@@ -24,7 +24,7 @@ export default function Dashboard() {
                   Dashboard Monitoring
                 </h1>
                 <p className="text-muted-foreground">
-                  Pantau progress dan kinerja program UU HKPD Jawa Tengah secara
+                  Pantau progress dan kinerja program Jasa Raharja Jawa Tengah secara
                   real-time
                 </p>
               </div>

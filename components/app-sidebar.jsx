@@ -90,7 +90,7 @@ const data = {
       items: [
         { title: "Implementasi UU HKPD", url: "/implementasi-uu-hkpd" },
         { title: "Kebijakan Relaksasi", url: "/kebijakan-relaksasi" },
-        { title: "Operasi Gabungan", url: "/404" },
+        { title: "Operasi Gabungan", url: "/operasi-gabungan" },
         { title: "Rekonsiliasi Data", url: "/404" },
         { title: "Keterisian Data Valid", url: "/404" },
         { title: "Sosialisasi Kesamsatan", url: "/404" },
@@ -118,10 +118,8 @@ export function AppSidebar(props) {
                   <Building2 className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">
-                    Dashboard JR
-                  </span>
-                  <span className="truncate text-xs">Monitoring UU HKPD</span>
+                  <span className="truncate font-semibold">Dashboard JR</span>
+                  <span className="truncate text-xs">Monitoring Jasa Raharja</span>
                 </div>
               </a>
             </SidebarMenuButton>

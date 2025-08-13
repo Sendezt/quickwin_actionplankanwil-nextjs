@@ -39,6 +39,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Skeleton } from "@/components/ui/skeleton";
+import Navbar from "@/components/navbar";
 
 export default function MenuDua() {
   const [tableData, setTableData] = useState(null);
@@ -84,21 +85,7 @@ export default function MenuDua() {
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         {/* Navbar */}
-        <header className="sticky top-0 z-50 bg-white flex h-16 shrink-0 items-center gap-2 border-b px-4">
-          <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="mr-2 h-4" />
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className="hidden md:block" />
-              <BreadcrumbItem>
-                <BreadcrumbPage>Kebijakan Relaksasi</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </header>
+        <Navbar />
 
         <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
           {/* ===== CHART DARI TABLE1 ===== */}
