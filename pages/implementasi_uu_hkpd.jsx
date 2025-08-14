@@ -43,10 +43,12 @@ import {
 } from "lucide-react";
 
 import Navbar from "@/components/navbar";
+import DetailTable from "@/components/DetailTable";
 
 export default function MenuSatu() {
   const [dashboardData, setDashboardData] = useState(null);
   const [rangeData, setRangeData] = useState(null);
+  const [expandRow, setExpandRow] = useState(null);
 
   useEffect(() => {
     let interval;
@@ -104,6 +106,9 @@ export default function MenuSatu() {
   const totalPotential = parseInt(dashboardData?.summary?.[2] || "0");
   const totalTarget = parseInt(dashboardData?.summary?.[3] || "0");
   const totalRealization = parseInt(dashboardData?.summary?.[5] || "0");
+  const toggleRow = (index) => {
+    setExpandRow(expandRow === index ? null : index);
+  };
 
   return (
     <div>
@@ -315,29 +320,42 @@ export default function MenuSatu() {
                       </TableHeader>
                       <TableBody>
                         {dashboardData.data.map((row, index) => (
-                          <TableRow
-                            key={index}
-                            className="border border-gray-300"
-                          >
-                            {row
-                              .filter((cell) => cell !== "")
-                              .map((cell, cellIndex) => (
-                                <TableCell
-                                  key={cellIndex}
-                                  className="border border-gray-300 text-center px-2 py-1 text-sm"
-                                >
-                                  {cellIndex === 1 ? (
-                                    <Badge variant="outline">{cell}</Badge>
-                                  ) : cellIndex === 6 && cell === "100" ? (
-                                    <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
-                                      {cell}
-                                    </Badge>
-                                  ) : (
-                                    cell
-                                  )}
+                          <React.Fragment key={index}>
+                            <TableRow className="border border-gray-300">
+                              {row
+                                .filter((cell) => cell !== "")
+                                .map((cell, cellIndex) => (
+                                  <TableCell
+                                    key={cellIndex}
+                                    className="border border-gray-300 text-center px-2 py-1 text-sm cursor-pointer"
+                                    onClick={() => {
+                                      if (cellIndex === 1) toggleRow(index); // hanya kolom Loket Kantor bisa diklik
+                                    }}
+                                  >
+                                    {cellIndex === 1 ? (
+                                      <Badge className="bg-blue-300 text-blue-800 hover:bg-blue-100 cursor-pointer">
+                                        {cell}
+                                      </Badge>
+                                    ) : cellIndex === 6 && cell === "100" ? (
+                                      <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
+                                        {cell}
+                                      </Badge>
+                                    ) : (
+                                      cell
+                                    )}
+                                  </TableCell>
+                                ))}
+                            </TableRow>
+
+                            {/* Row Detail */}
+                            {expandRow === index && (
+                              <TableRow className="bg-gray-50">
+                                <TableCell colSpan={row.length} className="p-2">
+                                  <DetailTable loket={row[1]} />
                                 </TableCell>
-                              ))}
-                          </TableRow>
+                              </TableRow>
+                            )}
+                          </React.Fragment>
                         ))}
 
                         {/* Summary Row */}
