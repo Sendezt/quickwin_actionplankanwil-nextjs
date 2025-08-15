@@ -37,9 +37,9 @@ import { ChartBarMultiple } from "@/components/chart-bar-multiple";
 import {
   BarChart3,
   TrendingUp,
-  Users,
-  Building2,
+  FileText,
   CalendarDays,
+  ArrowUpRight,
 } from "lucide-react";
 
 import Navbar from "@/components/navbar";
@@ -74,7 +74,7 @@ export default function MenuSatu() {
     async function fetchRangeData() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/google/getRange-sheet1"
+          "https://magangproject.vercel.app/api/google/getRange-sheetglobal"
         );
         const json = await res.json();
 
@@ -101,11 +101,6 @@ export default function MenuSatu() {
   const headerRows = dashboardData?.header ?? [];
   const headers =
     headerRows.find((row) => row.some((cell) => cell !== "")) ?? [];
-
-  const totalOffices = dashboardData?.data?.length ?? 0;
-  const totalPotential = parseInt(dashboardData?.summary?.[2] || "0");
-  const totalTarget = parseInt(dashboardData?.summary?.[3] || "0");
-  const totalRealization = parseInt(dashboardData?.summary?.[5] || "0");
   const toggleRow = (index) => {
     setExpandRow(expandRow === index ? null : index);
   };
@@ -136,147 +131,151 @@ export default function MenuSatu() {
                 ))
               ) : (
                 <>
-                  <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">
-                        Total Kantor
-                      </CardTitle>
-                      <Building2 className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold">{totalOffices}</div>
-                      <p className="text-xs text-muted-foreground">
-                        Loket kantor aktif
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">
-                        Total Potensi
-                      </CardTitle>
-                      <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold">{totalPotential}</div>
-                      <p className="text-xs text-muted-foreground">
-                        Potensi Kab/Kota
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">
-                        Target Pelaksanaan
-                      </CardTitle>
-                      <BarChart3 className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold">{totalTarget}</div>
-                      <p className="text-xs text-muted-foreground">
-                        Target UU HKPD
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">
-                        Realisasi
-                      </CardTitle>
-                      <Users className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold">
-                        {totalRealization}
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        Realisasi Pelaksanaan
-                      </p>
-                    </CardContent>
-                  </Card>
                   {/* Tanggal Periode sebagai dua Card */}
                   {rangeData?.periode_awal && rangeData?.periode_akhir && (
                     <>
-                      <Card className="col-span-2 p-0 overflow-hidden">
-                        <div className="bg-yellow-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                          <h4 className="text-sm font-semibold text-yellow-800">
+                      <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                          <CardTitle className="text-sm font-medium">
                             Periode Awal
-                          </h4>
-                          <div className="bg-yellow-200 rounded-full">
-                            <CalendarDays className="h-4 w-4 text-yellow-700" />
-                          </div>
-                        </div>
-                        <CardContent className="py-6 px-5">
-                          <div className="text-xl md:text-2xl font-bold text-gray-900 mb-1">
-                            {rangeData.periode_awal}
-                          </div>
-                          <p className="text-sm text-muted-foreground">
-                            Tanggal mulai periode
+                          </CardTitle>
+                          <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold">{rangeData.periode_awal}</div>
+                          <p className="text-xs text-muted-foreground">
+                            Tanggal Mulai Periode
                           </p>
                         </CardContent>
                       </Card>
 
-                      <Card className="col-span-2 p-0 overflow-hidden">
-                        <div className="bg-yellow-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                          <h4 className="text-sm font-semibold text-yellow-800">
+                      <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                          <CardTitle className="text-sm font-medium">
                             Periode Akhir
-                          </h4>
-                          <div className="bg-yellow-200 rounded-full">
-                            <CalendarDays className="h-4 w-4 text-yellow-700" />
-                          </div>
-                        </div>
-                        <CardContent className="py-6 px-5">
-                          <div className="text-xl md:text-2xl font-bold text-gray-900 mb-1">
-                            {rangeData.periode_akhir}
-                          </div>
-                          <p className="text-sm text-muted-foreground">
-                            Tanggal akhir periode
+                          </CardTitle>
+                          <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold">{rangeData.periode_akhir}</div>
+                          <p className="text-xs text-muted-foreground">
+                            Tanggal Akhir Periode
                           </p>
                         </CardContent>
                       </Card>
                     </>
                   )}
-                  <Card className="col-span-2 p-0 overflow-hidden">
-                    <div className="bg-gradient-to-r from-blue-100 to-blue-50 rounded-t-xl px-5 py-3 flex items-center justify-between border-b">
-                      <h4 className="text-sm font-semibold text-blue-800">
+
+                  {/* Skor Kanwil */}
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">
                         Skor Kanwil
-                      </h4>
-                      <div className="bg-blue-200 p-1 rounded-full">
-                        <TrendingUp className="h-4 w-4 text-blue-700" />
+                      </CardTitle>
+                      <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">
+                        {dashboardData?.summary?.[6] ?? "-"}
                       </div>
-                    </div>
-                    <CardContent className="py-6 px-5">
-                      <div className="text-4xl font-bold text-gray-900 mb-2">
-                        {dashboardData?.summary?.[7] ?? "-"}
-                      </div>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-xs text-muted-foreground">
                         Nilai Total Kanwil{" "}
                         <span className="text-gray-500">| 4 (Nilai Max)</span>
                       </p>
                     </CardContent>
                   </Card>
 
-                  <Card className="col-span-2 p-0 overflow-hidden">
-                    <div className="bg-gradient-to-r from-blue-100 to-blue-50 rounded-t-xl px-5 py-3 flex items-center justify-between border-b">
-                      <h4 className="text-sm font-semibold text-blue-800">
+                  {/* Skor Cabang */}
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">
                         Skor Cabang
-                      </h4>
-                      <div className="bg-blue-200 p-1 rounded-full">
-                        <TrendingUp className="h-4 w-4 text-blue-700" />
-                      </div>
-                    </div>
-                    <CardContent className="py-6 px-5">
-                      <div className="text-4xl font-bold text-gray-900 mb-2">
+                      </CardTitle>
+                      <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">
                         {dashboardData?.summary?.[7] ?? "-"}
                       </div>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-xs text-muted-foreground">
                         Nilai Total Cabang{" "}
                         <span className="text-gray-500">| 4 (Nilai Max)</span>
                       </p>
                     </CardContent>
                   </Card>
-                </>
-              )}
+                  
+                {/* Obyek Penilaian */}
+                <Card className="col-span-2 p-0 overflow-hidden">
+                  <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                    <h4 className="text-sm font-semibold text-green-800">
+                      Obyek Penilaian
+                    </h4>
+                    <div className="bg-green-200 rounded-full">
+                      <BarChart3 className="h-4 w-4 text-green-700" />
+                    </div>
+                  </div>
+                  <CardContent className="py-6 px-5">
+                    <div className="text-lg font-bold text-gray-900 mb-1">
+                      1. Kantor Wilayah
+                    </div>
+                    <div className="text-lg font-bold text-gray-900 mb-1">
+                      2. Kantor Cabang
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      2 Obyek Penilaian
+                    </p>
+                  </CardContent>
+                </Card>
+
+                {/* Juknis Sengkuyung Prioritas */}
+                <Card className="col-span-2 p-0 overflow-hidden">
+                  <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                    <h4 className="text-sm font-semibold text-green-800">
+                      Juknis Sengkuyung Prioritas
+                    </h4>
+                    <div className="bg-green-200 rounded-full">
+                      <ArrowUpRight className="h-4 w-4 text-green-700" />
+                    </div>
+                  </div>
+                  <CardContent className="py-6 px-5">
+                    <a
+                      href="https://drive.google.com/file/d/1LzzM_lllpBQMgkcBXhPXC53s7pr21srN/view"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-lg font-bold text-blue-600 hover:underline mb-1 block"
+                    >
+                      Juknis Sengkuyung Prioritas
+                    </a>
+                    <p className="text-sm text-muted-foreground">
+                      No. 900.1.13.1/ 177 Tahun 2025 tentang Petunjuk Teknis Pelaksanaan Kegiatan Sengkuyung Prioritas Tahun 2025
+                    </p>
+                  </CardContent>
+                </Card>
+
+                {/* Deskripsi Formula */}
+                <Card className="col-span-4 p-0 overflow-hidden">
+                  <div className="bg-gradient-to-r from-yellow-100 to-yellow-50 rounded-t-xl px-5 py-3 flex items-center justify-between border-b">
+                    <h4 className="text-sm font-semibold text-yellow-800">
+                      Forumula
+                    </h4>
+                    <div className="bg-yellow-200 p-1 rounded-full">
+                      <FileText className="h-4 w-4 text-yellow-700" />
+                    </div>
+                  </div>
+                  <CardContent className="py-6 px-5 italic">
+                    <p className="text-sm text-muted-foreground">
+                      <span className="font-bold text-base text-gray-900">
+                        Terlaksananya Program Kerja Peningkatan Tingkat Kepatuhan di seluruh Kota / Kabupaten
+                      </span>
+                      {" = "}
+                      <span className="text-sm text-muted-foreground">
+                        Kota atau Kabupaten yang melaksanakan Program Kerja / Total Kota atau Kabupaten
+                      </span>
+                    </p>
+                  </CardContent>
+                </Card>
+                    </>
+                  )}
             </div>
 
             {dashboardData && dashboardData.data && (
