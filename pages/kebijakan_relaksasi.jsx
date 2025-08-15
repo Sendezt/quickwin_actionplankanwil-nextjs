@@ -39,22 +39,40 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Skeleton } from "@/components/ui/skeleton";
+import { 
+  CalendarDays, 
+  TrendingUp, 
+  BarChart3, 
+  ArrowUpRight, 
+  FileText 
+} from "lucide-react";
 import Navbar from "@/components/navbar";
 
 export default function MenuDua() {
   const [tableData, setTableData] = useState(null);
   const [table1Data, setTable1Data] = useState(null);
+  const [breakdownData, setBreakdownData] = useState(null);
+  const [periodeData, setPeriodeData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [rangeData, setRangeData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetch existing data
         const res = await fetch(
           "https://magangproject.vercel.app/api/google/getsheet2"
         );
         const json = await res.json();
         setTableData(json.table2);
         setTable1Data(json.table1);
+
+        // Fetch breakdown skor data
+        const breakdownRes = await fetch(
+          "https://magangproject.vercel.app/api/google/getsheet2card"
+        );
+        const breakdownJson = await breakdownRes.json();
+        setBreakdownData(breakdownJson);
       } catch (error) {
         console.error("Gagal fetch data:", error);
       } finally {
@@ -62,10 +80,27 @@ export default function MenuDua() {
       }
     };
 
+    async function fetchRangeData() {
+      try {
+        const res = await fetch(
+          "https://magangproject.vercel.app/api/google/getRange-sheet2"
+        );
+        const json = await res.json();
+
+        if (json) {
+          setRangeData(json);
+        } else {
+          console.warn("Struktur data tidak valid", json);
+        }
+      } catch (err) {
+        console.error("Gagal fetch getRange-sheet1: ", err);
+      }
+    }
     fetchData();
+    fetchRangeData();
   }, []);
 
-  // Skeleton Table
+  // Skeleton Table Component
   const SkeletonTable = ({ rows = 5, cols = 6 }) => (
     <div className="space-y-2">
       {Array.from({ length: rows }).map((_, i) => (
@@ -78,6 +113,14 @@ export default function MenuDua() {
     </div>
   );
 
+  // Hitung total skor dari breakdown data
+  const totalSkor = breakdownData?.data?.reduce((total, item) => total + item.skor, 0) ?? 0;
+  const targetSkor = 8; // nilai maksimum
+
+  // Extract periode data dari API
+  const periodeAwal = periodeData?.periode_awal || "Loading...";
+  const periodeAkhir = periodeData?.periode_akhir || "Loading...";
+
   const { headerTop, headerBottom, data, summary } = tableData || {};
 
   return (
@@ -87,7 +130,213 @@ export default function MenuDua() {
         {/* Navbar */}
         <Navbar />
 
+        {/* Konten Dashboard */}
         <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {loading ? (
+              Array.from({ length: 4 }).map((_, i) => (
+                <Card key={i} className="col-span-1 p-0 overflow-hidden">
+                  <div className="px-5 py-3 border-b">
+                    <Skeleton className="h-4 w-1/4 mb-2" />
+                  </div>
+                  <CardContent className="py-6 px-5 space-y-2">
+                    <Skeleton className="h-8 w-1/3" />
+                    <Skeleton className="h-4 w-2/3" />
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <>
+                {/* Tanggal Periode sebagai dua Card */}
+                {rangeData?.periode_awal && rangeData?.periode_akhir && (
+                    <>
+                      <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                          <CardTitle className="text-sm font-medium">
+                            Periode Awal
+                          </CardTitle>
+                          <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold">{rangeData.periode_awal}</div>
+                          <p className="text-xs text-muted-foreground">
+                            Tanggal Mulai Periode
+                          </p>
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                          <CardTitle className="text-sm font-medium">
+                            Periode Akhir
+                          </CardTitle>
+                          <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold">{rangeData.periode_akhir}</div>
+                          <p className="text-xs text-muted-foreground">
+                            Tanggal Akhir Periode
+                          </p>
+                        </CardContent>
+                      </Card>
+                    </>
+                  )}
+
+                {/* Skor Total */}
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Skor Total</CardTitle>
+                    <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">{totalSkor}</div>
+                    <p className="text-xs text-muted-foreground">
+                      Target: {targetSkor} (nilai max)
+                    </p>
+                  </CardContent>
+                </Card>
+
+                {/* Breakdown Skor */}
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Breakdown Skor</CardTitle>
+                    <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      {breakdownData?.data?.map((item, index) => (
+                        <div key={index} className="flex justify-between items-center">
+                          <span className="text-xs text-gray-600 flex-1 pr-2">
+                            {item.judul}
+                          </span>
+                          <span className="text-lg font-bold">
+                            {item.skor}
+                          </span>
+                        </div>
+                      )) || (
+                        <p className="text-xs text-muted-foreground">Tidak ada data</p>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </>
+            )}
+          </div>
+                
+          {/* Row kedua untuk cards yang lebih besar */}
+          <div className="grid gap-4 md:grid-cols-2">
+            {loading ? (
+              Array.from({ length: 2 }).map((_, i) => (
+                <Card key={i} className="col-span-1 p-0 overflow-hidden">
+                  <div className="px-5 py-3 border-b">
+                    <Skeleton className="h-4 w-1/4 mb-2" />
+                  </div>
+                  <CardContent className="py-6 px-5 space-y-2">
+                    <Skeleton className="h-8 w-1/3" />
+                    <Skeleton className="h-4 w-2/3" />
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <>
+                {/* Obyek Penilaian */}
+                <Card className="p-0 overflow-hidden">
+                  <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                    <h4 className="text-sm font-semibold text-green-800">
+                      Obyek Penilaian
+                    </h4>
+                    <div className="bg-green-200 rounded-full">
+                      <BarChart3 className="h-4 w-4 text-green-700" />
+                    </div>
+                  </div>
+                  <CardContent className="py-6 px-5">
+                    <div className="text-lg font-bold text-gray-900 mb-1">
+                      Kantor Wilayah
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      1 Obyek Penilaian
+                    </p>
+                  </CardContent>
+                </Card>
+
+                {/* Juknis Sengkuyung Prioritas */}
+                <Card className="p-0 overflow-hidden">
+                  <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                    <h4 className="text-sm font-semibold text-green-800">
+                      SK Gubernur Jateng
+                    </h4>
+                    <div className="bg-green-200 rounded-full">
+                      <ArrowUpRight className="h-4 w-4 text-green-700" />
+                    </div>
+                  </div>
+                  <CardContent className="py-6 px-5">
+                    <a
+                      href="https://drive.google.com/file/d/1zJc41CQkQ4MFStjR_TD9uIwD9FAN9ODm/view"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-lg font-bold text-blue-600 hover:underline mb-1 block"
+                    >
+                      Surat Keputusan Gubernur Jawa Tengah
+                    </a>
+                    <p className="text-sm text-muted-foreground">
+                      No. 100.3.3.1/87 Tahun 2025 tentang Pembebasan atas Pokok dan Sanksi Administratif Pajak Kendaraan Bermotor
+                    </p>
+                  </CardContent>
+                </Card>
+              </>
+            )}
+          </div>
+
+          {/* Deskripsi Formula - Full width */}
+          {!loading && (
+            <Card className="p-0 overflow-hidden">
+              {/* Header Card */}
+              <div className="bg-gradient-to-r from-yellow-100 to-yellow-50 rounded-t-xl px-5 py-3 flex items-center justify-between border-b">
+                <h4 className="text-sm font-semibold text-yellow-800">
+                  Forumula
+                </h4>
+                <div className="bg-yellow-200 p-1 rounded-full">
+                  <FileText className="h-4 w-4 text-yellow-700" />
+                </div>
+              </div>
+
+              {/* Content Card */}
+              <CardContent className="py-6 px-5 italic space-y-6">
+                {/* Forumula 1 */}
+                <div>
+                  <h2 className="text-lg font-bold text-gray-900 mb-2">
+                    Forumula 1
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    <span className="font-semibold text-gray-900">
+                      Terlaksananya Kebijakan Relaksasi
+                    </span>
+                    {" = "}
+                    <span className="text-sm text-muted-foreground">
+                      Ketersediaan Surat Keputusan Gubernur atas Kebijakan Pembebasan Denda, BBNKB II, dan Pajak Progresif / Target
+                    </span>
+                  </p>
+                </div>
+
+                {/* Forumula 2 */}
+                <div>
+                  <h2 className="text-lg font-bold text-gray-900 mb-2">
+                    Forumula 2
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    <span className="font-semibold text-gray-900">
+                      Pertumbuhan penerimaan SW di periode Relaksasi
+                    </span>
+                    {" = "}
+                    <span className="text-sm text-muted-foreground">
+                      Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n / Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n-1 x 100 - 100
+                    </span>
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* ===== CHART DARI TABLE1 ===== */}
           <Card className="w-full overflow-hidden">
             <CardHeader>
@@ -164,12 +413,12 @@ export default function MenuDua() {
               )}
             </CardContent>
           </Card>
+
           {/* ================= CARD UNTUK TABLE1 ================= */}
           <Card className="w-full overflow-hidden">
             <CardHeader>
               <CardTitle className="text-xl font-bold">
-                Rekapitulasi Pertumbuhan Penerimaan SW Periode Pemutihan Per
-                Cabang
+                Rekapitulasi Pertumbuhan Penerimaan SW Periode Pemutihan Per Cabang
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -240,8 +489,7 @@ export default function MenuDua() {
           <Card className="w-full overflow-hidden">
             <CardHeader>
               <CardTitle className="text-xl font-bold">
-                Rekapitulasi Pertumbuhan Penerimaan SW Periode Pemutihan Per
-                Cabang
+                Rekapitulasi Pertumbuhan Penerimaan SW Periode Pemutihan Per Cabang
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -392,3 +640,5 @@ export default function MenuDua() {
     </SidebarProvider>
   );
 }
+
+///fixxx ea -periode
