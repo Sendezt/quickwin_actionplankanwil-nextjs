@@ -259,7 +259,7 @@ export default function MenuDua() {
                   </CardContent>
                 </Card>
 
-                {/* Juknis Sengkuyung Prioritas */}
+                {/* SK Gubernur Jateng */}
                 <Card className="p-0 overflow-hidden">
                   <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
                     <h4 className="text-sm font-semibold text-green-800">
