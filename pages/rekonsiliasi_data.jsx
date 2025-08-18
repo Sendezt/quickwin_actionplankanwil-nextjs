@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CalendarDays, BarChart3, FileText } from "lucide-react";
 import Navbar from "@/components/navbar";
 
-export default function MenuDua() {
+export default function MenuEmpat() {
   const [table1Data, setTable1Data] = useState(null);
   const [table2Data, setTable2Data] = useState(null);
   const [table3Data, setTable3Data] = useState(null);

@@ -92,7 +92,7 @@ const data = {
         { title: "Kebijakan Relaksasi", url: "/kebijakan-relaksasi" },
         { title: "Operasi Gabungan", url: "/operasi-gabungan" },
         { title: "Rekonsiliasi Data", url: "/rekonsiliasi-data" },
-        { title: "Keterisian Data Valid", url: "/404" },
+        { title: "Keterisian Data Valid", url: "/keterisian-data" },
         { title: "Sosialisasi Kesamsatan", url: "/404" },
         { title: "SIGNAL & ONLINE", url: "/404" },
         { title: "Merchant", url: "/404" },
