@@ -97,10 +97,10 @@ const data = {
         { title: "SIGNAL & ONLINE", url: "/optimalisasi-signal-layanan-online" },
         { title: "Merchant", url: "/kolaborasi-merchant" },
         { title: "Komitmen Stakeholder", url: "/komitmen-stakeholder" },
-        { title: "SIGAP Prioritas", url: "/404" },
-        { title: "SIGAP Instansi", url: "/404" },
-        { title: "WA Blast", url: "/404" },
-        { title: "Pendataan Terlibat Laka", url: "/404" },
+        { title: "SIGAP Prioritas", url: "/sigap-prioritas" },
+        { title: "SIGAP Instansi", url: "/sigap-instansi" },
+        { title: "WA Blast", url: "/wa-blast" },
+        { title: "Pendataan Terlibat Laka", url: "/pendataan-laka" },
       ],
     },
   ],
@@ -118,7 +118,7 @@ export function AppSidebar(props) {
                   <Building2 className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Dashboard JR</span>
+                  <span className="truncate font-semibold">Dashboard Jasa Raharja</span>
                   <span className="truncate text-xs">Monitoring Jasa Raharja</span>
                 </div>
               </a>
