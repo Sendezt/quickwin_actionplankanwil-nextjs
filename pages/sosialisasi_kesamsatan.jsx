@@ -13,6 +13,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CalendarDays, BarChart3, FileText } from "lucide-react";
 import Navbar from "@/components/navbar";
+import RenderTable4 from "@/components/sosialisasikesamsatan/RenderTable4";
 import React from "react";
 
 export default function MenuEnam() {
@@ -95,38 +96,20 @@ export default function MenuEnam() {
         <table className="w-full border-collapse border border-gray-300">
           <thead>
             <tr className="bg-gray-50">
-              {Array.isArray(data?.header?.[0]) &&
-                data.header[0].map((header, idx) => {
-                  if (isTable5 && header.toLowerCase().includes("total"))
-                    return null;
-                  return (
-                    <th
-                      key={idx}
-                      className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700"
-                    >
-                      {header}
-                    </th>
-                  );
-                })}
+              {(Array.isArray(data?.header?.[0])
+                ? data.header[0]
+                : data?.header || []
+              ).map((header, idx) => (
+                <th
+                  key={idx}
+                  className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700"
+                >
+                  {header}
+                </th>
+              ))}
             </tr>
-            {/* Khusus tabel5: tampilkan header bulan */}
-            {isTable5 && data?.header?.[0] && (
-              <tr className="bg-gray-50">
-                {data.header[0].map((header, idx) => (
-                  <th
-                    key={idx}
-                    className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700"
-                  >
-                    {header.match(
-                      /Jan|Feb|Mar|Apr|Mei|Jun|Jul|Agt|Sep|Okt|Nov|Des/
-                    )
-                      ? header
-                      : ""}
-                  </th>
-                ))}
-              </tr>
-            )}
           </thead>
+
           <tbody>
             {Array.isArray(data?.data) &&
               data.data.map((row, idx) => {
@@ -206,9 +189,9 @@ export default function MenuEnam() {
             {/* Summary */}
             {data?.summary &&
               (Array.isArray(data.summary) ? (
-                // Default summary (array biasa)
+                // Summary berupa array biasa
                 <tr className="font-medium bg-blue-50">
-                  <td></td> {/* Geser satu kolom */}
+                  <td></td>
                   {data.summary.map((cell, idx) => (
                     <td
                       key={idx}
@@ -219,43 +202,34 @@ export default function MenuEnam() {
                   ))}
                 </tr>
               ) : (
-                // Summary berupa object (misal tabel5)
+                // Summary berupa object (misalnya { total_kanwil: [...], total_cabang: [...] })
                 Object.values(data.summary).map((row, idx) => (
                   <tr
                     key={idx}
                     className="font-medium bg-blue-50 hover:bg-blue-100"
                   >
-                    {Array.isArray(row)
-                      ? row.map((cell, cIdx) => {
-                          // Tabel5: hilangkan 0 di TOTAL KANWIL & TOTAL CABANG
-                          if (
-                            isTable5 &&
-                            cIdx >= row.length - 2 &&
-                            (cell === 0 || cell === "0")
-                          )
-                            return (
-                              <td
-                                key={cIdx}
-                                className="border border-gray-300 px-4 py-2 text-sm font-semibold"
-                              ></td>
-                            );
-                          return (
-                            <td
-                              key={cIdx}
-                              className="border border-gray-300 px-4 py-2 text-sm font-semibold"
-                            >
-                              {cell || 0}
-                            </td>
-                          );
-                        })
-                      : Object.values(row).map((cell, cIdx) => (
+                    {row.map((cell, cIdx) => {
+                      if (
+                        isTable5 &&
+                        cIdx >= row.length - 2 &&
+                        (cell === 0 || cell === "0")
+                      ) {
+                        return (
                           <td
                             key={cIdx}
                             className="border border-gray-300 px-4 py-2 text-sm font-semibold"
-                          >
-                            {cell || 0}
-                          </td>
-                        ))}
+                          ></td>
+                        );
+                      }
+                      return (
+                        <td
+                          key={cIdx}
+                          className="border border-gray-300 px-4 py-2 text-sm font-semibold"
+                        >
+                          {cell || ""}
+                        </td>
+                      );
+                    })}
                   </tr>
                 ))
               ))}
@@ -494,15 +468,15 @@ export default function MenuEnam() {
           {/* Table 4 */}
           <Card>
             <CardHeader>
-              <CardTitle>
+              <CardTitle className="text-base font-semibold">
                 Pengisian Data Banner Sosialisasi Kesamsatan - Per Samsat
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-sm text-gray-500">
                 Monitoring kelengkapan banner sosialisasi
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <RenderTable data={table4Data} />
+              <RenderTable4 data={table4Data} />
             </CardContent>
           </Card>
 
