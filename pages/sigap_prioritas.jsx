@@ -60,11 +60,11 @@ export default function MenuTen() {
     async function fetchRangeData() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/google/getRange-sheet5"
+          "https://magangproject.vercel.app/api/sheet10/getRange-sheet10"
         );
         setRangeData(await res.json());
       } catch (err) {
-        console.error("Gagal fetch getRange-sheet5: ", err);
+        console.error("Gagal fetch getRange-sheet10: ", err);
       }
     }
 
