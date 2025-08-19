@@ -1,29 +1,14 @@
 "use client";
 
 import * as React from "react";
+import { usePathname } from "next/navigation";
 import {
-  BarChart3,
   Building2,
   ChevronRight,
-  FileText,
   Home,
   Settings,
-  Target,
-  TrendingUp,
   Users,
-  Zap,
-  CheckCircle,
-  Calendar,
-  MapPin,
-  Award,
-  Activity,
-  Briefcase,
-  Database,
-  Globe,
-  Layers,
-  PieChart,
-  Search,
-  Shield,
+  FileText,
 } from "lucide-react";
 
 import {
@@ -38,7 +23,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -57,8 +41,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Button } from "@/components/ui/button";
-
 // Menu data
 const data = {
   user: {
@@ -71,7 +53,6 @@ const data = {
       title: "Dashboard",
       url: "/",
       icon: Home,
-      isActive: true,
     },
     {
       title: "Quickwin Jateng",
@@ -94,7 +75,10 @@ const data = {
         { title: "Rekonsiliasi Data", url: "/rekonsiliasi-data" },
         { title: "Keterisian Data Valid", url: "/keterisian-data" },
         { title: "Sosialisasi Kesamsatan", url: "/sosialisasi-kesamsatan" },
-        { title: "SIGNAL & ONLINE", url: "/optimalisasi-signal-layanan-online" },
+        {
+          title: "SIGNAL & ONLINE",
+          url: "/optimalisasi-signal-layanan-online",
+        },
         { title: "Merchant", url: "/kolaborasi-merchant" },
         { title: "Komitmen Stakeholder", url: "/komitmen-stakeholder" },
         { title: "SIGAP Prioritas", url: "/sigap-prioritas" },
@@ -107,19 +91,30 @@ const data = {
 };
 
 export function AppSidebar(props) {
+  const pathname = usePathname();
+
   return (
     <Sidebar variant="inset" {...props}>
+      {/* Header dengan Logo */}
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Building2 className="size-4" />
+              <a href="/" className="flex items-center gap-2">
+                <div className="h-8 aspect-[4/3]">
+                  <img
+                    src="/logo.png" // ganti sesuai path logo kamu
+                    alt="Logo"
+                    className="h-full w-full object-contain rounded-md"
+                  />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Dashboard Jasa Raharja</span>
-                  <span className="truncate text-xs">Monitoring Jasa Raharja</span>
+                  <span className="truncate font-semibold">
+                    Dashboard Jasa Raharja
+                  </span>
+                  <span className="truncate text-xs">
+                    Monitoring Jasa Raharja
+                  </span>
                 </div>
               </a>
             </SidebarMenuButton>
@@ -127,59 +122,86 @@ export function AppSidebar(props) {
         </SidebarMenu>
       </SidebarHeader>
 
+      {/* Sidebar Content */}
       <SidebarContent className="sidebar-content">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {data.navMain.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  {item.items ? (
-                    <Collapsible asChild defaultOpen={true}>
-                      <div>
-                        <CollapsibleTrigger asChild>
-                          <SidebarMenuButton tooltip={item.title}>
-                            {item.icon && <item.icon />}
-                            <span>{item.title}</span>
-                            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                          </SidebarMenuButton>
-                        </CollapsibleTrigger>
-                        <CollapsibleContent>
-                          <SidebarMenuSub>
-                            {item.items.map((subItem) => (
-                              <SidebarMenuSubItem key={subItem.title}>
-                                <SidebarMenuSubButton asChild>
-                                  <a href={subItem.url}>
-                                    {subItem.icon && (
-                                      <subItem.icon className="size-4" />
-                                    )}
-                                    <span>{subItem.title}</span>
-                                  </a>
-                                </SidebarMenuSubButton>
-                              </SidebarMenuSubItem>
-                            ))}
-                          </SidebarMenuSub>
-                        </CollapsibleContent>
-                      </div>
-                    </Collapsible>
-                  ) : (
-                    <SidebarMenuButton
-                      tooltip={item.title}
-                      isActive={item.isActive}
-                      asChild
-                    >
-                      <a href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </a>
-                    </SidebarMenuButton>
-                  )}
-                </SidebarMenuItem>
-              ))}
+              {data.navMain.map((item) => {
+                const isActive = pathname === item.url;
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    {item.items ? (
+                      <Collapsible
+                        asChild
+                        defaultOpen={item.items.some(
+                          (sub) => sub.url === pathname
+                        )}
+                      >
+                        <div>
+                          <CollapsibleTrigger asChild>
+                            <SidebarMenuButton
+                              tooltip={item.title}
+                              className={`hover:bg-gray-800 hover:text-white ${
+                                isActive ? "bg-gray-700 text-white" : ""
+                              }`}
+                            >
+                              {item.icon && <item.icon />}
+                              <span>{item.title}</span>
+                              <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                            </SidebarMenuButton>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <SidebarMenuSub>
+                              {item.items.map((subItem) => {
+                                const isSubActive = pathname === subItem.url;
+                                return (
+                                  <SidebarMenuSubItem key={subItem.title}>
+                                    <SidebarMenuSubButton
+                                      asChild
+                                      className={`hover:bg-gray-500 hover:text-white ${
+                                        isSubActive
+                                          ? "bg-gray-700 text-white"
+                                          : ""
+                                      }`}
+                                    >
+                                      <a href={subItem.url}>
+                                        {subItem.icon && (
+                                          <subItem.icon className="size-4" />
+                                        )}
+                                        <span>{subItem.title}</span>
+                                      </a>
+                                    </SidebarMenuSubButton>
+                                  </SidebarMenuSubItem>
+                                );
+                              })}
+                            </SidebarMenuSub>
+                          </CollapsibleContent>
+                        </div>
+                      </Collapsible>
+                    ) : (
+                      <SidebarMenuButton
+                        tooltip={item.title}
+                        asChild
+                        className={`hover:bg-gray-700 hover:text-white ${
+                          isActive ? "bg-gray-700 text-white" : ""
+                        }`}
+                      >
+                        <a href={item.url}>
+                          {item.icon && <item.icon />}
+                          <span>{item.title}</span>
+                        </a>
+                      </SidebarMenuButton>
+                    )}
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
 
+      {/* Footer */}
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
