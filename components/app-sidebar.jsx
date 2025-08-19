@@ -95,7 +95,7 @@ const data = {
         { title: "Keterisian Data Valid", url: "/keterisian-data" },
         { title: "Sosialisasi Kesamsatan", url: "/sosialisasi-kesamsatan" },
         { title: "SIGNAL & ONLINE", url: "/optimalisasi-signal-layanan-online" },
-        { title: "Merchant", url: "/merchant" },
+        { title: "Merchant", url: "/kolaborasi-merchant" },
         { title: "Komitmen Stakeholder", url: "/404" },
         { title: "SIGAP Prioritas", url: "/404" },
         { title: "SIGAP Instansi", url: "/404" },
