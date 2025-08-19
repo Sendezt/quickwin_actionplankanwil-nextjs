@@ -96,7 +96,7 @@ const data = {
         { title: "Sosialisasi Kesamsatan", url: "/sosialisasi-kesamsatan" },
         { title: "SIGNAL & ONLINE", url: "/optimalisasi-signal-layanan-online" },
         { title: "Merchant", url: "/kolaborasi-merchant" },
-        { title: "Komitmen Stakeholder", url: "/404" },
+        { title: "Komitmen Stakeholder", url: "/komitmen-stakeholder" },
         { title: "SIGAP Prioritas", url: "/404" },
         { title: "SIGAP Instansi", url: "/404" },
         { title: "WA Blast", url: "/404" },
