@@ -77,7 +77,7 @@ const data = {
       title: "Quickwin Jateng",
       url: "#",
       items: [
-        { title: "SENGKUYUNG", url: "/404" },
+        { title: "SENGKUYUNG", url: "/sengkuyung" },
         { title: "PROMITRA", url: "/404" },
         { title: "OPSGAB", url: "/404" },
         { title: "SOWAN", url: "/404" },
