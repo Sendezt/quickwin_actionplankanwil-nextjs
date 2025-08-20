@@ -6,7 +6,14 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { LineChart, CartesianGrid, XAxis, Line, YAxis } from "recharts";
+import {
+  LineChart,
+  CartesianGrid,
+  XAxis,
+  Line,
+  YAxis,
+  LabelList,
+} from "recharts";
 import {
   Table,
   TableBody,
@@ -39,12 +46,12 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Skeleton } from "@/components/ui/skeleton";
-import { 
-  CalendarDays, 
-  TrendingUp, 
-  BarChart3, 
-  ArrowUpRight, 
-  FileText 
+import {
+  CalendarDays,
+  TrendingUp,
+  BarChart3,
+  ArrowUpRight,
+  FileText,
 } from "lucide-react";
 import Navbar from "@/components/navbar";
 
@@ -114,7 +121,8 @@ export default function MenuDua() {
   );
 
   // Hitung total skor dari breakdown data
-  const totalSkor = breakdownData?.data?.reduce((total, item) => total + item.skor, 0) ?? 0;
+  const totalSkor =
+    breakdownData?.data?.reduce((total, item) => total + item.skor, 0) ?? 0;
   const targetSkor = 8; // nilai maksimum
 
   // Extract periode data dari API
@@ -149,43 +157,49 @@ export default function MenuDua() {
               <>
                 {/* Tanggal Periode sebagai dua Card */}
                 {rangeData?.periode_awal && rangeData?.periode_akhir && (
-                    <>
-                      <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                          <CardTitle className="text-sm font-medium">
-                            Periode Awal
-                          </CardTitle>
-                          <CalendarDays className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                          <div className="text-2xl font-bold">{rangeData.periode_awal}</div>
-                          <p className="text-xs text-muted-foreground">
-                            Tanggal Mulai Periode
-                          </p>
-                        </CardContent>
-                      </Card>
+                  <>
+                    <Card>
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">
+                          Periode Awal
+                        </CardTitle>
+                        <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-2xl font-bold">
+                          {rangeData.periode_awal}
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          Tanggal Mulai Periode
+                        </p>
+                      </CardContent>
+                    </Card>
 
-                      <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                          <CardTitle className="text-sm font-medium">
-                            Periode Akhir
-                          </CardTitle>
-                          <CalendarDays className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                          <div className="text-2xl font-bold">{rangeData.periode_akhir}</div>
-                          <p className="text-xs text-muted-foreground">
-                            Tanggal Akhir Periode
-                          </p>
-                        </CardContent>
-                      </Card>
-                    </>
-                  )}
+                    <Card>
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">
+                          Periode Akhir
+                        </CardTitle>
+                        <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-2xl font-bold">
+                          {rangeData.periode_akhir}
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          Tanggal Akhir Periode
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </>
+                )}
 
                 {/* Skor Total */}
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Skor Total</CardTitle>
+                    <CardTitle className="text-sm font-medium">
+                      Skor Total
+                    </CardTitle>
                     <TrendingUp className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
@@ -199,22 +213,27 @@ export default function MenuDua() {
                 {/* Breakdown Skor */}
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Breakdown Skor</CardTitle>
+                    <CardTitle className="text-sm font-medium">
+                      Breakdown Skor
+                    </CardTitle>
                     <BarChart3 className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
                       {breakdownData?.data?.map((item, index) => (
-                        <div key={index} className="flex justify-between items-center">
+                        <div
+                          key={index}
+                          className="flex justify-between items-center"
+                        >
                           <span className="text-xs text-gray-600 flex-1 pr-2">
                             {item.judul}
                           </span>
-                          <span className="text-lg font-bold">
-                            {item.skor}
-                          </span>
+                          <span className="text-lg font-bold">{item.skor}</span>
                         </div>
                       )) || (
-                        <p className="text-xs text-muted-foreground">Tidak ada data</p>
+                        <p className="text-xs text-muted-foreground">
+                          Tidak ada data
+                        </p>
                       )}
                     </div>
                   </CardContent>
@@ -222,7 +241,7 @@ export default function MenuDua() {
               </>
             )}
           </div>
-                
+
           {/* Row kedua untuk cards yang lebih besar */}
           <div className="grid gap-4 md:grid-cols-2">
             {loading ? (
@@ -279,7 +298,8 @@ export default function MenuDua() {
                       Surat Keputusan Gubernur Jawa Tengah
                     </a>
                     <p className="text-sm text-muted-foreground">
-                      No. 100.3.3.1/87 Tahun 2025 tentang Pembebasan atas Pokok dan Sanksi Administratif Pajak Kendaraan Bermotor
+                      No. 100.3.3.1/87 Tahun 2025 tentang Pembebasan atas Pokok
+                      dan Sanksi Administratif Pajak Kendaraan Bermotor
                     </p>
                   </CardContent>
                 </Card>
@@ -302,34 +322,37 @@ export default function MenuDua() {
 
               {/* Content Card */}
               <CardContent className="py-6 px-5 italic space-y-6">
-                {/* Forumula 1 */}
-                <div>
-                  <h2 className="text-lg font-bold text-gray-900 mb-2">
+                {/* Formula 1 */}
+                <div className="mb-4 p-4 rounded-2xl border bg-white shadow-sm">
+                  <h2 className="text-base font-semibold text-gray-800 mb-2">
                     Forumula 1
                   </h2>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm leading-relaxed text-gray-600">
                     <span className="font-semibold text-gray-900">
                       Terlaksananya Kebijakan Relaksasi
                     </span>
                     {" = "}
-                    <span className="text-sm text-muted-foreground">
-                      Ketersediaan Surat Keputusan Gubernur atas Kebijakan Pembebasan Denda, BBNKB II, dan Pajak Progresif / Target
+                    <span>
+                      Ketersediaan Surat Keputusan Gubernur atas Kebijakan
+                      Pembebasan Denda, BBNKB II, dan Pajak Progresif / Target
                     </span>
                   </p>
                 </div>
 
                 {/* Forumula 2 */}
-                <div>
-                  <h2 className="text-lg font-bold text-gray-900 mb-2">
+                <div className="mb-4 p-4 rounded-2xl border bg-white shadow-sm">
+                  <h2 className="text-base font-semibold text-gray-800 mb-2">
                     Forumula 2
                   </h2>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm leading-relaxed text-gray-600">
                     <span className="font-semibold text-gray-900">
                       Pertumbuhan penerimaan SW di periode Relaksasi
                     </span>
                     {" = "}
-                    <span className="text-sm text-muted-foreground">
-                      Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n / Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n-1 x 100 - 100
+                    <span>
+                      Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n /
+                      Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n-1
+                      × 100 - 100
                     </span>
                   </p>
                 </div>
@@ -405,7 +428,15 @@ export default function MenuDua() {
                       strokeWidth={2}
                       dot={{ fill: "var(--chart-1)" }}
                       activeDot={{ r: 6 }}
-                    />
+                    >
+                      <LabelList
+                        dataKey="growth"
+                        position="top"
+                        dy={-10} // atur jarak vertikal dari titik
+                        formatter={(val) => `${val}%`}
+                        className="text-xs fill-gray-700"
+                      />
+                    </Line>
                   </LineChart>
                 </ChartContainer>
               ) : (
@@ -418,7 +449,8 @@ export default function MenuDua() {
           <Card className="w-full overflow-hidden">
             <CardHeader>
               <CardTitle className="text-xl font-bold">
-                Rekapitulasi Pertumbuhan Penerimaan SW Periode Pemutihan Per Cabang
+                Rekapitulasi Pertumbuhan Penerimaan SW Periode Pemutihan Per
+                Cabang
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -489,7 +521,8 @@ export default function MenuDua() {
           <Card className="w-full overflow-hidden">
             <CardHeader>
               <CardTitle className="text-xl font-bold">
-                Rekapitulasi Pertumbuhan Penerimaan SW Periode Pemutihan Per Cabang
+                Rekapitulasi Pertumbuhan Penerimaan SW Periode Pemutihan Per
+                Cabang
               </CardTitle>
             </CardHeader>
             <CardContent>
