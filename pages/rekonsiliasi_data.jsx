@@ -353,7 +353,7 @@ export default function MenuEmpat() {
               </CardContent>
             </Card>
 
-            {/* Formula */}
+            {/* Forumula */}
             <Card className="p-0 overflow-hidden">
               <div className="bg-yellow-100 px-5 py-3 border-b flex items-center justify-between">
                 <h4 className="text-sm font-semibold text-yellow-800">

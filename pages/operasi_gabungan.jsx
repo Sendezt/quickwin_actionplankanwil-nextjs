@@ -336,9 +336,11 @@ export default function MenuTiga() {
               </CardContent>
             </Card>
           </div>
-
+          
+          {/* Deskripsi Forumula */}
           <Card className="p-0 overflow-hidden">
-            <div className="bg-gradient-to-r from-yellow-100 to-yellow-50 px-5 py-3 flex items-center justify-between border-b">
+            {/* Header Card */}
+            <div className="bg-gradient-to-r from-yellow-100 to-yellow-50 rounded-t-xl px-5 py-3 flex items-center justify-between border-b">
               <h4 className="text-sm font-semibold text-yellow-800">
                 Forumula
               </h4>
@@ -346,29 +348,27 @@ export default function MenuTiga() {
                 <FileText className="h-4 w-4 text-yellow-700" />
               </div>
             </div>
+
+            {/* Content Card */}
             <CardContent className="py-6 px-5 italic space-y-6">
-              <div>
-                <h2 className="text-lg font-bold text-gray-900 mb-2">
-                  Forumula 1
-                </h2>
-                <p className="text-sm text-muted-foreground">
+              {/* Forumula 1 */}
+              <div className="pb-4 border-b last:border-0">
+                <p className="text-sm leading-relaxed text-gray-600">
                   <span className="font-semibold text-gray-900">
-                    Terlaksananya Kegiatan Operasi Gabungan
+                    1. Terlaksananya Kegiatan Operasi Gabungan
                   </span>
                   {" = "}
-                  Realisasi Kegiatan / Target
+                  <span>Realisasi Kegiatan / Target</span>
                 </p>
               </div>
-              <div>
-                <h2 className="text-lg font-bold text-gray-900 mb-2">
-                  Forumula 2
-                </h2>
-                <p className="text-sm text-muted-foreground">
+              {/* Forumula 2 */}
+              <div className="pb-4 border-b last:border-0">
+                <p className="text-sm leading-relaxed text-gray-600">
                   <span className="font-semibold text-gray-900">
-                    Kontribusi SW terkutip dari Tunggakan SW
+                    2. Kontribusi SW terkutip dari Tunggakan SW
                   </span>
                   {" = "}
-                  Realisasi SW Terkutip/Tunggakan SW
+                  <span>Realisasi SW Terkutip/Tunggakan SW</span>
                 </p>
               </div>
             </CardContent>
@@ -413,7 +413,6 @@ export default function MenuTiga() {
                 ...item.samsat.map((row) => ["", ...row.slice(1)]),
               ]) ?? []
             }
-            
             summary={table4Data?.summary ?? []}
             isLoading={!table4Data}
           />

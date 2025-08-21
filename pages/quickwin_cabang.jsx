@@ -232,18 +232,15 @@ export default function QuickwinCabang() {
             )}
           </div>
 
-<Card className="overflow-x-auto">
-  <CardHeader>
-    <CardTitle>Monitoring Quickwins</CardTitle>
-  </CardHeader>
-  <CardContent>
-    {loading ? (
-      <Skeleton className="h-40 w-full" />
-    ) : (
-      <RenderTableInfo data={tables2} />
-    )}
-  </CardContent>
-</Card>
+          <Card className="overflow-x-auto">
+            <CardContent>
+              {loading ? (
+                <Skeleton className="h-40 w-full" />
+              ) : (
+                <RenderTableInfo data={tables2} />
+              )}
+            </CardContent>
+          </Card>
 
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
             {loading ? (
