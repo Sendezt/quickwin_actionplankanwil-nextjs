@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -15,31 +15,26 @@ export default function RenderTableScroll({ data }) {
   const summary = data?.summary || null;
 
   const [visibleCount, setVisibleCount] = useState(15);
-  const containerRef = useRef(null);
+
+  // Reset visibleCount setiap kali data berubah
+  useEffect(() => {
+    setVisibleCount(15);
+  }, [rows]);
 
   // --- Infinite scroll handler ---
-  const handleScroll = () => {
-    if (!containerRef.current) return;
-    const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-
+  const handleScroll = (e) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.target;
     if (scrollTop + clientHeight >= scrollHeight - 20) {
-      setVisibleCount((prev) =>
-        prev + 10 > rows.length ? rows.length : prev + 10
-      );
+      setVisibleCount((prev) => Math.min(prev + 10, rows.length));
     }
   };
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (container) container.addEventListener("scroll", handleScroll);
-    return () => {
-      if (container) container.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  // Filter rows: sembunyikan kalau index 1 kosong/null
+  const filteredRows = rows.filter((row) => row[1] !== "" && row[1] != null);
 
   return (
     <div
-      ref={containerRef}
+      onScroll={handleScroll}
       className="overflow-y-auto max-h-[500px] border"
     >
       <Table className="border border-gray-300 border-collapse text-sm w-full">
@@ -57,8 +52,7 @@ export default function RenderTableScroll({ data }) {
         </TableHeader>
 
         <TableBody>
-          {rows.slice(0, visibleCount).map((row, ridx) => {
-            // Normalisasi jumlah kolom biar sesuai header
+          {filteredRows.slice(0, visibleCount).map((row, ridx) => {
             const normalizedRow = [
               ...row,
               ...Array(headers.length - row.length).fill(""),
@@ -82,7 +76,7 @@ export default function RenderTableScroll({ data }) {
             );
           })}
 
-          {rows.length === 0 && (
+          {filteredRows.length === 0 && (
             <TableRow>
               <TableCell
                 colSpan={headers?.length || 1}

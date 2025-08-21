@@ -42,7 +42,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 // Menu data
-const data = {
+export const data = {
   user: {
     name: "Admin User",
     email: "admin@jateng.go.id",

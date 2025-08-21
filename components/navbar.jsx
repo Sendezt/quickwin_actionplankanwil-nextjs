@@ -1,5 +1,6 @@
 import { Bell, Search, User, ChevronDown } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 import {
   Breadcrumb,
@@ -23,33 +24,48 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Badge } from "@/components/ui/badge";
 
+// ambil data sidebar
+import { data } from "@/components/app-sidebar"; // pastikan export data di file app-sidebar.jsx
+
 function Navbar() {
   const [show, setShow] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const pathname = usePathname();
+
+  // fungsi cari breadcrumb berdasarkan path
+  const getBreadcrumbs = () => {
+    for (const item of data.navMain) {
+      if (item.url === pathname) {
+        return [item];
+      }
+      if (item.items) {
+        const sub = item.items.find((s) => s.url === pathname);
+        if (sub) {
+          return [item, sub];
+        }
+      }
+    }
+    return [{ title: "Dashboard", url: "/" }];
+  };
+
+  const breadcrumbs = getBreadcrumbs();
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-
-      // scroll up -> show
       if (currentScrollY < lastScrollY) {
         setShow(true);
       }
-
-      // scroll down -> hide
       if (currentScrollY > lastScrollY) {
         setShow(false);
       }
-
       setLastScrollY(currentScrollY);
     };
 
     window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
+
   return (
     <header
       className={`sticky top-0 z-50 transform transition-transform duration-300 ${
@@ -61,13 +77,20 @@ function Navbar() {
         <Separator orientation="vertical" className="mr-2 h-4" />
         <Breadcrumb>
           <BreadcrumbList>
-            <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator className="hidden md:block" />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Monitoring</BreadcrumbPage>
-            </BreadcrumbItem>
+            {breadcrumbs.map((bc, idx) => (
+              <React.Fragment key={bc.title}>
+                <BreadcrumbItem>
+                  {idx === breadcrumbs.length - 1 ? (
+                    <BreadcrumbPage>{bc.title}</BreadcrumbPage>
+                  ) : (
+                    <BreadcrumbLink href={bc.url}>{bc.title}</BreadcrumbLink>
+                  )}
+                </BreadcrumbItem>
+                {idx < breadcrumbs.length - 1 && (
+                  <BreadcrumbSeparator />
+                )}
+              </React.Fragment>
+            ))}
           </BreadcrumbList>
         </Breadcrumb>
       </div>

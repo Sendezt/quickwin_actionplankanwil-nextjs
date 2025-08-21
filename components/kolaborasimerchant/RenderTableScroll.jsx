@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -16,36 +16,28 @@ export default function RenderTable({ data }) {
 
   // --- State untuk kontrol jumlah baris yang ditampilkan ---
   const [visibleCount, setVisibleCount] = useState(15);
-  const containerRef = useRef(null);
+
+  // Reset visibleCount setiap kali rows berubah
+  useEffect(() => {
+    setVisibleCount(15);
+  }, [rows]);
 
   // Handler saat scroll
-  const handleScroll = () => {
-    if (!containerRef.current) return;
-    const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-
+  const handleScroll = (e) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.target;
     if (scrollTop + clientHeight >= scrollHeight - 20) {
-      // Tambah 10 row tiap kali scroll mentok bawah
-      setVisibleCount((prev) =>
-        prev + 10 > rows.length ? rows.length : prev + 10
-      );
+      setVisibleCount((prev) => Math.min(prev + 10, filteredRows.length));
     }
   };
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener("scroll", handleScroll);
-    }
-    return () => {
-      if (container) {
-        container.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
+  // Filter: hanya tampilkan row kalau kolom index 1 ada isinya
+  const filteredRows = rows.filter(
+    (row) => row[1] !== "" && row[1] !== null && row[1] !== undefined
+  );
 
   return (
     <div
-      ref={containerRef}
+      onScroll={handleScroll}
       className="overflow-y-auto max-h-[500px] border"
     >
       <Table className="border border-gray-300 border-collapse text-sm w-full">
@@ -63,13 +55,13 @@ export default function RenderTable({ data }) {
         </TableHeader>
 
         <TableBody>
-          {rows.slice(0, visibleCount).map((row, idx) => (
-            <TableRow key={idx} className="hover:bg-gray-50">
+          {filteredRows.slice(0, visibleCount).map((row, ridx) => (
+            <TableRow key={ridx} className="hover:bg-gray-50">
               {row.map((cell, cidx) => (
                 <TableCell
                   key={cidx}
                   className={`border border-gray-300 px-3 py-2 ${
-                    typeof cell === "number" || /^\d/.test(cell)
+                    typeof cell === "number" || /^\d+$/.test(cell)
                       ? "text-center"
                       : "text-left"
                   }`}
@@ -80,7 +72,7 @@ export default function RenderTable({ data }) {
             </TableRow>
           ))}
 
-          {rows.length === 0 && (
+          {filteredRows.length === 0 && (
             <TableRow>
               <TableCell
                 colSpan={headers?.length || 1}
