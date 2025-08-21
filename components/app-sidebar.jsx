@@ -66,6 +66,13 @@ const data = {
       ],
     },
     {
+      title: "Quickwin",
+      url: "#",
+      items: [
+        { title: "Oi", url: "/quickwin-cabang" },
+      ],
+    },
+    {
       title: "Action Plan Pusat",
       url: "#",
       items: [
@@ -103,7 +110,7 @@ export function AppSidebar(props) {
               <a href="/" className="flex items-center gap-2">
                 <div className="h-8 aspect-[4/3]">
                   <img
-                    src="/logo.png" // ganti sesuai path logo kamu
+                    src="/logo.png"
                     alt="Logo"
                     className="h-full w-full object-contain rounded-md"
                   />
