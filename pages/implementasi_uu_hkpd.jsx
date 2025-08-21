@@ -48,7 +48,8 @@ import DetailTable from "@/components/DetailTable";
 export default function MenuSatu() {
   const [dashboardData, setDashboardData] = useState(null);
   const [rangeData, setRangeData] = useState(null);
-  const [expandRow, setExpandRow] = useState(null);
+  // const [expandRow, setExpandRow] = useState(null);
+  const [expandedRows, setExpandedRows] = useState([]);
 
   useEffect(() => {
     let interval;
@@ -101,8 +102,16 @@ export default function MenuSatu() {
   const headerRows = dashboardData?.header ?? [];
   const headers =
     headerRows.find((row) => row.some((cell) => cell !== "")) ?? [];
-  const toggleRow = (index) => {
-    setExpandRow(expandRow === index ? null : index);
+  // const toggleRow = (index) => {
+  //   setExpandRow(expandRow === index ? null : index);
+  // };
+  const toggleRow = (rowIndex) => {
+    setExpandedRows(
+      (prev) =>
+        prev.includes(rowIndex)
+          ? prev.filter((i) => i !== rowIndex)
+          : [...prev, rowIndex] 
+    );
   };
 
   return (
@@ -142,7 +151,9 @@ export default function MenuSatu() {
                           <CalendarDays className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                          <div className="text-2xl font-bold">{rangeData.periode_awal}</div>
+                          <div className="text-2xl font-bold">
+                            {rangeData.periode_awal}
+                          </div>
                           <p className="text-xs text-muted-foreground">
                             Tanggal Mulai Periode
                           </p>
@@ -157,7 +168,9 @@ export default function MenuSatu() {
                           <CalendarDays className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                          <div className="text-2xl font-bold">{rangeData.periode_akhir}</div>
+                          <div className="text-2xl font-bold">
+                            {rangeData.periode_akhir}
+                          </div>
                           <p className="text-xs text-muted-foreground">
                             Tanggal Akhir Periode
                           </p>
@@ -203,79 +216,82 @@ export default function MenuSatu() {
                       </p>
                     </CardContent>
                   </Card>
-                  
-                {/* Obyek Penilaian */}
-                <Card className="col-span-2 p-0 overflow-hidden">
-                  <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                    <h4 className="text-sm font-semibold text-green-800">
-                      Obyek Penilaian
-                    </h4>
-                    <div className="bg-green-200 rounded-full">
-                      <BarChart3 className="h-4 w-4 text-green-700" />
-                    </div>
-                  </div>
-                  <CardContent className="py-6 px-5">
-                    <div className="text-lg font-bold text-gray-900 mb-1">
-                      1. Kantor Wilayah
-                    </div>
-                    <div className="text-lg font-bold text-gray-900 mb-1">
-                      2. Kantor Cabang
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      2 Obyek Penilaian
-                    </p>
-                  </CardContent>
-                </Card>
 
-                {/* Juknis Sengkuyung Prioritas */}
-                <Card className="col-span-2 p-0 overflow-hidden">
-                  <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                    <h4 className="text-sm font-semibold text-green-800">
-                      Juknis Sengkuyung Prioritas
-                    </h4>
-                    <div className="bg-green-200 rounded-full">
-                      <ArrowUpRight className="h-4 w-4 text-green-700" />
+                  {/* Obyek Penilaian */}
+                  <Card className="col-span-2 p-0 overflow-hidden">
+                    <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                      <h4 className="text-sm font-semibold text-green-800">
+                        Obyek Penilaian
+                      </h4>
+                      <div className="bg-green-200 rounded-full">
+                        <BarChart3 className="h-4 w-4 text-green-700" />
+                      </div>
                     </div>
-                  </div>
-                  <CardContent className="py-6 px-5">
-                    <a
-                      href="https://drive.google.com/file/d/1LzzM_lllpBQMgkcBXhPXC53s7pr21srN/view"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-lg font-bold text-blue-600 hover:underline mb-1 block"
-                    >
-                      Juknis Sengkuyung Prioritas
-                    </a>
-                    <p className="text-sm text-muted-foreground">
-                      No. 900.1.13.1/ 177 Tahun 2025 tentang Petunjuk Teknis Pelaksanaan Kegiatan Sengkuyung Prioritas Tahun 2025
-                    </p>
-                  </CardContent>
-                </Card>
+                    <CardContent className="py-6 px-5">
+                      <ol className="list-decimal pl-5 text-lg font-bold text-gray-900 mb-1">
+                        <li>Kantor Wilayah</li>
+                        <li>Kantor Cabang</li>
+                      </ol>
+                      <p className="text-sm text-muted-foreground">
+                        2 Obyek Penilaian
+                      </p>
+                    </CardContent>
+                  </Card>
 
-                {/* Deskripsi Formula */}
-                <Card className="col-span-4 p-0 overflow-hidden">
-                  <div className="bg-gradient-to-r from-yellow-100 to-yellow-50 rounded-t-xl px-5 py-3 flex items-center justify-between border-b">
-                    <h4 className="text-sm font-semibold text-yellow-800">
-                      Forumula
-                    </h4>
-                    <div className="bg-yellow-200 p-1 rounded-full">
-                      <FileText className="h-4 w-4 text-yellow-700" />
+                  {/* Juknis Sengkuyung Prioritas */}
+                  <Card className="col-span-2 p-0 overflow-hidden">
+                    <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                      <h4 className="text-sm font-semibold text-green-800">
+                        Juknis Sengkuyung Prioritas
+                      </h4>
+                      <div className="bg-green-200 rounded-full">
+                        <ArrowUpRight className="h-4 w-4 text-green-700" />
+                      </div>
                     </div>
-                  </div>
-                  <CardContent className="py-6 px-5 italic">
-                    <p className="text-sm text-muted-foreground">
-                      <span className="font-bold text-base text-gray-900">
-                        Terlaksananya Program Kerja Peningkatan Tingkat Kepatuhan di seluruh Kota / Kabupaten
-                      </span>
-                      {" = "}
-                      <span className="text-sm text-muted-foreground">
-                        Kota atau Kabupaten yang melaksanakan Program Kerja / Total Kota atau Kabupaten
-                      </span>
-                    </p>
-                  </CardContent>
-                </Card>
-                    </>
-                  )}
+                    <CardContent className="py-6 px-5">
+                      <a
+                        href="https://drive.google.com/file/d/1LzzM_lllpBQMgkcBXhPXC53s7pr21srN/view"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-lg font-bold text-blue-600 hover:underline mb-1 block"
+                      >
+                        Juknis Sengkuyung Prioritas
+                      </a>
+                      <p className="text-sm text-muted-foreground">
+                        No. 900.1.13.1/ 177 Tahun 2025 tentang Petunjuk Teknis
+                        Pelaksanaan Kegiatan Sengkuyung Prioritas Tahun 2025
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  {/* Deskripsi Formula */}
+                  <Card className="col-span-4 p-0 overflow-hidden">
+                    <div className="bg-gradient-to-r from-yellow-100 to-yellow-50 rounded-t-xl px-5 py-3 flex items-center justify-between border-b">
+                      <h4 className="text-sm font-semibold text-yellow-800">
+                        Forumula
+                      </h4>
+                      <div className="bg-yellow-200 p-1 rounded-full">
+                        <FileText className="h-4 w-4 text-yellow-700" />
+                      </div>
+                    </div>
+                    <CardContent className="py-6 px-5 italic">
+                      <div className="pb-4 border-b last:border-0">
+                        <p className="text-sm leading-relaxed text-gray-600">
+                          <span className="font-semibold text-gray-900">
+                            Terlaksananya Program Kerja Peningkatan Tingkat
+                            Kepatuhan di seluruh Kota / Kabupaten
+                          </span>
+                          {" = "}
+                          <span>
+                            Kota atau Kabupaten yang melaksanakan Program Kerja
+                            / Total Kota atau Kabupaten
+                          </span>
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </>
+              )}
             </div>
 
             {dashboardData && dashboardData.data && (
@@ -347,7 +363,14 @@ export default function MenuSatu() {
                             </TableRow>
 
                             {/* Row Detail */}
-                            {expandRow === index && (
+                            {/* {expandRow === index && (
+                              <TableRow className="bg-gray-50">
+                                <TableCell colSpan={row.length} className="p-2">
+                                  <DetailTable loket={row[1]} />
+                                </TableCell>
+                              </TableRow>
+                            )} */}
+                            {expandedRows.includes(index) && (
                               <TableRow className="bg-gray-50">
                                 <TableCell colSpan={row.length} className="p-2">
                                   <DetailTable loket={row[1]} />

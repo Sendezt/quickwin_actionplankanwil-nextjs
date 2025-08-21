@@ -307,7 +307,7 @@ export default function MenuDua() {
             )}
           </div>
 
-          {/* Deskripsi Formula - Full width */}
+          {/* Deskripsi Forumula */}
           {!loading && (
             <Card className="p-0 overflow-hidden">
               {/* Header Card */}
@@ -322,14 +322,11 @@ export default function MenuDua() {
 
               {/* Content Card */}
               <CardContent className="py-6 px-5 italic space-y-6">
-                {/* Formula 1 */}
-                <div className="mb-4 p-4 rounded-2xl border bg-white shadow-sm">
-                  <h2 className="text-base font-semibold text-gray-800 mb-2">
-                    Forumula 1
-                  </h2>
+                {/* Forumula 1 */}
+                <div className="pb-4 border-b last:border-0">
                   <p className="text-sm leading-relaxed text-gray-600">
                     <span className="font-semibold text-gray-900">
-                      Terlaksananya Kebijakan Relaksasi
+                      1. Terlaksananya Kebijakan Relaksasi
                     </span>
                     {" = "}
                     <span>
@@ -340,13 +337,10 @@ export default function MenuDua() {
                 </div>
 
                 {/* Forumula 2 */}
-                <div className="mb-4 p-4 rounded-2xl border bg-white shadow-sm">
-                  <h2 className="text-base font-semibold text-gray-800 mb-2">
-                    Forumula 2
-                  </h2>
+                <div className="pb-4 border-b last:border-0">
                   <p className="text-sm leading-relaxed text-gray-600">
                     <span className="font-semibold text-gray-900">
-                      Pertumbuhan penerimaan SW di periode Relaksasi
+                      2. Pertumbuhan penerimaan SW di periode Relaksasi
                     </span>
                     {" = "}
                     <span>

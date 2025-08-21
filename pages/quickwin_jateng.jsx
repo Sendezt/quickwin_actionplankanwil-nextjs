@@ -40,8 +40,6 @@ export default function QuickwinJateng() {
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
-        
-
           {/* Table */}
           <Card>
             <CardContent>
