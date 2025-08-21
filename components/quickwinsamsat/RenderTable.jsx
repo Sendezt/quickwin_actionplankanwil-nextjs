@@ -27,19 +27,19 @@ const getQuickwinsBadge = (value) => {
   let badgeClass = "bg-gray-200 text-gray-800";
   switch (value.toLowerCase()) {
     case "promitra":
-      badgeClass = "bg-green-100 text-green-800";
-      break;
-    case "sengkuyung":
-      badgeClass = "bg-blue-100 text-blue-800";
-      break;
-    case "sowan":
-      badgeClass = "bg-yellow-100 text-yellow-800";
-      break;
-    case "okdealer":
       badgeClass = "bg-purple-100 text-purple-800";
       break;
+    case "sengkuyung":
+      badgeClass = "bg-orange-100 text-orange-800";
+      break;
+    case "sowan":
+      badgeClass = "bg-blue-100 text-blue-800";
+      break;
+    case "okdealer":
+      badgeClass = "bg-yellow-100 text-yellow-800";
+      break;
     case "opsgab":
-      badgeClass = "bg-red-100 text-red-800";
+      badgeClass = "bg-green-100 text-green-800";
       break;
   }
   return (
