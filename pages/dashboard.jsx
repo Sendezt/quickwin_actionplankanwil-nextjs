@@ -9,7 +9,8 @@ import Navbar from "@/components/navbar";
 // import ChartJS
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement } from "chart.js";
-
+import { ExternalLink } from "lucide-react";
+import Link from "next/link";
 ChartJS.register(Title, Tooltip, Legend, ArcElement);
 
 export default function Dashboard() {
@@ -19,6 +20,12 @@ export default function Dashboard() {
   const [bestSamsatData, setBestSamsatData] = useState(null);
   const [cabangTables, setCabangTables] = useState([]);
   const [chartData, setChartData] = useState(null);
+
+  const cardConfig = [
+    { title: "Action Plan Kanwil", link: "/quickwin-kanwil" },
+    { title: "Action Plan Cabang", link: "/quickwin-cabang" },
+    { title: "Action Plan Samsat", link: "/quickwin-samsat" },
+  ];
 
   useEffect(() => {
     async function fetchCardDashboard() {
@@ -224,28 +231,33 @@ export default function Dashboard() {
             </Card>
 
             {/* Render cards dari API */}
-            {cardDashboardData.map((card, idx) => (
+            {cardConfig.map((cfg, idx) => (
               <Card
                 key={idx}
                 className="p-0 overflow-hidden rounded-2xl shadow-md"
               >
                 <CardHeader className="bg-green-900 text-white p-2">
-                  <CardTitle className="text-sm">Action Plan Kanwil</CardTitle>
+                  <div className="flex items-center justify-between w-full">
+                    <CardTitle className="text-sm">{cfg.title}</CardTitle>
+                    <Link href={cfg.link} className="hover:text-gray-200">
+                      <ExternalLink size={16} />
+                    </Link>
+                  </div>
                 </CardHeader>
                 <CardContent className="p-4 text-center text-red-900 font-bold">
                   {/* Skor utama */}
                   <div className="text-4xl mb-1">
-                    {card.data?.[0]?.[0] ?? "-"}
+                    {cardDashboardData[idx]?.data?.[0]?.[0] ?? "-"}
                   </div>
 
                   {/* Persentase */}
                   <div className="text-lg text-red-600 mb-1">
-                    {card.data?.[1]?.[0] ?? "-"}
+                    {cardDashboardData[idx]?.data?.[1]?.[0] ?? "-"}
                   </div>
 
                   {/* Skor max */}
                   <p className="text-sm text-gray-600">
-                    {card.data?.[2]?.[0] ?? "-"} (skor max)
+                    {cardDashboardData[idx]?.data?.[2]?.[0] ?? "-"} (skor max)
                   </p>
                 </CardContent>
               </Card>
