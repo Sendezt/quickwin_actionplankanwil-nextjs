@@ -132,7 +132,7 @@ export default function MenuDua() {
   const { headerTop, headerBottom, data, summary } = tableData || {};
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultOpen={true}>
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         {/* Navbar */}

@@ -116,7 +116,7 @@ export default function MenuSatu() {
 
   return (
     <div>
-      <SidebarProvider defaultOpen={false}>
+      <SidebarProvider defaultOpen={true}>
         <AppSidebar />
         <SidebarInset>
           {/* Navbar */}

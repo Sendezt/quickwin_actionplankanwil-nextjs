@@ -19,7 +19,8 @@ export default function Dashboard() {
   const [cardDashboardData, setCardDashboardData] = useState([]);
   const [bestSamsatData, setBestSamsatData] = useState(null);
   const [cabangTables, setCabangTables] = useState([]);
-  const [chartData, setChartData] = useState(null);
+  const [chartData1, setChartData1] = useState(null);
+  const [chartData2, setChartData2] = useState(null);
 
   const cardConfig = [
     { title: "Action Plan Kanwil", link: "/quickwin-kanwil" },
@@ -28,6 +29,50 @@ export default function Dashboard() {
   ];
 
   useEffect(() => {
+    async function fetchCharts() {
+      try {
+        const res1 = await fetch(
+          "https://magangproject.vercel.app/api/dashboard/getdashboardchart1"
+        );
+        const data1 = await res1.json();
+
+        if (data1?.data && Array.isArray(data1.data)) {
+          setChartData1({
+            labels: data1.data.map((item) => item[0]),
+            datasets: [
+              {
+                data: data1.data.map((item) => parseFloat(item[1])),
+                backgroundColor: ["#001BB7", "#347433", "#FFCC00", "#8C1007"],
+              },
+            ],
+          });
+        } else {
+          console.warn("Struktur chart1 tidak sesuai:", data1);
+        }
+
+        const res2 = await fetch(
+          "https://magangproject.vercel.app/api/dashboard/getdashboardchart2"
+        );
+        const data2 = await res2.json();
+
+        if (data2?.data && Array.isArray(data2.data)) {
+          setChartData2({
+            labels: data2.data.map((item) => item[0]),
+            datasets: [
+              {
+                data: data2.data.map((item) => parseFloat(item[1])),
+                backgroundColor: ["#8C1007", "#DC2525", "#C83F12"],
+              },
+            ],
+          });
+        } else {
+          console.warn("Struktur chart2 tidak sesuai:", data2);
+        }
+      } catch (error) {
+        console.error("Gagal memuat data chart:", error);
+      }
+    }
+
     async function fetchCardDashboard() {
       try {
         const res = await fetch(
@@ -103,49 +148,45 @@ export default function Dashboard() {
       }
     }
 
-    async function fetchDataChart() {
-      try {
-        const res = await fetch(
-          "https://magangproject.vercel.app/api/dashboard/getdashboardchart1"
-        );
-        const json = await res.json();
-
-        if (json && Array.isArray(json.data)) {
-          const labels = json.data.map((d) => d[0]);
-          const values = json.data.map((d) => parseFloat(d[1]));
-
-          setChartData({
-            labels,
-            datasets: [
-              {
-                label: json.name,
-                data: values,
-                backgroundColor: [
-                  "#ef4444", // merah
-                  "#22c55e", // hijau
-                  "#3b82f6", // biru
-                  "#f59e0b", // kuning
-                ],
-                borderWidth: 1,
-              },
-            ],
-          });
-        }
-      } catch (err) {
-        console.error("Gagal fetch chart data:", err);
-      }
-    }
-
     fetchDataJateng();
     fetchDataBestCabang();
     fetchDataBestSamsat();
     fetchCardDashboard();
-    fetchDataChart();
+    fetchCharts();
   }, []);
+
+  const options = {
+    plugins: {
+      legend: {
+        position: "bottom",
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const dataset = context.dataset;
+            const total = dataset.data.reduce((acc, val) => acc + val, 0);
+            const value = context.raw;
+            const percentage = ((value / total) * 100).toFixed(1);
+            return `${context.label}: ${percentage}% (${value})`;
+          },
+        },
+      },
+      datalabels: {
+        color: "#fff",
+        formatter: (value, context) => {
+          const total = context.chart.data.datasets[0].data.reduce(
+            (a, b) => a + b,
+            0
+          );
+          return ((value / total) * 100).toFixed(1) + "%";
+        },
+      },
+    },
+  };
 
   return (
     <div>
-      <SidebarProvider defaultOpen={false}>
+      <SidebarProvider defaultOpen={true}>
         <AppSidebar />
         <SidebarInset>
           {/* Navbar */}
@@ -263,21 +304,54 @@ export default function Dashboard() {
               </Card>
             ))}
 
-            {/* === Pie Chart di atas tabel === */}
-            <Card className="col-span-3 p-0 overflow-hidden">
-              <CardHeader className="bg-green-900 text-white p-2">
-                <CardTitle className="text-sm">
-                  Action Plan (Pie Chart)
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-4">
-                {chartData ? (
-                  <Pie data={chartData} />
-                ) : (
-                  <p className="text-gray-500 text-sm">Memuat chart...</p>
-                )}
-              </CardContent>
-            </Card>
+            {/* Dua chart berdampingan */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 col-span-3">
+              <Card className="p-0 overflow-hidden h-[400px] flex flex-col">
+                <CardHeader className="bg-green-900 text-white p-2">
+                  <CardTitle className="text-sm">
+                    Action Plan (Pie Chart)
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex-1 flex items-center justify-center">
+                  {chartData1 ? (
+                    <div className="w-full h-full max-h-[320px]">
+                      <Pie
+                        data={chartData1}
+                        options={{
+                          ...options,
+                          maintainAspectRatio: false,
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <p className="text-gray-500 text-sm">Memuat chart...</p>
+                  )}
+                </CardContent>
+              </Card>
+
+              <Card className="p-0 overflow-hidden h-[400px] flex flex-col">
+                <CardHeader className="bg-blue-900 text-white p-2">
+                  <CardTitle className="text-sm">
+                    Kekurangan (Pie Chart)
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex-1 flex items-center justify-center">
+                  {chartData2 ? (
+                    <div className="w-full h-full max-h-[320px]">
+                      <Pie
+                        data={chartData2}
+                        options={{
+                          ...options,
+                          maintainAspectRatio: false,
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <p className="text-gray-500 text-sm">Memuat chart...</p>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
 
             {/* Render tabel khusus: Nilai Total Action Plan Cabang */}
             {cabangTables

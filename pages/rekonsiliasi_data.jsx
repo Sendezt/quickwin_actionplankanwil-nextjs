@@ -233,7 +233,7 @@ export default function MenuEmpat() {
   const targetSkor = cabangData?.summary?.[1] ?? "";
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultOpen={true}>
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />

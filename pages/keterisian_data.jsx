@@ -89,7 +89,7 @@ export default function MenuLima() {
   );
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultOpen={true}>
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />

@@ -75,7 +75,7 @@ export default function MenuTwelve() {
   const skorTotal = table1Data?.data?.[0]?.[6] ?? "-";
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultOpen={true}>
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />

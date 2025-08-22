@@ -245,7 +245,7 @@ export default function MenuEnam() {
   const skorSamsat = table3Data?.summary?.[5] ?? "?";
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultOpen={true}>
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />

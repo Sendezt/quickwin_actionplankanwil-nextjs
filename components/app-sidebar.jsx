@@ -56,7 +56,7 @@ export const data = {
     },
     {
       title: "Quickwin Jateng",
-      url: "#",
+      url: "/",
       items: [
         { title: "SENGKUYUNG", url: "/sengkuyung" },
         { title: "PROMITRA", url: "/404" },
@@ -66,15 +66,8 @@ export const data = {
       ],
     },
     {
-      title: "Quickwin",
-      url: "#",
-      items: [
-        { title: "Oi", url: "/quickwin-cabang" },
-      ],
-    },
-    {
       title: "Action Plan Pusat",
-      url: "#",
+      url: "/",
       items: [
         { title: "Implementasi UU HKPD", url: "/implementasi-uu-hkpd" },
         { title: "Kebijakan Relaksasi", url: "/kebijakan-relaksasi" },
@@ -102,7 +95,6 @@ export function AppSidebar(props) {
 
   return (
     <Sidebar variant="inset" {...props}>
-      {/* Header dengan Logo */}
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -129,20 +121,23 @@ export function AppSidebar(props) {
         </SidebarMenu>
       </SidebarHeader>
 
-      {/* Sidebar Content */}
       <SidebarContent className="sidebar-content">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               {data.navMain.map((item) => {
-                const isActive = pathname === item.url;
+                const isDashboardActive = item.url === "/" && pathname === "/";
+                const isParentActive =
+                  item.items?.some((sub) => pathname.startsWith(sub.url)) ||
+                  (item.url !== "/" && pathname.startsWith(item.url));
+
                 return (
                   <SidebarMenuItem key={item.title}>
                     {item.items ? (
                       <Collapsible
                         asChild
-                        defaultOpen={item.items.some(
-                          (sub) => sub.url === pathname
+                        defaultOpen={item.items.some((sub) =>
+                          pathname.startsWith(sub.url)
                         )}
                       >
                         <div>
@@ -150,7 +145,7 @@ export function AppSidebar(props) {
                             <SidebarMenuButton
                               tooltip={item.title}
                               className={`hover:bg-gray-800 hover:text-white ${
-                                isActive ? "bg-gray-700 text-white" : ""
+                                isParentActive ? "bg-gray-700 text-white" : ""
                               }`}
                             >
                               {item.icon && <item.icon />}
@@ -161,7 +156,9 @@ export function AppSidebar(props) {
                           <CollapsibleContent>
                             <SidebarMenuSub>
                               {item.items.map((subItem) => {
-                                const isSubActive = pathname === subItem.url;
+                                const isSubActive = pathname.startsWith(
+                                  subItem.url
+                                );
                                 return (
                                   <SidebarMenuSubItem key={subItem.title}>
                                     <SidebarMenuSubButton
@@ -191,7 +188,7 @@ export function AppSidebar(props) {
                         tooltip={item.title}
                         asChild
                         className={`hover:bg-gray-700 hover:text-white ${
-                          isActive ? "bg-gray-700 text-white" : ""
+                          isDashboardActive ? "bg-gray-700 text-white" : ""
                         }`}
                       >
                         <a href={item.url}>
@@ -208,7 +205,6 @@ export function AppSidebar(props) {
         </SidebarGroup>
       </SidebarContent>
 
-      {/* Footer */}
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>

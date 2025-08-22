@@ -48,7 +48,7 @@ export default function QuickwinCabang() {
   const getTable = (name) => tables.find((t) => t.name === name) || null;
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultOpen={true}>
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />

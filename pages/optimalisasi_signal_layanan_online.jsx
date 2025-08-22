@@ -225,7 +225,7 @@ export default function MenuTujuh() {
   const skorKanwil = table1Data?.summary?.[8] ?? "?";
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultOpen={true}>
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
