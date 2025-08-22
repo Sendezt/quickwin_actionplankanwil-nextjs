@@ -3,7 +3,6 @@
 import * as React from "react";
 import { usePathname } from "next/navigation";
 import {
-  Building2,
   ChevronRight,
   Home,
   Settings,
@@ -85,7 +84,10 @@ export const data = {
         { title: "SIGAP Instansi", url: "/sigap-instansi" },
         { title: "WA Blast", url: "/wa-blast" },
         { title: "Pendataan Terlibat Laka", url: "/pendataan-laka" },
-      ],
+      ].map((item, index) => ({
+        ...item,
+        title: `${index + 1}. ${item.title}`, 
+      })),
     },
   ],
 };

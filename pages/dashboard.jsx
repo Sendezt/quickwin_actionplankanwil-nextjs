@@ -195,20 +195,20 @@ export default function Dashboard() {
           {/* Konten Dashboard */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 px-4 md:px-6 lg:px-8">
             {/* Kolom kiri: Skor Jateng */}
-            <Card className="row-span-2 p-0 overflow-hidden">
+            <Card className="row-span-2 p-5 overflow-hidden text-center">
               <CardHeader className="p-4">
                 <CardTitle className="text-sm font-bold text-red-900">
                   Skor Action Plan Jateng
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-4">
-                <div className="text-4xl font-bold text-red-900">
+              <CardContent className="p-2">
+                <div className="text-6xl font-bold text-red-900">
                   {skorJatengData?.summary?.[2] ?? "-"}
                 </div>
                 <p className="text-sm text-gray-600">
                   Target Skor{" "}
-                  <span className="text-green-700 font-bold">100</span> (nilai
-                  max)
+                  <span className="text-green-700 font-bold">100</span> (Nilai
+                  Max)
                 </p>
               </CardContent>
             </Card>
@@ -296,11 +296,14 @@ export default function Dashboard() {
                     {cardDashboardData[idx]?.data?.[1]?.[0] ?? "-"}
                   </div>
 
-                  {/* Skor max */}
+                  {/* Skor Max */}
                   <p className="text-sm text-gray-600">
-                    {cardDashboardData[idx]?.data?.[2]?.[0] ?? "-"} (skor max)
+                    {cardDashboardData[idx]?.data?.[2]?.[0] ?? "-"} (Skor Max)
                   </p>
                 </CardContent>
+              </Card>,
+              <Card>
+
               </Card>
             ))}
 
