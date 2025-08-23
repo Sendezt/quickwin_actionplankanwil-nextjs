@@ -38,7 +38,6 @@ const chartConfig = {
   },
 };
 
-// components/chart-bar-multiple.jsx
 export function ChartBarMultiple({ data }) {
   const chartData = data.map((item) => ({
     loket: item[1],
@@ -75,7 +74,7 @@ export function ChartBarMultiple({ data }) {
           <TrendingUp className="h-4 w-4" />
         </div>
         <div className="text-muted-foreground leading-none">
-          Data bersumber dari API Sheet1 (Magang Project)
+          Data diambil dari Quickwin Action Plan (Google Spreadsheet)
         </div>
       </CardFooter>
     </Card>
