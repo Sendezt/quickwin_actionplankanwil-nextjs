@@ -34,13 +34,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChartBarMultiple } from "@/components/chart-bar-multiple";
-import {
-  BarChart3,
-  TrendingUp,
-  FileText,
-  CalendarDays,
-  ArrowUpRight,
-} from "lucide-react";
+import { BarChart3, Radical, CalendarDays, File, LandPlot } from "lucide-react";
 
 import Navbar from "@/components/navbar";
 import DetailTable from "@/components/DetailTable";
@@ -92,9 +86,9 @@ export default function MenuSatu() {
     fetchData(); // Initial fetch
     fetchRangeData();
 
-    interval = setInterval(fetchData, 10000); // Fetch ulang setiap 60 detik
+    interval = setInterval(fetchData, 10000);
 
-    return () => clearInterval(interval); // Clear interval on component unmount
+    return () => clearInterval(interval);
   }, []);
 
   const isLoading = !dashboardData;
@@ -102,15 +96,11 @@ export default function MenuSatu() {
   const headerRows = dashboardData?.header ?? [];
   const headers =
     headerRows.find((row) => row.some((cell) => cell !== "")) ?? [];
-  // const toggleRow = (index) => {
-  //   setExpandRow(expandRow === index ? null : index);
-  // };
   const toggleRow = (rowIndex) => {
-    setExpandedRows(
-      (prev) =>
-        prev.includes(rowIndex)
-          ? prev.filter((i) => i !== rowIndex)
-          : [...prev, rowIndex] 
+    setExpandedRows((prev) =>
+      prev.includes(rowIndex)
+        ? prev.filter((i) => i !== rowIndex)
+        : [...prev, rowIndex]
     );
   };
 
@@ -179,55 +169,15 @@ export default function MenuSatu() {
                     </>
                   )}
 
-                  {/* Skor Kanwil */}
-                  <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">
-                        Skor Kanwil
-                      </CardTitle>
-                      <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold">
-                        {dashboardData?.summary?.[6] ?? "-"}
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        Nilai Total Kanwil{" "}
-                        <span className="text-gray-500">| 4 (Nilai Max)</span>
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  {/* Skor Cabang */}
-                  <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">
-                        Skor Cabang
-                      </CardTitle>
-                      <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold">
-                        {dashboardData?.summary?.[7] ?? "-"}
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        Nilai Total Cabang{" "}
-                        <span className="text-gray-500">| 4 (Nilai Max)</span>
-                      </p>
-                    </CardContent>
-                  </Card>
-
                   {/* Obyek Penilaian */}
-                  <Card className="col-span-2 p-0 overflow-hidden">
-                    <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                      <h4 className="text-sm font-semibold text-green-800">
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">
                         Obyek Penilaian
-                      </h4>
-                      <div className="bg-green-200 rounded-full">
-                        <BarChart3 className="h-4 w-4 text-green-700" />
-                      </div>
-                    </div>
-                    <CardContent className="py-6 px-5">
+                      </CardTitle>
+                      <LandPlot className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent className="py-0 px-5">
                       <ol className="list-decimal pl-5 text-lg font-bold text-gray-900 mb-1">
                         <li>Kantor Wilayah</li>
                         <li>Kantor Cabang</li>
@@ -239,16 +189,14 @@ export default function MenuSatu() {
                   </Card>
 
                   {/* Juknis Sengkuyung Prioritas */}
-                  <Card className="col-span-2 p-0 overflow-hidden">
-                    <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                      <h4 className="text-sm font-semibold text-green-800">
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">
                         Juknis Sengkuyung Prioritas
-                      </h4>
-                      <div className="bg-green-200 rounded-full">
-                        <ArrowUpRight className="h-4 w-4 text-green-700" />
-                      </div>
-                    </div>
-                    <CardContent className="py-6 px-5">
+                      </CardTitle>
+                      <File className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent className="py-0 px-5">
                       <a
                         href="https://drive.google.com/file/d/1LzzM_lllpBQMgkcBXhPXC53s7pr21srN/view"
                         target="_blank"
@@ -264,18 +212,58 @@ export default function MenuSatu() {
                     </CardContent>
                   </Card>
 
-                  {/* Deskripsi Formula */}
-                  <Card className="col-span-4 p-0 overflow-hidden">
-                    <div className="bg-gradient-to-r from-yellow-100 to-yellow-50 rounded-t-xl px-5 py-3 flex items-center justify-between border-b">
-                      <h4 className="text-sm font-semibold text-yellow-800">
-                        Forumula
+                  {/* Skor Kanwil */}
+                  <Card className="col-span-2 p-0 overflow-hidden pb-4 text-center">
+                    <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                      <h4 className="text-sm font-semibold text-blue-800">
+                        Skor Kanwil
                       </h4>
-                      <div className="bg-yellow-200 p-1 rounded-full">
-                        <FileText className="h-4 w-4 text-yellow-700" />
+                      <div className="bg-blue-200 rounded-full">
+                        <BarChart3 className="h-4 w-4 text-blue-700" />
                       </div>
                     </div>
-                    <CardContent className="py-6 px-5 italic">
-                      <div className="pb-4 border-b last:border-0">
+                    <CardContent className="pb-4">
+                      <div className="text-7xl font-bold text-blue-900">
+                        {dashboardData?.summary?.[6] ?? "-"}
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Nilai Total Kanwil{" "}
+                        <span className="text-gray-500">| 4 (Nilai Max)</span>
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  {/* Skor Cabang */}
+                  <Card className="col-span-2 p-0 overflow-hidden pb-4 text-center">
+                    <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                      <h4 className="text-sm font-semibold text-green-800">
+                        Skor Cabang
+                      </h4>
+                      <div className="bg-green-200 rounded-full">
+                        <BarChart3 className="h-4 w-4 text-green-700" />
+                      </div>
+                    </div>
+                    <CardContent className="pb-4">
+                      <div className="text-7xl font-bold text-green-700">
+                        {dashboardData?.summary?.[7] ?? "-"}
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Nilai Total Cabang{" "}
+                        <span className="text-gray-500">| 4 (Nilai Max)</span>
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  {/* Deskripsi Formula */}
+                  <Card className="col-span-4">
+                    <CardHeader className="flex flex-row col items-center justify-between space-y-0">
+                      <CardTitle className="text-sm font-bold">
+                        Forumula
+                      </CardTitle>
+                      <Radical className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent className="px-6 italic">
+                      <div className="border-b last:border-0">
                         <p className="text-sm leading-relaxed text-gray-600">
                           <span className="font-semibold text-gray-900">
                             Terlaksananya Program Kerja Peningkatan Tingkat
@@ -344,11 +332,11 @@ export default function MenuSatu() {
                                     key={cellIndex}
                                     className="border border-gray-300 text-center px-2 py-1 text-sm cursor-pointer"
                                     onClick={() => {
-                                      if (cellIndex === 1) toggleRow(index); // hanya kolom Loket Kantor bisa diklik
+                                      if (cellIndex === 1) toggleRow(index);
                                     }}
                                   >
                                     {cellIndex === 1 ? (
-                                      <Badge className="bg-blue-300 text-blue-800 hover:bg-blue-100 cursor-pointer">
+                                      <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100 cursor-pointer">
                                         {cell}
                                       </Badge>
                                     ) : cellIndex === 6 && cell === "100" ? (
@@ -363,13 +351,6 @@ export default function MenuSatu() {
                             </TableRow>
 
                             {/* Row Detail */}
-                            {/* {expandRow === index && (
-                              <TableRow className="bg-gray-50">
-                                <TableCell colSpan={row.length} className="p-2">
-                                  <DetailTable loket={row[1]} />
-                                </TableCell>
-                              </TableRow>
-                            )} */}
                             {expandedRows.includes(index) && (
                               <TableRow className="bg-gray-50">
                                 <TableCell colSpan={row.length} className="p-2">

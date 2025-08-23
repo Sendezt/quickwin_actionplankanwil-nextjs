@@ -52,6 +52,7 @@ import {
   BarChart3,
   ArrowUpRight,
   FileText,
+  LandPlot,
 } from "lucide-react";
 import Navbar from "@/components/navbar";
 
@@ -195,7 +196,7 @@ export default function MenuDua() {
                 )}
 
                 {/* Skor Total */}
-                <Card>
+                {/* <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
                       Skor Total
@@ -208,10 +209,10 @@ export default function MenuDua() {
                       Target: {targetSkor} (nilai max)
                     </p>
                   </CardContent>
-                </Card>
+                </Card> */}
 
                 {/* Breakdown Skor */}
-                <Card>
+                {/* <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
                       Breakdown Skor
@@ -237,12 +238,54 @@ export default function MenuDua() {
                       )}
                     </div>
                   </CardContent>
+                </Card> */}
+
+                {/* Obyek Penilaian */}
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Obyek Penilaian
+                    </CardTitle>
+                    <LandPlot className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent className="py-0 px-6">
+                    <div className="text-lg font-bold text-gray-900 mb-1">
+                      Kantor Wilayah
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      1 Obyek Penilaian
+                    </p>
+                  </CardContent>
+                </Card>
+
+                {/* Skor Total */}
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      SK Gubernur Jateng
+                    </CardTitle>
+                    <FileText className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent className="py-0 px-6">
+                    <a
+                      href="https://drive.google.com/file/d/1zJc41CQkQ4MFStjR_TD9uIwD9FAN9ODm/view"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-lg font-bold text-blue-600 hover:underline mb-1 block"
+                    >
+                      Surat Keputusan Gubernur Jawa Tengah
+                    </a>
+                    <p className="text-sm text-muted-foreground">
+                      No. 100.3.3.1/87 Tahun 2025 tentang Pembebasan atas Pokok
+                      dan Sanksi Administratif Pajak Kendaraan Bermotor
+                    </p>
+                  </CardContent>
                 </Card>
               </>
             )}
           </div>
 
-          {/* Row kedua untuk cards yang lebih besar */}
+          {/* Row kedua untuk cards */}
           <div className="grid gap-4 md:grid-cols-2">
             {loading ? (
               Array.from({ length: 2 }).map((_, i) => (
@@ -258,49 +301,52 @@ export default function MenuDua() {
               ))
             ) : (
               <>
-                {/* Obyek Penilaian */}
-                <Card className="p-0 overflow-hidden">
-                  <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                    <h4 className="text-sm font-semibold text-green-800">
-                      Obyek Penilaian
+                {/* Skor Total */}
+                <Card className="p-0 overflow-hidden pb-4 text-center">
+                  <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                    <h4 className="text-sm font-semibold text-blue-800">
+                      Skor Total
                     </h4>
-                    <div className="bg-green-200 rounded-full">
-                      <BarChart3 className="h-4 w-4 text-green-700" />
+                    <div className="bg-blue-200 rounded-full">
+                      <TrendingUp className="h-4 w-4 text-blue-700" />
                     </div>
                   </div>
-                  <CardContent className="py-6 px-5">
-                    <div className="text-lg font-bold text-gray-900 mb-1">
-                      Kantor Wilayah
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      1 Obyek Penilaian
+                  <CardContent className="pb-4">
+                    <div className="text-7xl font-bold text-blue-900">{totalSkor}</div>
+                    <p className="text-xs text-muted-foreground">
+                      Target: {targetSkor} (Nilai Max)
                     </p>
                   </CardContent>
                 </Card>
 
-                {/* SK Gubernur Jateng */}
+                {/* Breakdown Skor */}
                 <Card className="p-0 overflow-hidden">
-                  <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                    <h4 className="text-sm font-semibold text-green-800">
-                      SK Gubernur Jateng
+                  <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                    <h4 className="text-sm font-semibold text-blue-800">
+                      Breakdown Skor
                     </h4>
-                    <div className="bg-green-200 rounded-full">
-                      <ArrowUpRight className="h-4 w-4 text-green-700" />
+                    <div className="bg-blue-200 rounded-full">
+                      <BarChart3 className="h-4 w-4 text-blue-700" />
                     </div>
                   </div>
-                  <CardContent className="py-6 px-5">
-                    <a
-                      href="https://drive.google.com/file/d/1zJc41CQkQ4MFStjR_TD9uIwD9FAN9ODm/view"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-lg font-bold text-blue-600 hover:underline mb-1 block"
-                    >
-                      Surat Keputusan Gubernur Jawa Tengah
-                    </a>
-                    <p className="text-sm text-muted-foreground">
-                      No. 100.3.3.1/87 Tahun 2025 tentang Pembebasan atas Pokok
-                      dan Sanksi Administratif Pajak Kendaraan Bermotor
-                    </p>
+                  <CardContent className="py-6 px-5 space-y-2">
+                    {breakdownData?.data?.length > 0 ? (
+                      breakdownData.data.map((item, index) => (
+                        <div
+                          key={index}
+                          className="flex justify-between items-center"
+                        >
+                          <span className="text-xs text-gray-600 flex-1 pr-2">
+                            {item.judul}
+                          </span>
+                          <span className="text-lg font-bold">{item.skor}</span>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-xs text-muted-foreground">
+                        Tidak ada data
+                      </p>
+                    )}
                   </CardContent>
                 </Card>
               </>
