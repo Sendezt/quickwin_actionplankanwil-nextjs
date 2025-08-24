@@ -3,9 +3,15 @@
 import React, { useEffect, useState } from "react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import Navbar from "@/components/navbar";
-
+import RenderTable from "@/components/dashboard/RenderTable";
 // import ChartJS
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement } from "chart.js";
@@ -18,6 +24,7 @@ export default function Dashboard() {
   const [bestCabangData, setBestCabangData] = useState(null);
   const [cardDashboardData, setCardDashboardData] = useState([]);
   const [bestSamsatData, setBestSamsatData] = useState(null);
+  const [bestSamsatCard, setBestSamsatCard] = useState(null);
   const [cabangTables, setCabangTables] = useState([]);
   const [chartData1, setChartData1] = useState(null);
   const [chartData2, setChartData2] = useState(null);
@@ -99,11 +106,19 @@ export default function Dashboard() {
 
         if (json && Array.isArray(json.tables)) {
           setCabangTables(json.tables); // simpan semua tabel
+
+          // cari tabel "Nilai Total Action Plan Cabang"
           const table = json.tables.find(
             (t) => t.name === "Nilai Total Action Plan Cabang"
           );
+
           if (table) {
-            setBestCabangData({ summary: table.data[0] });
+            setBestCabangData({
+              header: [table.header], // bungkus biar cocok dengan RenderTable
+              data: table.data,
+              summary: [table.data[0][1], table.data[0][2]],
+              // misal summary menampilkan baris pertama
+            });
           }
         }
       } catch (err) {
@@ -119,11 +134,14 @@ export default function Dashboard() {
         const json = await res.json();
 
         if (json && Array.isArray(json.tables)) {
+          setBestSamsatData(json.tables);
+
+          // cari tabel khusus untuk card
           const table = json.tables.find(
             (t) => t.name === "Nilai Total Action Plan SAMSAT"
           );
           if (table) {
-            setBestSamsatData({
+            setBestSamsatCard({
               summary: table.data[0],
             });
           }
@@ -192,123 +210,128 @@ export default function Dashboard() {
           {/* Navbar */}
           <Navbar />
 
-          {/* Konten Dashboard */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 px-4 md:px-6 lg:px-8">
-            {/* Kolom kiri: Skor Jateng */}
-            <Card className="row-span-2 p-5 overflow-hidden text-center">
-              <CardHeader className="p-4">
-                <CardTitle className="text-sm font-bold text-red-900">
-                  Skor Action Plan Jateng
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-2">
-                <div className="text-6xl font-bold text-red-900">
-                  {skorJatengData?.summary?.[2] ?? "-"}
-                </div>
-                <p className="text-sm text-gray-600">
-                  Target Skor{" "}
-                  <span className="text-green-700 font-bold">100</span> (Nilai
-                  Max)
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Kolom tengah atas: Cabang Terbaik */}
-            <Card className="row-span-1 p-0 overflow-hidden">
-              <CardHeader className="bg-green-500 text-white p-2">
-                <CardTitle className="text-sm">
-                  Action Plan Cabang Terbaik
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex justify-between text-red-900 font-bold p-4">
-                <span>{bestCabangData?.summary?.[1] ?? "-"}</span>
-                <span>{bestCabangData?.summary?.[2] ?? "-"}</span>
-              </CardContent>
-            </Card>
-
-            {/* Kolom kanan atas: Petunjuk */}
-            <Card className="p-0 overflow-hidden">
-              <CardContent className="p-4">
-                <a
-                  href="https://drive.google.com/file/d/1xkFeIieB7_Qp8RHBdRZRlp-VpQ6f-Lvz/view"
-                  className="text-lg text-blue-700 font-bold hover:underline"
-                >
-                  Petunjuk Pengisian Action Plan
-                </a>
-                <p className="text-xs text-gray-600">
-                  AS/SE/18/2025 Tentang Sarana Teknologi Action Plan SWDKLLJ
-                  Tahun 2025
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Kolom tengah bawah: Samsat Terbaik */}
-            <Card className="row-span-1 p-0 overflow-hidden">
-              <CardHeader className="bg-green-900 text-white p-2">
-                <CardTitle className="text-sm">
-                  Action Plan Samsat Terbaik
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex justify-between text-red-900 font-bold p-4">
-                <span>{bestSamsatData?.summary?.[1] ?? "-"}</span>
-                <span>{bestSamsatData?.summary?.[2] ?? "-"}</span>
-              </CardContent>
-            </Card>
-
-            {/* Kolom kanan bawah: Juknis */}
-            <Card className="p-0 overflow-hidden">
-              <CardContent className="p-4">
-                <a
-                  href="https://drive.google.com/file/d/1PKoplfsZnruv9zBwrNjDxrB8v7AumzqQ/view?usp=sharing"
-                  className="text-lg text-blue-700 font-bold hover:underline"
-                >
-                  Juknis Penilaian Action Plan
-                </a>
-                <p className="text-xs text-gray-600">
-                  Dokumen Petunjuk Teknis Action Plan Dalam Peningkatan Tingkat
-                  Kepatuhan
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Render cards dari API */}
-            {cardConfig.map((cfg, idx) => (
-              <Card
-                key={idx}
-                className="p-0 overflow-hidden rounded-2xl shadow-md"
-              >
-                <CardHeader className="bg-green-900 text-white p-2">
-                  <div className="flex items-center justify-between w-full">
-                    <CardTitle className="text-sm">{cfg.title}</CardTitle>
-                    <Link href={cfg.link} className="hover:text-gray-200">
-                      <ExternalLink size={16} />
+          {/* Container dengan padding yang lebih baik */}
+          <div className="px-4 md:px-6 lg:px-8 space-y-6">
+            {/* Section 1: Grid untuk cards dan info */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Kolom kiri: Skor Jateng */}
+              <Card className="row-span-2 p-5 overflow-hidden text-center">
+                <CardHeader className="p-4">
+                  <CardTitle className="text-sm font-bold text-red-900">
+                    Skor Action Plan Jateng
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-2">
+                  <div className="text-6xl font-bold text-red-900">
+                    {skorJatengData?.summary?.[2] ?? "-"}
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Target Skor{" "}
+                    <span className="text-green-700 font-bold">100</span> (Nilai
+                    Max)
+                  </p>
+                  <div className="mt-4">
+                    <Link
+                      href="/quickwin-jateng"
+                      className="inline-block px-4 py-2 text-sm font-semibold text-white bg-red-900 rounded-lg hover:bg-red-800 transition"
+                    >
+                      Lihat Detail
                     </Link>
                   </div>
+                </CardContent>
+              </Card>
+
+              {/* Kolom tengah atas: Cabang Terbaik */}
+              <Card className="row-span-1 p-0 overflow-hidden">
+                <CardHeader className="bg-green-500 text-white p-2">
+                  <CardTitle className="text-sm">
+                    Action Plan Cabang Terbaik
+                  </CardTitle>
                 </CardHeader>
-                <CardContent className="p-4 text-center text-red-900 font-bold">
-                  {/* Skor utama */}
-                  <div className="text-4xl mb-1">
-                    {cardDashboardData[idx]?.data?.[0]?.[0] ?? "-"}
-                  </div>
+                <CardContent className="flex justify-between text-red-900 font-bold p-4">
+                  <span>{bestCabangData?.summary?.[0] ?? "-"}</span>
+                  <span>{bestCabangData?.summary?.[1] ?? "-"}</span>
+                </CardContent>
+              </Card>
 
-                  {/* Persentase */}
-                  <div className="text-lg text-red-600 mb-1">
-                    {cardDashboardData[idx]?.data?.[1]?.[0] ?? "-"}
-                  </div>
-
-                  {/* Skor Max */}
-                  <p className="text-sm text-gray-600">
-                    {cardDashboardData[idx]?.data?.[2]?.[0] ?? "-"} (Skor Max)
+              {/* Kolom kanan atas: Petunjuk */}
+              <Card className="p-0 overflow-hidden">
+                <CardContent className="p-4">
+                  <a
+                    href="https://drive.google.com/file/d/1xkFeIieB7_Qp8RHBdRZRlp-VpQ6f-Lvz/view"
+                    className="text-lg text-blue-700 font-bold hover:underline"
+                  >
+                    Petunjuk Pengisian Action Plan
+                  </a>
+                  <p className="text-xs text-gray-600">
+                    AS/SE/18/2025 Tentang Sarana Teknologi Action Plan SWDKLLJ
+                    Tahun 2025
                   </p>
                 </CardContent>
-              </Card>,
-              <Card>
-
               </Card>
-            ))}
 
-            {/* Dua chart berdampingan */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 col-span-3">
+              {/* Kolom tengah bawah: Samsat Terbaik */}
+              <Card className="row-span-1 p-0 overflow-hidden">
+                <CardHeader className="bg-green-900 text-white p-2">
+                  <CardTitle className="text-sm">
+                    Action Plan Samsat Terbaik
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex justify-between text-red-900 font-bold p-4">
+                  <span>{bestSamsatCard?.summary?.[1] ?? "-"}</span>
+                  <span>{bestSamsatCard?.summary?.[2] ?? "-"}</span>
+                </CardContent>
+              </Card>
+
+              {/* Kolom kanan bawah: Juknis */}
+              <Card className="p-0 overflow-hidden">
+                <CardContent className="p-4">
+                  <a
+                    href="https://drive.google.com/file/d/1PKoplfsZnruv9zBwrNjDxrB8v7AumzqQ/view?usp=sharing"
+                    className="text-lg text-blue-700 font-bold hover:underline"
+                  >
+                    Juknis Penilaian Action Plan
+                  </a>
+                  <p className="text-xs text-gray-600">
+                    Dokumen Petunjuk Teknis Action Plan Dalam Peningkatan
+                    Tingkat Kepatuhan
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Section 2: Action Plan Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {cardConfig.map((cfg, idx) => (
+                <Card
+                  key={idx}
+                  className="p-0 overflow-hidden rounded-2xl shadow-md"
+                >
+                  <CardHeader className="bg-green-900 text-white p-2">
+                    <div className="flex items-center justify-between w-full">
+                      <CardTitle className="text-sm">{cfg.title}</CardTitle>
+                      <Link href={cfg.link} className="hover:text-gray-200">
+                        <ExternalLink size={16} />
+                      </Link>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-4 text-center text-red-900 font-bold">
+                    <div className="text-4xl mb-1">
+                      {cardDashboardData[idx]?.data?.[0]?.[0] ?? "-"}
+                    </div>
+                    <div className="text-lg text-red-600 mb-1">
+                      {cardDashboardData[idx]?.data?.[1]?.[0] ?? "-"}
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      {cardDashboardData[idx]?.data?.[2]?.[0] ?? "-"} (Skor Max)
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Section 3: Charts */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card className="p-0 overflow-hidden h-[400px] flex flex-col">
                 <CardHeader className="bg-green-900 text-white p-2">
                   <CardTitle className="text-sm">
@@ -356,79 +379,95 @@ export default function Dashboard() {
               </Card>
             </div>
 
-            {/* Render tabel khusus: Nilai Total Action Plan Cabang */}
-            {cabangTables
-              .filter((t) => t.name === "Nilai Total Action Plan Cabang")
-              .map((table, idx) => (
-                <Card key={idx} className="col-span-3 p-0 overflow-hidden">
-                  <CardHeader className="bg-green-900 text-white p-2">
-                    <CardTitle className="text-sm">{table.name}</CardTitle>
+            {/* Section 4: Tables */}
+            <div className="space-y-6">
+              {/* ===== Peringkat Action Plan Cabang ===== */}
+              <h2 className="text-xl font-bold text-gray-800 border-b-2 border-gray-300 pb-2">
+                📊 Peringkat Action Plan Cabang
+              </h2>
+
+              {/* Tabel khusus: Nilai Total Action Plan Cabang - Full Width */}
+              {cabangTables
+                .filter(
+                  (table) => table.name === "Nilai Total Action Plan Cabang"
+                )
+                .map((table, idx) => (
+                  <div key={`main-${idx}`} className="w-full">
+                    <Card className="overflow-hidden w-full">
+                      <CardHeader>
+                        <CardTitle className="text-lg font-semibold text-blue-900">
+                          {table.name}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="p-0">
+                        <RenderTable
+                          data={{
+                            header: [table.header],
+                            data: table.data,
+                            summary: table.summary,
+                          }}
+                        />
+                      </CardContent>
+                    </Card>
+                  </div>
+                ))}
+
+              {/* Tabel lainnya - 2 per baris */}
+              {cabangTables.filter(
+                (table) => table.name !== "Nilai Total Action Plan Cabang"
+              ).length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {cabangTables
+                    .filter(
+                      (table) => table.name !== "Nilai Total Action Plan Cabang"
+                    )
+                    .map((table, idx) => (
+                      <Card key={`other-${idx}`} className="overflow-hidden">
+                        <CardHeader>
+                          <CardTitle className="text-base font-semibold text-green-900">
+                            {table.name}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="p-0">
+                          <RenderTable
+                            data={{
+                              header: [table.header],
+                              data: table.data,
+                              summary: table.summary,
+                            }}
+                          />
+                        </CardContent>
+                      </Card>
+                    ))}
+                </div>
+              )}
+            </div>
+
+            {/* Divider antar segmen */}
+            <div className="my-8 border-t-4 border-dashed border-gray-400"></div>
+
+            {/* Section: Tables SAMSAT */}
+            <h2 className="text-xl font-bold text-gray-800 border-b-2 border-gray-300 pb-2">
+              🚗 Peringkat Action Plan SAMSAT
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+              {bestSamsatData?.map((table, idx) => (
+                <Card key={idx} className="overflow-hidden w-full">
+                  <CardHeader>
+                    <CardTitle className="text-lg font-semibold text-blue-900">
+                      {table.name}
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent className="p-4 overflow-x-auto">
-                    <table className="min-w-full border border-gray-300 text-sm">
-                      <thead className="bg-gray-100">
-                        <tr>
-                          {table.header.map((col, i) => (
-                            <th key={i} className="border px-3 py-2 text-left">
-                              {col}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {table.data.map((row, i) => (
-                          <tr key={i} className="hover:bg-gray-50">
-                            {row.map((cell, j) => (
-                              <td key={j} className="border px-3 py-2">
-                                {cell}
-                              </td>
-                            ))}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                  <CardContent className="p-0">
+                    <RenderTable
+                      data={{
+                        header: [table.header],
+                        data: table.data,
+                      }}
+                    />
                   </CardContent>
                 </Card>
               ))}
-
-            {/* Render tabel lainnya dalam grid 2 kolom */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 col-span-3">
-              {cabangTables
-                .filter((t) => t.name !== "Nilai Total Action Plan Cabang")
-                .map((table, idx) => (
-                  <Card key={idx} className="p-0 overflow-hidden">
-                    <CardHeader className="bg-green-900 text-white p-2">
-                      <CardTitle className="text-sm">{table.name}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-4 overflow-x-auto">
-                      <table className="w-full border border-gray-300 text-sm">
-                        <thead className="bg-gray-100">
-                          <tr>
-                            {table.header.map((col, i) => (
-                              <th
-                                key={i}
-                                className="border px-2 py-1 text-left"
-                              >
-                                {col}
-                              </th>
-                            ))}
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {table.data.map((row, i) => (
-                            <tr key={i} className="hover:bg-gray-50">
-                              {row.map((cell, j) => (
-                                <td key={j} className="border px-2 py-1">
-                                  {cell}
-                                </td>
-                              ))}
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </CardContent>
-                  </Card>
-                ))}
             </div>
           </div>
         </SidebarInset>

@@ -2,13 +2,8 @@
 
 import * as React from "react";
 import { usePathname } from "next/navigation";
-import {
-  ChevronRight,
-  Home,
-  Settings,
-  Users,
-  FileText,
-} from "lucide-react";
+import Link from "next/link";
+import { ChevronRight, Home, Settings, Users, FileText } from "lucide-react";
 
 import {
   Collapsible,
@@ -86,7 +81,7 @@ export const data = {
         { title: "Pendataan Terlibat Laka", url: "/pendataan-laka" },
       ].map((item, index) => ({
         ...item,
-        title: `${index + 1}. ${item.title}`, 
+        title: `${index + 1}. ${item.title}`,
       })),
     },
   ],
@@ -98,29 +93,28 @@ export function AppSidebar(props) {
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <a href="/" className="flex items-center gap-2">
-                <div className="h-8 aspect-[4/3]">
-                  <img
-                    src="/logo.png"
-                    alt="Logo"
-                    className="h-full w-full object-contain rounded-md"
-                  />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">
-                    Dashboard Jasa Raharja
-                  </span>
-                  <span className="truncate text-xs">
-                    Monitoring Jasa Raharja
-                  </span>
-                </div>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <div className="flex flex-col items-center gap-2 p-4">
+          <Link href="/" className="flex flex-col items-center">
+            {/* Logo */}
+            <div className="h-24 w-24 flex items-center justify-center rounded-2xl bg-white shadow-md border border-gray-200">
+              <img
+                src="/logo.png"
+                alt="Logo"
+                className="h-20 w-20 object-contain"
+              />
+            </div>
+
+            {/* Judul di bawah logo */}
+            <div className="text-center mt-1">
+              <span className="block font-bold text-green-900 text-md">
+                QuickWin
+              </span>
+              <span className="block text-xs text-gray-600">
+                ACTION PLAN KANWIL JATENG
+              </span>
+            </div>
+          </Link>
+        </div>
       </SidebarHeader>
 
       <SidebarContent className="sidebar-content">
@@ -207,7 +201,7 @@ export function AppSidebar(props) {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter>
+      {/* <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
@@ -250,7 +244,7 @@ export function AppSidebar(props) {
             </DropdownMenu>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarFooter>
+      </SidebarFooter> */}
 
       <SidebarRail />
     </Sidebar>

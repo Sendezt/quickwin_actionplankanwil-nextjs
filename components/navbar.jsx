@@ -104,33 +104,6 @@ function Navbar() {
             className="w-64 pl-8"
           />
         </div>
-
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-4 w-4" />
-          <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 text-xs">
-            3
-          </Badge>
-        </Button>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="flex items-center gap-2">
-              <div className="flex aspect-square size-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                <User className="size-4" />
-              </div>
-              <span className="hidden md:block">Admin</span>
-              <ChevronDown className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel>Akun Saya</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Profil</DropdownMenuItem>
-            <DropdownMenuItem>Pengaturan</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Keluar</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
     </header>
   );
