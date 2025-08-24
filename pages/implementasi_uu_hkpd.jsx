@@ -131,86 +131,44 @@ export default function MenuSatu() {
               ) : (
                 <>
                   {/* Tanggal Periode sebagai dua Card */}
+                  {/* Periode Awal & Akhir */}
                   {rangeData?.periode_awal && rangeData?.periode_akhir && (
-                    <>
-                      <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                          <CardTitle className="text-sm font-medium">
+                    <div className="col-span-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <Card className="shadow-sm border bg-slate-50">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 px-3">
+                          <CardTitle className="text-xs font-medium text-muted-foreground">
                             Periode Awal
                           </CardTitle>
-                          <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                          <CalendarDays className="h-3 w-3 text-muted-foreground" />
                         </CardHeader>
-                        <CardContent>
-                          <div className="text-2xl font-bold">
+                        <CardContent className="px-3 pb-2">
+                          <div className="text-lg font-semibold">
                             {rangeData.periode_awal}
                           </div>
-                          <p className="text-xs text-muted-foreground">
-                            Tanggal Mulai Periode
+                          <p className="text-[10px] text-muted-foreground">
+                            Tanggal Mulai
                           </p>
                         </CardContent>
                       </Card>
 
-                      <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                          <CardTitle className="text-sm font-medium">
+                      <Card className="shadow-sm border bg-slate-50">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 px-3">
+                          <CardTitle className="text-xs font-medium text-muted-foreground">
                             Periode Akhir
                           </CardTitle>
-                          <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                          <CalendarDays className="h-3 w-3 text-muted-foreground" />
                         </CardHeader>
-                        <CardContent>
-                          <div className="text-2xl font-bold">
+                        <CardContent className="px-3 pb-2">
+                          <div className="text-lg font-semibold">
                             {rangeData.periode_akhir}
                           </div>
-                          <p className="text-xs text-muted-foreground">
-                            Tanggal Akhir Periode
+                          <p className="text-[10px] text-muted-foreground">
+                            Tanggal Akhir
                           </p>
                         </CardContent>
                       </Card>
-                    </>
+                    </div>
                   )}
-
-                  {/* Obyek Penilaian */}
-                  <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">
-                        Obyek Penilaian
-                      </CardTitle>
-                      <LandPlot className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent className="py-0 px-5">
-                      <ol className="list-decimal pl-5 text-lg font-bold text-gray-900 mb-1">
-                        <li>Kantor Wilayah</li>
-                        <li>Kantor Cabang</li>
-                      </ol>
-                      <p className="text-sm text-muted-foreground">
-                        2 Obyek Penilaian
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  {/* Juknis Sengkuyung Prioritas */}
-                  <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">
-                        Juknis Sengkuyung Prioritas
-                      </CardTitle>
-                      <File className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent className="py-0 px-5">
-                      <a
-                        href="https://drive.google.com/file/d/1LzzM_lllpBQMgkcBXhPXC53s7pr21srN/view"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-lg font-bold text-blue-600 hover:underline mb-1 block"
-                      >
-                        Juknis Sengkuyung Prioritas
-                      </a>
-                      <p className="text-sm text-muted-foreground">
-                        No. 900.1.13.1/ 177 Tahun 2025 tentang Petunjuk Teknis
-                        Pelaksanaan Kegiatan Sengkuyung Prioritas Tahun 2025
-                      </p>
-                    </CardContent>
-                  </Card>
 
                   {/* Skor Kanwil */}
                   <Card className="col-span-2 p-0 overflow-hidden pb-4 text-center">
@@ -254,6 +212,50 @@ export default function MenuSatu() {
                     </CardContent>
                   </Card>
 
+                  {/* Obyek Penilaian & Juknis */}
+                  <div className="col-span-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <Card className="shadow-sm border bg-slate-50">
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 px-3">
+                        <CardTitle className="text-xs font-medium text-muted-foreground">
+                          Obyek Penilaian
+                        </CardTitle>
+                        <LandPlot className="h-3 w-3 text-muted-foreground" />
+                      </CardHeader>
+                      <CardContent className="py-0 px-3">
+                        <ol className="list-decimal pl-4 text-base font-semibold text-gray-800 mb-1">
+                          <li>Kantor Wilayah</li>
+                          <li>Kantor Cabang</li>
+                        </ol>
+                        <p className="text-xs text-muted-foreground">
+                          2 Obyek Penilaian
+                        </p>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="shadow-sm border bg-slate-50">
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 px-3">
+                        <CardTitle className="text-xs font-medium text-muted-foreground">
+                          Juknis Sengkuyung Prioritas
+                        </CardTitle>
+                        <File className="h-3 w-3 text-muted-foreground" />
+                      </CardHeader>
+                      <CardContent className="py-0 px-3">
+                        <a
+                          href="https://drive.google.com/file/d/1LzzM_lllpBQMgkcBXhPXC53s7pr21srN/view"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-base font-semibold text-blue-600 hover:underline mb-1 block"
+                        >
+                          Juknis Sengkuyung Prioritas
+                        </a>
+                        <p className="text-xs text-muted-foreground">
+                          No. 900.1.13.1/ 177 Tahun 2025 tentang Petunjuk Teknis
+                          Pelaksanaan Kegiatan Sengkuyung Prioritas Tahun 2025
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </div>
+
                   {/* Deskripsi Formula */}
                   <Card className="col-span-4">
                     <CardHeader className="flex flex-row col items-center justify-between space-y-0">
@@ -289,11 +291,9 @@ export default function MenuSatu() {
             {/* Tabel */}
             <Card>
               <CardHeader>
-                <CardTitle>Data Pelaksanaan UU HKPD</CardTitle>
-                <CardDescription>
-                  Monitoring pelaksanaan Undang-Undang Hubungan Keuangan Pusat
-                  dan Daerah
-                </CardDescription>
+                <CardTitle>
+                  Rekapitulasi Implementasi UU HKPD Per Cabang
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto">

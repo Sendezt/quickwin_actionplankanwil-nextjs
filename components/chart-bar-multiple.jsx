@@ -48,8 +48,7 @@ export function ChartBarMultiple({ data }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Target vs Realisasi</CardTitle>
-        <CardDescription>Per Loket Kantor</CardDescription>
+        <CardTitle>Diagram Implementasi UU HKPD Per Cabang</CardTitle>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
@@ -68,15 +67,6 @@ export function ChartBarMultiple({ data }) {
           </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 leading-none font-medium">
-          Target dan Realisasi Pelaksanaan UU HKPD{" "}
-          <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="text-muted-foreground leading-none">
-          Data diambil dari Quickwin Action Plan (Google Spreadsheet)
-        </div>
-      </CardFooter>
     </Card>
   );
 }
