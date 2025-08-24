@@ -156,7 +156,7 @@ export default function MenuDua() {
               ))
             ) : (
               <>
-                {/* Tanggal Periode sebagai dua Card */}
+                {/* Tanggal Periode sebagai dua Card
                 {rangeData?.periode_awal && rangeData?.periode_akhir && (
                   <>
                     <Card>
@@ -193,7 +193,7 @@ export default function MenuDua() {
                       </CardContent>
                     </Card>
                   </>
-                )}
+                )} */}
 
                 {/* Skor Total */}
                 {/* <Card>
@@ -240,47 +240,84 @@ export default function MenuDua() {
                   </CardContent>
                 </Card> */}
 
-                {/* Obyek Penilaian */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Obyek Penilaian
-                    </CardTitle>
-                    <LandPlot className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent className="py-0 px-6">
-                    <div className="text-lg font-bold text-gray-900 mb-1">
-                      Kantor Wilayah
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      1 Obyek Penilaian
-                    </p>
-                  </CardContent>
-                </Card>
+                <div className="col-span-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-muted-foreground">
+                    {/* Periode */}
+                    {rangeData?.periode_awal && rangeData?.periode_akhir && (
+                      <>
+                        <Card className="shadow-sm border border-dashed bg-muted/30">
+                          <CardHeader className="flex flex-row items-center justify-between pb-1">
+                            <CardTitle className="text-xs font-medium">
+                              Periode Awal
+                            </CardTitle>
+                            <CalendarDays className="h-3 w-3 text-muted-foreground" />
+                          </CardHeader>
+                          <CardContent className="py-1 px-4">
+                            <div className="text-base font-semibold text-gray-900">
+                              {rangeData.periode_awal}
+                            </div>
+                            <p className="text-xs">Tanggal Mulai</p>
+                          </CardContent>
+                        </Card>
 
-                {/* Skor Total */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      SK Gubernur Jateng
-                    </CardTitle>
-                    <FileText className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent className="py-0 px-6">
-                    <a
-                      href="https://drive.google.com/file/d/1zJc41CQkQ4MFStjR_TD9uIwD9FAN9ODm/view"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-lg font-bold text-blue-600 hover:underline mb-1 block"
-                    >
-                      Surat Keputusan Gubernur Jawa Tengah
-                    </a>
-                    <p className="text-sm text-muted-foreground">
-                      No. 100.3.3.1/87 Tahun 2025 tentang Pembebasan atas Pokok
-                      dan Sanksi Administratif Pajak Kendaraan Bermotor
-                    </p>
-                  </CardContent>
-                </Card>
+                        <Card className="shadow-sm border border-dashed bg-muted/30">
+                          <CardHeader className="flex flex-row items-center justify-between pb-1">
+                            <CardTitle className="text-xs font-medium">
+                              Periode Akhir
+                            </CardTitle>
+                            <CalendarDays className="h-3 w-3 text-muted-foreground" />
+                          </CardHeader>
+                          <CardContent className="py-1 px-4">
+                            <div className="text-base font-semibold text-gray-900">
+                              {rangeData.periode_akhir}
+                            </div>
+                            <p className="text-xs">Tanggal Akhir</p>
+                          </CardContent>
+                        </Card>
+                      </>
+                    )}
+
+                    {/* Obyek Penilaian */}
+                    <Card className="shadow-sm border border-dashed bg-muted/30">
+                      <CardHeader className="flex flex-row items-center justify-between pb-1">
+                        <CardTitle className="text-xs font-medium">
+                          Obyek Penilaian
+                        </CardTitle>
+                        <LandPlot className="h-3 w-3 text-muted-foreground" />
+                      </CardHeader>
+                      <CardContent className="py-1 px-4">
+                        <div className="text-base font-semibold text-gray-900">
+                          Kantor Wilayah
+                        </div>
+                        <p className="text-xs">1 Obyek Penilaian</p>
+                      </CardContent>
+                    </Card>
+
+                    {/* SK Gubernur */}
+                    <Card className="shadow-sm border border-dashed bg-muted/30">
+                      <CardHeader className="flex flex-row items-center justify-between pb-1">
+                        <CardTitle className="text-xs font-medium">
+                          SK Gubernur Jateng
+                        </CardTitle>
+                        <FileText className="h-3 w-3 text-muted-foreground" />
+                      </CardHeader>
+                      <CardContent className="py-1 px-4">
+                        <a
+                          href="https://drive.google.com/file/d/1zJc41CQkQ4MFStjR_TD9uIwD9FAN9ODm/view"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-base font-semibold text-blue-600 hover:underline block"
+                        >
+                          Surat Keputusan Gubernur Jawa Tengah
+                        </a>
+                        <p className="text-xs">
+                          No. 100.3.3.1/87 Tahun 2025 tentang Pembebasan Pajak
+                          Kendaraan Bermotor
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
               </>
             )}
           </div>
@@ -312,7 +349,9 @@ export default function MenuDua() {
                     </div>
                   </div>
                   <CardContent className="pb-4">
-                    <div className="text-7xl font-bold text-blue-900">{totalSkor}</div>
+                    <div className="text-7xl font-bold text-blue-900">
+                      {totalSkor}
+                    </div>
                     <p className="text-xs text-muted-foreground">
                       Target: {targetSkor} (Nilai Max)
                     </p>
@@ -329,7 +368,7 @@ export default function MenuDua() {
                       <BarChart3 className="h-4 w-4 text-blue-700" />
                     </div>
                   </div>
-                  <CardContent className="py-6 px-5 space-y-2">
+                  <CardContent className="py-6 px-5 space-y-4">
                     {breakdownData?.data?.length > 0 ? (
                       breakdownData.data.map((item, index) => (
                         <div
@@ -337,9 +376,11 @@ export default function MenuDua() {
                           className="flex justify-between items-center"
                         >
                           <span className="text-xs text-gray-600 flex-1 pr-2">
-                            {item.judul}
+                            {index + 1}. {item.judul}
                           </span>
-                          <span className="text-lg font-bold">{item.skor}</span>
+                          <span className="text-2xl font-extrabold text-blue-900">
+                            {item.skor}
+                          </span>
                         </div>
                       ))
                     ) : (
