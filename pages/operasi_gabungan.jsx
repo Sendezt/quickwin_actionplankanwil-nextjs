@@ -336,7 +336,7 @@ export default function MenuTiga() {
               </CardContent>
             </Card>
           </div>
-          
+
           {/* Deskripsi Forumula */}
           <Card className="p-0 overflow-hidden">
             {/* Header Card */}
@@ -376,7 +376,6 @@ export default function MenuTiga() {
 
           <TableCard
             title="Skor Pelaksanaan Operasi Gabungan - Per Cabang"
-            description="Skor Pelaksanaan Operasi Gabungan"
             headers={table1Data?.header?.[0] ?? []}
             data={table1Data?.data ?? []}
             summary={table1Data?.summary ?? []}
@@ -384,7 +383,6 @@ export default function MenuTiga() {
           />
           <TableCard
             title="Skor Kontribusi Penerimaan Operasi Gabungan - Per Cabang"
-            description="Skor Kontribusi Penerimaan Operasi Gabungan"
             headers={table2Data?.header?.[0] ?? []}
             data={table2Data?.data ?? []}
             summary={table2Data?.summary ?? []}
@@ -392,7 +390,7 @@ export default function MenuTiga() {
           />
           <TableCard
             title="Skor Pelaksanaan Operasi Gabungan - Per Samsat"
-            description="Skor Pelaksanaan Operasi Gabungan"
+            // description="Skor Pelaksanaan Operasi Gabungan"
             headers={table3Data?.header?.[0] ?? []}
             data={
               table3Data?.data?.flatMap((item) => [
@@ -405,7 +403,7 @@ export default function MenuTiga() {
           />
           <TableCard
             title="Skor Kontribusi Penerimaan Operasi Gabungan - Per Samsat"
-            description="Skor Kontribusi Penerimaan Operasi Gabungan"
+            // description="Skor Kontribusi Penerimaan Operasi Gabungan"
             headers={table4Data?.header?.[0] ?? []}
             data={
               table4Data?.data?.flatMap((item) => [
@@ -418,7 +416,8 @@ export default function MenuTiga() {
           />
           <TableCard
             title="Hasil Penerimaan Atas Kegiatan Operasi Gabungan"
-            description="Hasil Penerimaan Atas Kegiatan Operasi Gabungan"
+            // 
+            
             headers={table5Data?.header?.[0] ?? []}
             data={
               table5Data?.data?.flatMap((item) => [
