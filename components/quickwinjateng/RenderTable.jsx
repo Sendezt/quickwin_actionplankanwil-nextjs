@@ -24,27 +24,27 @@ const TableFooter = ({ children }) => <tfoot>{children}</tfoot>;
 // 🎨 helper untuk badge Quickwins
 const getQuickwinsBadge = (value) => {
   if (!value) return null;
-  let badgeClass = "bg-gray-200 text-gray-800";
+  let badgeClass = "bg-gray-400 text-white border border-gray-500";
   switch (value.toLowerCase()) {
     case "promitra":
-      badgeClass = "bg-green-100 text-green-800";
+      badgeClass = "bg-emerald-500 text-white border border-emerald-600";
       break;
     case "sengkuyung":
-      badgeClass = "bg-blue-100 text-blue-800";
+      badgeClass = "bg-sky-500 text-white border border-sky-600";
       break;
     case "sowan":
-      badgeClass = "bg-yellow-100 text-yellow-800";
+      badgeClass = "bg-amber-500 text-white border border-amber-600";
       break;
     case "okdealer":
-      badgeClass = "bg-purple-100 text-purple-800";
+      badgeClass = "bg-violet-500 text-white border border-violet-600";
       break;
     case "opsgab":
-      badgeClass = "bg-red-100 text-red-800";
+      badgeClass = "bg-rose-500 text-white border border-rose-600";
       break;
   }
   return (
     <span
-      className={`px-2 py-1 rounded-full text-xs font-semibold ${badgeClass}`}
+      className={`px-3 py-1 rounded-md text-xs font-bold ${badgeClass} shadow-md`}
     >
       {value}
     </span>
@@ -104,9 +104,12 @@ export default function RenderTableQuickwins({ data }) {
       <div className="space-y-4 p-4">
         {/* Header Utama */}
         {mainHeaders.length > 0 && (
-          <div className="rounded-xl bg-blue-50 border p-4">
+          <div className="rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 border border-cyan-600 p-4 shadow-lg">
             {mainHeaders.map((row, i) => (
-              <div key={i} className="text-center font-bold text-blue-800">
+              <div
+                key={i}
+                className="text-center font-bold text-white text-lg drop-shadow-md"
+              >
                 {Array.isArray(row) ? row.filter(Boolean).join(" ") : row}
               </div>
             ))}
@@ -114,11 +117,14 @@ export default function RenderTableQuickwins({ data }) {
         )}
 
         {inisiatifList.map((inisiatif, idx) => (
-          <div key={idx} className="border rounded-xl p-4 shadow-sm bg-white">
-            <h3 className="font-bold mb-3 text-gray-800 text-lg">
+          <div
+            key={idx}
+            className="border border-gray-400 rounded-lg p-4 shadow-md bg-white"
+          >
+            <h3 className="font-black mb-3 text-gray-900 text-lg border-b border-gray-300 pb-2">
               {inisiatif.inisiatif}
             </h3>
-            <div className="text-sm text-gray-600 mb-4 p-2 bg-blue-50 rounded">
+            <div className="text-sm text-white mb-4 p-3 bg-gradient-to-r from-emerald-500 to-teal-500 rounded border border-emerald-600 font-semibold shadow-md">
               <strong>Target:</strong> {inisiatif.total?.target} |{" "}
               <strong>Nilai Akhir:</strong> {inisiatif.total?.nilaiAkhir}
             </div>
@@ -126,7 +132,7 @@ export default function RenderTableQuickwins({ data }) {
             {inisiatif.rows?.map((row, rIdx) => (
               <div
                 key={`${idx}-${rIdx}`}
-                className="divide-y border rounded-md mb-2"
+                className="border border-gray-300 rounded-md mb-3 shadow-sm bg-gray-50"
               >
                 {tableHeaders.map((header, hIdx) => {
                   let cellValue = "";
@@ -141,10 +147,10 @@ export default function RenderTableQuickwins({ data }) {
                   return (
                     <div
                       key={hIdx}
-                      className="px-2 py-2 text-sm flex justify-between"
+                      className="px-3 py-2 text-sm flex justify-between border-b border-gray-200 last:border-b-0"
                     >
-                      <span className="font-medium">{header}:</span>
-                      <span className="ml-2 break-words text-right">
+                      <span className="font-bold text-gray-800">{header}:</span>
+                      <span className="ml-2 break-words text-right font-semibold text-gray-900">
                         {hIdx === 7
                           ? getQuickwinsBadge(cellValue)
                           : cellValue || ""}
@@ -159,8 +165,8 @@ export default function RenderTableQuickwins({ data }) {
 
         {/* Summary */}
         {summary && (
-          <div className="border rounded-xl p-4 bg-gray-100 text-sm font-bold">
-            <div className="flex gap-4">
+          <div className="border border-indigo-400 rounded-lg p-4 bg-gradient-to-r from-indigo-500 to-purple-500 text-sm font-bold text-white shadow-lg">
+            <div className="flex gap-4 drop-shadow-md">
               <div className="shrink-0">{summary[0] || "Total"}</div>
               <div>Target: {summary[1] || ""}</div>
               <div>Nilai Akhir: {summary[2] || ""}</div>
@@ -173,9 +179,9 @@ export default function RenderTableQuickwins({ data }) {
 
   // === TABLE / COMPACT MODE ===
   return (
-    <div className="w-full overflow-x-auto bg-white">
+    <div className="w-full overflow-x-auto bg-white border border-cyan-400 rounded-lg shadow-xl">
       <Table
-        className={`w-full border border-gray-300 ${
+        className={`w-full border-collapse ${
           viewMode === "compact" ? "text-xs" : "text-sm"
         }`}
         style={{ tableLayout: "fixed" }}
@@ -193,7 +199,7 @@ export default function RenderTableQuickwins({ data }) {
               <TableRow key={rowIdx}>
                 <TableHead
                   colSpan={tableHeaders.length}
-                  className="text-center font-bold bg-blue-100 py-3 text-blue-900 border border-gray-300"
+                  className="text-center font-black bg-gradient-to-r from-cyan-500 to-blue-500 py-4 text-white border border-cyan-600 text-base drop-shadow-md"
                 >
                   {Array.isArray(row) ? row.filter(Boolean).join(" ") : row}
                 </TableHead>
@@ -201,11 +207,11 @@ export default function RenderTableQuickwins({ data }) {
             ))}
 
           {/* Column headers */}
-          <TableRow className="bg-gray-100">
+          <TableRow className="bg-gradient-to-r from-slate-600 to-slate-700">
             {tableHeaders.map((col, idx) => (
               <TableHead
                 key={idx}
-                className="text-center px-2 py-3 font-bold text-gray-800 border border-gray-300"
+                className="text-center px-3 py-3 font-black text-white border border-slate-500 drop-shadow-md"
               >
                 <div className="break-words">{col}</div>
               </TableHead>
@@ -217,28 +223,31 @@ export default function RenderTableQuickwins({ data }) {
           {inisiatifList.map((inisiatif, idx) => (
             <React.Fragment key={idx}>
               {/* Baris judul inisiatif + total */}
-              <TableRow className="bg-blue-50">
+              <TableRow className="bg-gradient-to-r from-emerald-100 to-teal-100 border-t border-emerald-400">
                 <TableCell
                   colSpan={4}
-                  className="px-3 py-2 text-left font-bold text-blue-900 border border-gray-300"
+                  className="px-3 py-3 text-left font-black text-emerald-900 border border-emerald-400"
                 >
                   <div className="break-words">{inisiatif.inisiatif}</div>
                 </TableCell>
-                <TableCell className="text-center px-2 py-2 font-bold text-blue-900 border border-gray-300">
+                <TableCell className="text-center px-2 py-3 font-black text-emerald-900 border border-emerald-400">
                   {inisiatif.total?.target || ""}
                 </TableCell>
-                <TableCell className="text-center px-2 py-2 font-bold text-blue-900 border border-gray-300">
+                <TableCell className="text-center px-2 py-3 font-black text-emerald-900 border border-emerald-400">
                   {inisiatif.total?.nilaiAkhir || ""}
                 </TableCell>
                 <TableCell
                   colSpan={2}
-                  className="px-2 py-2 border border-gray-300"
+                  className="px-2 py-3 border border-emerald-400"
                 ></TableCell>
               </TableRow>
 
               {/* Detail rows */}
               {inisiatif.rows?.map((row, rIdx) => (
-                <TableRow key={`${idx}-${rIdx}`} className="hover:bg-gray-50">
+                <TableRow
+                  key={`${idx}-${rIdx}`}
+                  className="hover:bg-cyan-50 even:bg-slate-50 transition-colors duration-200"
+                >
                   {tableHeaders.map((_, hIdx) => {
                     let cellValue = "";
 
@@ -260,7 +269,7 @@ export default function RenderTableQuickwins({ data }) {
                     return (
                       <TableCell
                         key={hIdx}
-                        className={`px-2 py-2 border border-gray-300 ${textAlign} align-top`}
+                        className={`px-3 py-3 border border-slate-300 ${textAlign} align-top font-medium text-slate-800`}
                       >
                         <div className="break-words whitespace-normal">
                           {hIdx === 7
@@ -279,21 +288,21 @@ export default function RenderTableQuickwins({ data }) {
         {/* Summary footer (root) */}
         {summary && (
           <TableFooter>
-            <TableRow className="bg-gray-200 font-bold">
-              <TableCell className="px-2 py-2 border border-gray-300"></TableCell>
-              <TableCell className="px-2 py-2 border border-gray-300"></TableCell>
-              <TableCell className="px-2 py-2 border border-gray-300"></TableCell>
-              <TableCell className="px-2 py-2 text-center font-bold border border-gray-300">
+            <TableRow className="bg-gradient-to-r from-cyan-500 to-blue-500 font-black text-white border-t-2 border-cyan-500">
+              <TableCell className="px-3 py-3 border border-cyan-500"></TableCell>
+              <TableCell className="px-3 py-3 border border-cyan-500"></TableCell>
+              <TableCell className="px-3 py-3 border border-cyan-500"></TableCell>
+              <TableCell className="px-3 py-3 text-center font-black border border-indigo-500 drop-shadow-md">
                 {summary[0] || "Total"}
               </TableCell>
-              <TableCell className="px-2 py-2 text-center font-bold border border-gray-300">
+              <TableCell className="px-3 py-3 text-center font-black border border-indigo-500 drop-shadow-md">
                 {summary[1] || ""}
               </TableCell>
-              <TableCell className="px-2 py-2 text-center font-bold border border-gray-300">
+              <TableCell className="px-3 py-3 text-center font-black border border-indigo-500 drop-shadow-md">
                 {summary[2] || ""}
               </TableCell>
               <TableCell
-                className="px-2 py-2 border border-gray-300"
+                className="px-3 py-3 border border-indigo-500"
                 colSpan={2}
               ></TableCell>
             </TableRow>

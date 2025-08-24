@@ -58,9 +58,6 @@ export default function QuickwinCabang() {
             <Card>
               <CardHeader>
                 <CardTitle>Kinerja Action Plan Total</CardTitle>
-                <CardDescription>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                </CardDescription>
               </CardHeader>
               <CardContent>
                 {loading ? (
@@ -92,9 +89,6 @@ export default function QuickwinCabang() {
                 <Card>
                   <CardHeader>
                     <CardTitle>1. Kinerja Action Plan UU HKPD</CardTitle>
-                    <CardDescription>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <RenderTable
@@ -109,9 +103,6 @@ export default function QuickwinCabang() {
                     <CardTitle>
                       6. Kinerja Action Plan Sosialisasi Kesamsatan
                     </CardTitle>
-                    <CardDescription>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <RenderTable
@@ -146,9 +137,6 @@ export default function QuickwinCabang() {
                     <CardTitle>
                       8. Kinerja Action Plan Kolaborasi Merchant
                     </CardTitle>
-                    <CardDescription>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <RenderTable
@@ -165,9 +153,6 @@ export default function QuickwinCabang() {
                     <CardTitle>
                       9. Kinerja Action Plan Komitmen Stakeholder
                     </CardTitle>
-                    <CardDescription>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <RenderTable
@@ -201,9 +186,6 @@ export default function QuickwinCabang() {
                     <CardTitle>
                       10. Kinerja Action Plan SIGAP Prioritas
                     </CardTitle>
-                    <CardDescription>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <RenderTable
@@ -218,9 +200,6 @@ export default function QuickwinCabang() {
                     <CardTitle>
                       11. Kinerja Action Plan SIGAP Instansi
                     </CardTitle>
-                    <CardDescription>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <RenderTable

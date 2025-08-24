@@ -42,11 +42,23 @@ function Navbar() {
   };
   const breadcrumbs = getBreadcrumbs();
 
-  // ambil semua program untuk search
-  const allPrograms = data.navMain.flatMap((item) =>
+  // daftar extra pages yg tidak ada di sidebar
+  const extraPrograms = [
+    { title: "Quickwin Jateng", url: "/quickwin-jateng" },
+    { title: "Quickwin Kanwil", url: "/quickwin-kanwil" },
+    { title: "Quickwin Cabang", url: "/quickwin-cabang" },
+    { title: "Quickwin Samsat", url: "/quickwin-samsat" },
+  ];
+
+  // ambil semua program dari sidebar
+  const allProgramsFromSidebar = data.navMain.flatMap((item) =>
     item.items ? item.items : [item]
   );
 
+  // gabungkan dengan extraPrograms
+  const allPrograms = [...allProgramsFromSidebar, ...extraPrograms];
+
+  // filter sesuai query
   const filteredPrograms = query
     ? allPrograms.filter((p) =>
         p.title.toLowerCase().includes(query.toLowerCase())
@@ -114,7 +126,7 @@ function Navbar() {
             <div className="absolute mt-1 w-full rounded-md border bg-white shadow-md z-50">
               {filteredPrograms.map((prog, idx) => (
                 <Link
-                  key={`${prog.url}-${prog.title}-${idx}`}
+                  key={`${prog.title}-${prog.url}-${idx}`}
                   href={prog.url}
                   className="block px-3 py-2 text-sm hover:bg-gray-100"
                   onClick={() => setQuery("")}

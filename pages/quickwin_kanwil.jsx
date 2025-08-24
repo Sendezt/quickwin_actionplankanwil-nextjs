@@ -12,7 +12,7 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import Navbar from "@/components/navbar";
-import RenderQuickwinsTable from "@/components/quickwinjateng/RenderTable";
+import RenderQuickwinsTable from "@/components/quickwinkanwil/RenderTable";
 
 export default function QuickwinKanwil() {
   const [table1Data, setTable1Data] = useState(null);
@@ -40,12 +40,12 @@ export default function QuickwinKanwil() {
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
-          {/* Table */}
-          <Card>
-            <CardContent>
-              <RenderQuickwinsTable data={table1Data} />
-            </CardContent>
-          </Card>
+        {/* Table */}
+        <Card>
+          <CardContent>
+            <RenderQuickwinsTable data={table1Data} />
+          </CardContent>
+        </Card>
       </SidebarInset>
     </SidebarProvider>
   );
