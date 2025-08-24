@@ -269,13 +269,18 @@ export default function MenuDelapan() {
               <CardContent className="px-4 py-2 text-gray-600 text-sm">
                 <ol className="list-decimal pl-5 space-y-3">
                   <li className="italic border-b pb-2">
-                    Jumlah merchant yang bekerja sama = Jumlah merchant yang
-                    berhasil diajak kerjasama / Target (3 Merchant)
+                    <span className="font-bold">
+                      Jumlah merchant yang bekerja sama =
+                    </span>{" "}
+                    Jumlah merchant yang berhasil diajak kerjasama / Target (3
+                    Merchant)
                   </li>
                   <li className="italic border-b pb-2">
-                    % Jumlah WP yang memanfaatkan fasilitas merchant = Jumlah
-                    Wajib Pajak yang memanfaatkan fasilitas merchant / Target
-                    (10 Klaim per Merchant)
+                    <span className="font-bold">
+                      % Jumlah WP yang memanfaatkan fasilitas merchant =
+                    </span>
+                    Jumlah Wajib Pajak yang memanfaatkan fasilitas merchant /
+                    Target (10 Klaim per Merchant)
                   </li>
                 </ol>
               </CardContent>
