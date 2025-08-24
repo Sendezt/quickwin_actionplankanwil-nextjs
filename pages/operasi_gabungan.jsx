@@ -214,7 +214,7 @@ export default function MenuTiga() {
               ))
             ) : (
               <>
-                <Card>
+                {/* <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
                       Periode Awal
@@ -285,57 +285,162 @@ export default function MenuTiga() {
                       ))}
                     </div>
                   </CardContent>
+                </Card> */}
+                <div className="col-span-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-muted-foreground">
+                    {/* Periode */}
+                    {rangeData?.periode_awal && rangeData?.periode_akhir && (
+                      <>
+                        <Card className="shadow-sm border border-dashed bg-muted/30">
+                          <CardHeader className="flex flex-row items-center justify-between pb-1">
+                            <CardTitle className="text-xs font-medium">
+                              Periode Awal
+                            </CardTitle>
+                            <CalendarDays className="h-3 w-3 text-muted-foreground" />
+                          </CardHeader>
+                          <CardContent className="py-1 px-4">
+                            <div className="text-base font-semibold text-gray-900">
+                              {rangeData.periode_awal}
+                            </div>
+                            <p className="text-xs">Tanggal Mulai Periode</p>
+                          </CardContent>
+                        </Card>
+
+                        <Card className="shadow-sm border border-dashed bg-muted/30">
+                          <CardHeader className="flex flex-row items-center justify-between pb-1">
+                            <CardTitle className="text-xs font-medium">
+                              Periode Akhir
+                            </CardTitle>
+                            <CalendarDays className="h-3 w-3 text-muted-foreground" />
+                          </CardHeader>
+                          <CardContent className="py-1 px-4">
+                            <div className="text-base font-semibold text-gray-900">
+                              {rangeData.periode_akhir}
+                            </div>
+                            <p className="text-xs">Tanggal Akhir Periode</p>
+                          </CardContent>
+                        </Card>
+                      </>
+                    )}
+
+                    {/* Obyek Penilaian */}
+                    <Card className="shadow-sm border border-dashed bg-muted/30">
+                      <CardHeader className="flex flex-row items-center justify-between pb-1">
+                        <CardTitle className="text-xs font-medium">
+                          Obyek Penilaian
+                        </CardTitle>
+                        <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                      </CardHeader>
+                      <CardContent className="py-1 px-4">
+                        <div className="text-base font-semibold text-gray-900">
+                          Kantor Samsat
+                        </div>
+                        <p className="text-xs">1 Obyek Penilaian</p>
+                      </CardContent>
+                    </Card>
+
+                    {/* SK Gubernur */}
+                    <Card className="shadow-sm border border-dashed bg-muted/30">
+                      <CardHeader className="flex flex-row items-center justify-between pb-1">
+                        <CardTitle className="text-xs font-medium">
+                          Surat Dukungan Opsgab
+                        </CardTitle>
+                        <FileText className="h-3 w-3 text-muted-foreground" />
+                      </CardHeader>
+                      <CardContent className="py-1 px-4">
+                        <a
+                          href="https://drive.google.com/file/d/1PiK5uwKQ2LPZfLICZZKwmaDX-CW-wmx5/view"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-base font-semibold text-blue-600 hover:underline block"
+                        >
+                          Surat Dukungan Operasi Gabungan
+                        </a>
+                        <p className="text-xs">
+                          Surat Sekda kepada Kapolda No.900.1.13.1/0005203 Hal
+                          Kegiatan Operasi Gabungan Optimalisasi Pajak Kendaraan
+                          Bermotor Tahun 2025
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Row kedua untuk cards */}
+          <div className="grid gap-4 md:grid-cols-2">
+            {loading ? (
+              Array.from({ length: 2 }).map((_, i) => (
+                <Card key={i} className="col-span-1 p-0 overflow-hidden">
+                  <div className="px-5 py-3 border-b">
+                    <Skeleton className="h-4 w-1/4 mb-2" />
+                  </div>
+                  <CardContent className="py-6 px-5 space-y-2">
+                    <Skeleton className="h-8 w-1/3" />
+                    <Skeleton className="h-4 w-2/3" />
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <>
+                {/* Skor Total */}
+                <Card className="p-0 overflow-hidden pb-4 text-center">
+                  <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                    <h4 className="text-sm font-semibold text-blue-800">
+                      Skor Total
+                    </h4>
+                    <div className="bg-blue-200 rounded-full">
+                      <TrendingUp className="h-4 w-4 text-blue-700" />
+                    </div>
+                  </div>
+                  <CardContent className="pb-4">
+                    <div className="text-7xl font-bold text-blue-900">
+                      {totalSkor}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Target: {targetSkor}
+                    </p>
+                  </CardContent>
+                </Card>
+
+                {/* Breakdown Skor */}
+                <Card className="p-0 overflow-hidden">
+                  <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                    <h4 className="text-sm font-semibold text-blue-800">
+                      Breakdown Skor
+                    </h4>
+                    <div className="bg-blue-200 rounded-full">
+                      <BarChart3 className="h-4 w-4 text-blue-700" />
+                    </div>
+                  </div>
+                  <CardContent className="py-2 space-y-2">
+                    {breakdownData?.data?.length > 0 ? (
+                      breakdownData.data.map((item, index) => (
+                        <div
+                          key={index}
+                          className="flex justify-between items-center"
+                        >
+                          <span className="text-lg text-gray-600 flex-1 pr-2 font-bold">
+                            {item.judul}
+                          </span>
+                          <span className="text-2xl font-extrabold text-blue-900">
+                            {item.skor}
+                          </span>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-xs text-muted-foreground">
+                        Tidak ada data
+                      </p>
+                    )}
+                  </CardContent>
                 </Card>
               </>
             )}
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <Card className="p-0 overflow-hidden">
-              <div className="bg-green-100 px-5 py-3 flex items-center justify-between border-b">
-                <h4 className="text-sm font-semibold text-green-800">
-                  Obyek Penilaian
-                </h4>
-                <div className="bg-green-200 rounded-full">
-                  <BarChart3 className="h-4 w-4 text-green-700" />
-                </div>
-              </div>
-              <CardContent className="py-6 px-5">
-                <div className="text-lg font-bold text-gray-900 mb-1">
-                  Kantor Samsat
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  1 Obyek Penilaian
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="p-0 overflow-hidden">
-              <div className="bg-green-100 px-5 py-3 flex items-center justify-between border-b">
-                <h4 className="text-sm font-semibold text-green-800">
-                  Surat Dukungan Opsgab
-                </h4>
-                <div className="bg-green-200 rounded-full">
-                  <ArrowUpRight className="h-4 w-4 text-green-700" />
-                </div>
-              </div>
-              <CardContent className="py-6 px-5">
-                <a
-                  href="https://drive.google.com/file/d/1PiK5uwKQ2LPZfLICZZKwmaDX-CW-wmx5/view"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-lg font-bold text-blue-600 hover:underline mb-1 block"
-                >
-                  Surat Dukungan Operasi Gabungan
-                </a>
-                <p className="text-sm text-muted-foreground">
-                  Surat Sekda kepada Kapolda No.900.1.13.1/0005203 Hal Kegiatan
-                  Operasi Gabungan Optimalisasi Pajak Kendaraan Bermotor Tahun
-                  2025
-                </p>
-              </CardContent>
-            </Card>
-          </div>
 
           {/* Deskripsi Forumula */}
           <Card className="p-0 overflow-hidden">
