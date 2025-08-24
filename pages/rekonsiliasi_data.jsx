@@ -238,104 +238,64 @@ export default function MenuEmpat() {
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
         <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {loading ? (
-              <>
-                <SkeletonCard />
-                <SkeletonCard />
-                <SkeletonCard />
-                <SkeletonCard />
-              </>
-            ) : (
-              <>
-                {/* Periode Awal */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Periode Awal
-                    </CardTitle>
-                    <CalendarDays className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
-                      {rangeData?.periode_awal ?? "-"}
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Tanggal Mulai Periode
-                    </p>
-                  </CardContent>
-                </Card>
-
-                {/* Periode Akhir */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Periode Akhir
-                    </CardTitle>
-                    <CalendarDays className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
-                      {rangeData?.periode_akhir ?? "-"}
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Tanggal Akhir Periode
-                    </p>
-                  </CardContent>
-                </Card>
-
-                {/* Skor Samsat Se-Jateng */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Skor Samsat Se-Jateng
-                    </CardTitle>
-                    <BarChart3 className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{skorSamsat}</div>
-                    <p className="text-xs text-muted-foreground">
-                      Nilai Akhir (Max 4)
-                    </p>
-                  </CardContent>
-                </Card>
-
-                {/* Skor Cabang */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Skor Cabang
-                    </CardTitle>
-                    <BarChart3 className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    {skorCabangList.length > 0 ? (
-                      skorCabangList.map(([cabang, skor], idx) => (
-                        <div
-                          key={idx}
-                          className="flex justify-between text-sm border-b pb-1 last:border-0"
-                        >
-                          <span>{cabang}</span>
-                          <span className="font-bold">{skor}</span>
-                        </div>
-                      ))
-                    ) : (
-                      <p className="text-xs text-muted-foreground">
-                        Tidak ada data cabang
-                      </p>
-                    )}
-                    {targetSkor && (
-                      <p className="text-xs text-muted-foreground pt-2">
-                        Target Skor: {targetSkor}
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
-              </>
-            )}
-          </div>
+          {/* Grid utama */}
           <div className="grid gap-4 md:grid-cols-2">
-            {/* Obyek Penilaian */}
+            {/* Kolom 1: Periode Awal */}
+            <Card className="shadow-sm border border-dashed bg-muted/30">
+              <CardHeader className="flex flex-row items-center justify-between pb-1">
+                <CardTitle className="text-xs font-medium">
+                  Periode Awal
+                </CardTitle>
+                <CalendarDays className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="py-1 px-4">
+                <div className="text-base font-semibold text-gray-900">
+                  {rangeData?.periode_awal ?? "-"}
+                </div>
+                <p className="text-xs">Tanggal Mulai Periode</p>
+              </CardContent>
+            </Card>
+
+            {/* Kolom 2 (row-span-2): Skor Samsat Se-Jateng */}
+            <Card className="p-0 overflow-hidden row-span-2">
+              <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                <h4 className="text-sm font-semibold text-blue-800">
+                  Skor Samsat Se-Jateng
+                </h4>
+                <div className="bg-blue-200 rounded-full">
+                  <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                </div>
+              </div>
+              <CardContent className="flex flex-col items-center justify-center text-center py-14 px-14">
+                <div className="text-7xl font-bold text-blue-900">
+                  {skorSamsat}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Nilai Akhir (Max 4)
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Kolom 1: Periode Akhir */}
+            <Card className="shadow-sm border border-dashed bg-muted/30">
+              <CardHeader className="flex flex-row items-center justify-between pb-1">
+                <CardTitle className="text-xs font-medium">
+                  Periode Akhir
+                </CardTitle>
+                <CalendarDays className="h-3 w-3 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="py-1 px-4">
+                <div className="text-base font-semibold text-gray-900">
+                  {rangeData?.periode_akhir ?? "-"}
+                </div>
+                <p className="text-xs">Tanggal Akhir Periode</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Grid kedua */}
+          <div className="grid gap-4 md:grid-cols-2">
+            {/* Kolom 1: Obyek Penilaian */}
             <Card className="p-0 overflow-hidden">
               <div className="bg-green-100 px-5 py-3 border-b flex items-center justify-between">
                 <h4 className="text-sm font-semibold text-green-800">
@@ -349,6 +309,33 @@ export default function MenuEmpat() {
                 </div>
                 <p className="text-sm text-muted-foreground">
                   1 Obyek Penilaian
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Kolom 2 (row-span-2): Skor Cabang */}
+            <Card className="p-0 overflow-hidden row-span-2">
+              <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                <h4 className="text-sm font-semibold text-blue-800">
+                  Skor Cabang
+                </h4>
+                <div className="bg-blue-200 rounded-full">
+                  <BarChart3 className="h-4 w-4 text-blue-700" />
+                </div>
+              </div>
+              <CardContent className="px-5 py-4 space-y-3">
+                {skorCabangList.map(([cabang, skor], idx) => (
+                  <div
+                    key={idx}
+                    className="flex justify-between text-1xl border-b pb-1 last:border-0"
+                  >
+                    <span>{cabang}</span>
+                    <span className="font-bold">{skor}</span>
+                  </div>
+                ))}
+
+                <p className="text-xs text-muted-foreground pt-2">
+                  Target Skor: {targetSkor}
                 </p>
               </CardContent>
             </Card>

@@ -156,90 +156,6 @@ export default function MenuDua() {
               ))
             ) : (
               <>
-                {/* Tanggal Periode sebagai dua Card
-                {rangeData?.periode_awal && rangeData?.periode_akhir && (
-                  <>
-                    <Card>
-                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                          Periode Awal
-                        </CardTitle>
-                        <CalendarDays className="h-4 w-4 text-muted-foreground" />
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-2xl font-bold">
-                          {rangeData.periode_awal}
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                          Tanggal Mulai Periode
-                        </p>
-                      </CardContent>
-                    </Card>
-
-                    <Card>
-                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                          Periode Akhir
-                        </CardTitle>
-                        <CalendarDays className="h-4 w-4 text-muted-foreground" />
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-2xl font-bold">
-                          {rangeData.periode_akhir}
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                          Tanggal Akhir Periode
-                        </p>
-                      </CardContent>
-                    </Card>
-                  </>
-                )} */}
-
-                {/* Skor Total */}
-                {/* <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Skor Total
-                    </CardTitle>
-                    <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{totalSkor}</div>
-                    <p className="text-xs text-muted-foreground">
-                      Target: {targetSkor} (nilai max)
-                    </p>
-                  </CardContent>
-                </Card> */}
-
-                {/* Breakdown Skor */}
-                {/* <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Breakdown Skor
-                    </CardTitle>
-                    <BarChart3 className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      {breakdownData?.data?.map((item, index) => (
-                        <div
-                          key={index}
-                          className="flex justify-between items-center"
-                        >
-                          <span className="text-xs text-gray-600 flex-1 pr-2">
-                            {item.judul}
-                          </span>
-                          <span className="text-lg font-bold">{item.skor}</span>
-                        </div>
-                      )) || (
-                        <p className="text-xs text-muted-foreground">
-                          Tidak ada data
-                        </p>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card> */}
-
                 <div className="col-span-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-muted-foreground">
                     {/* Periode */}
@@ -368,15 +284,15 @@ export default function MenuDua() {
                       <BarChart3 className="h-4 w-4 text-blue-700" />
                     </div>
                   </div>
-                  <CardContent className="py-6 px-5 space-y-4">
+                  <CardContent className="py-2 space-y-2">
                     {breakdownData?.data?.length > 0 ? (
                       breakdownData.data.map((item, index) => (
                         <div
                           key={index}
                           className="flex justify-between items-center"
                         >
-                          <span className="text-xs text-gray-600 flex-1 pr-2">
-                            {index + 1}. {item.judul}
+                          <span className="text-lg text-gray-600 flex-1 pr-2 font-bold">
+                            {item.judul}
                           </span>
                           <span className="text-2xl font-extrabold text-blue-900">
                             {item.skor}
