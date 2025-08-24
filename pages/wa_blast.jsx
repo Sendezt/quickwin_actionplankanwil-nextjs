@@ -1,13 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -27,25 +21,21 @@ export default function MenuTwelve() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Tabel 1
         const res1 = await fetch(
           "https://magangproject.vercel.app/api/sheet12/getsheet12table1"
         );
         setTable1Data(await res1.json());
 
-        // Tabel 2
         const res2 = await fetch(
           "https://magangproject.vercel.app/api/sheet12/getsheet12table2"
         );
         setTable2Data(await res2.json());
 
-        // Tabel 3
         const res3 = await fetch(
           "https://magangproject.vercel.app/api/sheet12/getsheet12table3"
         );
         setTable3Data(await res3.json());
 
-        // Tabel 4
         const res4 = await fetch(
           "https://magangproject.vercel.app/api/sheet12/getsheet12table4"
         );
@@ -81,10 +71,11 @@ export default function MenuTwelve() {
         <Navbar />
         <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
           {/* Cards Atas */}
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {loading ? (
-              Array.from({ length: 4 }).map((_, i) => (
-                <Card key={i} className="p-0 overflow-hidden">
+          {loading ? (
+            <div className="grid gap-4 md:grid-cols-2">
+              {/* Skeleton kiri */}
+              <div className="flex flex-col gap-4">
+                <Card className="p-0 overflow-hidden">
                   <div className="px-5 py-3 border-b">
                     <Skeleton className="h-4 w-1/4 mb-2" />
                   </div>
@@ -93,9 +84,31 @@ export default function MenuTwelve() {
                     <Skeleton className="h-4 w-2/3" />
                   </CardContent>
                 </Card>
-              ))
-            ) : (
-              <>
+                <Card className="p-0 overflow-hidden">
+                  <div className="px-5 py-3 border-b">
+                    <Skeleton className="h-4 w-1/4 mb-2" />
+                  </div>
+                  <CardContent className="py-6 px-5 space-y-2">
+                    <Skeleton className="h-8 w-1/3" />
+                    <Skeleton className="h-4 w-2/3" />
+                  </CardContent>
+                </Card>
+              </div>
+              {/* Skeleton kanan */}
+              <Card className="p-0 overflow-hidden">
+                <div className="px-5 py-3 border-b">
+                  <Skeleton className="h-4 w-1/4 mb-2" />
+                </div>
+                <CardContent className="py-6 px-5 space-y-2">
+                  <Skeleton className="h-8 w-1/3" />
+                  <Skeleton className="h-4 w-2/3" />
+                </CardContent>
+              </Card>
+            </div>
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2">
+              {/* Kolom Kiri: Periode Awal & Akhir */}
+              <div className="flex flex-col gap-4">
                 {/* Periode Awal */}
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -105,7 +118,7 @@ export default function MenuTwelve() {
                     <CalendarDays className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">
+                    <div className="text-xl font-semibold">
                       {rangeData?.periode_awal ?? "-"}
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -123,7 +136,7 @@ export default function MenuTwelve() {
                     <CalendarDays className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">
+                    <div className="text-xl font-semibold">
                       {rangeData?.periode_akhir ?? "-"}
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -131,49 +144,54 @@ export default function MenuTwelve() {
                     </p>
                   </CardContent>
                 </Card>
+              </div>
 
-                {/* Skor Kanwil */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Skor Total
-                    </CardTitle>
-                    <BarChart3 className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{skorTotal}</div>
-                    <p className="text-xs text-muted-foreground">
-                      Nilai Akhir (Max 4)
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="p-0 overflow-hidden">
-                  <div className="bg-green-100 px-5 py-3 border-b flex items-center justify-between">
-                    <h4 className="text-sm font-semibold text-green-800">
-                      Obyek Penilaian
-                    </h4>
-                    <BarChart3 className="h-4 w-4 text-green-700" />
+              {/* Kolom Kanan: Skor Total (utama) */}
+              <Card className="bg-gradient-to-br from-blue-100 to-blue-200 border-blue-300 shadow-md">
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <CardTitle className="text-base font-semibold text-blue-900">
+                    Skor Total
+                  </CardTitle>
+                  <BarChart3 className="h-5 w-5 text-blue-800" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-4xl font-extrabold text-blue-900">
+                    {skorTotal}
                   </div>
-                  <CardContent className="py-6 px-5">
-                    <div className="text-lg font-bold text-gray-900 mb-1">
-                      Kantor Wilayah
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      1 Obyek Penilaian
-                    </p>
-                  </CardContent>
-                </Card>
-              </>
-            )}
-          </div>
+                  <p className="text-sm text-blue-700">Nilai Akhir (Max 4)</p>
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
-          {/* Forumula */}
+          {/* Obyek Penilaian (full width) */}
+          {!loading && (
+            <div className="mt-2">
+              <Card className="p-0 overflow-hidden w-full">
+                <div className="bg-green-100 px-5 py-3 border-b flex items-center justify-between">
+                  <h4 className="text-sm font-semibold text-green-800">
+                    Obyek Penilaian
+                  </h4>
+                  <BarChart3 className="h-4 w-4 text-green-700" />
+                </div>
+                <CardContent className="py-6 px-5">
+                  <div className="text-lg font-bold text-gray-900 mb-1">
+                    Kantor Wilayah
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    1 Obyek Penilaian
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Formula */}
           <div className="grid gap-4">
             <Card className="p-0 overflow-hidden">
               <div className="bg-yellow-100 px-5 py-3 border-b flex items-center justify-between">
                 <h4 className="text-sm font-semibold text-yellow-800">
-                  Forumula
+                  Formula
                 </h4>
                 <FileText className="h-4 w-4 text-yellow-700" />
               </div>
@@ -195,12 +213,6 @@ export default function MenuTwelve() {
               <CardTitle>
                 Skor Kontribusi Penerimaan WA Blast - Kanwil
               </CardTitle>
-              <CardDescription>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Corporis esse vitae harum nisi velit fugit minus deleniti
-                voluptas, temporibus cumque hic, beatae dicta veniam eaque alias
-                illo sequi, eligendi omnis.
-              </CardDescription>
             </CardHeader>
             <CardContent>
               <RenderTable data={table1Data} />
@@ -213,12 +225,6 @@ export default function MenuTwelve() {
               <CardTitle>
                 Skor Kontribusi Penerimaan WA Blast - Per Cabang
               </CardTitle>
-              <CardDescription>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quidem
-                id voluptates molestiae natus provident sint quibusdam fugiat
-                dolores eveniet quod voluptate doloremque excepturi consequuntur
-                totam culpa, at magnam deserunt veritatis?
-              </CardDescription>
             </CardHeader>
             <CardContent>
               <RenderTable data={table2Data} />
@@ -231,12 +237,6 @@ export default function MenuTwelve() {
               <CardTitle>
                 Skor Kontribusi Penerimaan WA Blast - Per Samsat
               </CardTitle>
-              <CardDescription>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea
-                nihil veritatis commodi, voluptas eius cum quibusdam! Blanditiis
-                debitis laboriosam adipisci voluptate ad quod. Voluptatem,
-                numquam aliquam explicabo voluptatibus similique optio!
-              </CardDescription>
             </CardHeader>
             <CardContent>
               <RenderTableArray data={table3Data} />
@@ -247,12 +247,6 @@ export default function MenuTwelve() {
           <Card>
             <CardHeader>
               <CardTitle>Hasil Penerimaan Atas Kegiatan WA Blast</CardTitle>
-              <CardDescription>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Exercitationem facilis provident labore distinctio doloremque
-                placeat, in rerum. Corporis iure voluptas soluta eum, libero
-                incidunt quo, dolorem illum repudiandae ipsum ducimus!
-              </CardDescription>
             </CardHeader>
             <CardContent>
               <RenderTableArray data={table4Data} />

@@ -1,13 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -27,25 +21,21 @@ export default function MenuSebelas() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Tabel 1
         const res1 = await fetch(
           "https://magangproject.vercel.app/api/sheet11/getsheet11table1"
         );
         setTable1Data(await res1.json());
 
-        // Tabel 2
         const res2 = await fetch(
           "https://magangproject.vercel.app/api/sheet11/getsheet11table2"
         );
         setTable2Data(await res2.json());
 
-        // Tabel 3
         const res3 = await fetch(
           "https://magangproject.vercel.app/api/sheet11/getsheet11table3"
         );
         setTable3Data(await res3.json());
 
-        // Tabel 4
         const res4 = await fetch(
           "https://magangproject.vercel.app/api/sheet11/getsheet11table4"
         );
@@ -73,24 +63,17 @@ export default function MenuSebelas() {
   }, []);
 
   function getNilaiAkhir(table) {
-    // ambil header pertama
     const headerRow = table?.header?.[0] ?? [];
     const idx = headerRow.findIndex((h) => h.includes("Nilai Akhir"));
 
-    // kalau ada summary → ambil dari situ
     if (table?.summary && idx !== -1) {
       return table.summary[idx - 2] ?? "?";
-      // ⚠️ perbedaan: summary Samsat & Cabang ga ada kolom "No" dan "Loket/Cabang"
-      // makanya geser index (idx - 2)
     }
 
-    // fallback: kalau ada data array biasa
     if (table?.data?.length && idx !== -1) {
       if (Array.isArray(table.data[0])) {
-        // data berupa array biasa
         return table.data[0][idx] ?? "?";
       } else if (table.data[0]?.samsat?.length) {
-        // data berupa object dengan samsat array
         return table.data[0].samsat[0][idx] ?? "?";
       }
     }
@@ -107,86 +90,82 @@ export default function MenuSebelas() {
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
         <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
-          {/* Cards Atas */}
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {/* Baris 1: Periode Awal, Periode Akhir, Obyek Penilaian, Formula */}
+          <div className="grid gap-4 md:grid-cols-4">
             {loading ? (
               Array.from({ length: 4 }).map((_, i) => (
-                <Card key={i} className="p-0 overflow-hidden">
-                  <div className="px-5 py-3 border-b">
-                    <Skeleton className="h-4 w-1/4 mb-2" />
-                  </div>
-                  <CardContent className="py-6 px-5 space-y-2">
-                    <Skeleton className="h-8 w-1/3" />
-                    <Skeleton className="h-4 w-2/3" />
+                <Card key={i} className="p-3 shadow-sm bg-slate-50 border-0">
+                  <CardHeader className="pb-1">
+                    <Skeleton className="h-3 w-1/4 mb-1" />
+                  </CardHeader>
+                  <CardContent className="pt-1">
+                    <Skeleton className="h-5 w-1/3 mb-1" />
                   </CardContent>
                 </Card>
               ))
             ) : (
               <>
                 {/* Periode Awal */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
+                <Card className="bg-slate-50 shadow-sm border-0">
+                  <CardHeader className="flex flex-row items-center justify-between px-4 pt-3 pb-1 bg-slate-100 rounded-t-lg">
+                    <CardTitle className="text-sm font-medium text-gray-700">
                       Periode Awal
                     </CardTitle>
-                    <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                    <CalendarDays className="h-4 w-4 text-gray-500" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
+                  <CardContent className="px-4 py-4">
+                    <p className="text-lg font-semibold text-gray-800">
                       {rangeData?.periode_awal ?? "-"}
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Tanggal Mulai Periode
                     </p>
                   </CardContent>
                 </Card>
 
                 {/* Periode Akhir */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
+                <Card className="bg-slate-50 shadow-sm border-0">
+                  <CardHeader className="flex flex-row items-center justify-between px-4 pt-3 pb-1 bg-slate-100 rounded-t-lg">
+                    <CardTitle className="text-sm font-medium text-gray-700">
                       Periode Akhir
                     </CardTitle>
-                    <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                    <CalendarDays className="h-4 w-4 text-gray-500" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
+                  <CardContent className="px-4 py-4">
+                    <p className="text-lg font-semibold text-gray-800">
                       {rangeData?.periode_akhir ?? "-"}
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Tanggal Akhir Periode
                     </p>
                   </CardContent>
                 </Card>
 
-                {/* Skor Kanwil */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Skor Kanwil
+                {/* Obyek Penilaian */}
+                <Card className="bg-slate-50 shadow-sm border-0">
+                  <CardHeader className="flex flex-row items-center justify-between px-4 pt-3 pb-1 bg-slate-100 rounded-t-lg">
+                    <CardTitle className="text-sm font-medium text-gray-700">
+                      Obyek Penilaian
                     </CardTitle>
-                    <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                    <BarChart3 className="h-4 w-4 text-gray-500" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{skorKanwil}</div>
-                    <p className="text-xs text-muted-foreground">
-                      Nilai Akhir (Max 4)
-                    </p>
+                  <CardContent className="px-4 py-4">
+                    <ol className="list-decimal pl-4 text-sm font-semibold text-gray-800 space-y-1">
+                      <li>Kantor Wilayah</li>
+                      <li>Kantor Cabang</li>
+                      <li>Kantor Samsat</li>
+                    </ol>
                   </CardContent>
                 </Card>
 
-                {/* Skor Cabang */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Skor Cabang
+                {/* Formula */}
+                <Card className="bg-slate-50 shadow-sm border-0">
+                  <CardHeader className="flex flex-row items-center justify-between px-4 pt-3 pb-1 bg-slate-100 rounded-t-lg">
+                    <CardTitle className="text-sm font-medium text-gray-700">
+                      Formula
                     </CardTitle>
-                    <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                    <FileText className="h-4 w-4 text-gray-500" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{skorCabang}</div>
-                    <p className="text-xs text-muted-foreground">
-                      Nilai Akhir (Max 4)
+                  <CardContent className="px-4 py-4">
+                    <p className="text-sm text-gray-800 italic">
+                      <span className="font-semibold">
+                        Kontribusi SW Terkutip dari Tunggakan
+                      </span>{" "}
+                      = Realisasi SW Terkutip / Tunggakan SW
                     </p>
                   </CardContent>
                 </Card>
@@ -194,60 +173,59 @@ export default function MenuSebelas() {
             )}
           </div>
 
-          {/* Skor Samsat + Obyek */}
-          <div className="grid gap-4 md:grid-cols-2">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Skor Samsat Se-Jateng
+          {/* Baris 2: Skor Kanwil, Cabang, Samsat */}
+          <div className="grid gap-6 md:grid-cols-3">
+            {/* Skor Kanwil */}
+            <Card className="shadow-md border-0 p-0">
+              <CardHeader className="flex flex-row items-center justify-between px-6 py-4 bg-blue-100 rounded-t-lg">
+                <CardTitle className="text-sm font-medium text-blue-800">
+                  Skor Kanwil
                 </CardTitle>
-                <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                <BarChart3 className="h-4 w-4 text-blue-600" />
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{skorSamsat}</div>
-                <p className="text-xs text-muted-foreground">
-                  Nilai Akhir (Max 4)
+              <CardContent className="flex flex-col items-center justify-center py-6">
+                <div className="text-6xl font-extrabold text-blue-700">
+                  {skorKanwil}
+                </div>
+                <p className="text-sm text-blue-600 mt-2">
+                  Target Skor | 4 (Nilai Max)
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="p-0 overflow-hidden">
-              <div className="bg-green-100 px-5 py-3 border-b flex items-center justify-between">
-                <h4 className="text-sm font-semibold text-green-800">
-                  Obyek Penilaian
-                </h4>
-                <BarChart3 className="h-4 w-4 text-green-700" />
-              </div>
-              <CardContent className="py-6 px-5">
-                <ol className="list-decimal pl-5 text-lg font-bold text-gray-900 mb-1">
-                  <li>Kantor Wilayah</li>
-                  <li>Kantor Cabang</li>
-                  <li>Kantor Samsat</li>
-                </ol>
-                <p className="text-sm text-muted-foreground">
-                  3 Obyek Penilaian
+            {/* Skor Cabang */}
+            <Card className="shadow-md border-0 p-0">
+              <CardHeader className="flex flex-row items-center justify-between px-6 py-4 bg-green-100 rounded-t-lg">
+                <CardTitle className="text-sm font-medium text-green-800">
+                  Skor Cabang
+                </CardTitle>
+                <BarChart3 className="h-4 w-4 text-green-600" />
+              </CardHeader>
+              <CardContent className="flex flex-col items-center justify-center py-6">
+                <div className="text-6xl font-extrabold text-green-700">
+                  {skorCabang}
+                </div>
+                <p className="text-sm text-green-600 mt-2">
+                  Target Skor | 4 (Nilai Max)
                 </p>
               </CardContent>
             </Card>
-          </div>
 
-          {/* Forumula */}
-          <div className="grid gap-4">
-            <Card className="p-0 overflow-hidden">
-              <div className="bg-yellow-100 px-5 py-3 border-b flex items-center justify-between">
-                <h4 className="text-sm font-semibold text-yellow-800">
-                  Forumula
-                </h4>
-                <FileText className="h-4 w-4 text-yellow-700" />
-              </div>
-              <CardContent className="py-4 px-5 italic">
-                <span className="font-semibold text-gray-900">
-                  Kontribusi SW Terkutip dari Tunggakan
-                </span>
-                <span className="text-gray-600">
-                  {" "}
-                  = Realisasi SW Terkutip / Tunggakan SW
-                </span>
+            {/* Skor Samsat */}
+            <Card className="shadow-md border-0 p-0">
+              <CardHeader className="flex flex-row items-center justify-between px-6 py-4 bg-yellow-100 rounded-t-lg">
+                <CardTitle className="text-sm font-medium text-yellow-800">
+                  Skor Samsat
+                </CardTitle>
+                <BarChart3 className="h-4 w-4 text-yellow-600" />
+              </CardHeader>
+              <CardContent className="flex flex-col items-center justify-center py-6">
+                <div className="text-6xl font-extrabold text-yellow-700">
+                  {skorSamsat}
+                </div>
+                <p className="text-sm text-yellow-600 mt-2">
+                  Target Skor | 4 (Nilai Max)
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -258,12 +236,6 @@ export default function MenuSebelas() {
               <CardTitle>
                 Skor Kontribusi Penerimaan SIGAP Instansi - Kanwil
               </CardTitle>
-              <CardDescription>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Corporis esse vitae harum nisi velit fugit minus deleniti
-                voluptas, temporibus cumque hic, beatae dicta veniam eaque alias
-                illo sequi, eligendi omnis.
-              </CardDescription>
             </CardHeader>
             <CardContent>
               <RenderTable data={table1Data} />
@@ -276,12 +248,6 @@ export default function MenuSebelas() {
               <CardTitle>
                 Skor Kontribusi Penerimaan SIGAP Instansi - Per Cabang
               </CardTitle>
-              <CardDescription>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quidem
-                id voluptates molestiae natus provident sint quibusdam fugiat
-                dolores eveniet quod voluptate doloremque excepturi consequuntur
-                totam culpa, at magnam deserunt veritatis?
-              </CardDescription>
             </CardHeader>
             <CardContent>
               <RenderTable data={table2Data} />
@@ -294,12 +260,6 @@ export default function MenuSebelas() {
               <CardTitle>
                 Skor Kontribusi Penerimaan SIGAP Instansi - Per Samsat
               </CardTitle>
-              <CardDescription>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea
-                nihil veritatis commodi, voluptas eius cum quibusdam! Blanditiis
-                debitis laboriosam adipisci voluptate ad quod. Voluptatem,
-                numquam aliquam explicabo voluptatibus similique optio!
-              </CardDescription>
             </CardHeader>
             <CardContent>
               <RenderTableArray data={table3Data} />
@@ -312,12 +272,6 @@ export default function MenuSebelas() {
               <CardTitle>
                 Hasil Penerimaan Atas Kegiatan SIGAP Instansi
               </CardTitle>
-              <CardDescription>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Exercitationem facilis provident labore distinctio doloremque
-                placeat, in rerum. Corporis iure voluptas soluta eum, libero
-                incidunt quo, dolorem illum repudiandae ipsum ducimus!
-              </CardDescription>
             </CardHeader>
             <CardContent>
               <RenderTableArray data={table4Data} />

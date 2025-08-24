@@ -24,7 +24,9 @@ export default function RenderTableArray({ data }) {
         <TableHeader>
           <TableRow>
             {headers.map((col, idx) => (
-              <TableHead key={idx}>{col}</TableHead>
+              <TableHead key={idx} className="text-center">
+                {col}
+              </TableHead>
             ))}
           </TableRow>
         </TableHeader>
@@ -33,18 +35,23 @@ export default function RenderTableArray({ data }) {
         <TableBody>
           {cabangs.map((cabang, idx) => (
             <React.Fragment key={cabang.cabang || idx}>
-              {/* Baris judul cabang */}
+              {/* Baris judul cabang → kiri */}
               <TableRow className="bg-gray-100">
-                <TableCell colSpan={headers.length} className="font-bold">
+                <TableCell
+                  colSpan={headers.length}
+                  className="font-bold text-left"
+                >
                   {cabang.cabang}
                 </TableCell>
               </TableRow>
 
-              {/* Data samsat */}
+              {/* Data samsat → center */}
               {cabang.samsat.map((row, rIdx) => (
                 <TableRow key={`${cabang.cabang}-${rIdx}`}>
                   {row.map((cell, cidx) => (
-                    <TableCell key={cidx}>{cell}</TableCell>
+                    <TableCell key={cidx} className="text-center">
+                      {cell}
+                    </TableCell>
                   ))}
                 </TableRow>
               ))}
@@ -56,11 +63,11 @@ export default function RenderTableArray({ data }) {
         {summary && (
           <TableFooter>
             <TableRow>
-              <TableCell />
-              <TableCell />
+              <TableCell className="text-center" />
+              <TableCell className="text-center" />
 
               {summary.map((cell, idx) => (
-                <TableCell key={idx} className="font-semibold">
+                <TableCell key={idx} className="font-semibold text-center">
                   {cell}
                 </TableCell>
               ))}
