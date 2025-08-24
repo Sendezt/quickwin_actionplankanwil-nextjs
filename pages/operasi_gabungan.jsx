@@ -96,22 +96,27 @@ function TableCard({ title, description, headers, data, summary, isLoading }) {
             </TableBody>
             {normalizedSummary.length > 0 && (
               <TableFooter>
-                {normalizedSummary.map((row, i) => (
-                  <TableRow key={i} className="bg-gray-50 font-semibold">
-                    {/* Tambahkan sel kosong di awal */}
-                    <TableCell className="border border-gray-300 px-3 py-1 text-sm"></TableCell>
-                    {Array.isArray(row)
-                      ? row.map((cell, j) => (
-                          <TableCell
-                            key={j}
-                            className="border border-gray-300 px-3 py-1 text-sm"
-                          >
-                            {cell}
-                          </TableCell>
-                        ))
-                      : null}
-                  </TableRow>
-                ))}
+                {normalizedSummary.map((row, i) => {
+                  const emptyCells = headers.length - row.length; // sel kosong di awal
+                  return (
+                    <TableRow key={i} className="bg-gray-50 font-semibold">
+                      {Array.from({ length: emptyCells }).map((_, idx) => (
+                        <TableCell
+                          key={`empty-${idx}`}
+                          className="border border-gray-300 px-3 py-1 text-sm"
+                        ></TableCell>
+                      ))}
+                      {row.map((cell, j) => (
+                        <TableCell
+                          key={j}
+                          className="border border-gray-300 px-3 py-1 text-sm"
+                        >
+                          {cell}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  );
+                })}
               </TableFooter>
             )}
           </Table>
@@ -441,7 +446,6 @@ export default function MenuTiga() {
             )}
           </div>
 
-
           {/* Deskripsi Forumula */}
           <Card className="p-0 overflow-hidden">
             {/* Header Card */}
@@ -521,8 +525,8 @@ export default function MenuTiga() {
           />
           <TableCard
             title="Hasil Penerimaan Atas Kegiatan Operasi Gabungan"
-            // 
-            
+            //
+
             headers={table5Data?.header?.[0] ?? []}
             data={
               table5Data?.data?.flatMap((item) => [
