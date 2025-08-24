@@ -30,9 +30,21 @@ export default function Dashboard() {
   const [chartData2, setChartData2] = useState(null);
 
   const cardConfig = [
-    { title: "Action Plan Kanwil", link: "/quickwin-kanwil" },
-    { title: "Action Plan Cabang", link: "/quickwin-cabang" },
-    { title: "Action Plan Samsat", link: "/quickwin-samsat" },
+    {
+      title: "Action Plan Kanwil",
+      link: "/quickwin-kanwil",
+      color: "bg-green-800",
+    },
+    {
+      title: "Action Plan Cabang",
+      link: "/quickwin-cabang",
+      color: "bg-blue-800",
+    },
+    {
+      title: "Action Plan Samsat",
+      link: "/quickwin-samsat",
+      color: "bg-yellow-600",
+    },
   ];
 
   useEffect(() => {
@@ -243,7 +255,7 @@ export default function Dashboard() {
 
               {/* Kolom tengah atas: Cabang Terbaik */}
               <Card className="row-span-1 p-0 overflow-hidden">
-                <CardHeader className="bg-green-500 text-white p-2">
+                <CardHeader className="bg-green-800 text-white p-2">
                   <CardTitle className="text-sm">
                     Action Plan Cabang Terbaik
                   </CardTitle>
@@ -272,7 +284,7 @@ export default function Dashboard() {
 
               {/* Kolom tengah bawah: Samsat Terbaik */}
               <Card className="row-span-1 p-0 overflow-hidden">
-                <CardHeader className="bg-green-900 text-white p-2">
+                <CardHeader className="bg-green-800 text-white p-2">
                   <CardTitle className="text-sm">
                     Action Plan Samsat Terbaik
                   </CardTitle>
@@ -307,7 +319,8 @@ export default function Dashboard() {
                   key={idx}
                   className="p-0 overflow-hidden rounded-2xl shadow-md"
                 >
-                  <CardHeader className="bg-green-900 text-white p-2">
+                  {/* gunakan warna dari cardConfig */}
+                  <CardHeader className={`${cfg.color} text-white p-2`}>
                     <div className="flex items-center justify-between w-full">
                       <CardTitle className="text-sm">{cfg.title}</CardTitle>
                       <Link href={cfg.link} className="hover:text-gray-200">
@@ -382,8 +395,8 @@ export default function Dashboard() {
             {/* Section 4: Tables */}
             <div className="space-y-6">
               {/* ===== Peringkat Action Plan Cabang ===== */}
-              <h2 className="text-xl font-bold text-gray-800 border-b-2 border-gray-300 pb-2">
-                📊 Peringkat Action Plan Cabang
+              <h2 className="text-xl font-bold text-gray-800 border-b-2 border-gray-300 pb-3 text-center">
+                Peringkat Action Plan Cabang
               </h2>
 
               {/* Tabel khusus: Nilai Total Action Plan Cabang - Full Width */}
@@ -447,8 +460,8 @@ export default function Dashboard() {
             <div className="my-8 border-t-4 border-dashed border-gray-400"></div>
 
             {/* Section: Tables SAMSAT */}
-            <h2 className="text-xl font-bold text-gray-800 border-b-2 border-gray-300 pb-2">
-              🚗 Peringkat Action Plan SAMSAT
+            <h2 className="text-xl font-bold text-gray-800 border-b-2 border-gray-300 pb-3 text-center">
+              Peringkat Action Plan SAMSAT
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
               {bestSamsatData?.map((table, idx) => (

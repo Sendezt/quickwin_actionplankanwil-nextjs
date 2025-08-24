@@ -151,12 +151,14 @@ export function AppSidebar(props) {
                           </CollapsibleTrigger>
                           <CollapsibleContent>
                             <SidebarMenuSub>
-                              {item.items.map((subItem) => {
+                              {item.items.map((subItem, index) => {
                                 const isSubActive = pathname.startsWith(
                                   subItem.url
                                 );
                                 return (
-                                  <SidebarMenuSubItem key={subItem.title}>
+                                  <SidebarMenuSubItem
+                                    key={subItem.url + "-" + index}
+                                  >
                                     <SidebarMenuSubButton
                                       asChild
                                       className={`hover:bg-gray-500 hover:text-white ${
