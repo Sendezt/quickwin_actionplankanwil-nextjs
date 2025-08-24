@@ -124,130 +124,141 @@ export default function MenuTen() {
             ) : (
               <>
                 {/* Periode Awal */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
+                {/* Periode Awal */}
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
                       Periode Awal
                     </CardTitle>
-                    <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                    <CalendarDays className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
+                  <CardContent className="py-1 px-4">
+                    <div className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_awal ?? "-"}
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      Tanggal Mulai Periode
-                    </p>
+                    <p className="text-xs">Tanggal Mulai</p>
                   </CardContent>
                 </Card>
 
                 {/* Periode Akhir */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
                       Periode Akhir
                     </CardTitle>
-                    <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                    <CalendarDays className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
+                  <CardContent className="py-1 px-4">
+                    <div className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_akhir ?? "-"}
                     </div>
+                    <p className="text-xs">Tanggal Akhir</p>
+                  </CardContent>
+                </Card>
+
+                {/* Obyek Penilaian */}
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
+                      Obyek Penilaian
+                    </CardTitle>
+                    <BarChart3 className="h-3 w-3 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent className="py-1 px-4">
+                    <ol className="list-decimal pl-4 text-sm font-semibold text-gray-900 mb-1">
+                      <li>Kantor Wilayah</li>
+                      <li>Kantor Cabang</li>
+                      <li>Kantor Samsat</li>
+                    </ol>
                     <p className="text-xs text-muted-foreground">
-                      Tanggal Akhir Periode
+                      3 Obyek Penilaian
                     </p>
                   </CardContent>
                 </Card>
 
-                {/* Skor Kanwil */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Skor Kanwil
+                {/* Forumula */}
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
+                      Forumula
                     </CardTitle>
-                    <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                    <BarChart3 className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{skorKanwil}</div>
-                    <p className="text-xs text-muted-foreground">
-                      Nilai Akhir (Max 4)
-                    </p>
-                  </CardContent>
-                </Card>
-
-                {/* Skor Cabang */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Skor Cabang
-                    </CardTitle>
-                    <BarChart3 className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{skorCabang}</div>
-                    <p className="text-xs text-muted-foreground">
-                      Nilai Akhir (Max 4)
-                    </p>
+                  <CardContent className="py-2 px-4 italic text-sm">
+                    <span className="font-semibold text-gray-900">
+                      Kontribusi SW Terkutip dari Tunggakan
+                    </span>
+                    <span className="text-gray-600">
+                      {" "}
+                      = Realisasi SW Terkutip / Tunggakan SW
+                    </span>
                   </CardContent>
                 </Card>
               </>
             )}
           </div>
-
-          {/* Skor Samsat + Obyek */}
-          <div className="grid gap-4 md:grid-cols-2">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Skor Samsat Se-Jateng
-                </CardTitle>
-                <BarChart3 className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{skorSamsat}</div>
+          {/* All Skor - Kanwil Cabang Samsat */}
+          <div className="grid gap-4 md:grid-cols-3">
+            {/* Skor Kanwil */}
+            <Card className="p-0 overflow-hidden pb-4 text-center">
+              <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                <h4 className="text-sm font-semibold text-blue-800">
+                  Skor Kanwil
+                </h4>
+                <div className="bg-blue-200 rounded-full p-1">
+                  <BarChart3 className="h-4 w-4 text-blue-700" />
+                </div>
+              </div>
+              <CardContent className="pb-4">
+                <div className="text-7xl font-bold text-blue-700">
+                  {skorKanwil}
+                </div>
                 <p className="text-xs text-muted-foreground">
-                  Nilai Akhir (Max 4)
+                  Target Skor{" "}
+                  <span className="text-gray-500">| 4 (Nilai Max)</span>
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="p-0 overflow-hidden">
-              <div className="bg-green-100 px-5 py-3 border-b flex items-center justify-between">
+            {/* Skor Cabang */}
+            <Card className="p-0 overflow-hidden pb-4 text-center">
+              <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
                 <h4 className="text-sm font-semibold text-green-800">
-                  Obyek Penilaian
+                  Skor Cabang
                 </h4>
-                <BarChart3 className="h-4 w-4 text-green-700" />
+                <div className="bg-green-200 rounded-full p-1">
+                  <BarChart3 className="h-4 w-4 text-green-700" />
+                </div>
               </div>
-              <CardContent className="py-6 px-5">
-                <ol className="list-decimal pl-5 text-lg font-bold text-gray-900 mb-1">
-                  <li>Kantor Wilayah</li>
-                  <li>Kantor Cabang</li>
-                  <li>Kantor Samsat</li>
-                </ol>
-                <p className="text-sm text-muted-foreground">
-                  3 Obyek Penilaian
+              <CardContent className="pb-4">
+                <div className="text-7xl font-bold text-green-700">
+                  {skorCabang}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Target Skor{" "}
+                  <span className="text-gray-500">| 4 (Nilai Max)</span>
                 </p>
               </CardContent>
             </Card>
-          </div>
 
-          {/* Forumula */}
-          <div className="grid gap-4">
-            <Card className="p-0 overflow-hidden">
-              <div className="bg-yellow-100 px-5 py-3 border-b flex items-center justify-between">
+            {/* Skor Samsat */}
+            <Card className="p-0 overflow-hidden pb-4 text-center">
+              <div className="bg-yellow-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
                 <h4 className="text-sm font-semibold text-yellow-800">
-                  Forumula
+                  Skor Samsat Se-Jateng
                 </h4>
-                <FileText className="h-4 w-4 text-yellow-700" />
+                <div className="bg-yellow-200 rounded-full p-1">
+                  <BarChart3 className="h-4 w-4 text-yellow-700" />
+                </div>
               </div>
-              <CardContent className="py-4 px-5 italic">
-                <span className="font-semibold text-gray-900">
-                  Kontribusi SW Terkutip dari Tunggakan
-                </span>
-                <span className="text-gray-600">
-                  {" "}
-                  = Realisasi SW Terkutip / Tunggakan SW
-                </span>
+              <CardContent className="pb-4">
+                <div className="text-7xl font-bold text-yellow-700">
+                  {skorSamsat}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Target Skor{" "}
+                  <span className="text-gray-500">| 4 (Nilai Max)</span>
+                </p>
               </CardContent>
             </Card>
           </div>
