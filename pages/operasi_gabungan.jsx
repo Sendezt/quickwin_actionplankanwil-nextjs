@@ -26,6 +26,7 @@ import {
   BarChart3,
   ArrowUpRight,
   FileText,
+  LandPlot,
 } from "lucide-react";
 import Navbar from "@/components/navbar";
 
@@ -334,7 +335,7 @@ export default function MenuTiga() {
                         <CardTitle className="text-xs font-medium">
                           Obyek Penilaian
                         </CardTitle>
-                        <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                        <LandPlot className="h-3 w-3 text-muted-foreground" />
                       </CardHeader>
                       <CardContent className="py-1 px-4">
                         <div className="text-base font-semibold text-gray-900">

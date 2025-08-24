@@ -255,7 +255,7 @@ export default function Dashboard() {
 
               {/* Kolom tengah atas: Cabang Terbaik */}
               <Card className="row-span-1 p-0 overflow-hidden">
-                <CardHeader className="bg-green-800 text-white p-2">
+                <CardHeader className="bg-gray-500 text-white p-2">
                   <CardTitle className="text-sm">
                     Action Plan Cabang Terbaik
                   </CardTitle>
@@ -284,7 +284,7 @@ export default function Dashboard() {
 
               {/* Kolom tengah bawah: Samsat Terbaik */}
               <Card className="row-span-1 p-0 overflow-hidden">
-                <CardHeader className="bg-green-800 text-white p-2">
+                <CardHeader className="bg-gray-500 text-white p-2">
                   <CardTitle className="text-sm">
                     Action Plan Samsat Terbaik
                   </CardTitle>
@@ -346,7 +346,7 @@ export default function Dashboard() {
             {/* Section 3: Charts */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card className="p-0 overflow-hidden h-[400px] flex flex-col">
-                <CardHeader className="bg-green-900 text-white p-2">
+                <CardHeader className="bg-gray-500 text-white p-2">
                   <CardTitle className="text-sm">
                     Action Plan (Pie Chart)
                   </CardTitle>
@@ -369,7 +369,7 @@ export default function Dashboard() {
               </Card>
 
               <Card className="p-0 overflow-hidden h-[400px] flex flex-col">
-                <CardHeader className="bg-blue-900 text-white p-2">
+                <CardHeader className="bg-gray-500 text-white p-2">
                   <CardTitle className="text-sm">
                     Kekurangan (Pie Chart)
                   </CardTitle>

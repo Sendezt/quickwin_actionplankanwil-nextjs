@@ -193,7 +193,7 @@ export default function MenuLima() {
                   Skor Cabang
                 </h4>
                 <div className="bg-green-200 rounded-full">
-                  <FileText className="h-4 w-4 text-green-700" />
+                  <BarChart3 className="h-4 w-4 text-green-700" />
                 </div>
               </div>
               <CardContent className="px-5 py-4 space-y-3">

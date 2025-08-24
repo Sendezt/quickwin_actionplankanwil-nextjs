@@ -294,7 +294,7 @@ export default function MenuTujuh() {
                 <Card className="shadow-sm border border-dashed bg-muted/30">
                   <CardHeader className="flex flex-row items-center justify-between pb-1">
                     <CardTitle className="text-xs font-medium">
-                      Formula
+                      Forumula
                     </CardTitle>
                     <Radical className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
@@ -319,16 +319,16 @@ export default function MenuTujuh() {
           {/* Skor Kanwil */}
           <div className="grid gap-4 md:grid-cols-1">
             <Card className="p-0 overflow-hidden pb-4 text-center">
-              <div className="bg-yellow-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                <h4 className="text-sm font-semibold text-yellow-800">
+              <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                <h4 className="text-sm font-semibold text-blue-800">
                   Skor Kanwil
                 </h4>
-                <div className="bg-yellow-200 rounded-full">
-                  <BarChart3 className="h-4 w-4 text-yellow-700" />
+                <div className="bg-blue-200 rounded-full">
+                  <BarChart3 className="h-4 w-4 text-blue-700" />
                 </div>
               </div>
               <CardContent className="pb-9">
-                <div className="text-7xl font-bold text-yellow-900">
+                <div className="text-7xl font-bold text-blue-900">
                   {skorKanwil}
                 </div>
                 <p className="text-xs text-muted-foreground">

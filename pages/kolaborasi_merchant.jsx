@@ -11,7 +11,7 @@ import {
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CalendarDays, BarChart3, FileText } from "lucide-react";
+import { CalendarDays, BarChart3, LandPlot, Radical } from "lucide-react";
 import Navbar from "@/components/navbar";
 import RenderTable from "@/components/kolaborasimerchant/RenderTable";
 import RenderTableArray from "@/components/kolaborasimerchant/RenderTableArray";
@@ -117,33 +117,33 @@ export default function MenuDelapan() {
             {/* Kolom Kiri: Periode Awal & Akhir */}
             <div className="flex flex-col gap-4">
               {/* Periode Awal */}
-              <Card className="shadow-sm bg-gray-100">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 px-3">
+              <Card className="shadow-sm border border-dashed bg-muted/30">
+                <CardHeader className="flex flex-row items-center justify-between pb-1 px-3">
                   <CardTitle className="text-xs font-medium">
                     Periode Awal
                   </CardTitle>
                   <CalendarDays className="h-3 w-3 text-muted-foreground" />
                 </CardHeader>
                 <CardContent className="px-3 pb-2">
-                  <div className="text-base font-semibold">
+                  <div className="text-base font-semibold text-gray-900">
                     {rangeData?.periode_awal ?? "-"}
                   </div>
-                  <p className="text-[9px] text-muted-foreground">
-                    Tanggal Mulai
+                  <p className="text-[10px] text-muted-foreground">
+                    Tanggal Mulai Periode
                   </p>
                 </CardContent>
               </Card>
 
               {/* Periode Akhir */}
-              <Card className="h-32 shadow-sm bg-gray-100">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 px-3">
+              <Card className="shadow-sm border border-dashed bg-muted/30">
+                <CardHeader className="flex flex-row items-center justify-between pb-1 px-3">
                   <CardTitle className="text-xs font-medium">
                     Periode Akhir
                   </CardTitle>
                   <CalendarDays className="h-3 w-3 text-muted-foreground" />
                 </CardHeader>
-                <CardContent className="px-3 py-2">
-                  <div className="text-lg font-semibold">
+                <CardContent className="px-3 pb-2">
+                  <div className="text-base font-semibold text-gray-900">
                     {rangeData?.periode_akhir ?? "-"}
                   </div>
                   <p className="text-[10px] text-muted-foreground">
@@ -154,19 +154,26 @@ export default function MenuDelapan() {
             </div>
 
             {/* Kolom Kanan: Obyek Penilaian */}
-            <Card className="min-h-[120px] border border-gray-200 bg-white shadow-sm rounded-xl">
-              <CardHeader className="px-4 py-2 border-b bg-gray-50 rounded-t-xl">
-                <CardTitle className="text-sm font-semibold text-gray-800">
+            <Card className="p-0 overflow-hidden">
+              {/* Header */}
+              <div className="bg-gray-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                <h4 className="text-sm font-semibold text-gray-800">
                   Obyek Penilaian
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="px-4 py-2 text-gray-700">
-                <ol className="list-decimal pl-5 space-y-1 text-xs">
+                </h4>
+                <div className="bg-gray-200 rounded-full">
+                  <LandPlot className="h-4 w-4 text-gray-700" />
+                </div>
+              </div>
+
+              {/* Content */}
+              <CardContent className="py-3 px-5 space-y-2">
+                <ol className="list-decimal pl-5 space-y-2 text-sm text-gray-700">
                   <li className="font-medium">Kantor Wilayah</li>
                   <li className="font-medium">Kantor Cabang</li>
                   <li className="font-medium">Kantor Samsat</li>
                 </ol>
-                <p className="text-[10px] text-gray-500 mt-2 italic">
+
+                <p className="text-xs text-gray-500 mt-2 italic">
                   Total: 3 Obyek Penilaian
                 </p>
               </CardContent>
@@ -195,14 +202,14 @@ export default function MenuDelapan() {
 
             {/* Skor Cabang */}
             <Card className="overflow-hidden p-0">
-              <div className="bg-blue-100 px-5 py-3 border-b flex items-center justify-between">
-                <h4 className="text-sm font-semibold text-blue-800">
+              <div className="bg-green-100 px-5 py-3 border-b flex items-center justify-between">
+                <h4 className="text-sm font-semibold text-green-800">
                   Skor Cabang
                 </h4>
-                <BarChart3 className="h-4 w-4 text-blue-700" />
+                <BarChart3 className="h-4 w-4 text-green-700" />
               </div>
               <CardContent className="py-6 px-5 text-center">
-                <div className="text-6xl font-bold text-blue-600">
+                <div className="text-6xl font-bold text-green-600">
                   {skorCabang}
                 </div>
                 <p className="text-sm text-gray-500 mt-2">
@@ -213,14 +220,14 @@ export default function MenuDelapan() {
 
             {/* Skor Samsat */}
             <Card className="overflow-hidden p-0">
-              <div className="bg-blue-100 px-5 py-3 border-b flex items-center justify-between">
-                <h4 className="text-sm font-semibold text-blue-800">
+              <div className="bg-yellow-100 px-5 py-3 border-b flex items-center justify-between">
+                <h4 className="text-sm font-semibold text-yellow-800">
                   Skor Samsat Se-Jateng
                 </h4>
-                <BarChart3 className="h-4 w-4 text-blue-700" />
+                <BarChart3 className="h-4 w-4 text-yellow-700" />
               </div>
               <CardContent className="py-6 px-5 text-center">
-                <div className="text-6xl font-bold text-blue-600">
+                <div className="text-6xl font-bold text-yellow-600">
                   {skorSamsat}
                 </div>
                 <p className="text-sm text-gray-500 mt-2">
@@ -230,30 +237,48 @@ export default function MenuDelapan() {
             </Card>
           </div>
 
-          {/* Row 3: Breakdown Skor + Formula */}
+          {/* Row 3: Breakdown Skor + Forumula */}
           <div className="grid gap-4 md:grid-cols-2">
             {/* Breakdown Skor */}
-            <Card className="overflow-hidden p-0">
-              <div className="bg-blue-100 px-5 py-3 border-b flex items-center justify-between">
+            <Card className="p-0 overflow-hidden">
+              {/* Header */}
+              <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
                 <h4 className="text-sm font-semibold text-blue-800">
                   Breakdown Skor
                 </h4>
-                <BarChart3 className="h-4 w-4 text-blue-700" />
+                <div className="bg-blue-200 rounded-full">
+                  <BarChart3 className="h-4 w-4 text-blue-700" />
+                </div>
               </div>
-              <CardContent className="py-6 px-5 space-y-3">
-                {breakdownData?.data?.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center border-b pb-2 text-blue-700"
-                  >
-                    <span className="text-sm font-medium">{item.judul}</span>
-                    <span className="text-2xl font-bold">{item.skor}</span>
-                  </div>
-                ))}
+
+              {/* Content */}
+              <CardContent className="py-2 space-y-2">
+                {breakdownData?.data?.length > 0 ? (
+                  breakdownData.data.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex justify-between items-center"
+                    >
+                      <span className="text-lg text-gray-600 flex-1 pr-2 font-bold">
+                        {item.judul}
+                      </span>
+                      <span className="text-2xl font-extrabold text-blue-900">
+                        {item.skor}
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-xs text-muted-foreground">
+                    Tidak ada data
+                  </p>
+                )}
+
                 {breakdownData?.target && (
-                  <div className="flex justify-between items-center pt-2 text-gray-700 font-medium">
-                    <span>{breakdownData.target.judul}</span>
-                    <span className="font-bold">
+                  <div className="flex justify-between items-center border-t pt-2 text-gray-700">
+                    <span className="text-sm font-semibold">
+                      {breakdownData.target.judul}
+                    </span>
+                    <span className="text-lg font-bold">
                       {breakdownData.target.skor}
                     </span>
                   </div>
@@ -261,26 +286,22 @@ export default function MenuDelapan() {
               </CardContent>
             </Card>
 
-            {/* Formula */}
-            <Card className="border border-gray-200 shadow-none">
-              <CardHeader>
-                <CardTitle className="text-sm text-gray-700">Formula</CardTitle>
+            {/* Forumula */}
+            <Card className="shadow-sm border border-dashed bg-muted/30">
+              <CardHeader className="flex flex-row items-center justify-between pb-1 px-3">
+                <CardTitle className="text-xs font-medium">Forumula</CardTitle>
+                <Radical className="h-3 w-3 text-muted-foreground" />
               </CardHeader>
-              <CardContent className="px-4 py-2 text-gray-600 text-sm">
-                <ol className="list-decimal pl-5 space-y-3">
+              <CardContent className="px-3 pb-2">
+                <ol className="list-decimal pl-4 space-y-2 text-xs text-gray-700">
                   <li className="italic border-b pb-2">
-                    <span className="font-bold">
-                      Jumlah merchant yang bekerja sama =
-                    </span>{" "}
-                    Jumlah merchant yang berhasil diajak kerjasama / Target (3
-                    Merchant)
+                    Jumlah merchant yang bekerja sama = Jumlah merchant yang
+                    berhasil diajak kerjasama / Target (3 Merchant)
                   </li>
-                  <li className="italic border-b pb-2">
-                    <span className="font-bold">
-                      % Jumlah WP yang memanfaatkan fasilitas merchant =
-                    </span>
-                    Jumlah Wajib Pajak yang memanfaatkan fasilitas merchant /
-                    Target (10 Klaim per Merchant)
+                  <li className="italic">
+                    % Jumlah WP yang memanfaatkan fasilitas merchant = Jumlah
+                    Wajib Pajak yang memanfaatkan fasilitas merchant / Target
+                    (10 Klaim per Merchant)
                   </li>
                 </ol>
               </CardContent>

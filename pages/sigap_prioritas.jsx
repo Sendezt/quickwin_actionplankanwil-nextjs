@@ -11,7 +11,7 @@ import {
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CalendarDays, BarChart3, FileText } from "lucide-react";
+import { CalendarDays, BarChart3, FileText, Radical, LandPlot } from "lucide-react";
 import Navbar from "@/components/navbar";
 import RenderTable from "@/components/sigapprioritas/RenderTable";
 import RenderTableArray from "@/components/sigapprioritas/RenderTableArray";
@@ -161,7 +161,7 @@ export default function MenuTen() {
                     <CardTitle className="text-xs font-medium">
                       Obyek Penilaian
                     </CardTitle>
-                    <BarChart3 className="h-3 w-3 text-muted-foreground" />
+                    <LandPlot className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
                   <CardContent className="py-1 px-4">
                     <ol className="list-decimal pl-4 text-sm font-semibold text-gray-900 mb-1">
@@ -181,7 +181,7 @@ export default function MenuTen() {
                     <CardTitle className="text-xs font-medium">
                       Forumula
                     </CardTitle>
-                    <BarChart3 className="h-3 w-3 text-muted-foreground" />
+                    <Radical className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
                   <CardContent className="py-2 px-4 italic text-sm">
                     <span className="font-semibold text-gray-900">
