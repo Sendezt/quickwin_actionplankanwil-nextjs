@@ -251,7 +251,7 @@ export default function MenuEnam() {
         <Navbar />
         <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
           {/* Top Info */}
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-2">
             {loading ? (
               <>
                 <SkeletonCard />
@@ -261,122 +261,127 @@ export default function MenuEnam() {
               </>
             ) : (
               <>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
                       Periode Awal
                     </CardTitle>
-                    <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                    <CalendarDays className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
-                      {rangeData?.periode_awal ?? "-"}
+                  <CardContent className="flex flex-col justify-center">
+                    <div className="text-base font-semibold text-gray-900">
+                      {rangeData.periode_awal}
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      Tanggal Mulai Periode
-                    </p>
+                    <p className="text-xs">Tanggal Mulai Periode</p>
                   </CardContent>
                 </Card>
 
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
+                {/* Periode Akhir */}
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
                       Periode Akhir
                     </CardTitle>
-                    <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                    <CalendarDays className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
-                      {rangeData?.periode_akhir ?? "-"}
+                  <CardContent className="flex flex-col justify-center">
+                    <div className="text-base font-semibold text-gray-900">
+                      {rangeData.periode_akhir}
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      Tanggal Akhir Periode
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Skor Kanwil
-                    </CardTitle>
-                    <BarChart3 className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{skorKanwil}</div>
-                    <p className="text-xs text-muted-foreground">
-                      Nilai Akhir (Max 4)
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Skor Cabang
-                    </CardTitle>
-                    <BarChart3 className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{skorCabang}</div>
-                    <p className="text-xs text-muted-foreground">
-                      Nilai Akhir (Max 4)
-                    </p>
+                    <p className="text-xs">Tanggal Akhir Periode</p>
                   </CardContent>
                 </Card>
               </>
             )}
           </div>
 
-          {/* Skor + Obyek */}
-          <div className="grid gap-4 md:grid-cols-2">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Skor Samsat Se-Jateng
-                </CardTitle>
-                <BarChart3 className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{skorSamsat}</div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {/* Skor Kanwil */}
+            <Card className="p-0 overflow-hidden pb-4 text-center">
+              <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                <h4 className="text-sm font-semibold text-blue-800">
+                  Skor Kanwil
+                </h4>
+                <BarChart3 className="h-4 w-4 text-blue-700" />
+              </div>
+              <CardContent className="pb-4">
+                <div className="text-6xl font-bold text-blue-900">
+                  {skorKanwil}
+                </div>
                 <p className="text-xs text-muted-foreground">
                   Nilai Akhir (Max 4)
                 </p>
               </CardContent>
             </Card>
-            <Card className="p-0 overflow-hidden">
-              <div className="bg-green-100 px-5 py-3 border-b flex items-center justify-between">
-                <h4 className="text-sm font-semibold text-green-800">
-                  Obyek Penilaian
+
+            {/* Skor Cabang */}
+            <Card className="p-0 overflow-hidden pb-4 text-center">
+              <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                <h4 className="text-sm font-semibold text-blue-800">
+                  Skor Cabang
                 </h4>
-                <BarChart3 className="h-4 w-4 text-green-700" />
+                <BarChart3 className="h-4 w-4 text-blue-700" />
               </div>
-              <CardContent className="py-6 px-5">
-                <ol className="list-decimal pl-5 text-lg font-bold text-gray-900 mb-1">
-                  <li>Kantor Wilayah</li>
-                  <li>Kantor Cabang</li>
-                  <li>Kantor Samsat</li>
-                </ol>
-                <p className="text-sm text-muted-foreground">
-                  3 Obyek Penilaian
+              <CardContent className="pb-4">
+                <div className="text-6xl font-bold text-blue-900">
+                  {skorCabang}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Nilai Akhir (Max 4)
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Skor Samsat Se-Jateng */}
+            <Card className="p-0 overflow-hidden pb-4 text-center">
+              <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                <h4 className="text-sm font-semibold text-blue-800">
+                  Skor Samsat Se-Jateng
+                </h4>
+                <BarChart3 className="h-4 w-4 text-blue-700" />
+              </div>
+              <CardContent className="pb-4">
+                <div className="text-6xl font-bold text-blue-900">
+                  {skorSamsat}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Nilai Akhir (Max 4)
                 </p>
               </CardContent>
             </Card>
           </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {/* Obyek Penilaian */}
+            <Card className="shadow-sm border border-dashed bg-muted/30">
+              <CardHeader className="flex flex-row items-center justify-between pb-1">
+                <CardTitle className="text-xs font-medium">
+                  Obyek Penilaian
+                </CardTitle>
+                <BarChart3 className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="py-6 px-5">
+                <ol className="list-decimal pl-5 text-sm font-bold text-gray-900 mb-1">
+                  <li>Kantor Wilayah</li>
+                  <li>Kantor Cabang</li>
+                  <li>Kantor Samsat</li>
+                </ol>
+                <p className="text-xs text-muted-foreground">
+                  3 Obyek Penilaian
+                </p>
+              </CardContent>
+            </Card>
 
-          {/* Banner & Formula */}
-          <div className="grid gap-4 md:grid-cols-2">
-            <Card className="p-0 overflow-hidden">
-              <div className="bg-yellow-100 px-5 py-3 border-b flex items-center justify-between">
-                <h4 className="text-sm font-semibold text-yellow-800">
+            {/* Banner Kesamsatan */}
+            <Card className="shadow-sm border border-dashed bg-muted/30">
+              <CardHeader className="flex flex-row items-center justify-between pb-1">
+                <CardTitle className="text-xs font-medium">
                   Banner Kesamsatan
-                </h4>
-                <FileText className="h-4 w-4 text-yellow-700" />
-              </div>
-              <CardContent className="py-4 px-5 space-y-6">
+                </CardTitle>
+                <FileText className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="py-4 px-5 space-y-3">
                 <ol className="list-decimal pl-5 text-sm font-semibold text-gray-900">
                   <li>Banner Terkait Jasa Raharja</li>
-                  <li>Banner Terkait JRku Reward</li>
                   <li>Banner Terkait JRku Reward</li>
                   <li>Banner Terkait Signal</li>
                   <li>Banner Terkait Layanan Online</li>
@@ -384,13 +389,13 @@ export default function MenuEnam() {
                 </ol>
               </CardContent>
             </Card>
-            <Card className="p-0 overflow-hidden">
-              <div className="bg-yellow-100 px-5 py-3 border-b flex items-center justify-between">
-                <h4 className="text-sm font-semibold text-yellow-800">
-                  Forumula
-                </h4>
-                <FileText className="h-4 w-4 text-yellow-700" />
-              </div>
+
+            {/* Formula */}
+            <Card className="shadow-sm border border-dashed bg-muted/30">
+              <CardHeader className="flex flex-row items-center justify-between pb-1">
+                <CardTitle className="text-xs font-medium">Formula</CardTitle>
+                <FileText className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
               <CardContent className="py-4 px-5 italic">
                 <ol className="list-decimal pl-5 divide-y divide-gray-200 text-sm">
                   <li className="py-2 text-muted-foreground">
