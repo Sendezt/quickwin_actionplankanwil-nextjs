@@ -447,37 +447,34 @@ export default function MenuTiga() {
           </div>
 
           {/* Deskripsi Forumula */}
-          <Card className="p-0 overflow-hidden">
+          <Card className="shadow-sm border border-dashed bg-muted/30">
             {/* Header Card */}
-            <div className="bg-gradient-to-r from-yellow-100 to-yellow-50 rounded-t-xl px-5 py-3 flex items-center justify-between border-b">
-              <h4 className="text-sm font-semibold text-yellow-800">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">
                 Forumula
-              </h4>
-              <div className="bg-yellow-200 p-1 rounded-full">
-                <FileText className="h-4 w-4 text-yellow-700" />
-              </div>
-            </div>
-
+              </CardTitle>
+                <FileText className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
             {/* Content Card */}
-            <CardContent className="py-6 px-5 italic space-y-6">
+            <CardContent className="py-6italic space-y-6">
               {/* Forumula 1 */}
               <div className="pb-4 border-b last:border-0">
                 <p className="text-sm leading-relaxed text-gray-600">
-                  <span className="font-semibold text-gray-900">
+                  <span className="font-semibold italic text-gray-900">
                     1. Terlaksananya Kegiatan Operasi Gabungan
                   </span>
                   {" = "}
-                  <span>Realisasi Kegiatan / Target</span>
+                  <span className="italic">Realisasi Kegiatan / Target</span>
                 </p>
               </div>
               {/* Forumula 2 */}
               <div className="pb-4 border-b last:border-0">
                 <p className="text-sm leading-relaxed text-gray-600">
-                  <span className="font-semibold text-gray-900">
+                  <span className="font-semibold text-gray-900 italic">
                     2. Kontribusi SW terkutip dari Tunggakan SW
                   </span>
                   {" = "}
-                  <span>Realisasi SW Terkutip/Tunggakan SW</span>
+                  <span className="italic">Realisasi SW Terkutip/Tunggakan SW</span>
                 </p>
               </div>
             </CardContent>

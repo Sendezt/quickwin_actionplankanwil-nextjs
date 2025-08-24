@@ -11,7 +11,7 @@ import {
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CalendarDays, BarChart3, FileText } from "lucide-react";
+import { CalendarDays, BarChart3, FileText, LandPlot, Radical } from "lucide-react";
 import Navbar from "@/components/navbar";
 import RenderTable4 from "@/components/sosialisasikesamsatan/RenderTable4";
 import React from "react";
@@ -68,7 +68,7 @@ export default function MenuTujuh() {
     if (!data) return <Skeleton className="h-[200px] w-full" />;
 
     return (
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto text-center">
         <table className="w-full border-collapse border border-gray-300">
           <thead>
             <tr className="bg-gray-50">
@@ -165,7 +165,7 @@ export default function MenuTujuh() {
             {/* Summary */}
             {data?.summary &&
               (Array.isArray(data.summary) ? (
-                <tr className="font-medium bg-blue-50">
+                <tr className="font-medium text-center bg-gray-100">
                   {/* Kolom Total span 2 kolom */}
                   <td
                     colSpan={2}
@@ -188,7 +188,7 @@ export default function MenuTujuh() {
                 Object.values(data.summary).map((row, idx) => (
                   <tr
                     key={idx}
-                    className="font-medium bg-blue-50 hover:bg-blue-100"
+                    className="font-medium bg-gray-50 hover:bg-gray-100"
                   >
                     {row.map((cell, cIdx) => {
                       if (
@@ -231,7 +231,7 @@ export default function MenuTujuh() {
         <Navbar />
         <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
           {/* Top Info */}
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {loading ? (
               <>
                 <SkeletonCard />
@@ -240,51 +240,75 @@ export default function MenuTujuh() {
               </>
             ) : (
               <>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
+                {/* Periode Awal */}
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
                       Periode Awal
                     </CardTitle>
-                    <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                    <CalendarDays className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
+                  <CardContent className="py-1 px-4">
+                    <div className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_awal ?? "-"}
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      Tanggal Mulai Periode
-                    </p>
+                    <p className="text-xs">Tanggal Mulai</p>
                   </CardContent>
                 </Card>
 
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
+                {/* Periode Akhir */}
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
                       Periode Akhir
                     </CardTitle>
-                    <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                    <CalendarDays className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
+                  <CardContent className="py-1 px-4">
+                    <div className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_akhir ?? "-"}
                     </div>
+                    <p className="text-xs">Tanggal Akhir</p>
+                  </CardContent>
+                </Card>
+
+                {/* Obyek Penilaian */}
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
+                      Obyek Penilaian
+                    </CardTitle>
+                    <LandPlot className="h-3 w-3 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent className="py-1 px-4">
+                    <div className="text-base font-semibold text-gray-900">
+                      Kantor Wilayah
+                    </div>
                     <p className="text-xs text-muted-foreground">
-                      Tanggal Akhir Periode
+                      1 Objek Penelitian
                     </p>
                   </CardContent>
                 </Card>
 
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Obyek Penilaian
+                {/* Formula */}
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
+                      Formula
                     </CardTitle>
-                    <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                    <Radical className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">Kantor Wilayah</div>
-                    <p className="text-xs text-muted-foreground">
-                      1 Objek Penelitian
+                  <CardContent className="py-2 px-4">
+                    <p className="mb-1 italic text-sm font-semibold text-gray-900">
+                      Pertumbuhan Penerimaan SWDKLLJ via SIGNAL dan Layanan
+                      Online
+                    </p>
+                    <p className="italic text-xs text-gray-600">
+                      = Realisasi / Target
+                    </p>
+                    <br/>
+                    <p className="italic text-xs text-blue-600">
+                      *) Target pertumbuhan 5%
                     </p>
                   </CardContent>
                 </Card>
@@ -292,37 +316,25 @@ export default function MenuTujuh() {
             )}
           </div>
 
-          {/* Skor + Obyek */}
-          <div className="grid gap-4 md:grid-cols-2">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Skor Kanwil
-                </CardTitle>
-                <BarChart3 className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{skorKanwil}</div>
-                <p className="text-xs text-muted-foreground">
-                  Nilai Akhir (Max 4)
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="p-0 overflow-hidden">
-              {/* Header */}
-              <div className="bg-yellow-100 px-5 py-3 border-b flex items-center justify-between">
+          {/* Skor Kanwil */}
+          <div className="grid gap-4 md:grid-cols-1">
+            <Card className="p-0 overflow-hidden pb-4 text-center">
+              <div className="bg-yellow-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
                 <h4 className="text-sm font-semibold text-yellow-800">
-                  Formula
+                  Skor Kanwil
                 </h4>
-                <FileText className="h-4 w-4 text-yellow-700" />
+                <div className="bg-yellow-200 rounded-full">
+                  <BarChart3 className="h-4 w-4 text-yellow-700" />
+                </div>
               </div>
-
-              {/* Content */}
-              <CardContent className="py-6 px-6">
-                <p className="mb-2 text-gray-900 font-semibold">
-                  Pertumbuhan Penerimaan SWDKLLJ via SIGNAL dan Layanan Online
+              <CardContent className="pb-9">
+                <div className="text-7xl font-bold text-yellow-900">
+                  {skorKanwil}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Target Skor{" "}
+                  <span className="text-gray-500">| 4 (Nilai Max)</span>
                 </p>
-                <p className="italic text-gray-600">= Realisasi / Target</p>
               </CardContent>
             </Card>
           </div>

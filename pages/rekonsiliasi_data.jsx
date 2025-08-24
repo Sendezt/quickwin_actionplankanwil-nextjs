@@ -296,20 +296,18 @@ export default function MenuEmpat() {
           {/* Grid kedua */}
           <div className="grid gap-4 md:grid-cols-2">
             {/* Kolom 1: Obyek Penilaian */}
-            <Card className="p-0 overflow-hidden">
-              <div className="bg-green-100 px-5 py-3 border-b flex items-center justify-between">
-                <h4 className="text-sm font-semibold text-green-800">
+            <Card className="shadow-sm border border-dashed bg-muted/30">
+              <CardHeader className="flex flex-row items-center justify-between pb-1">
+                <CardTitle className="text-xs font-medium">
                   Obyek Penilaian
-                </h4>
-                <BarChart3 className="h-4 w-4 text-green-700" />
-              </div>
-              <CardContent className="py-6 px-5">
-                <div className="text-lg font-bold text-gray-900 mb-1">
+                </CardTitle>
+                <BarChart3 className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="flex flex-col justify-center min-h-24 px-4">
+                <div className="text-base font-semibold text-gray-900">
                   Kantor Samsat
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  1 Obyek Penilaian
-                </p>
+                <p className="text-xs">1 Obyek Penilaian</p>
               </CardContent>
             </Card>
 
@@ -341,13 +339,11 @@ export default function MenuEmpat() {
             </Card>
 
             {/* Forumula */}
-            <Card className="p-0 overflow-hidden">
-              <div className="bg-yellow-100 px-5 py-3 border-b flex items-center justify-between">
-                <h4 className="text-sm font-semibold text-yellow-800">
-                  Forumula
-                </h4>
-                <FileText className="h-4 w-4 text-yellow-700" />
-              </div>
+            <Card className="shadow-sm border border-dashed bg-muted/30">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">Forumula</CardTitle>
+                <FileText className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
               <CardContent className="py-6 px-5 italic space-y-6">
                 <div>
                   <p className="text-sm text-muted-foreground">
