@@ -11,7 +11,13 @@ import {
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CalendarDays, BarChart3, FileText } from "lucide-react";
+import {
+  CalendarDays,
+  BarChart3,
+  FileText,
+  Radical,
+  LandPlot,
+} from "lucide-react";
 import Navbar from "@/components/navbar";
 import RenderTable from "@/components/pendataanlaka/RenderTable";
 import RenderTable2 from "@/components/pendataanlaka/RenderTable2";
@@ -88,38 +94,34 @@ export default function MenuThirdteen() {
                 {/* Kolom Kiri: Periode Awal + Akhir */}
                 <div className="grid gap-4">
                   {/* Periode Awal */}
-                  <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">
+                  <Card className="shadow-sm border border-dashed bg-muted/30">
+                    <CardHeader className="flex flex-row items-center justify-between pb-1">
+                      <CardTitle className="text-xs font-medium">
                         Periode Awal
                       </CardTitle>
-                      <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                      <CalendarDays className="h-3 w-3 text-muted-foreground" />
                     </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold">
+                    <CardContent className="py-1 px-4">
+                      <div className="text-base font-semibold text-gray-900">
                         {rangeData?.periode_awal ?? "-"}
                       </div>
-                      <p className="text-xs text-muted-foreground">
-                        Tanggal Mulai Periode
-                      </p>
+                      <p className="text-xs">Tanggal Mulai Periode</p>
                     </CardContent>
                   </Card>
 
                   {/* Periode Akhir */}
-                  <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">
+                  <Card className="shadow-sm border border-dashed bg-muted/30">
+                    <CardHeader className="flex flex-row items-center justify-between pb-1">
+                      <CardTitle className="text-xs font-medium">
                         Periode Akhir
                       </CardTitle>
-                      <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                      <CalendarDays className="h-3 w-3 text-muted-foreground" />
                     </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold">
+                    <CardContent className="py-1 px-4">
+                      <div className="text-base font-semibold text-gray-900">
                         {rangeData?.periode_akhir ?? "-"}
                       </div>
-                      <p className="text-xs text-muted-foreground">
-                        Tanggal Akhir Periode
-                      </p>
+                      <p className="text-xs">Tanggal Akhir Periode</p>
                     </CardContent>
                   </Card>
                 </div>
@@ -143,36 +145,32 @@ export default function MenuThirdteen() {
                 </Card>
               </div>
 
-              {/* Baris 2: Objek Penilaian full width */}
-              <Card className="p-0 overflow-hidden">
-                <div className="bg-green-100 px-5 py-3 border-b flex items-center justify-between">
-                  <h4 className="text-sm font-semibold text-green-800">
+              {/* Baris 2: Obyek Penilaian full width */}
+              <Card className="shadow-sm border border-dashed bg-muted/30">
+                <CardHeader className="flex flex-row items-center justify-between pb-1">
+                  <CardTitle className="text-xs font-medium">
                     Obyek Penilaian
-                  </h4>
-                  <BarChart3 className="h-4 w-4 text-green-700" />
-                </div>
-                <CardContent className="py-6 px-5">
-                  <div className="text-lg font-bold text-gray-900 mb-1">
+                  </CardTitle>
+                  <LandPlot className="h-3 w-3 text-muted-foreground" />
+                </CardHeader>
+                <CardContent className="py-1 px-4">
+                  <div className="text-base font-semibold text-gray-900">
                     Kantor Wilayah
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    1 Obyek Penilaian
-                  </p>
+                  <p className="text-xs">1 Obyek Penilaian</p>
                 </CardContent>
               </Card>
             </div>
           )}
 
-          {/* Formula */}
+          {/* Forumula */}
           <div className="grid gap-4">
-            <Card className="p-0 overflow-hidden">
-              <div className="bg-yellow-100 px-5 py-3 border-b flex items-center justify-between">
-                <h4 className="text-sm font-semibold text-yellow-800">
-                  Formula
-                </h4>
-                <FileText className="h-4 w-4 text-yellow-700" />
-              </div>
-              <CardContent className="py-4 px-5 italic">
+            <Card className="shadow-sm border border-dashed bg-muted/30">
+              <CardHeader className="flex flex-row items-center justify-between pb-1">
+                <CardTitle className="text-xs font-medium">Forumula</CardTitle>
+                <Radical className="h-3 w-3 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="py-1 px-4 italic">
                 <span className="font-semibold text-gray-900">
                   % pelunasan PKB dan SWDKLLJ kendaraan terlibat laka lantas
                 </span>

@@ -11,7 +11,7 @@ import {
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CalendarDays, BarChart3, FileText } from "lucide-react";
+import { CalendarDays, BarChart3, FileText, LandPlot, Radical } from "lucide-react";
 import Navbar from "@/components/navbar";
 import RenderTable from "@/components/komitmenstakeholder/RenderTable";
 import RenderTableArray from "@/components/komitmenstakeholder/RenderTableArray";
@@ -132,7 +132,7 @@ export default function MenuNine() {
                 <BarChart3 className="h-4 w-4 text-blue-700" />
               </div>
               <CardContent className="text-center py-6">
-                <div className="text-5xl font-bold text-blue-600">
+                <div className="text-6xl font-bold text-blue-600">
                   {skorKanwil}
                 </div>
                 <p className="text-sm text-gray-600 mt-2">
@@ -143,14 +143,14 @@ export default function MenuNine() {
 
             {/* Skor Cabang */}
             <Card className="p-0 overflow-hidden">
-              <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                <h4 className="text-sm font-semibold text-blue-800">
+              <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                <h4 className="text-sm font-semibold text-green-800">
                   Skor Cabang
                 </h4>
-                <BarChart3 className="h-4 w-4 text-blue-700" />
+                <BarChart3 className="h-4 w-4 text-green-700" />
               </div>
               <CardContent className="text-center py-6">
-                <div className="text-6xl font-bold text-blue-600">
+                <div className="text-6xl font-bold text-green-600">
                   {skorCabang}
                 </div>
                 <p className="text-sm text-gray-600 mt-2">
@@ -161,14 +161,14 @@ export default function MenuNine() {
 
             {/* Skor Samsat */}
             <Card className="p-0 overflow-hidden">
-              <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                <h4 className="text-sm font-semibold text-blue-800">
+              <div className="bg-yellow-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                <h4 className="text-sm font-semibold text-yellow-800">
                   Skor Samsat Se-Jateng
                 </h4>
-                <BarChart3 className="h-4 w-4 text-blue-700" />
+                <BarChart3 className="h-4 w-4 text-yellow-700" />
               </div>
               <CardContent className="text-center py-6">
-                <div className="text-6xl font-bold text-blue-600">
+                <div className="text-6xl font-bold text-yellow-600">
                   {skorSamsat}
                 </div>
                 <p className="text-sm text-gray-600 mt-2">
@@ -222,31 +222,33 @@ export default function MenuNine() {
             {/* Obyek + Formula jadi vertikal */}
             <div className="flex flex-col gap-4">
               {/* Obyek Penilaian */}
-              <Card className="p-0 overflow-hidden border border-gray-200 shadow-sm">
-                <div className="bg-gray-50 px-5 py-3 border-b flex items-center justify-between">
-                  <h4 className="text-sm font-medium text-gray-700">
+              <Card className="shadow-sm border border-dashed bg-muted/30">
+                <CardHeader className="flex flex-row items-center justify-between pb-1">
+                  <CardTitle className="text-xs font-medium">
                     Obyek Penilaian
-                  </h4>
-                  <BarChart3 className="h-4 w-4 text-gray-500" />
-                </div>
-                <CardContent className="py-5 px-5">
-                  <ol className="list-decimal pl-5 text-base font-semibold text-gray-800 mb-1">
+                  </CardTitle>
+                  <LandPlot className="h-3 w-3 text-muted-foreground" />
+                </CardHeader>
+                <CardContent className="py-2 px-4 text-sm">
+                  <ol className="list-decimal pl-5 font-semibold text-gray-900 space-y-0.5">
                     <li>Kantor Wilayah</li>
                     <li>Kantor Cabang</li>
                     <li>Kantor Samsat</li>
                   </ol>
-                  <p className="text-xs text-gray-500">3 Obyek Penilaian</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    3 Obyek Penilaian
+                  </p>
                 </CardContent>
               </Card>
 
               {/* Formula */}
-              <Card className="p-0 overflow-hidden border border-gray-200 shadow-sm">
-                <div className="bg-gray-50 px-5 py-3 border-b flex items-center justify-between">
-                  <h4 className="text-sm font-medium text-gray-700">Formula</h4>
-                  <FileText className="h-4 w-4 text-gray-500" />
-                </div>
-                <CardContent className="py-5 px-5 text-sm leading-relaxed text-gray-700">
-                  <span className="font-semibold text-gray-800">
+              <Card className="shadow-sm border border-dashed bg-muted/30">
+                <CardHeader className="flex flex-row items-center justify-between pb-1">
+                  <CardTitle className="text-xs font-medium">Forumula</CardTitle>
+                  <Radical className="h-3 w-3 text-muted-foreground" />
+                </CardHeader>
+                <CardContent className="py-2 px-4 italic text-sm">
+                  <span className="font-semibold text-gray-900">
                     Terlaksananya sinergi yang diwujudkan dalam bentuk Komitmen
                     Bersama, yang terimplementasi ke dalam sebuah inisiatif
                     strategis, yang selanjutnya dilakukan analisa dan evaluasi
@@ -268,8 +270,10 @@ export default function MenuNine() {
             <CardHeader>
               <CardTitle>Skor Jumlah Komitmen Stakeholder - Kanwil</CardTitle>
               <CardDescription>
-                Ringkasan total skor komitmen stakeholder di tingkat Kantor
-                Wilayah sebagai gambaran umum pencapaian secara agregat.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat
+                hic voluptatum corporis eius quisquam earum mollitia modi ipsa
+                minus sit. Quis neque repellat molestias nostrum enim ipsa
+                debitis unde quaerat?
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -284,8 +288,10 @@ export default function MenuNine() {
                 Skor Jumlah Komitmen Stakeholder - Per Cabang
               </CardTitle>
               <CardDescription>
-                Perbandingan skor komitmen stakeholder pada setiap cabang untuk
-                melihat kontribusi masing-masing unit kerja.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni
+                exercitationem pariatur explicabo qui modi consequatur? Dolore
+                voluptates deserunt nisi ratione! Beatae aperiam repellat
+                distinctio eligendi officia aut repellendus eum neque?
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -300,8 +306,10 @@ export default function MenuNine() {
                 Skor Jumlah Komitmen Stakeholder - Per Samsat
               </CardTitle>
               <CardDescription>
-                Detail skor komitmen stakeholder berdasarkan Samsat di setiap
-                cabang.
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                Officia ipsum necessitatibus optio accusamus similique ratione
+                aspernatur, expedita nulla soluta quae tempore harum esse alias.
+                Maxime veniam deleniti architecto obcaecati repudiandae!
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -314,8 +322,10 @@ export default function MenuNine() {
             <CardHeader>
               <CardTitle>Pengisian Data Komitmen Stakeholder</CardTitle>
               <CardDescription>
-                Rekapitulasi data implementasi dan evaluasi komitmen stakeholder
-                yang telah diinput pada periode berjalan.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat
+                odit consequuntur dolores, dolorem sequi blanditiis harum
+                deleniti. Ipsam mollitia saepe tenetur sed placeat praesentium
+                iusto magnam. Necessitatibus expedita cum consectetur?
               </CardDescription>
             </CardHeader>
             <CardContent>

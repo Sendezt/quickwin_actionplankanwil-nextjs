@@ -11,7 +11,7 @@ import {
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CalendarDays, BarChart3, FileText } from "lucide-react";
+import { CalendarDays, BarChart3, FileText, Radical, LandPlot } from "lucide-react";
 import Navbar from "@/components/navbar";
 import RenderTable4 from "@/components/sosialisasikesamsatan/RenderTable4";
 import React from "react";
@@ -316,14 +316,14 @@ export default function MenuEnam() {
 
             {/* Skor Cabang */}
             <Card className="p-0 overflow-hidden pb-4 text-center">
-              <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                <h4 className="text-sm font-semibold text-blue-800">
+              <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                <h4 className="text-sm font-semibold text-green-800">
                   Skor Cabang
                 </h4>
-                <BarChart3 className="h-4 w-4 text-blue-700" />
+                <BarChart3 className="h-4 w-4 text-green-700" />
               </div>
               <CardContent className="pb-4">
-                <div className="text-6xl font-bold text-blue-900">
+                <div className="text-6xl font-bold text-green-900">
                   {skorCabang}
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -334,14 +334,14 @@ export default function MenuEnam() {
 
             {/* Skor Samsat Se-Jateng */}
             <Card className="p-0 overflow-hidden pb-4 text-center">
-              <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                <h4 className="text-sm font-semibold text-blue-800">
+              <div className="bg-yellow-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                <h4 className="text-sm font-semibold text-yellow-800">
                   Skor Samsat Se-Jateng
                 </h4>
-                <BarChart3 className="h-4 w-4 text-blue-700" />
+                <BarChart3 className="h-4 w-4 text-yellow-700" />
               </div>
               <CardContent className="pb-4">
-                <div className="text-6xl font-bold text-blue-900">
+                <div className="text-6xl font-bold text-yellow-900">
                   {skorSamsat}
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -357,7 +357,7 @@ export default function MenuEnam() {
                 <CardTitle className="text-xs font-medium">
                   Obyek Penilaian
                 </CardTitle>
-                <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                <LandPlot className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent className="py-6 px-5">
                 <ol className="list-decimal pl-5 text-sm font-bold text-gray-900 mb-1">
@@ -393,8 +393,8 @@ export default function MenuEnam() {
             {/* Formula */}
             <Card className="shadow-sm border border-dashed bg-muted/30">
               <CardHeader className="flex flex-row items-center justify-between pb-1">
-                <CardTitle className="text-xs font-medium">Formula</CardTitle>
-                <FileText className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-xs font-medium">Forumula</CardTitle>
+                <Radical className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent className="py-4 px-5 italic">
                 <ol className="list-decimal pl-5 divide-y divide-gray-200 text-sm">

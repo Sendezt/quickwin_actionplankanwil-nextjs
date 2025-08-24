@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CalendarDays, BarChart3, FileText } from "lucide-react";
+import { CalendarDays, BarChart3, FileText, LandPlot, Radical } from "lucide-react";
 import Navbar from "@/components/navbar";
 import RenderTable from "@/components/sigapinstansi/RenderTable";
 import RenderTableArray from "@/components/sigapinstansi/RenderTableArray";
@@ -106,45 +106,45 @@ export default function MenuSebelas() {
             ) : (
               <>
                 {/* Periode Awal */}
-                <Card className="bg-slate-50 shadow-sm border-0">
-                  <CardHeader className="flex flex-row items-center justify-between px-4 pt-3 pb-1 bg-slate-100 rounded-t-lg">
-                    <CardTitle className="text-sm font-medium text-gray-700">
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
                       Periode Awal
                     </CardTitle>
-                    <CalendarDays className="h-4 w-4 text-gray-500" />
+                    <CalendarDays className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="px-4 py-4">
-                    <p className="text-lg font-semibold text-gray-800">
+                  <CardContent className="py-1 px-4">
+                    <p className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_awal ?? "-"}
                     </p>
                   </CardContent>
                 </Card>
 
                 {/* Periode Akhir */}
-                <Card className="bg-slate-50 shadow-sm border-0">
-                  <CardHeader className="flex flex-row items-center justify-between px-4 pt-3 pb-1 bg-slate-100 rounded-t-lg">
-                    <CardTitle className="text-sm font-medium text-gray-700">
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
                       Periode Akhir
                     </CardTitle>
-                    <CalendarDays className="h-4 w-4 text-gray-500" />
+                    <CalendarDays className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="px-4 py-4">
-                    <p className="text-lg font-semibold text-gray-800">
+                  <CardContent className="py-1 px-4">
+                    <p className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_akhir ?? "-"}
                     </p>
                   </CardContent>
                 </Card>
 
                 {/* Obyek Penilaian */}
-                <Card className="bg-slate-50 shadow-sm border-0">
-                  <CardHeader className="flex flex-row items-center justify-between px-4 pt-3 pb-1 bg-slate-100 rounded-t-lg">
-                    <CardTitle className="text-sm font-medium text-gray-700">
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
                       Obyek Penilaian
                     </CardTitle>
-                    <BarChart3 className="h-4 w-4 text-gray-500" />
+                    <LandPlot className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="px-4 py-4">
-                    <ol className="list-decimal pl-4 text-sm font-semibold text-gray-800 space-y-1">
+                  <CardContent className="py-1 px-4">
+                    <ol className="list-decimal pl-4 text-xs font-semibold text-gray-900 space-y-1">
                       <li>Kantor Wilayah</li>
                       <li>Kantor Cabang</li>
                       <li>Kantor Samsat</li>
@@ -152,17 +152,17 @@ export default function MenuSebelas() {
                   </CardContent>
                 </Card>
 
-                {/* Formula */}
-                <Card className="bg-slate-50 shadow-sm border-0">
-                  <CardHeader className="flex flex-row items-center justify-between px-4 pt-3 pb-1 bg-slate-100 rounded-t-lg">
-                    <CardTitle className="text-sm font-medium text-gray-700">
-                      Formula
+                {/* Forumula */}
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
+                      Forumula
                     </CardTitle>
-                    <FileText className="h-4 w-4 text-gray-500" />
+                    <Radical className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="px-4 py-4">
-                    <p className="text-sm text-gray-800 italic">
-                      <span className="font-semibold">
+                  <CardContent className="py-1 px-4 italic">
+                    <p className="text-xs text-gray-700">
+                      <span className="font-semibold text-gray-900">
                         Kontribusi SW Terkutip dari Tunggakan
                       </span>{" "}
                       = Realisasi SW Terkutip / Tunggakan SW
