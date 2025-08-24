@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CalendarDays, BarChart3, FileText } from "lucide-react";
+import { CalendarDays, BarChart3, FileText, LandPlot, Radical } from "lucide-react";
 import Navbar from "@/components/navbar";
 
 export default function MenuEmpat() {
@@ -258,16 +258,16 @@ export default function MenuEmpat() {
 
             {/* Kolom 2 (row-span-2): Skor Samsat Se-Jateng */}
             <Card className="p-0 overflow-hidden row-span-2">
-              <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                <h4 className="text-sm font-semibold text-blue-800">
+              <div className="bg-yellow-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                <h4 className="text-sm font-semibold text-yellow-800">
                   Skor Samsat Se-Jateng
                 </h4>
-                <div className="bg-blue-200 rounded-full">
+                <div className="bg-yellow-200 rounded-full">
                   <BarChart3 className="h-4 w-4 text-muted-foreground" />
                 </div>
               </div>
               <CardContent className="flex flex-col items-center justify-center text-center py-14 px-14">
-                <div className="text-7xl font-bold text-blue-900">
+                <div className="text-7xl font-bold text-yellow-900">
                   {skorSamsat}
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -301,7 +301,7 @@ export default function MenuEmpat() {
                 <CardTitle className="text-xs font-medium">
                   Obyek Penilaian
                 </CardTitle>
-                <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                <LandPlot className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent className="flex flex-col justify-center min-h-24 px-4">
                 <div className="text-base font-semibold text-gray-900">
@@ -313,12 +313,12 @@ export default function MenuEmpat() {
 
             {/* Kolom 2 (row-span-2): Skor Cabang */}
             <Card className="p-0 overflow-hidden row-span-2">
-              <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                <h4 className="text-sm font-semibold text-blue-800">
+              <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                <h4 className="text-sm font-semibold text-green-800">
                   Skor Cabang
                 </h4>
-                <div className="bg-blue-200 rounded-full">
-                  <BarChart3 className="h-4 w-4 text-blue-700" />
+                <div className="bg-green-200 rounded-full">
+                  <BarChart3 className="h-4 w-4 text-green-700" />
                 </div>
               </div>
               <CardContent className="px-5 py-4 space-y-3">
@@ -342,7 +342,7 @@ export default function MenuEmpat() {
             <Card className="shadow-sm border border-dashed bg-muted/30">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">Forumula</CardTitle>
-                <FileText className="h-4 w-4 text-muted-foreground" />
+                <Radical className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent className="py-6 px-5 italic space-y-6">
                 <div>
