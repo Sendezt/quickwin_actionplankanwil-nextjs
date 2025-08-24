@@ -11,7 +11,13 @@ import {
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CalendarDays, BarChart3, FileText } from "lucide-react";
+import {
+  CalendarDays,
+  BarChart3,
+  FileText,
+  Radical,
+  LandPlot,
+} from "lucide-react";
 import Navbar from "@/components/navbar";
 import { ChartBarSingle } from "@/components/chart-bar-single";
 
@@ -94,8 +100,8 @@ export default function MenuLima() {
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
         <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
-          {/* Grid Periode + Skor */}
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {/* Grid Periode + Info */}
+          <div className="grid gap-4 md:grid-cols-2">
             {loading ? (
               <>
                 <SkeletonCard />
@@ -105,132 +111,129 @@ export default function MenuLima() {
               </>
             ) : (
               <>
-                {/* Periode Awal */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
+                {/* Kolom 1: Periode Awal */}
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
                       Periode Awal
                     </CardTitle>
                     <CalendarDays className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
+                  <CardContent className="py-1 px-4">
+                    <div className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_awal ?? "-"}
                     </div>
+                    <p className="text-xs">Tanggal Mulai Periode</p>
+                  </CardContent>
+                </Card>
+
+                {/* Kolom 2 (row-span-2): Skor Kanwil */}
+                <Card className="p-0 overflow-hidden row-span-2">
+                  <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                    <h4 className="text-sm font-semibold text-blue-800">
+                      Skor Kanwil
+                    </h4>
+                    <div className="bg-blue-200 rounded-full">
+                      <BarChart3 className="h-4 w-4 text-blue-700" />
+                    </div>
+                  </div>
+                  <CardContent className="flex flex-col items-center justify-center text-center py-14 px-14">
+                    <div className="text-7xl font-bold text-blue-900">
+                      {skorKanwil}
+                    </div>
                     <p className="text-xs text-muted-foreground">
-                      Tanggal Mulai Periode
+                      Target Skor | 4 (Nilai Max)
                     </p>
                   </CardContent>
                 </Card>
 
-                {/* Periode Akhir */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
+                {/* Kolom 1: Periode Akhir */}
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
                       Periode Akhir
                     </CardTitle>
                     <CalendarDays className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
+                  <CardContent className="py-1 px-4">
+                    <div className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_akhir ?? "-"}
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      Tanggal Akhir Periode
-                    </p>
-                  </CardContent>
-                </Card>
-
-                {/* Skor Kanwil */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Skor Kanwil
-                    </CardTitle>
-                    <BarChart3 className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{skorKanwil}</div>
-                    <p className="text-xs text-muted-foreground">
-                      Nilai Akhir (Max 4)
-                    </p>
-                  </CardContent>
-                </Card>
-
-                {/* Skor Cabang */}
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Skor Cabang
-                    </CardTitle>
-                    <BarChart3 className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    {skorCabangList.length > 0 ? (
-                      skorCabangList.map(([cabang, skor], idx) => (
-                        <div
-                          key={idx}
-                          className="flex justify-between text-sm border-b pb-1 last:border-0"
-                        >
-                          <span>{cabang}</span>
-                          <span className="font-bold">{skor}</span>
-                        </div>
-                      ))
-                    ) : (
-                      <p className="text-xs text-muted-foreground">
-                        Tidak ada data cabang
-                      </p>
-                    )}
-                    {targetSkor && (
-                      <p className="text-xs text-muted-foreground pt-2">
-                        Target Skor: {targetSkor}
-                      </p>
-                    )}
+                    <p className="text-xs">Tanggal Akhir Periode</p>
                   </CardContent>
                 </Card>
               </>
             )}
           </div>
 
-          {/* Section tambahan */}
+          {/* Grid Kedua */}
           <div className="grid gap-4 md:grid-cols-2">
-            {/* Obyek Penilaian */}
-            <Card className="p-0 overflow-hidden">
-              <div className="bg-green-100 px-5 py-3 border-b flex items-center justify-between">
-                <h4 className="text-sm font-semibold text-green-800">
+            {/* Kolom 1: Obyek Penilaian */}
+            <Card className="shadow-sm border border-dashed bg-muted/30">
+              <CardHeader className="flex flex-row items-center justify-between pb-1">
+                <CardTitle className="text-xs font-medium">
                   Obyek Penilaian
-                </h4>
-                <BarChart3 className="h-4 w-4 text-green-700" />
-              </div>
-              <CardContent className="py-6 px-5">
-                <div className="text-lg font-bold text-gray-900 mb-1">
+                </CardTitle>
+                <LandPlot className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="flex flex-col justify-center min-h-24 px-4">
+                <div className="text-base font-semibold text-gray-900">
                   Kantor Wilayah
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs text-muted-foreground">
                   1 Obyek Penilaian
                 </p>
               </CardContent>
             </Card>
 
-            {/* Forumula */}
-            <Card className="p-0 overflow-hidden">
-              <div className="bg-yellow-100 px-5 py-3 border-b flex items-center justify-between">
-                <h4 className="text-sm font-semibold text-yellow-800">
-                  Forumula
+            {/* Kolom 2 (row-span-2): Skor Cabang */}
+            <Card className="p-0 overflow-hidden row-span-2">
+              <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                <h4 className="text-sm font-semibold text-green-800">
+                  Skor Cabang
                 </h4>
-                <FileText className="h-4 w-4 text-yellow-700" />
-              </div>
-              <CardContent className="py-6 px-5 italic space-y-6">
-                <div>
-                  <p className="text-sm text-muted-foreground">
-                    <span className="font-semibold text-gray-900">
-                      Tingkat Keterisian Data Kepemilikan Kendaraan sesuai
-                      Target
-                    </span>
-                    {" = "}
-                    Realisasi Ceri / Target
-                  </p>
+                <div className="bg-green-200 rounded-full">
+                  <FileText className="h-4 w-4 text-green-700" />
                 </div>
+              </div>
+              <CardContent className="px-5 py-4 space-y-3">
+                {skorCabangList.length > 0 ? (
+                  skorCabangList.map(([cabang, skor], idx) => (
+                    <div
+                      key={idx}
+                      className="flex justify-between text-base border-b pb-1 last:border-0"
+                    >
+                      <span>{cabang}</span>
+                      <span className="font-bold text-green-900">{skor}</span>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-xs text-muted-foreground">
+                    Tidak ada data cabang
+                  </p>
+                )}
+
+                {targetSkor && (
+                  <p className="text-xs text-muted-foreground pt-2">
+                    Target Skor: {targetSkor}
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Forumula */}
+            <Card className="shadow-sm border border-dashed bg-muted/30">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">Forumula</CardTitle>
+                <Radical className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="py-6 px-5 italic space-y-6">
+                <p className="text-sm text-muted-foreground">
+                  <span className="font-semibold text-gray-900">
+                    Tingkat Keterisian Data Kepemilikan Kendaraan sesuai Target
+                  </span>{" "}
+                  = Realisasi Ceri / Target
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -256,14 +259,17 @@ export default function MenuLima() {
             <CardHeader>
               <CardTitle>Rekapitulasi Keterisian Data Per Cabang</CardTitle>
               <CardDescription>
-                Ringkasan keterisian data berdasarkan masing-masing cabang.
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam
+                dicta asperiores quaerat vero, accusantium beatae necessitatibus
+                dignissimos ipsum aliquam maxime vitae voluptatibus sunt saepe
+                quidem rem! Libero ipsa nobis odio?
               </CardDescription>
             </CardHeader>
             <CardContent>
               {!table1Data ? (
                 <Skeleton className="h-[200px] w-full" />
               ) : (
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto text-center">
                   <table className="w-full border-collapse border border-gray-300">
                     <thead>
                       <tr className="bg-gray-50">
@@ -319,15 +325,17 @@ export default function MenuLima() {
             <CardHeader>
               <CardTitle>Skor Keterisian Data - Per Samsat</CardTitle>
               <CardDescription>
-                Detail skor keterisian data untuk setiap samsat di masing-masing
-                cabang.
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                Ducimus illum officiis maxime repudiandae ut, accusantium
+                adipisci tempora veritatis magnam ipsam ad? Consequatur
+                architecto sunt quia nobis dignissimos, eum quod perferendis!
               </CardDescription>
             </CardHeader>
             <CardContent>
               {!table2Data ? (
                 <Skeleton className="h-[200px] w-full" />
               ) : (
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto text-center">
                   <table className="w-full border-collapse border border-gray-300">
                     <thead>
                       <tr className="bg-gray-50">
