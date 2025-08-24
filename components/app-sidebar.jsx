@@ -106,7 +106,7 @@ export function AppSidebar(props) {
 
             {/* Judul di bawah logo */}
             <div className="text-center mt-1">
-              <span className="block font-bold text-green-900 text-md">
+              <span className="block font-bold text-gray-900 text-md">
                 QuickWin
               </span>
               <span className="block text-xs text-gray-600">

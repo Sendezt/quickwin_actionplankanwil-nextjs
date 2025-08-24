@@ -21,7 +21,9 @@ export default function RenderTable({ data }) {
         <TableHeader>
           <TableRow>
             {headers.map((col, idx) => (
-              <TableHead key={idx}>{col}</TableHead>
+              <TableHead key={idx} className="text-center">
+                {col}
+              </TableHead>
             ))}
           </TableRow>
         </TableHeader>
@@ -30,22 +32,22 @@ export default function RenderTable({ data }) {
           {rows.map((row, idx) => (
             <TableRow key={idx}>
               {row.map((cell, cidx) => (
-                <TableCell key={cidx}>{cell}</TableCell>
+                <TableCell key={cidx} className="text-center">
+                  {cell}
+                </TableCell>
               ))}
             </TableRow>
           ))}
         </TableBody>
 
-        {/* Footer untuk summary */}
         {summary && (
           <TableFooter>
             <TableRow>
-              {/* Merge kolom No + Samsat Induk */}
               <TableCell colSpan={2} className="font-bold text-center">
                 {summary[0]}
               </TableCell>
               {summary.slice(1).map((cell, idx) => (
-                <TableCell key={idx} className="font-semibold">
+                <TableCell key={idx} className="font-semibold text-center">
                   {cell}
                 </TableCell>
               ))}
