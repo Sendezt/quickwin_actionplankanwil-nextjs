@@ -33,12 +33,12 @@ export default function Dashboard() {
     {
       title: "Action Plan Kanwil",
       link: "/quickwin-kanwil",
-      color: "bg-green-800",
+      color: "bg-blue-800",
     },
     {
       title: "Action Plan Cabang",
       link: "/quickwin-cabang",
-      color: "bg-blue-800",
+      color: "bg-green-800",
     },
     {
       title: "Action Plan Samsat",

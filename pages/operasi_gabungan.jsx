@@ -27,6 +27,7 @@ import {
   ArrowUpRight,
   FileText,
   LandPlot,
+  Radical,
 } from "lucide-react";
 import Navbar from "@/components/navbar";
 
@@ -454,7 +455,7 @@ export default function MenuTiga() {
               <CardTitle className="text-sm font-medium">
                 Forumula
               </CardTitle>
-                <FileText className="h-4 w-4 text-muted-foreground" />
+                <Radical className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             {/* Content Card */}
             <CardContent className="py-6italic space-y-6">

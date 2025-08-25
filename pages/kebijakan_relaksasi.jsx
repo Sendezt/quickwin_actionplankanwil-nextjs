@@ -53,6 +53,7 @@ import {
   ArrowUpRight,
   FileText,
   LandPlot,
+  Radical,
 } from "lucide-react";
 import Navbar from "@/components/navbar";
 
@@ -312,49 +313,45 @@ export default function MenuDua() {
 
           {/* Deskripsi Forumula */}
           {!loading && (
-            <Card className="p-0 overflow-hidden">
-              {/* Header Card */}
-              <div className="bg-gradient-to-r from-yellow-100 to-yellow-50 rounded-t-xl px-5 py-3 flex items-center justify-between border-b">
-                <h4 className="text-sm font-semibold text-yellow-800">
-                  Forumula
-                </h4>
-                <div className="bg-yellow-200 p-1 rounded-full">
-                  <FileText className="h-4 w-4 text-yellow-700" />
-                </div>
-              </div>
+              <Card className="shadow-sm border border-dashed bg-muted/30">
+                {/* Header Card */}
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <CardTitle className="text-sm font-medium">Forumula</CardTitle>
+                  <Radical className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
 
-              {/* Content Card */}
-              <CardContent className="py-6 px-5 italic space-y-6">
-                {/* Forumula 1 */}
-                <div className="pb-4 border-b last:border-0">
-                  <p className="text-sm leading-relaxed text-gray-600">
-                    <span className="font-semibold text-gray-900">
-                      1. Terlaksananya Kebijakan Relaksasi
-                    </span>
-                    {" = "}
-                    <span>
-                      Ketersediaan Surat Keputusan Gubernur atas Kebijakan
-                      Pembebasan Denda, BBNKB II, dan Pajak Progresif / Target
-                    </span>
-                  </p>
-                </div>
+                {/* Content Card */}
+                <CardContent className="py-6 italic space-y-6">
+                  {/* Formula 1 */}
+                  <div className="pb-4 border-b last:border-0">
+                    <p className="text-sm leading-relaxed text-gray-600">
+                      <span className="font-semibold italic text-gray-900">
+                        1. Terlaksananya Kebijakan Relaksasi
+                      </span>
+                      {" = "}
+                      <span className="italic">
+                        Ketersediaan Surat Keputusan Gubernur atas Kebijakan
+                        Pembebasan Denda, BBNKB II, dan Pajak Progresif / Target
+                      </span>
+                    </p>
+                  </div>
 
-                {/* Forumula 2 */}
-                <div className="pb-4 border-b last:border-0">
-                  <p className="text-sm leading-relaxed text-gray-600">
-                    <span className="font-semibold text-gray-900">
-                      2. Pertumbuhan penerimaan SW di periode Relaksasi
-                    </span>
-                    {" = "}
-                    <span>
-                      Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n /
-                      Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n-1
-                      × 100 - 100
-                    </span>
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+                  {/* Formula 2 */}
+                  <div className="pb-4 border-b last:border-0">
+                    <p className="text-sm leading-relaxed text-gray-600">
+                      <span className="font-semibold italic text-gray-900">
+                        2. Pertumbuhan penerimaan SW di periode Relaksasi
+                      </span>
+                      {" = "}
+                      <span className="italic">
+                        Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n
+                        / Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun
+                        n-1 × 100 - 100
+                      </span>
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
           )}
 
           {/* ===== CHART DARI TABLE1 ===== */}

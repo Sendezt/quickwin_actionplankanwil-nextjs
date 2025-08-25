@@ -3,7 +3,7 @@
 import * as React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { ChevronRight, Home, Settings, Users, FileText } from "lucide-react";
+import { ChevronRight, Home, Flame, Layers } from "lucide-react";
 
 import {
   Collapsible,
@@ -51,6 +51,7 @@ export const data = {
     {
       title: "Quickwin Jateng",
       url: "/",
+      icon: Flame,
       items: [
         { title: "SENGKUYUNG", url: "/sengkuyung" },
         { title: "PROMITRA", url: "/404" },
@@ -62,6 +63,7 @@ export const data = {
     {
       title: "Action Plan Pusat",
       url: "/",
+      icon: Layers,
       items: [
         { title: "Implementasi UU HKPD", url: "/implementasi-uu-hkpd" },
         { title: "Kebijakan Relaksasi", url: "/kebijakan-relaksasi" },
