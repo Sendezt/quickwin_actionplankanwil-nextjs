@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import {
   Table,
   TableHeader,
@@ -7,6 +10,7 @@ import {
   TableCell,
   TableFooter,
 } from "@/components/ui/table";
+import { ArrowUpDown, ArrowDown01, ArrowDown10 } from "lucide-react";
 
 export default function RenderTable({ data }) {
   if (!data) return null;
@@ -14,6 +18,49 @@ export default function RenderTable({ data }) {
   const headers = data?.header?.[0] || [];
   const rows = data?.data || [];
   const summary = data?.summary || null;
+
+  // cari index kolom "Action Plan"
+  const actionPlanIndex = headers.findIndex(
+    (h) => String(h).toLowerCase().includes("action plan")
+  );
+
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: null,
+  });
+
+  const sortedRows = [...rows];
+  if (sortConfig.key === actionPlanIndex && sortConfig.direction) {
+    sortedRows.sort((a, b) => {
+      const valA = parseFloat(a[sortConfig.key]) || 0;
+      const valB = parseFloat(b[sortConfig.key]) || 0;
+
+      return sortConfig.direction === "asc" ? valA - valB : valB - valA;
+    });
+  }
+
+  const handleSort = (idx) => {
+    if (idx !== actionPlanIndex) return;
+
+    let direction = "asc";
+    if (sortConfig.key === idx) {
+      if (sortConfig.direction === "asc") {
+        direction = "desc";
+      } else if (sortConfig.direction === "desc") {
+        direction = null;
+      }
+    }
+    setSortConfig({ key: idx, direction });
+  };
+
+  const renderSortIcon = (idx) => {
+    if (idx !== actionPlanIndex) return null;
+    if (!sortConfig.direction) return <ArrowUpDown className="w-4 h-4 inline ml-1" />;
+    if (sortConfig.direction === "asc")
+      return <ArrowDown01 className="w-4 h-4 inline ml-1" />;
+    if (sortConfig.direction === "desc")
+      return <ArrowDown10 className="w-4 h-4 inline ml-1" />;
+  };
 
   return (
     <div className="w-full">
@@ -25,16 +72,20 @@ export default function RenderTable({ data }) {
               {headers.map((col, idx) => (
                 <TableHead
                   key={idx}
-                  className="text-center px-3 py-3 font-semibold text-gray-900 border border-gray-200 whitespace-nowrap"
+                  onClick={() => handleSort(idx)}
+                  className={`text-center px-3 py-3 font-semibold text-gray-900 border border-gray-200 whitespace-nowrap select-none ${
+                    idx === actionPlanIndex ? "cursor-pointer" : ""
+                  }`}
                 >
                   {col}
+                  {renderSortIcon(idx)}
                 </TableHead>
               ))}
             </TableRow>
           </TableHeader>
 
           <TableBody>
-            {rows.map((row, idx) => (
+            {sortedRows.map((row, idx) => (
               <TableRow
                 key={idx}
                 className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}

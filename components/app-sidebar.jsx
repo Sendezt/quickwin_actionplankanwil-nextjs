@@ -4,6 +4,7 @@ import * as React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { ChevronRight, Home, Flame, Layers } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import {
   Collapsible,
@@ -61,7 +62,7 @@ export const data = {
       ],
     },
     {
-      title: "Action Plan Pusat",
+      title: "Action Plan",
       url: "/",
       icon: Layers,
       items: [
@@ -69,10 +70,10 @@ export const data = {
         { title: "Kebijakan Relaksasi", url: "/kebijakan-relaksasi" },
         { title: "Operasi Gabungan", url: "/operasi-gabungan" },
         { title: "Rekonsiliasi Data", url: "/rekonsiliasi-data" },
-        { title: "Keterisian Data Valid", url: "/keterisian-data" },
+        { title: "Keterisian Data Valid", url: "/keterisian-data" }, // index 4
         { title: "Sosialisasi Kesamsatan", url: "/sosialisasi-kesamsatan" },
         {
-          title: "SIGNAL & ONLINE",
+          title: "SIGNAL & ONLINE", // index 6
           url: "/optimalisasi-signal-layanan-online",
         },
         { title: "Merchant", url: "/kolaborasi-merchant" },
@@ -80,7 +81,7 @@ export const data = {
         { title: "SIGAP Prioritas", url: "/sigap-prioritas" },
         { title: "SIGAP Instansi", url: "/sigap-instansi" },
         { title: "WA Blast", url: "/wa-blast" },
-        { title: "Pendataan Terlibat Laka", url: "/pendataan-laka" },
+        { title: "Pendataan Terlibat Laka", url: "/pendataan-laka" }, // index 12
       ].map((item, index) => ({
         ...item,
         title: `${index + 1}. ${item.title}`,
@@ -91,6 +92,16 @@ export const data = {
 
 export function AppSidebar(props) {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    // render versi "kosong" dulu biar sama dengan SSR
+    return null;
+  }
 
   return (
     <Sidebar variant="inset" {...props}>
@@ -157,17 +168,30 @@ export function AppSidebar(props) {
                                 const isSubActive = pathname.startsWith(
                                   subItem.url
                                 );
+                                const merahTitles = [
+                                  "Keterisian Data Valid",
+                                  "SIGNAL & ONLINE",
+                                  "Pendataan Terlibat Laka",
+                                ];
+                                const isMerah = merahTitles.some((t) =>
+                                  subItem.title.includes(t)
+                                );
+
                                 return (
                                   <SidebarMenuSubItem
                                     key={subItem.url + "-" + index}
                                   >
                                     <SidebarMenuSubButton
                                       asChild
-                                      className={`hover:bg-gray-500 hover:text-white ${
-                                        isSubActive
-                                          ? "bg-gray-700 text-white"
-                                          : ""
-                                      }`}
+                                      className={
+                                        isMerah
+                                          ? isSubActive
+                                            ? "bg-red-600 text-white hover:bg-red-700 hover:text-white"
+                                            : "text-red-600 hover:text-red-700"
+                                          : isSubActive
+                                          ? "bg-gray-700 text-white hover:bg-gray-800 hover:text-white"
+                                          : "hover:bg-gray-500 hover:text-white"
+                                      }
                                     >
                                       <a href={subItem.url}>
                                         {subItem.icon && (
@@ -205,7 +229,7 @@ export function AppSidebar(props) {
         </SidebarGroup>
       </SidebarContent>
 
-      {/* <SidebarFooter>
+      {/* /* <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
