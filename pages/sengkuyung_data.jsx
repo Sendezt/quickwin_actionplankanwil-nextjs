@@ -2,14 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import RenderTable from "@/components/sengkuyung/RenderTable";
+import RenderTableSort from "@/components/sengkuyung/RenderTableSort";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import Navbar from "@/components/navbar";
 import { Skeleton } from "@/components/ui/skeleton";
+import RenderTable from "@/components/sengkuyung/RenderTable";
 
 export default function MenuSengkuyung() {
-  const [tableData, setTableData] = useState();
+  const [table1, setTable1] = useState(null);
+  const [table2, setTable2] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,7 +21,8 @@ export default function MenuSengkuyung() {
           "https://magangproject.vercel.app/api/sheetI/getsheetItable1" 
         );
         const json = await res.json();
-        setTableData(json);
+        setTable1(json.table1);
+        setTable2(json.table2);
       } catch (err) {
         console.error("Gagal fetch data sengkuyung:", err);
       } finally {
@@ -57,7 +60,7 @@ export default function MenuSengkuyung() {
                       <Skeleton className="h-8 w-20 mx-auto mt-2" />
                     ) : (
                       <div className="text-2xl font-bold text-green-700">
-                        {tableData?.table2?.summary?.total?.[1]}
+                        {table2?.summary?.total?.[1]}
                       </div>
                     )}
                   </div>
@@ -71,7 +74,7 @@ export default function MenuSengkuyung() {
                       <Skeleton className="h-8 w-24 mx-auto mt-2" />
                     ) : (
                       <div className="text-2xl font-bold text-purple-800">
-                        Rp{tableData?.table2?.summary?.total?.[7]}
+                        Rp{table2?.summary?.total?.[7]}
                       </div>
                     )}
                   </div>
@@ -85,7 +88,7 @@ export default function MenuSengkuyung() {
                       <Skeleton className="h-8 w-24 mx-auto mt-2" />
                     ) : (
                       <div className="text-2xl font-bold text-red-600">
-                        Rp{tableData?.table2?.summary?.total?.[10]}
+                        Rp{table2?.summary?.total?.[10]}
                       </div>
                     )}
                   </div>
@@ -99,7 +102,7 @@ export default function MenuSengkuyung() {
                       <Skeleton className="h-8 w-24 mx-auto mt-2" />
                     ) : (
                       <div className="text-2xl font-bold text-blue-700">
-                        Rp{tableData?.table2?.summary?.total?.[4]}
+                        Rp{table2?.summary?.total?.[4]}
                       </div>
                     )}
                   </div>
@@ -113,7 +116,7 @@ export default function MenuSengkuyung() {
                       <Skeleton className="h-8 w-24 mx-auto mt-2" />
                     ) : (
                       <div className="text-2xl font-bold text-orange-600">
-                        Rp{tableData?.table2?.summary?.total?.[13]}
+                        Rp{table2?.summary?.total?.[13]}
                       </div>
                     )}
                   </div>
@@ -144,14 +147,14 @@ export default function MenuSengkuyung() {
                     ) : (
                       <>
                         <div className="text-2xl font-bold text-green-700">
-                          {tableData?.table2?.summary?.total?.[1]}
+                          {table2?.summary?.total?.[1]}
                         </div>
                         <div className="mt-2">
                           <p className="text-sm font-medium text-gray-600">
                             Success Rate
                           </p>
                           <p className="text-base font-semibold text-green-700">
-                            {tableData?.table2?.summary?.total?.[3]}
+                            {table2?.summary?.total?.[3]}
                           </p>
                         </div>
                       </>
@@ -168,14 +171,14 @@ export default function MenuSengkuyung() {
                     ) : (
                       <>
                         <div className="text-2xl font-bold text-purple-800">
-                          Rp{tableData?.table2?.summary?.total?.[8]}
+                          Rp{table2?.summary?.total?.[8]}
                         </div>
                         <div className="mt-2">
                           <p className="text-sm font-medium text-gray-600">
                             Success Rate
                           </p>
                           <p className="text-base font-semibold text-purple-800">
-                            {tableData?.table2?.summary?.total?.[9]}
+                            {table2?.summary?.total?.[9]}
                           </p>
                         </div>
                       </>
@@ -192,14 +195,14 @@ export default function MenuSengkuyung() {
                     ) : (
                       <>
                         <div className="text-2xl font-bold text-red-600">
-                          Rp{tableData?.table2?.summary?.total?.[11]}
+                          Rp{table2?.summary?.total?.[11]}
                         </div>
                         <div className="mt-2">
                           <p className="text-sm font-medium text-gray-600">
                             Success Rate
                           </p>
                           <p className="text-base font-semibold text-red-600">
-                            {tableData?.table2?.summary?.total?.[12]}
+                            {table2?.summary?.total?.[12]}
                           </p>
                         </div>
                       </>
@@ -216,14 +219,14 @@ export default function MenuSengkuyung() {
                     ) : (
                       <>
                         <div className="text-2xl font-bold text-blue-700">
-                          Rp{tableData?.table2?.summary?.total?.[5]}
+                          Rp{table2?.summary?.total?.[5]}
                         </div>
                         <div className="mt-2">
                           <p className="text-sm font-medium text-gray-600">
                             Success Rate
                           </p>
                           <p className="text-base font-semibold text-blue-700">
-                            {tableData?.table2?.summary?.total?.[6]}
+                            {table2?.summary?.total?.[6]}
                           </p>
                         </div>
                       </>
@@ -240,20 +243,35 @@ export default function MenuSengkuyung() {
                     ) : (
                       <>
                         <div className="text-2xl font-bold text-orange-600">
-                          Rp{tableData?.table2?.summary?.total?.[14]}
+                          Rp{table2?.summary?.total?.[14]}
                         </div>
                         <div className="mt-2">
                           <p className="text-sm font-medium text-gray-600">
                             Success Rate
                           </p>
                           <p className="text-base font-semibold text-orange-600">
-                            {tableData?.table2?.summary?.total?.[15]}
+                            {table2?.summary?.total?.[15]}
                           </p>
                         </div>
                       </>
                     )}
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="mt-8 space-y-6">
+            <h2 className="text-xl font-semibold mb-2">
+              Data Kendaraan dan Penerimaan (Table 1)
+            </h2>
+            <Card>
+              <CardContent>
+                {loading ? (
+                  <Skeleton className="h-40 w-full" />
+                ) : (
+                  <RenderTable data={table1} />
+                )}
               </CardContent>
             </Card>
           </div>
@@ -267,7 +285,7 @@ export default function MenuSengkuyung() {
                 {loading ? (
                   <Skeleton className="h-40 w-full" />
                 ) : (
-                  <RenderTable data={tableData} />
+                  <RenderTableSort data={table2} />
                 )}
               </CardContent>
             </Card>
