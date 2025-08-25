@@ -263,22 +263,7 @@ export default function MenuSengkuyung() {
 
           <div className="mt-8 space-y-6">
             <h2 className="text-xl font-semibold mb-2">
-              Data Kendaraan dan Penerimaan (Table 1)
-            </h2>
-            <Card>
-              <CardContent>
-                {loading ? (
-                  <Skeleton className="h-40 w-full" />
-                ) : (
-                  <RenderTable data={table1} />
-                )}
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="mt-8 space-y-6">
-            <h2 className="text-xl font-semibold mb-2">
-              Ranking Berdasarkan Success Rate Penerimaan SWDKLLJ
+              Ranking Per Kabupaten Kota Berdasarkan Success Rate Penerimaan SWDKLLJ
             </h2>
             <Card>
               <CardContent>
@@ -286,6 +271,21 @@ export default function MenuSengkuyung() {
                   <Skeleton className="h-40 w-full" />
                 ) : (
                   <RenderTableSort data={table2} />
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="mt-8 space-y-6">
+            <h2 className="text-xl font-semibold mb-2">
+              Ranking Per Cabang Success Rate Penerimaan SWDKLLJ
+            </h2>
+            <Card>
+              <CardContent>
+                {loading ? (
+                  <Skeleton className="h-40 w-full" />
+                ) : (
+                  <RenderTable data={table1} />
                 )}
               </CardContent>
             </Card>
