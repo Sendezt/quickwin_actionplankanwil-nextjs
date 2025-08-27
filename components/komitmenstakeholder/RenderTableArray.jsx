@@ -19,14 +19,16 @@ export default function RenderTableArray({ data }) {
 
   return (
     <div className="overflow-x-auto">
-      <Table>
+      <Table className="table-auto w-full border-collapse">
         {/* Header */}
         <TableHeader>
           <TableRow>
             {headers.map((col, idx) => (
               <TableHead
                 key={idx}
-                className={idx === 1 ? "text-left" : "text-center"}
+                className={`px-2 py-2 text-sm whitespace-normal break-words ${
+                  idx === 1 ? "text-left" : "text-center"
+                }`}
               >
                 {col}
               </TableHead>
@@ -40,7 +42,10 @@ export default function RenderTableArray({ data }) {
             <React.Fragment key={cabang.cabang || idx}>
               {/* Baris judul cabang */}
               <TableRow className="bg-gray-100">
-                <TableCell colSpan={headers.length} className="font-bold">
+                <TableCell
+                  colSpan={headers.length}
+                  className="font-bold px-2 py-2 text-left whitespace-normal break-words"
+                >
                   {cabang.cabang}
                 </TableCell>
               </TableRow>
@@ -51,7 +56,9 @@ export default function RenderTableArray({ data }) {
                   {row.map((cell, cidx) => (
                     <TableCell
                       key={cidx}
-                      className={cidx === 1 ? "text-left" : "text-center"}
+                      className={`px-2 py-1 text-sm whitespace-nowrap ${
+                        cidx === 1 ? "text-left" : "text-center"
+                      }`}
                     >
                       {cell}
                     </TableCell>
@@ -66,12 +73,17 @@ export default function RenderTableArray({ data }) {
         {summary && (
           <TableFooter>
             <TableRow>
-              {/* Merge kolom No + Samsat Induk */}
-              <TableCell colSpan={2} className="font-bold text-center">
+              <TableCell
+                colSpan={2}
+                className="font-bold text-center px-2 py-2 whitespace-normal break-words"
+              >
                 {summary[0]}
               </TableCell>
               {summary.slice(1).map((cell, idx) => (
-                <TableCell key={idx} className="font-semibold text-center">
+                <TableCell
+                  key={idx}
+                  className="font-semibold text-center px-2 py-2 whitespace-nowrap"
+                >
                   {cell}
                 </TableCell>
               ))}
