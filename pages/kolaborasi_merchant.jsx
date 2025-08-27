@@ -90,11 +90,11 @@ export default function MenuDelapan() {
     async function fetchRangeData() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/google/getRange-sheet5"
+          "https://magangproject.vercel.app/api/google/getRange-sheet8"
         );
         setRangeData(await res.json());
       } catch (err) {
-        console.error("Gagal fetch getRange-sheet5: ", err);
+        console.error("Gagal fetch getRange-sheet8: ", err);
       }
     }
 
