@@ -74,18 +74,68 @@ export default function MenuThirdteen() {
         <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
           {/* Cards Atas */}
           {loading ? (
-            <div className="grid gap-4 md:grid-cols-2">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <Card key={i} className="p-0 overflow-hidden">
-                  <div className="px-5 py-3 border-b">
-                    <Skeleton className="h-4 w-1/4 mb-2" />
-                  </div>
-                  <CardContent className="py-6 px-5 space-y-2">
-                    <Skeleton className="h-8 w-1/3" />
-                    <Skeleton className="h-4 w-2/3" />
+            <div className="grid gap-4">
+              {/* Baris 1 */}
+              <div className="grid gap-4 md:grid-cols-2">
+                {/* Kolom kiri: Periode Awal & Akhir */}
+                <div className="grid gap-4">
+                  {/* Periode Awal */}
+                  <Card>
+                    <CardHeader className="pb-1">
+                      <Skeleton className="h-3 w-20 mb-2" />
+                    </CardHeader>
+                    <CardContent>
+                      <Skeleton className="h-5 w-24 mb-1" />
+                      <Skeleton className="h-3 w-32" />
+                    </CardContent>
+                  </Card>
+
+                  {/* Periode Akhir */}
+                  <Card>
+                    <CardHeader className="pb-1">
+                      <Skeleton className="h-3 w-20 mb-2" />
+                    </CardHeader>
+                    <CardContent>
+                      <Skeleton className="h-5 w-24 mb-1" />
+                      <Skeleton className="h-3 w-32" />
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Kolom kanan: Skor Total */}
+                <Card>
+                  <CardHeader className="pb-2">
+                    <Skeleton className="h-4 w-24 mb-2" />
+                  </CardHeader>
+                  <CardContent>
+                    <Skeleton className="h-10 w-20 mb-1" />
+                    <Skeleton className="h-3 w-32" />
                   </CardContent>
                 </Card>
-              ))}
+              </div>
+
+              {/* Baris 2: Obyek Penilaian & Formula */}
+              <div className="grid grid-cols-2 gap-4">
+                <Card>
+                  <CardHeader className="pb-1">
+                    <Skeleton className="h-3 w-24 mb-2" />
+                  </CardHeader>
+                  <CardContent>
+                    <Skeleton className="h-5 w-32 mb-1" />
+                    <Skeleton className="h-3 w-28" />
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="pb-1">
+                    <Skeleton className="h-3 w-24 mb-2" />
+                  </CardHeader>
+                  <CardContent>
+                    <Skeleton className="h-5 w-40 mb-2" />
+                    <Skeleton className="h-3 w-32" />
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           ) : (
             <div className="grid gap-4">
@@ -190,7 +240,9 @@ export default function MenuThirdteen() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg font-semibold">
-                Skor Kontribusi % Pelunasan Kendaraan Terlibat Laka - Per Cabang
+                Skor Kontribusi % Pelunasan{" "}
+                <span className="text-red-600">Kendaraan Terlibat Laka</span> -
+                Per Cabang
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -202,7 +254,7 @@ export default function MenuThirdteen() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg font-semibold">
-                Hasil Penerimaan SW Atas Kendaraan Terlibat Laka
+                Hasil Penerimaan SW Atas{" "} <span className="text-yellow-600">Kendaraan Terlibat Laka</span>
               </CardTitle>
             </CardHeader>
             <CardContent>

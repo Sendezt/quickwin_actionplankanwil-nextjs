@@ -24,7 +24,12 @@ export default function RenderTable2({ data }) {
         <TableHeader>
           <TableRow>
             {headers.map((col, idx) => (
-              <TableHead key={idx} className="font-bold">
+              <TableHead
+                key={idx}
+                className={
+                  idx === 1 ? "text-left font-bold" : "text-center font-bold"
+                }
+              >
                 {col}
               </TableHead>
             ))}
@@ -36,7 +41,10 @@ export default function RenderTable2({ data }) {
           {rows.map((row, rIdx) => (
             <TableRow key={rIdx}>
               {row.map((cell, cIdx) => (
-                <TableCell key={cIdx}>
+                <TableCell
+                  key={cIdx}
+                  className={cIdx === 1 ? "text-left" : "text-center"}
+                >
                   {cell}
                 </TableCell>
               ))}
@@ -54,7 +62,7 @@ export default function RenderTable2({ data }) {
               </TableCell>
 
               {summary.map((cell, idx) => (
-                <TableCell key={idx} className="font-semibold">
+                <TableCell key={idx} className="font-semibold text-center">
                   {cell}
                 </TableCell>
               ))}
