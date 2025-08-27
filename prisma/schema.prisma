@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique @db.VarChar(100)
+  passwordHash String   @map("password_hash") @db.VarChar(255)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+
+  @@map("admins")
+}
+
+model Cabang {
+  id        Int        @id @default(autoincrement())
+  nama      String     @db.VarChar(100)
+  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamp(0)
+  feedbacks Feedback[]
+
+  @@map("cabang")
+}
+
+model ActionPlan {
+  id        Int        @id @default(autoincrement())
+  title     String     @db.VarChar(255)
+  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamp(0)
+  feedbacks Feedback[]
+
+  @@map("action_plan")
+}
+
+model Feedback {
+  id                Int           @id @default(autoincrement())
+  cabangId          Int           @map("cabang_id")
+  actionPlanId      Int           @map("action_plan_id")
+  task              String        @db.Text
+  status            FeedbackStatus @default(proses)
+  timestampProses   DateTime      @default(now()) @map("timestamp_proses") @db.Timestamp(0)
+  timestampSelesai  DateTime?     @map("timestamp_selesai") @db.Timestamp(0)
+  createdAt         DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
+  
+  cabang     Cabang     @relation(fields: [cabangId], references: [id])
+  actionPlan ActionPlan @relation(fields: [actionPlanId], references: [id])
+
+  @@map("feedback")
+}
+
+enum FeedbackStatus {
+  proses
+  selesai
+}

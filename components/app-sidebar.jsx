@@ -3,7 +3,7 @@
 import * as React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { ChevronRight, Home, Flame, Layers } from "lucide-react";
+import { ChevronRight, Home, Flame, Layers, MessageSquare } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import {
@@ -86,6 +86,11 @@ export const data = {
         ...item,
         title: `${index + 1}. ${item.title}`,
       })),
+    },
+    {
+      title: "Feedback",
+      url: "/feedback",
+      icon: MessageSquare,
     },
   ],
 };
