@@ -24,7 +24,10 @@ export default function RenderTableArray({ data }) {
         <TableHeader>
           <TableRow>
             {headers.map((col, idx) => (
-              <TableHead key={idx} className="text-center">
+              <TableHead
+                key={idx}
+                className={idx === 1 ? "text-left" : "text-center"}
+              >
                 {col}
               </TableHead>
             ))}
@@ -49,7 +52,10 @@ export default function RenderTableArray({ data }) {
               {cabang.samsat.map((row, rIdx) => (
                 <TableRow key={`${cabang.cabang}-${rIdx}`}>
                   {row.map((cell, cidx) => (
-                    <TableCell key={cidx} className="text-center">
+                    <TableCell
+                      key={cidx}
+                      className={cidx === 1 ? "text-left" : "text-center"}
+                    >
                       {cell}
                     </TableCell>
                   ))}

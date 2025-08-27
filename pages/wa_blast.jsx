@@ -235,8 +235,9 @@ export default function MenuTwelve() {
           {/* Table 1 */}
           <Card>
             <CardHeader>
-              <CardTitle>
-                Skor Kontribusi Penerimaan WA Blast - Kanwil
+              <CardTitle className="text-xl">
+                Skor Kontribusi Penerimaan{" "}
+                <span className="text-red-700">WA Blast</span> - Kanwil
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -247,8 +248,9 @@ export default function MenuTwelve() {
           {/* Table 2 */}
           <Card>
             <CardHeader>
-              <CardTitle>
-                Skor Kontribusi Penerimaan WA Blast - Per Cabang
+              <CardTitle className="text-xl">
+                Skor Kontribusi Penerimaan{" "}
+                <span className="text-red-700">WA Blast</span> - Per Cabang
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -259,8 +261,9 @@ export default function MenuTwelve() {
           {/* Table 3 */}
           <Card>
             <CardHeader>
-              <CardTitle>
-                Skor Kontribusi Penerimaan WA Blast - Per Samsat
+              <CardTitle className="text-xl">
+                Skor Kontribusi Penerimaan{" "}
+                <span className="text-red-700">WA Blast</span> - Per Samsat
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -271,7 +274,10 @@ export default function MenuTwelve() {
           {/* Table 4 */}
           <Card>
             <CardHeader>
-              <CardTitle>Hasil Penerimaan Atas Kegiatan WA Blast</CardTitle>
+              <CardTitle className="text-xl">
+                Hasil Penerimaan Atas Kegiatan{" "}
+                <span className="text-orange-500">WA Blast</span>
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <RenderTableArray data={table4Data} />
