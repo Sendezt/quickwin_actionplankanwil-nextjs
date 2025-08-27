@@ -223,7 +223,7 @@ export default function Dashboard() {
           <Navbar />
 
           {/* Container dengan padding yang lebih baik */}
-          <div className="px-4 md:px-6 lg:px-8 space-y-6">
+          <div className="px-4 md:px-6 lg:px-8 space-y-6 p-5">
             {/* Section 1: Grid untuk cards dan info */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Kolom kiri: Skor Jateng */}

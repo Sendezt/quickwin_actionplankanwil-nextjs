@@ -11,7 +11,13 @@ import {
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CalendarDays, BarChart3, FileText, Radical, LandPlot } from "lucide-react";
+import {
+  CalendarDays,
+  BarChart3,
+  FileText,
+  Radical,
+  LandPlot,
+} from "lucide-react";
 import Navbar from "@/components/navbar";
 import RenderTable from "@/components/sigapprioritas/RenderTable";
 import RenderTableArray from "@/components/sigapprioritas/RenderTableArray";
@@ -265,15 +271,10 @@ export default function MenuTen() {
           {/* Table 1 */}
           <Card>
             <CardHeader>
-              <CardTitle>
-                Skor Kontribusi Penerimaan SIGAP Prioritas - Kanwil
+              <CardTitle className="text-xl">
+                Skor Kontribusi Penerimaan{" "}
+                <span className="text-red-700">SIGAP Prioritas</span> - Kanwil
               </CardTitle>
-              <CardDescription>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Corporis esse vitae harum nisi velit fugit minus deleniti
-                voluptas, temporibus cumque hic, beatae dicta veniam eaque alias
-                illo sequi, eligendi omnis.
-              </CardDescription>
             </CardHeader>
             <CardContent>
               <RenderTable data={table1Data} />
@@ -283,15 +284,11 @@ export default function MenuTen() {
           {/* Table 2 */}
           <Card>
             <CardHeader>
-              <CardTitle>
-                Skor Kontribusi Penerimaan SIGAP Prioritas - Per Cabang
+              <CardTitle className="text-xl">
+                Skor Kontribusi Penerimaan{" "}
+                <span className="text-red-700">SIGAP Prioritas</span> - Per
+                Cabang
               </CardTitle>
-              <CardDescription>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quidem
-                id voluptates molestiae natus provident sint quibusdam fugiat
-                dolores eveniet quod voluptate doloremque excepturi consequuntur
-                totam culpa, at magnam deserunt veritatis?
-              </CardDescription>
             </CardHeader>
             <CardContent>
               <RenderTable data={table2Data} />
@@ -301,15 +298,11 @@ export default function MenuTen() {
           {/* Table 3 */}
           <Card>
             <CardHeader>
-              <CardTitle>
-                Skor Kontribusi Penerimaan SIGAP Prioritas - Per Samsat
+              <CardTitle className="text-xl">
+                Skor Kontribusi Penerimaan{" "}
+                <span className="text-red-700">SIGAP Prioritas</span> - Per
+                Samsat
               </CardTitle>
-              <CardDescription>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea
-                nihil veritatis commodi, voluptas eius cum quibusdam! Blanditiis
-                debitis laboriosam adipisci voluptate ad quod. Voluptatem,
-                numquam aliquam explicabo voluptatibus similique optio!
-              </CardDescription>
             </CardHeader>
             <CardContent>
               <RenderTableArray data={table3Data} />
@@ -319,15 +312,10 @@ export default function MenuTen() {
           {/* Table 4 */}
           <Card>
             <CardHeader>
-              <CardTitle>
-                Hasil Penerimaan Atas Kegiatan SIGAP Prioritas
+              <CardTitle className="text-xl">
+                Hasil Penerimaan Atas Kegiatan{" "}
+                <span className="text-yellow-700">SIGAP Prioritas</span>
               </CardTitle>
-              <CardDescription>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Exercitationem facilis provident labore distinctio doloremque
-                placeat, in rerum. Corporis iure voluptas soluta eum, libero
-                incidunt quo, dolorem illum repudiandae ipsum ducimus!
-              </CardDescription>
             </CardHeader>
             <CardContent>
               <RenderTableArray data={table4Data} />
