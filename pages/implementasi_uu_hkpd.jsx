@@ -69,7 +69,7 @@ export default function MenuSatu() {
     async function fetchRangeData() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/google/getRange-sheetglobal"
+          "https://magangproject.vercel.app/api/google/getRange-sheet1"
         );
         const json = await res.json();
 

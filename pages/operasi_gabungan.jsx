@@ -182,7 +182,7 @@ export default function MenuTiga() {
 
         // Ambil range periode
         const rangeRes = await fetch(
-          "https://magangproject.vercel.app/api/google/getRange-sheetglobal"
+          "https://magangproject.vercel.app/api/google/getRange-sheet3"
         );
         const rangeJson = await rangeRes.json();
         setRangeData(rangeJson);
@@ -452,10 +452,8 @@ export default function MenuTiga() {
           <Card className="shadow-sm border border-dashed bg-muted/30">
             {/* Header Card */}
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">
-                Forumula
-              </CardTitle>
-                <Radical className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium">Forumula</CardTitle>
+              <Radical className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             {/* Content Card */}
             <CardContent className="py-6italic space-y-6">
@@ -476,7 +474,9 @@ export default function MenuTiga() {
                     2. Kontribusi SW terkutip dari Tunggakan SW
                   </span>
                   {" = "}
-                  <span className="italic">Realisasi SW Terkutip/Tunggakan SW</span>
+                  <span className="italic">
+                    Realisasi SW Terkutip/Tunggakan SW
+                  </span>
                 </p>
               </div>
             </CardContent>

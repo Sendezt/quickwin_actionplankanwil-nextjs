@@ -11,7 +11,13 @@ import {
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CalendarDays, BarChart3, FileText, LandPlot, Radical } from "lucide-react";
+import {
+  CalendarDays,
+  BarChart3,
+  FileText,
+  LandPlot,
+  Radical,
+} from "lucide-react";
 import Navbar from "@/components/navbar";
 import RenderTable from "@/components/komitmenstakeholder/RenderTable";
 import RenderTableArray from "@/components/komitmenstakeholder/RenderTableArray";
@@ -64,9 +70,8 @@ export default function MenuNine() {
       try {
         const res = await fetch(
           "https://magangproject.vercel.app/api/google/getRange-sheet9"
-        );s
+        );
         setRangeData(await res.json());
-        console.log("Fetched range data:", await res.clone().json());
       } catch (err) {
         console.error("Gagal fetch getRange-sheet9: ", err);
       }
@@ -245,7 +250,9 @@ export default function MenuNine() {
               {/* Formula */}
               <Card className="shadow-sm border border-dashed bg-muted/30">
                 <CardHeader className="flex flex-row items-center justify-between pb-1">
-                  <CardTitle className="text-xs font-medium">Forumula</CardTitle>
+                  <CardTitle className="text-xs font-medium">
+                    Forumula
+                  </CardTitle>
                   <Radical className="h-3 w-3 text-muted-foreground" />
                 </CardHeader>
                 <CardContent className="py-2 px-4 italic text-sm">
