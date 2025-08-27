@@ -5,7 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CalendarDays, BarChart3, FileText, LandPlot, Radical } from "lucide-react";
+import {
+  CalendarDays,
+  BarChart3,
+  FileText,
+  LandPlot,
+  Radical,
+} from "lucide-react";
 import Navbar from "@/components/navbar";
 import RenderTable from "@/components/wablast/RenderTable";
 import RenderTableArray from "@/components/wablast/RenderTableArray";
@@ -160,40 +166,43 @@ export default function MenuTwelve() {
             </div>
           )}
 
-          {/* Obyek Penilaian (col-span-2) */}
-          {!loading && (
-            <Card className="shadow-sm border border-dashed bg-muted/30 col-span-2">
+          {/* Obyek Penilaian & Formula sejajar */}
+          <div className="grid grid-cols-2 gap-4">
+            {/* Obyek Penilaian */}
+            {!loading && (
+              <Card className="shadow-sm border border-dashed bg-muted/30">
+                <CardHeader className="flex flex-row items-center justify-between pb-1">
+                  <CardTitle className="text-xs font-medium">
+                    Obyek Penilaian
+                  </CardTitle>
+                  <LandPlot className="h-3 w-3 text-muted-foreground" />
+                </CardHeader>
+                <CardContent className="py-1 px-4">
+                  <div className="text-base font-semibold text-gray-900">
+                    Kantor Wilayah
+                  </div>
+                  <p className="text-xs">1 Obyek Penilaian</p>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Formula */}
+            <Card className="shadow-sm border border-dashed bg-muted/30">
               <CardHeader className="flex flex-row items-center justify-between pb-1">
-                <CardTitle className="text-xs font-medium">
-                  Obyek Penilaian
-                </CardTitle>
-                <LandPlot className="h-3 w-3 text-muted-foreground" />
+                <CardTitle className="text-xs font-medium">Forumula</CardTitle>
+                <Radical className="h-3 w-3 text-muted-foreground" />
               </CardHeader>
-              <CardContent className="py-1 px-4">
-                <div className="text-base font-semibold text-gray-900">
-                  Kantor Wilayah
-                </div>
-                <p className="text-xs">1 Obyek Penilaian</p>
+              <CardContent className="py-1 px-4 italic">
+                <span className="font-semibold text-gray-900">
+                  Kontribusi SW Terkutip dari Tunggakan
+                </span>
+                <span className="text-gray-600">
+                  {" "}
+                  = Realisasi SW Terkutip / Tunggakan SW
+                </span>
               </CardContent>
             </Card>
-          )}
-
-          {/* Formula (col-span-2) */}
-          <Card className="shadow-sm border border-dashed bg-muted/30 col-span-2">
-            <CardHeader className="flex flex-row items-center justify-between pb-1">
-              <CardTitle className="text-xs font-medium">Forumula</CardTitle>
-              <Radical className="h-3 w-3 text-muted-foreground" />
-            </CardHeader>
-            <CardContent className="py-1 px-4 italic">
-              <span className="font-semibold text-gray-900">
-                Kontribusi SW Terkutip dari Tunggakan
-              </span>
-              <span className="text-gray-600">
-                {" "}
-                = Realisasi SW Terkutip / Tunggakan SW
-              </span>
-            </CardContent>
-          </Card>
+          </div>
 
           {/* Table 1 */}
           <Card>

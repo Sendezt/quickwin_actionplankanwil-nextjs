@@ -145,43 +145,46 @@ export default function MenuThirdteen() {
                 </Card>
               </div>
 
-              {/* Baris 2: Obyek Penilaian full width */}
-              <Card className="shadow-sm border border-dashed bg-muted/30">
-                <CardHeader className="flex flex-row items-center justify-between pb-1">
-                  <CardTitle className="text-xs font-medium">
-                    Obyek Penilaian
-                  </CardTitle>
-                  <LandPlot className="h-3 w-3 text-muted-foreground" />
-                </CardHeader>
-                <CardContent className="py-1 px-4">
-                  <div className="text-base font-semibold text-gray-900">
-                    Kantor Wilayah
-                  </div>
-                  <p className="text-xs">1 Obyek Penilaian</p>
-                </CardContent>
-              </Card>
+              {/* Baris 2: Obyek Penilaian & Formula sejajar */}
+              <div className="grid grid-cols-2 gap-4">
+                {/* Obyek Penilaian */}
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
+                      Obyek Penilaian
+                    </CardTitle>
+                    <LandPlot className="h-3 w-3 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent className="py-1 px-4">
+                    <div className="text-base font-semibold text-gray-900">
+                      Kantor Wilayah
+                    </div>
+                    <p className="text-xs">1 Obyek Penilaian</p>
+                  </CardContent>
+                </Card>
+
+                {/* Forumula */}
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
+                      Forumula
+                    </CardTitle>
+                    <Radical className="h-3 w-3 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent className="py-1 px-4 italic">
+                    <span className="font-semibold text-gray-900">
+                      % pelunasan PKB dan SWDKLLJ kendaraan terlibat laka lantas
+                    </span>
+                    <span className="text-gray-600">
+                      {" "}
+                      = Jumlah kendaraan terlibat laka lantas yang lunas SW /
+                      Jumlah Kendaraan terlibat laka
+                    </span>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           )}
-
-          {/* Forumula */}
-          <div className="grid gap-4">
-            <Card className="shadow-sm border border-dashed bg-muted/30">
-              <CardHeader className="flex flex-row items-center justify-between pb-1">
-                <CardTitle className="text-xs font-medium">Forumula</CardTitle>
-                <Radical className="h-3 w-3 text-muted-foreground" />
-              </CardHeader>
-              <CardContent className="py-1 px-4 italic">
-                <span className="font-semibold text-gray-900">
-                  % pelunasan PKB dan SWDKLLJ kendaraan terlibat laka lantas
-                </span>
-                <span className="text-gray-600">
-                  {" "}
-                  = Jumlah kendaraan terlibat laka lantas yang lunas SW / Jumlah
-                  Kendaraan terlibat laka
-                </span>
-              </CardContent>
-            </Card>
-          </div>
 
           {/* Table 1 */}
           <Card>
