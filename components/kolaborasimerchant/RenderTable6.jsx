@@ -41,7 +41,7 @@ export default function RenderTable6({ data }) {
                     ? "text-center"
                     : idx === 1
                     ? "text-left"
-                    : "text-right"
+                    : "text-center"
                 }`}
               >
                 {col.replace("\n", " ")}
@@ -80,14 +80,14 @@ export default function RenderTable6({ data }) {
                             ? "text-center"
                             : cidx === 1
                             ? "text-left"
-                            : "text-right"
+                            : "text-center"
                         }`}
                       >
                         {cell}
                       </TableCell>
                     ))}
                     {/* Kolom Total per baris (sejajar via No) */}
-                    <TableCell className="border border-gray-200 px-2 py-1 font-semibold text-right">
+                    <TableCell className="border border-gray-200 px-2 py-1 font-semibold text-center">
                       {totalValue}
                     </TableCell>
                   </TableRow>
@@ -113,14 +113,14 @@ export default function RenderTable6({ data }) {
               {summary?.slice(1).map((cell, idx) => (
                 <TableCell
                   key={idx}
-                  className="border border-gray-300 px-2 py-1 font-semibold text-right"
+                  className="border border-gray-300 px-2 py-1 font-semibold text-center"
                 >
                   {cell}
                 </TableCell>
               ))}
 
               {/* Kolom terakhir totalSummary */}
-              <TableCell className="border border-gray-300 px-2 py-1 font-bold text-right">
+              <TableCell className="border border-gray-300 px-2 py-1 font-bold text-center">
                 {totalSummary}
               </TableCell>
             </TableRow>

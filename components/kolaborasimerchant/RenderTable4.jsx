@@ -9,7 +9,7 @@ import {
   TableFooter,
 } from "@/components/ui/table";
 
-export default function RenderTable5({ data }) {
+export default function RenderTable4({ data }) {
   if (!data) return null;
 
   const headers = data?.header?.[0] || [];
@@ -27,7 +27,11 @@ export default function RenderTable5({ data }) {
               <TableHead
                 key={idx}
                 className={`border border-gray-300 px-2 py-2 font-bold ${
-                  idx === 0 ? "text-center" : idx === 1 ? "text-left" : "text-right"
+                  idx === 0
+                    ? "text-center"
+                    : idx === 1
+                    ? "text-left"
+                    : "text-center"
                 }`}
               >
                 {col.replace("\n", " ")}
@@ -49,14 +53,18 @@ export default function RenderTable5({ data }) {
                 <TableCell
                   key={cidx}
                   className={`border border-gray-200 px-2 py-1 ${
-                    cidx === 0 ? "text-center" : cidx === 1 ? "text-left" : "text-right"
+                    cidx === 0
+                      ? "text-center"
+                      : cidx === 1
+                      ? "text-left"
+                      : "text-center"
                   }`}
                 >
                   {cell}
                 </TableCell>
               ))}
               {total && (
-                <TableCell className="border border-gray-200 px-2 py-1 font-semibold text-right">
+                <TableCell className="border border-gray-200 px-2 py-1 font-semibold text-center">
                   {total[idx] ?? ""}
                 </TableCell>
               )}
@@ -80,7 +88,7 @@ export default function RenderTable5({ data }) {
               {summary.slice(2).map((cell, idx) => (
                 <TableCell
                   key={idx}
-                  className="border border-gray-300 px-2 py-1 font-semibold text-right"
+                  className="border border-gray-300 px-2 py-1 font-semibold text-center"
                 >
                   {cell}
                 </TableCell>
@@ -88,7 +96,7 @@ export default function RenderTable5({ data }) {
 
               {/* isi kolom total terakhir */}
               {total && (
-                <TableCell className="border border-gray-300 px-2 py-1 font-semibold text-right">
+                <TableCell className="border border-gray-300 px-2 py-1 font-semibold text-center">
                   {total[total.length - 1] ?? ""}
                 </TableCell>
               )}

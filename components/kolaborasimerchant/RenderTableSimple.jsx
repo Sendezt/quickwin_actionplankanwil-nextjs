@@ -46,7 +46,11 @@ export default function RenderTableSimple() {
             {headers.map((col, idx) => (
               <TableHead
                 key={idx}
-                className="border border-gray-300 px-2 py-1 text-center font-bold"
+                className={
+                  idx === 1
+                    ? "border border-gray-300 px-2 py-1 text-left font-bold"
+                    : "border border-gray-300 px-2 py-1 text-center font-bold"
+                }
               >
                 {col}
               </TableHead>
@@ -66,7 +70,11 @@ export default function RenderTableSimple() {
               {row.map((cell, cidx) => (
                 <TableCell
                   key={cidx}
-                  className="border border-gray-200 px-2 py-1 text-center"
+                  className={
+                    cidx === 1
+                      ? "border border-gray-200 px-2 py-1 text-left"
+                      : "border border-gray-200 px-2 py-1 text-center"
+                  }
                 >
                   {cell}
                 </TableCell>
