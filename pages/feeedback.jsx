@@ -1,13 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Plus } from "lucide-react";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import Navbar from "@/components/navbar";
-import FeedbackList from "@/components/feedback/FeedbackList";
-import FeedbackFilters from "@/components/feedback/FeedbackFilters";
-import FeedbackModal from "@/components/feedback/FeedbackModal"; // ⬅️ import modal konfirmasi
-import FeedbackFormModal from "@/components/feedback/FeedbackFormModal";
 import {
   fetchFeedbacks,
   fetchCabangs,
@@ -16,43 +11,28 @@ import {
   updateFeedbackStatus,
 } from "@/lib/apifeedback";
 
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import FeedbackFormModal from "@/components/feedback/FeedbackFormModal";
+
 export default function FeedbackPage() {
   const [feedbacks, setFeedbacks] = useState([]);
-  const [filteredFeedbacks, setFilteredFeedbacks] = useState([]);
   const [cabangs, setCabangs] = useState([]);
   const [actionPlans, setActionPlans] = useState([]);
   const [isCreating, setIsCreating] = useState(false);
-  const [showModal, setShowModal] = useState(false);
 
   // state untuk modal tambah feedback
-  const [task, setTask] = useState("");
-  const [cabangId, setCabangId] = useState("");
-  const [actionPlanId, setActionPlanId] = useState("");
-
-  // filter
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-
-  // state untuk modal konfirmasi selesai
-  const [selectedFeedback, setSelectedFeedback] = useState(null);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCabang, setSelectedCabang] = useState(null);
 
   useEffect(() => {
     loadData();
   }, []);
-
-  useEffect(() => {
-    let filtered = feedbacks;
-    if (searchTerm) {
-      filtered = filtered.filter((fb) =>
-        fb.task.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-    if (statusFilter !== "all") {
-      filtered = filtered.filter((fb) => fb.status === statusFilter);
-    }
-    setFilteredFeedbacks(filtered);
-  }, [feedbacks, searchTerm, statusFilter]);
 
   const loadData = async () => {
     setFeedbacks(await fetchFeedbacks());
@@ -60,33 +40,28 @@ export default function FeedbackPage() {
     setActionPlans((await fetchActionPlans()) || []);
   };
 
-  const handleCreate = async () => {
-    if (!task || !cabangId || !actionPlanId) return;
+  const handleOpenModal = (cabang) => {
+    setSelectedCabang(cabang);
+    setShowModal(true);
+  };
+
+  const handleCreate = async ({ actionPlanId, task, resetForm }) => {
+    if (!selectedCabang || !task || !actionPlanId) return;
+
     setIsCreating(true);
     await createFeedback({
       task,
-      cabangId: Number(cabangId),
+      cabangId: Number(selectedCabang.id),
       actionPlanId: Number(actionPlanId),
     });
-    setTask("");
-    setCabangId("");
-    setActionPlanId("");
     setIsCreating(false);
     setShowModal(false);
+    resetForm();
     loadData();
   };
 
-  // buka modal konfirmasi selesai
-  const handleSelesai = (feedback) => {
-    setSelectedFeedback(feedback);
-    setShowConfirmModal(true);
-  };
-
-  // konfirmasi selesai
-  const confirmSelesai = async (id) => {
+  const handleSelesai = async (id) => {
     await updateFeedbackStatus(id);
-    setShowConfirmModal(false);
-    setSelectedFeedback(null);
     loadData();
   };
 
@@ -96,60 +71,83 @@ export default function FeedbackPage() {
       <SidebarInset>
         <Navbar />
         <div className="p-6">
-          {/* Header */}
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold">Feedback</h1>
-            <button
-              onClick={() => setShowModal(true)}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg"
-            >
-              <Plus className="mr-2" /> Tambah Feedback
-            </button>
-          </div>
+          <h1 className="text-2xl font-bold mb-6">Feedback Management</h1>
 
-          {/* Filters */}
-          <FeedbackFilters
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            statusFilter={statusFilter}
-            setStatusFilter={setStatusFilter}
-          />
+          <Accordion type="single" collapsible className="w-full">
+            {cabangs.map((cabang) => (
+              <AccordionItem key={cabang.id} value={`cabang-${cabang.id}`}>
+                <AccordionTrigger>{cabang.nama}</AccordionTrigger>
+                <AccordionContent>
+                  {/* Button Tambah */}
+                  <div className="flex justify-end mb-3">
+                    <Button onClick={() => handleOpenModal(cabang)}>
+                      Tambah Feedback
+                    </Button>
+                  </div>
 
-          {/* Feedback List */}
-          <FeedbackList
-            feedbacks={filteredFeedbacks}
-            onSelesai={handleSelesai}
-          />
+                  {/* Tabel Feedback */}
+                  <div className="overflow-x-auto border rounded-lg">
+                    <table className="w-full text-sm">
+                      <thead className="bg-gray-100">
+                        <tr>
+                          <th className="p-2 text-left">Task</th>
+                          <th className="p-2 text-left">Action Plan</th>
+                          <th className="p-2 text-left">Status</th>
+                          <th className="p-2 text-right">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {feedbacks
+                          .filter((fb) => fb.cabangId === cabang.id)
+                          .map((fb) => (
+                            <tr key={fb.id} className="border-t">
+                              <td className="p-2">{fb.task}</td>
+                              <td className="p-2">{fb.actionPlan?.title}</td>
+                              <td className="p-2">{fb.status}</td>
+                              <td className="p-2 text-right">
+                                {fb.status !== "selesai" && (
+                                  <Button
+                                    size="sm"
+                                    onClick={() => handleSelesai(fb.id)}
+                                    className="bg-green-600 hover:bg-green-700"
+                                  >
+                                    Tandai Selesai
+                                  </Button>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
 
-          {/* Modal Konfirmasi Selesai */}
-          <FeedbackModal
-            open={showConfirmModal}
-            onClose={() => setShowConfirmModal(false)}
-            onConfirm={confirmSelesai}
-            feedback={selectedFeedback}
-          />
-
-          {/* Modal Tambah Feedback */}
-          <FeedbackFormModal
-            cabangs={cabangs}
-            actionPlans={actionPlans}
-            isOpen={showModal}
-            onClose={() => setShowModal(false)}
-            onSubmit={async ({ cabangId, actionPlanId, task, resetForm }) => {
-              setIsCreating(true);
-              await createFeedback({
-                task,
-                cabangId: Number(cabangId),
-                actionPlanId: Number(actionPlanId),
-              });
-              setIsCreating(false);
-              setShowModal(false);
-              resetForm(); // reset step dan form
-              loadData();
-            }}
-            isCreating={isCreating}
-          />  
+                        {feedbacks.filter((fb) => fb.cabangId === cabang.id)
+                          .length === 0 && (
+                          <tr>
+                            <td
+                              colSpan="4"
+                              className="p-3 text-center text-gray-500"
+                            >
+                              Belum ada feedback.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
+
+        {/* Modal Tambah Feedback */}
+        <FeedbackFormModal
+          cabangs={cabangs}
+          actionPlans={actionPlans}
+          isOpen={showModal}
+          onClose={() => setShowModal(false)}
+          onSubmit={handleCreate}
+          isCreating={isCreating}
+          selectedCabang={selectedCabang} // ⬅️ tambahan prop
+        />
       </SidebarInset>
     </SidebarProvider>
   );
