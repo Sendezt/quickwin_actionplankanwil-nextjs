@@ -93,7 +93,7 @@ export function ChartBarSingle({ data }) {
           Prosentase Keterisian Data <TrendingUp className="h-4 w-4" />
         </div>
         <div className="text-muted-foreground leading-none">
-          Data bersumber dari API Sheet5 (Magang Project)
+          Data bersumber dari QuickWin Action Plan
         </div>
       </CardFooter>
     </Card>

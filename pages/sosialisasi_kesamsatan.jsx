@@ -1,19 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CalendarDays, BarChart3, FileText, Radical, LandPlot } from "lucide-react";
+import {
+  CalendarDays,
+  BarChart3,
+  FileText,
+  Radical,
+  LandPlot,
+} from "lucide-react";
 import Navbar from "@/components/navbar";
 import RenderTable4 from "@/components/sosialisasikesamsatan/RenderTable4";
+import RenderTable from "@/components/sosialisasikesamsatan/RenderTable";
 import React from "react";
 
 export default function MenuEnam() {
@@ -75,169 +76,75 @@ export default function MenuEnam() {
     fetchRangeData();
   }, []);
 
-  // Skeleton Card
-  const SkeletonCard = () => (
-    <Card className="p-0 overflow-hidden">
-      <div className="px-5 py-3 border-b">
-        <Skeleton className="h-4 w-1/4 mb-2" />
-      </div>
-      <CardContent className="py-6 px-5 space-y-2">
-        <Skeleton className="h-8 w-1/3" />
-        <Skeleton className="h-4 w-2/3" />
+  // Enhanced Skeleton Components
+  const PeriodeSkeleton = () => (
+    <Card className="shadow-sm border border-dashed bg-muted/30">
+      <CardHeader className="flex flex-row items-center justify-between pb-1">
+        <Skeleton className="h-3 w-20" />
+        <Skeleton className="h-3 w-3 rounded-full" />
+      </CardHeader>
+      <CardContent className="flex flex-col justify-center space-y-2">
+        <Skeleton className="h-4 w-24" />
+        <Skeleton className="h-3 w-32" />
       </CardContent>
     </Card>
   );
 
-  const RenderTable = ({ data, isTable5 }) => {
-    if (!data) return <Skeleton className="h-[200px] w-full" />;
-
-    return (
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse border border-gray-300">
-          <thead>
-            <tr className="bg-gray-50">
-              {(Array.isArray(data?.header?.[0])
-                ? data.header[0]
-                : data?.header || []
-              ).map((header, idx) => (
-                <th
-                  key={idx}
-                  className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700"
-                >
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-
-          <tbody>
-            {Array.isArray(data?.data) &&
-              data.data.map((row, idx) => {
-                // Nested (cabang + samsat)
-                if (row?.cabang && Array.isArray(row?.samsat)) {
-                  return (
-                    <React.Fragment key={idx}>
-                      <tr className="bg-gray-100">
-                        <td
-                          colSpan={data.header?.[0]?.length || 7}
-                          className="border border-gray-300 px-4 py-2 text-sm font-bold"
-                        >
-                          {row.cabang}
-                        </td>
-                      </tr>
-                      {row.samsat.map((samsatRow, samsatIdx) => {
-                        if (
-                          Array.isArray(samsatRow) &&
-                          samsatRow.length === 1
-                        ) {
-                          return (
-                            <tr key={samsatIdx} className="bg-green-100">
-                              <td
-                                colSpan={data.header?.[0]?.length || 7}
-                                className="border border-gray-300 px-4 py-2 text-sm font-semibold text-green-800"
-                              >
-                                {samsatRow[0]}
-                              </td>
-                            </tr>
-                          );
-                        }
-                        return (
-                          <tr key={samsatIdx} className="hover:bg-gray-50">
-                            {samsatRow.map((cell, cIdx) => {
-                              // Tabel5: hilangkan 0 di kolom TOTAL KANWIL & TOTAL CABANG
-                              if (
-                                isTable5 &&
-                                (cell === 0 || cell === "0") &&
-                                cIdx >= samsatRow.length - 2
-                              )
-                                return (
-                                  <td
-                                    key={cIdx}
-                                    className="border border-gray-300 px-4 py-2 text-sm"
-                                  ></td>
-                                );
-                              return (
-                                <td
-                                  key={cIdx}
-                                  className="border border-gray-300 px-4 py-2 text-sm"
-                                >
-                                  {cell}
-                                </td>
-                              );
-                            })}
-                          </tr>
-                        );
-                      })}
-                    </React.Fragment>
-                  );
-                }
-
-                // Flat data
-                return (
-                  <tr key={idx} className="hover:bg-gray-50">
-                    {row.map((cell, cIdx) => (
-                      <td
-                        key={cIdx}
-                        className="border border-gray-300 px-4 py-2 text-sm"
-                      >
-                        {cell}
-                      </td>
-                    ))}
-                  </tr>
-                );
-              })}
-            {/* Summary */}
-            {data?.summary &&
-              (Array.isArray(data.summary) ? (
-                // Summary berupa array biasa
-                <tr className="font-medium bg-blue-50">
-                  <td></td>
-                  {data.summary.map((cell, idx) => (
-                    <td
-                      key={idx}
-                      className="border border-gray-300 px-4 py-2 text-sm font-semibold"
-                    >
-                      {cell}
-                    </td>
-                  ))}
-                </tr>
-              ) : (
-                // Summary berupa object (misalnya { total_kanwil: [...], total_cabang: [...] })
-                Object.values(data.summary).map((row, idx) => (
-                  <tr
-                    key={idx}
-                    className="font-medium bg-blue-50 hover:bg-blue-100"
-                  >
-                    {row.map((cell, cIdx) => {
-                      if (
-                        isTable5 &&
-                        cIdx >= row.length - 2 &&
-                        (cell === 0 || cell === "0")
-                      ) {
-                        return (
-                          <td
-                            key={cIdx}
-                            className="border border-gray-300 px-4 py-2 text-sm font-semibold"
-                          ></td>
-                        );
-                      }
-                      return (
-                        <td
-                          key={cIdx}
-                          className="border border-gray-300 px-4 py-2 text-sm font-semibold"
-                        >
-                          {cell || ""}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                ))
-              ))}
-          </tbody>
-        </table>
+  const ScoreSkeleton = ({ bgColor, iconColor }) => (
+    <Card className="p-0 overflow-hidden pb-4 text-center">
+      <div
+        className={`${bgColor} px-5 py-3 flex items-center justify-between rounded-t-xl border-b`}
+      >
+        <Skeleton className="h-4 w-20" />
+        <Skeleton className="h-4 w-4 rounded-full" />
       </div>
-    );
-  };
+      <CardContent className="pb-4 space-y-2 pt-6">
+        <Skeleton className="h-12 w-16 mx-auto" />
+        <Skeleton className="h-3 w-24 mx-auto" />
+      </CardContent>
+    </Card>
+  );
+
+  const InfoCardSkeleton = () => (
+    <Card className="shadow-sm border border-dashed bg-muted/30">
+      <CardHeader className="flex flex-row items-center justify-between pb-1">
+        <Skeleton className="h-3 w-24" />
+        <Skeleton className="h-4 w-4 rounded-full" />
+      </CardHeader>
+      <CardContent className="py-4 px-5 space-y-3">
+        <div className="space-y-2">
+          <Skeleton className="h-3 w-full" />
+          <Skeleton className="h-3 w-5/6" />
+          <Skeleton className="h-3 w-4/5" />
+        </div>
+        <Skeleton className="h-3 w-20" />
+      </CardContent>
+    </Card>
+  );
+
+  const TableSkeleton = () => (
+    <Card>
+      <CardHeader>
+        <Skeleton className="h-5 w-64" />
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-3">
+          <div className="flex space-x-4">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Skeleton key={i} className="h-8 flex-1" />
+            ))}
+          </div>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="flex space-x-4">
+              {Array.from({ length: 5 }).map((_, j) => (
+                <Skeleton key={j} className="h-6 flex-1" />
+              ))}
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
 
   // Skor dari summary
   const skorKanwil = table3Data?.summary?.[5] ?? "?";
@@ -249,256 +156,293 @@ export default function MenuEnam() {
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
-        <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
-          {/* Top Info */}
-          <div className="grid gap-4 md:grid-cols-2">
+        <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-50 p-4 md:p-6">
+          {/* Periode Section */}
+          <div className="space-y-3">
+            <h2 className="text-lg font-semibold text-gray-900">
+              Informasi Periode
+            </h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              {loading ? (
+                <>
+                  <PeriodeSkeleton />
+                  <PeriodeSkeleton />
+                </>
+              ) : (
+                <>
+                  <Card className="shadow-sm border border-dashed bg-muted/30 hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between pb-1">
+                      <CardTitle className="text-xs font-medium text-gray-600">
+                        Periode Awal
+                      </CardTitle>
+                      <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent className="flex flex-col justify-center">
+                      <div className="text-lg font-bold text-gray-900 mb-1">
+                        {rangeData?.periode_awal || "-"}
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Tanggal Mulai Periode
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="shadow-sm border border-dashed bg-muted/30 hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between pb-1">
+                      <CardTitle className="text-xs font-medium text-gray-600">
+                        Periode Akhir
+                      </CardTitle>
+                      <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent className="flex flex-col justify-center">
+                      <div className="text-lg font-bold text-gray-900 mb-1">
+                        {rangeData?.periode_akhir || "-"}
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Tanggal Akhir Periode
+                      </p>
+                    </CardContent>
+                  </Card>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Score Section */}
+          <div className="space-y-3">
+            <h2 className="text-lg font-semibold text-gray-900">
+              Skor Penilaian
+            </h2>
+            <div className="grid gap-4 md:grid-cols-3">
+              {loading ? (
+                <>
+                  <ScoreSkeleton bgColor="bg-blue-100" />
+                  <ScoreSkeleton bgColor="bg-green-100" />
+                  <ScoreSkeleton bgColor="bg-yellow-100" />
+                </>
+              ) : (
+                <>
+                  <Card className="p-0 overflow-hidden text-center hover:shadow-lg transition-shadow">
+                    <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                      <h4 className="text-sm font-semibold text-blue-800">
+                        Skor Kanwil
+                      </h4>
+                      <BarChart3 className="h-4 w-4 text-blue-700" />
+                    </div>
+                    <CardContent className="pb-6 pt-6">
+                      <div className="text-5xl font-bold text-blue-900 mb-2">
+                        {skorKanwil}
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Nilai Akhir (Max 4)
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="p-0 overflow-hidden text-center hover:shadow-lg transition-shadow">
+                    <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                      <h4 className="text-sm font-semibold text-green-800">
+                        Skor Cabang
+                      </h4>
+                      <BarChart3 className="h-4 w-4 text-green-700" />
+                    </div>
+                    <CardContent className="pb-6 pt-6">
+                      <div className="text-5xl font-bold text-green-900 mb-2">
+                        {skorCabang}
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Nilai Akhir (Max 4)
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="p-0 overflow-hidden text-center hover:shadow-lg transition-shadow">
+                    <div className="bg-yellow-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                      <h4 className="text-sm font-semibold text-yellow-800">
+                        Skor Samsat Se-Jateng
+                      </h4>
+                      <BarChart3 className="h-4 w-4 text-yellow-700" />
+                    </div>
+                    <CardContent className="pb-6 pt-6">
+                      <div className="text-5xl font-bold text-yellow-900 mb-2">
+                        {skorSamsat}
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Nilai Akhir (Max 4)
+                      </p>
+                    </CardContent>
+                  </Card>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Information Section */}
+          <div className="space-y-3">
+            <h2 className="text-lg font-semibold text-gray-900">
+              Informasi Penilaian
+            </h2>
+            <div className="grid gap-4 lg:grid-cols-3">
+              {loading ? (
+                <>
+                  <InfoCardSkeleton />
+                  <InfoCardSkeleton />
+                  <InfoCardSkeleton />
+                </>
+              ) : (
+                <>
+                  <Card className="shadow-sm border border-dashed bg-muted/30 hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between pb-1">
+                      <CardTitle className="text-sm font-medium text-gray-700">
+                        Obyek Penilaian
+                      </CardTitle>
+                      <LandPlot className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent className="py-4">
+                      <ol className="list-decimal pl-5 text-sm font-semibold text-gray-900 mb-3 space-y-1">
+                        <li>Kantor Wilayah</li>
+                        <li>Kantor Cabang</li>
+                        <li>Kantor Samsat</li>
+                      </ol>
+                      <p className="text-xs text-muted-foreground">
+                        3 Obyek Penilaian
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="shadow-sm border border-dashed bg-muted/30 hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between pb-1">
+                      <CardTitle className="text-sm font-medium text-gray-700">
+                        Banner Kesamsatan
+                      </CardTitle>
+                      <FileText className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent className="py-4 space-y-2">
+                      <ol className="list-decimal pl-5 text-sm font-medium text-gray-900 space-y-1">
+                        <li>Banner Terkait Jasa Raharja</li>
+                        <li>Banner Terkait JRku Reward</li>
+                        <li>Banner Terkait Signal</li>
+                        <li>Banner Terkait Layanan Online</li>
+                        <li>
+                          Banner Terkait Fungsi Regident, PKB, dan SWDKLLJ
+                        </li>
+                      </ol>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="shadow-sm border border-dashed bg-muted/30 hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between pb-1">
+                      <CardTitle className="text-sm font-medium text-gray-700">
+                        Formula
+                      </CardTitle>
+                      <Radical className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent className="py-4">
+                      <div className="space-y-3 text-sm">
+                        <div className="border-l-4 border-blue-200 pl-3">
+                          <p className="font-semibold text-gray-900 mb-1">
+                            Terlaksananya Sosialisasi Kesamsatan di IG Kanwil
+                          </p>
+                          <p className="text-gray-600 text-xs">
+                            = Realisasi / Target (8 Postingan per Bulan)
+                          </p>
+                        </div>
+                        <div className="border-l-4 border-green-200 pl-3">
+                          <p className="font-semibold text-gray-900 mb-1">
+                            Terlaksananya Sosialisasi Kesamsatan di IG Cabang
+                          </p>
+                          <p className="text-gray-600 text-xs">
+                            = Realisasi / Target (8 Postingan per Bulan Per
+                            Cabang)
+                          </p>
+                        </div>
+                        <div className="border-l-4 border-yellow-200 pl-3">
+                          <p className="font-semibold text-gray-900 mb-1">
+                            Tersedianya Banner Kesamsatan
+                          </p>
+                          <p className="text-gray-600 text-xs">
+                            = Realisasi / Target
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Data Tables Section */}
+          <div className="space-y-6">
+            <h2 className="text-lg font-semibold text-gray-900">
+              Data Tabel Penilaian
+            </h2>
+
             {loading ? (
-              <>
-                <SkeletonCard />
-                <SkeletonCard />
-                <SkeletonCard />
-                <SkeletonCard />
-              </>
+              <div className="space-y-6">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <TableSkeleton key={i} />
+                ))}
+              </div>
             ) : (
               <>
-                <Card className="shadow-sm border border-dashed bg-muted/30">
-                  <CardHeader className="flex flex-row items-center justify-between pb-1">
-                    <CardTitle className="text-xs font-medium">
-                      Periode Awal
+                <Card className="shadow-sm hover:shadow-md transition-shadow">
+                  <CardHeader className="bg-gray-50 border-b">
+                    <CardTitle className="text-base">
+                      Pelaksanaan Sosialisasi Kesamsatan - Kanwil
                     </CardTitle>
-                    <CalendarDays className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="flex flex-col justify-center">
-                    <div className="text-base font-semibold text-gray-900">
-                      {rangeData.periode_awal}
-                    </div>
-                    <p className="text-xs">Tanggal Mulai Periode</p>
+                  <CardContent className="p-6">
+                    <RenderTable data={table1Data} />
                   </CardContent>
                 </Card>
 
-                {/* Periode Akhir */}
-                <Card className="shadow-sm border border-dashed bg-muted/30">
-                  <CardHeader className="flex flex-row items-center justify-between pb-1">
-                    <CardTitle className="text-xs font-medium">
-                      Periode Akhir
+                <Card className="shadow-sm hover:shadow-md transition-shadow">
+                  <CardHeader className="bg-gray-50 border-b">
+                    <CardTitle className="text-base">
+                      Pelaksanaan Sosialisasi Kesamsatan - Per Cabang
                     </CardTitle>
-                    <CalendarDays className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="flex flex-col justify-center">
-                    <div className="text-base font-semibold text-gray-900">
-                      {rangeData.periode_akhir}
-                    </div>
-                    <p className="text-xs">Tanggal Akhir Periode</p>
+                  <CardContent className="p-6">
+                    <RenderTable data={table2Data} />
+                  </CardContent>
+                </Card>
+
+                <Card className="shadow-sm hover:shadow-md transition-shadow">
+                  <CardHeader className="bg-gray-50 border-b">
+                    <CardTitle className="text-base">
+                      Skor Pelaksanaan Sosialisasi Kesamsatan - Per Samsat
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <RenderTable data={table3Data} />
+                  </CardContent>
+                </Card>
+
+                <Card className="shadow-sm hover:shadow-md transition-shadow">
+                  <CardHeader className="bg-gray-50 border-b">
+                    <CardTitle className="text-base">
+                      Pengisian Data Banner Sosialisasi Kesamsatan - Per Samsat
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <RenderTable4 data={table4Data} />
+                  </CardContent>
+                </Card>
+
+                <Card className="shadow-sm hover:shadow-md transition-shadow">
+                  <CardHeader className="bg-gray-50 border-b">
+                    <CardTitle className="text-base">
+                      Pengisian Data IG Sosialisasi Kesamsatan - Kanwil & Cabang
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <RenderTable data={table5Data} isTable5={true} />
                   </CardContent>
                 </Card>
               </>
             )}
           </div>
-
-          <div className="grid gap-4 md:grid-cols-3">
-            {/* Skor Kanwil */}
-            <Card className="p-0 overflow-hidden pb-4 text-center">
-              <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                <h4 className="text-sm font-semibold text-blue-800">
-                  Skor Kanwil
-                </h4>
-                <BarChart3 className="h-4 w-4 text-blue-700" />
-              </div>
-              <CardContent className="pb-4">
-                <div className="text-6xl font-bold text-blue-900">
-                  {skorKanwil}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Nilai Akhir (Max 4)
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Skor Cabang */}
-            <Card className="p-0 overflow-hidden pb-4 text-center">
-              <div className="bg-green-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                <h4 className="text-sm font-semibold text-green-800">
-                  Skor Cabang
-                </h4>
-                <BarChart3 className="h-4 w-4 text-green-700" />
-              </div>
-              <CardContent className="pb-4">
-                <div className="text-6xl font-bold text-green-900">
-                  {skorCabang}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Nilai Akhir (Max 4)
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Skor Samsat Se-Jateng */}
-            <Card className="p-0 overflow-hidden pb-4 text-center">
-              <div className="bg-yellow-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                <h4 className="text-sm font-semibold text-yellow-800">
-                  Skor Samsat Se-Jateng
-                </h4>
-                <BarChart3 className="h-4 w-4 text-yellow-700" />
-              </div>
-              <CardContent className="pb-4">
-                <div className="text-6xl font-bold text-yellow-900">
-                  {skorSamsat}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Nilai Akhir (Max 4)
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-          <div className="grid gap-4 md:grid-cols-3">
-            {/* Obyek Penilaian */}
-            <Card className="shadow-sm border border-dashed bg-muted/30">
-              <CardHeader className="flex flex-row items-center justify-between pb-1">
-                <CardTitle className="text-xs font-medium">
-                  Obyek Penilaian
-                </CardTitle>
-                <LandPlot className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent className="py-6 px-5">
-                <ol className="list-decimal pl-5 text-sm font-bold text-gray-900 mb-1">
-                  <li>Kantor Wilayah</li>
-                  <li>Kantor Cabang</li>
-                  <li>Kantor Samsat</li>
-                </ol>
-                <p className="text-xs text-muted-foreground">
-                  3 Obyek Penilaian
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Banner Kesamsatan */}
-            <Card className="shadow-sm border border-dashed bg-muted/30">
-              <CardHeader className="flex flex-row items-center justify-between pb-1">
-                <CardTitle className="text-xs font-medium">
-                  Banner Kesamsatan
-                </CardTitle>
-                <FileText className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent className="py-4 px-5 space-y-3">
-                <ol className="list-decimal pl-5 text-sm font-semibold text-gray-900">
-                  <li>Banner Terkait Jasa Raharja</li>
-                  <li>Banner Terkait JRku Reward</li>
-                  <li>Banner Terkait Signal</li>
-                  <li>Banner Terkait Layanan Online</li>
-                  <li>Banner Terkait Fungsi Regident, PKB, dan SWDKLLJ</li>
-                </ol>
-              </CardContent>
-            </Card>
-
-            {/* Formula */}
-            <Card className="shadow-sm border border-dashed bg-muted/30">
-              <CardHeader className="flex flex-row items-center justify-between pb-1">
-                <CardTitle className="text-xs font-medium">Forumula</CardTitle>
-                <Radical className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent className="py-4 px-5 italic">
-                <ol className="list-decimal pl-5 divide-y divide-gray-200 text-sm">
-                  <li className="py-2 text-muted-foreground">
-                    <span className="font-semibold text-gray-900">
-                      Terlaksananya Sosialisasi Kesamsatan di IG Kanwil
-                    </span>
-                    <span className="text-gray-600">
-                      {" "}
-                      = Realisasi / Target (8 Postingan per Bulan)
-                    </span>
-                  </li>
-                  <li className="py-2 text-muted-foreground">
-                    <span className="font-semibold text-gray-900">
-                      Terlaksananya Sosialisasi Kesamsatan di IG Cabang
-                    </span>
-                    <span className="text-gray-600">
-                      {" "}
-                      = Realisasi / Target (8 Postingan per Bulan Per Cabang)
-                    </span>
-                  </li>
-                  <li className="py-2 text-muted-foreground">
-                    <span className="font-semibold text-gray-900">
-                      Tersedianya Banner Kesamsatan
-                    </span>
-                    <span className="text-gray-600"> = Realisasi / Target</span>
-                  </li>
-                </ol>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Table 1 */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Pelaksanaan Sosialisasi Kesamsatan - Kanwil</CardTitle>
-              <CardDescription>
-                Rekap data sosialisasi tingkat Kanwil
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <RenderTable data={table1Data} />
-            </CardContent>
-          </Card>
-
-          {/* Table 2 */}
-          <Card>
-            <CardHeader>
-              <CardTitle>
-                Pelaksanaan Sosialisasi Kesamsatan - Per Cabang
-              </CardTitle>
-              <CardDescription>
-                Detail pelaksanaan sosialisasi di tiap cabang
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <RenderTable data={table2Data} />
-            </CardContent>
-          </Card>
-
-          {/* Table 3 */}
-          <Card>
-            <CardHeader>
-              <CardTitle>
-                Skor Pelaksanaan Sosialisasi Kesamsatan - Per Samsat
-              </CardTitle>
-              <CardDescription>
-                Nilai akhir sosialisasi berdasarkan masing-masing Samsat
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <RenderTable data={table3Data} />
-            </CardContent>
-          </Card>
-
-          {/* Table 4 */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base font-semibold">
-                Pengisian Data Banner Sosialisasi Kesamsatan - Per Samsat
-              </CardTitle>
-              <CardDescription className="text-sm text-gray-500">
-                Monitoring kelengkapan banner sosialisasi
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <RenderTable4 data={table4Data} />
-            </CardContent>
-          </Card>
-
-          {/* Table 5 */}
-          <Card>
-            <CardHeader>
-              <CardTitle>
-                Pengisian Data IG Sosialisasi Kesamsatan - Kanwil & Cabang
-              </CardTitle>
-              <CardDescription>
-                Rekap postingan IG pada tingkat Kanwil dan Cabang
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <RenderTable data={table5Data} />
-            </CardContent>
-          </Card>
         </div>
       </SidebarInset>
     </SidebarProvider>

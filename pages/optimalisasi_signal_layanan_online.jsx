@@ -11,9 +11,8 @@ import {
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CalendarDays, BarChart3, FileText, LandPlot, Radical } from "lucide-react";
+import { CalendarDays, BarChart3, LandPlot, Radical } from "lucide-react";
 import Navbar from "@/components/navbar";
-import RenderTable4 from "@/components/sosialisasikesamsatan/RenderTable4";
 import React from "react";
 
 export default function MenuTujuh() {
@@ -51,24 +50,54 @@ export default function MenuTujuh() {
     fetchRangeData();
   }, []);
 
-  // Skeleton Card
-  const SkeletonCard = () => (
-    <Card className="p-0 overflow-hidden">
-      <div className="px-5 py-3 border-b">
-        <Skeleton className="h-4 w-1/4 mb-2" />
-      </div>
-      <CardContent className="py-6 px-5 space-y-2">
-        <Skeleton className="h-8 w-1/3" />
-        <Skeleton className="h-4 w-2/3" />
+  // Skeleton untuk Top Info Card
+  const SkeletonInfoCard = () => (
+    <Card className="shadow-sm border border-dashed bg-muted/30">
+      <CardHeader className="flex flex-row items-center justify-between pb-1">
+        <Skeleton className="h-3 w-1/4" />
+        <Skeleton className="h-3 w-3 rounded-full" />
+      </CardHeader>
+      <CardContent className="py-2 px-4 space-y-2">
+        <Skeleton className="h-5 w-1/3" />
+        <Skeleton className="h-3 w-1/2" />
       </CardContent>
     </Card>
   );
 
+  // Skeleton untuk Skor Kanwil
+  const SkeletonScoreCard = () => (
+    <Card className="p-0 overflow-hidden pb-4 text-center">
+      <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+        <Skeleton className="h-4 w-20" />
+        <Skeleton className="h-4 w-4 rounded-full" />
+      </div>
+      <CardContent className="pb-9 space-y-2">
+        <Skeleton className="h-16 w-32 mx-auto" />
+        <Skeleton className="h-3 w-24 mx-auto" />
+      </CardContent>
+    </Card>
+  );
+
+  // Skeleton untuk Table
+  const SkeletonTable = () => (
+    <Card>
+      <CardHeader>
+        <Skeleton className="h-4 w-1/3" />
+        <Skeleton className="h-3 w-1/4 mt-1" />
+      </CardHeader>
+      <CardContent>
+        <Skeleton className="h-[200px] w-full" />
+      </CardContent>
+    </Card>
+  );
+
+  // Render table (tetap sama)
+  // Render table (isi semua tengah, kecuali kolom ke-2)
   const RenderTable = ({ data, isTable5 }) => {
     if (!data) return <Skeleton className="h-[200px] w-full" />;
 
     return (
-      <div className="overflow-x-auto text-center">
+      <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-300">
           <thead>
             <tr className="bg-gray-50">
@@ -78,25 +107,25 @@ export default function MenuTujuh() {
               ).map((header, idx) => (
                 <th
                   key={idx}
-                  className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700"
+                  className={`border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 ${
+                    idx === 1 ? "text-left" : "text-center"
+                  }`}
                 >
                   {header}
                 </th>
               ))}
             </tr>
           </thead>
-
           <tbody>
             {Array.isArray(data?.data) &&
               data.data.map((row, idx) => {
-                // Nested (cabang + samsat)
                 if (row?.cabang && Array.isArray(row?.samsat)) {
                   return (
                     <React.Fragment key={idx}>
                       <tr className="bg-gray-100">
                         <td
                           colSpan={data.header?.[0]?.length || 7}
-                          className="border border-gray-300 px-4 py-2 text-sm font-bold"
+                          className="border border-gray-300 px-4 py-2 text-sm font-bold text-center"
                         >
                           {row.cabang}
                         </td>
@@ -110,7 +139,7 @@ export default function MenuTujuh() {
                             <tr key={samsatIdx} className="bg-green-100">
                               <td
                                 colSpan={data.header?.[0]?.length || 7}
-                                className="border border-gray-300 px-4 py-2 text-sm font-semibold text-green-800"
+                                className="border border-gray-300 px-4 py-2 text-sm font-semibold text-green-800 text-center"
                               >
                                 {samsatRow[0]}
                               </td>
@@ -120,7 +149,6 @@ export default function MenuTujuh() {
                         return (
                           <tr key={samsatIdx} className="hover:bg-gray-50">
                             {samsatRow.map((cell, cIdx) => {
-                              // Tabel5: hilangkan 0 di kolom TOTAL KANWIL & TOTAL CABANG
                               if (
                                 isTable5 &&
                                 (cell === 0 || cell === "0") &&
@@ -129,13 +157,17 @@ export default function MenuTujuh() {
                                 return (
                                   <td
                                     key={cIdx}
-                                    className="border border-gray-300 px-4 py-2 text-sm"
+                                    className={`border border-gray-300 px-4 py-2 text-sm ${
+                                      cIdx === 1 ? "text-left" : "text-center"
+                                    }`}
                                   ></td>
                                 );
                               return (
                                 <td
                                   key={cIdx}
-                                  className="border border-gray-300 px-4 py-2 text-sm"
+                                  className={`border border-gray-300 px-4 py-2 text-sm ${
+                                    cIdx === 1 ? "text-left" : "text-center"
+                                  }`}
                                 >
                                   {cell}
                                 </td>
@@ -148,13 +180,14 @@ export default function MenuTujuh() {
                   );
                 }
 
-                // Flat data
                 return (
                   <tr key={idx} className="hover:bg-gray-50">
                     {row.map((cell, cIdx) => (
                       <td
                         key={cIdx}
-                        className="border border-gray-300 px-4 py-2 text-sm"
+                        className={`border border-gray-300 px-4 py-2 text-sm ${
+                          cIdx === 1 ? "text-left" : "text-center"
+                        }`}
                       >
                         {cell}
                       </td>
@@ -162,29 +195,26 @@ export default function MenuTujuh() {
                   </tr>
                 );
               })}
-            {/* Summary */}
+
             {data?.summary &&
               (Array.isArray(data.summary) ? (
-                <tr className="font-medium text-center bg-gray-100">
-                  {/* Kolom Total span 2 kolom */}
+                <tr className="font-medium bg-gray-100">
                   <td
                     colSpan={2}
-                    className="border border-gray-300 px-4 py-2 text-sm font-bold text-center"
+                    className="border border-gray-300 px-4 py-2 text-sm font-bold text-left"
                   >
                     {data.summary[0]}
                   </td>
-
                   {data.summary.slice(1).map((cell, idx) => (
                     <td
                       key={idx}
-                      className="border border-gray-300 px-4 py-2 text-sm font-semibold"
+                      className="border border-gray-300 px-4 py-2 text-sm font-semibold text-center"
                     >
                       {cell}
                     </td>
                   ))}
                 </tr>
               ) : (
-                // Summary berupa object (misalnya { total_kanwil: [...], total_cabang: [...] })
                 Object.values(data.summary).map((row, idx) => (
                   <tr
                     key={idx}
@@ -199,14 +229,18 @@ export default function MenuTujuh() {
                         return (
                           <td
                             key={cIdx}
-                            className="border border-gray-300 px-4 py-2 text-sm font-semibold"
+                            className={`border border-gray-300 px-4 py-2 text-sm font-semibold ${
+                              cIdx === 1 ? "text-left" : "text-center"
+                            }`}
                           ></td>
                         );
                       }
                       return (
                         <td
                           key={cIdx}
-                          className="border border-gray-300 px-4 py-2 text-sm font-semibold"
+                          className={`border border-gray-300 px-4 py-2 text-sm font-semibold ${
+                            cIdx === 1 ? "text-left" : "text-center"
+                          }`}
                         >
                           {cell || ""}
                         </td>
@@ -221,7 +255,6 @@ export default function MenuTujuh() {
     );
   };
 
-  // Skor dari summary
   const skorKanwil = table1Data?.summary?.[8] ?? "?";
 
   return (
@@ -230,13 +263,14 @@ export default function MenuTujuh() {
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
         <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
-          {/* Top Info */}
+          {/* Top Info (4 Card) */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {loading ? (
               <>
-                <SkeletonCard />
-                <SkeletonCard />
-                <SkeletonCard />
+                <SkeletonInfoCard />
+                <SkeletonInfoCard />
+                <SkeletonInfoCard />
+                <SkeletonInfoCard />
               </>
             ) : (
               <>
@@ -294,7 +328,7 @@ export default function MenuTujuh() {
                 <Card className="shadow-sm border border-dashed bg-muted/30">
                   <CardHeader className="flex flex-row items-center justify-between pb-1">
                     <CardTitle className="text-xs font-medium">
-                      Forumula
+                      Formula
                     </CardTitle>
                     <Radical className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
@@ -306,7 +340,7 @@ export default function MenuTujuh() {
                     <p className="italic text-xs text-gray-600">
                       = Realisasi / Target
                     </p>
-                    <br/>
+                    <br />
                     <p className="italic text-xs text-blue-600">
                       *) Target pertumbuhan 5%
                     </p>
@@ -318,39 +352,46 @@ export default function MenuTujuh() {
 
           {/* Skor Kanwil */}
           <div className="grid gap-4 md:grid-cols-1">
-            <Card className="p-0 overflow-hidden pb-4 text-center">
-              <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                <h4 className="text-sm font-semibold text-blue-800">
-                  Skor Kanwil
-                </h4>
-                <div className="bg-blue-200 rounded-full">
-                  <BarChart3 className="h-4 w-4 text-blue-700" />
+            {loading ? (
+              <SkeletonScoreCard />
+            ) : (
+              <Card className="p-0 overflow-hidden pb-4 text-center">
+                <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
+                  <h4 className="text-sm font-semibold text-blue-800">
+                    Skor Kanwil
+                  </h4>
+                  <div className="bg-blue-200 rounded-full">
+                    <BarChart3 className="h-4 w-4 text-blue-700" />
+                  </div>
                 </div>
-              </div>
-              <CardContent className="pb-9">
-                <div className="text-7xl font-bold text-blue-900">
-                  {skorKanwil}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Target Skor{" "}
-                  <span className="text-gray-500">| 4 (Nilai Max)</span>
-                </p>
-              </CardContent>
-            </Card>
+                <CardContent className="pb-9">
+                  <div className="text-7xl font-bold text-blue-900">
+                    {skorKanwil}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Target Skor{" "}
+                    <span className="text-gray-500">| 4 (Nilai Max)</span>
+                  </p>
+                </CardContent>
+              </Card>
+            )}
           </div>
 
           {/* Table 1 */}
-          <Card>
-            <CardHeader>
-              <CardTitle>
-                Rekapitulasi Penerimaan SIGNAL & Layanan Online
-              </CardTitle>
-              <CardDescription>Rekap</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <RenderTable data={table1Data} />
-            </CardContent>
-          </Card>
+          {loading ? (
+            <SkeletonTable />
+          ) : (
+            <Card>
+              <CardHeader>
+                <CardTitle>
+                  Rekapitulasi Penerimaan SIGNAL & Layanan Online
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <RenderTable data={table1Data} />
+              </CardContent>
+            </Card>
+          )}
         </div>
       </SidebarInset>
     </SidebarProvider>

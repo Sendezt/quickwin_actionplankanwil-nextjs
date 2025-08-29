@@ -6,27 +6,34 @@ const RenderTable4 = ({ data }) => {
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse border border-gray-300">
-        <thead className="bg-gray-100 text-base font-semibold">
+        <thead className="bg-gray-100 font-semibold">
           <tr>
-            <th rowSpan={2} className="border px-4 py-2">
-              No
+            {/* No */}
+            <th rowSpan={2} className="border px-4 py-2 whitespace-nowrap">
+              {data.headerTop[0]}
             </th>
-            <th rowSpan={2} className="border px-4 py-2">
-              Samsat Induk
+            {/* Samsat Induk */}
+            <th rowSpan={2} className="border px-4 py-2 whitespace-nowrap">
+              {data.headerTop[1]}
             </th>
+            {/* Jenis Banner (colspan) */}
             <th
               colSpan={data.headerBottom.length}
-              className="border px-4 py-2 text-center"
+              className="border px-4 py-2 text-center whitespace-nowrap"
             >
-              Jenis Banner
+              {data.headerTop[2]}
             </th>
-            <th rowSpan={2} className="border px-4 py-2">
-              Total
+            {/* Total */}
+            <th rowSpan={2} className="border px-4 py-2 whitespace-nowrap">
+              {data.headerTop[3]}
             </th>
           </tr>
           <tr>
             {data.headerBottom.map((h, idx) => (
-              <th key={idx} className="border px-4 py-2 text-center">
+              <th
+                key={idx}
+                className="border px-4 py-2 text-center whitespace-nowrap"
+              >
                 {h}
               </th>
             ))}
@@ -40,7 +47,7 @@ const RenderTable4 = ({ data }) => {
               <tr>
                 <td
                   colSpan={data.headerBottom.length + 3}
-                  className="bg-gray-200 font-semibold text-base px-4 py-2"
+                  className="bg-gray-200 font-semibold text-base px-4 py-2 text-left"
                 >
                   {row.cabang}
                 </td>
@@ -49,7 +56,10 @@ const RenderTable4 = ({ data }) => {
               {row.samsat.map((sRow, sIdx) => (
                 <tr key={sIdx}>
                   {sRow.map((col, cIdx) => (
-                    <td key={cIdx} className="border px-4 py-2 text-center">
+                    <td
+                      key={cIdx}
+                      className={cIdx === 1 ? "border px-4 py-2 text-left whitespace-nowrap" : "border px-4 py-2 text-center whitespace-nowrap"}
+                    >
                       {col}
                     </td>
                   ))}
@@ -61,12 +71,10 @@ const RenderTable4 = ({ data }) => {
           {/* Summary */}
           {data.summary && (
             <tr className="bg-gray-100 font-bold text-sm">
-              {/* Ambil summary[0] = "TOTAL" untuk gabung kolom pertama */}
+              {/* Kolom pertama gabung No + Samsat Induk */}
               <td colSpan={2} className="border px-4 py-2 text-center">
                 {data.summary[0]}
               </td>
-
-              {/* Sisanya dari summary[1..] */}
               {data.summary.slice(1).map((val, idx) => (
                 <td key={idx} className="border px-4 py-2 text-center">
                   {val}
