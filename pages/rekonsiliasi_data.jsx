@@ -291,7 +291,15 @@ export default function MenuEmpat() {
 
             {/* === Tambahan Tabel === */}
             <TableCardWrapper
-              title="Rekapitulasi Rekonsiliasi Data Per Cabang"
+              title={
+                <>
+                  <span className="text-xl">
+                    Rekapitulasi{" "}
+                    <span className="text-red-700">Rekonsiliasi Data</span> Per
+                    Cabang
+                  </span>
+                </>
+              }
               headers={table1Data?.header?.[0] ?? []}
               data={table1Data?.data ?? []}
               summary={table1Data?.summary ?? []}
@@ -299,7 +307,15 @@ export default function MenuEmpat() {
               isNested={false}
             />
             <TableCardWrapper
-              title="Skor Pelaksanaan Rekonsiliasi Data - Per Samsat"
+              title={
+                <>
+                  <span className="text-xl">
+                    Skor Pelaksanaan{" "}
+                    <span className="text-red-700">Rekonsiliasi Data</span> -
+                    Per Samsat
+                  </span>
+                </>
+              }
               headers={table2Data?.header?.[0] ?? []}
               data={table2Data?.data ?? []}
               summary={table2Data?.summary ?? []}
@@ -307,7 +323,15 @@ export default function MenuEmpat() {
               isNested={true}
             />
             <TableCardWrapper
-              title="Rekapitulasi Pelaksanaan Rekonsiliasi Data - Per Samsat"
+              title={
+                <>
+                  <span className="text-xl">
+                    Rekapitulasi Pelaksanaan{" "}
+                    <span className="text-red-700">Rekonsiliasi Data</span> -
+                    Per Samsat
+                  </span>
+                </>
+              }
               headers={table3Data?.header?.[0] ?? []}
               data={table3Data?.data ?? []}
               summary={table3Data?.summary ?? []}
