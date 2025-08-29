@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import FeedbackFormModal from "@/components/feedback/FeedbackFormModal";
+import FeedbackModal from "@/components/feedback/FeedbackModal"; // ⬅️ import konfirmasi modal
 
 export default function FeedbackPage() {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -26,9 +27,13 @@ export default function FeedbackPage() {
   const [actionPlans, setActionPlans] = useState([]);
   const [isCreating, setIsCreating] = useState(false);
 
-  // state untuk modal tambah feedback
+  // state modal tambah feedback
   const [showModal, setShowModal] = useState(false);
   const [selectedCabang, setSelectedCabang] = useState(null);
+
+  // state modal konfirmasi tandai selesai
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [selectedFeedback, setSelectedFeedback] = useState(null);
 
   useEffect(() => {
     loadData();
@@ -58,6 +63,12 @@ export default function FeedbackPage() {
     setShowModal(false);
     resetForm();
     loadData();
+  };
+
+  // buka modal konfirmasi tandai selesai
+  const handleOpenConfirm = (feedback) => {
+    setSelectedFeedback(feedback);
+    setConfirmOpen(true);
   };
 
   const handleSelesai = async (id) => {
@@ -90,9 +101,11 @@ export default function FeedbackPage() {
                     <table className="w-full text-sm">
                       <thead className="bg-gray-100">
                         <tr>
-                          <th className="p-2 text-left">Task</th>
                           <th className="p-2 text-left">Action Plan</th>
+                          <th className="p-2 text-left">Feedback</th>
                           <th className="p-2 text-left">Status</th>
+                          <th className="p-2 text-left">Proses</th>
+                          <th className="p-2 text-left">Selesai</th>
                           <th className="p-2 text-right">Aksi</th>
                         </tr>
                       </thead>
@@ -101,9 +114,23 @@ export default function FeedbackPage() {
                           .filter((fb) => fb.cabangId === cabang.id)
                           .map((fb) => (
                             <tr key={fb.id} className="border-t">
-                              <td className="p-2">{fb.task}</td>
                               <td className="p-2">{fb.actionPlan?.title}</td>
+                              <td className="p-2">{fb.task}</td>
                               <td className="p-2">{fb.status}</td>
+                              <td className="p-2">
+                                {fb.timestampProses
+                                  ? new Date(fb.timestampProses).toLocaleString(
+                                      "id-ID"
+                                    )
+                                  : "-"}
+                              </td>
+                              <td className="p-2">
+                                {fb.timestampSelesai
+                                  ? new Date(
+                                      fb.timestampSelesai
+                                    ).toLocaleString("id-ID")
+                                  : "-"}
+                              </td>
                               <td className="p-2 text-right">
                                 {fb.status !== "selesai" && (
                                   <Button
@@ -122,7 +149,7 @@ export default function FeedbackPage() {
                           .length === 0 && (
                           <tr>
                             <td
-                              colSpan="4"
+                              colSpan="6"
                               className="p-3 text-center text-gray-500"
                             >
                               Belum ada feedback.
@@ -146,7 +173,15 @@ export default function FeedbackPage() {
           onClose={() => setShowModal(false)}
           onSubmit={handleCreate}
           isCreating={isCreating}
-          selectedCabang={selectedCabang} // ⬅️ tambahan prop
+          selectedCabang={selectedCabang}
+        />
+
+        {/* Modal Konfirmasi Tandai Selesai */}
+        <FeedbackModal
+          open={confirmOpen}
+          onClose={() => setConfirmOpen(false)}
+          feedback={selectedFeedback}
+          onConfirm={handleSelesai}
         />
       </SidebarInset>
     </SidebarProvider>
