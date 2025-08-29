@@ -388,8 +388,12 @@ export default function MenuEnam() {
               <>
                 <Card className="shadow-sm hover:shadow-md transition-shadow">
                   <CardHeader className="bg-gray-50 border-b">
-                    <CardTitle className="text-base">
-                      Pelaksanaan Sosialisasi Kesamsatan - Kanwil
+                    <CardTitle className="text-xl">
+                      Pelaksanaan{" "}
+                      <span className="text-red-700">
+                        Sosialisasi Kesamsatan
+                      </span>{" "}
+                      - Kanwil
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-6">
@@ -399,8 +403,12 @@ export default function MenuEnam() {
 
                 <Card className="shadow-sm hover:shadow-md transition-shadow">
                   <CardHeader className="bg-gray-50 border-b">
-                    <CardTitle className="text-base">
-                      Pelaksanaan Sosialisasi Kesamsatan - Per Cabang
+                    <CardTitle className="text-xl">
+                      Pelaksanaan{" "}
+                      <span className="text-red-700">
+                        Sosialisasi Kesamsatan
+                      </span>{" "}
+                      - Per Cabang
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-6">
@@ -410,8 +418,12 @@ export default function MenuEnam() {
 
                 <Card className="shadow-sm hover:shadow-md transition-shadow">
                   <CardHeader className="bg-gray-50 border-b">
-                    <CardTitle className="text-base">
-                      Skor Pelaksanaan Sosialisasi Kesamsatan - Per Samsat
+                    <CardTitle className="text-xl">
+                      Skor Pelaksanaan{" "}
+                      <span className="text-red-700">
+                        Sosialisasi Kesamsatan
+                      </span>{" "}
+                      - Per Samsat
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-6">
@@ -421,8 +433,12 @@ export default function MenuEnam() {
 
                 <Card className="shadow-sm hover:shadow-md transition-shadow">
                   <CardHeader className="bg-gray-50 border-b">
-                    <CardTitle className="text-base">
-                      Pengisian Data Banner Sosialisasi Kesamsatan - Per Samsat
+                    <CardTitle className="text-xl">
+                      Pengisian Data Banner{" "}
+                      <span className="text-red-700">
+                        Sosialisasi Kesamsatan
+                      </span>{" "}
+                      - Per Samsat
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-6">
@@ -432,8 +448,12 @@ export default function MenuEnam() {
 
                 <Card className="shadow-sm hover:shadow-md transition-shadow">
                   <CardHeader className="bg-gray-50 border-b">
-                    <CardTitle className="text-base">
-                      Pengisian Data IG Sosialisasi Kesamsatan - Kanwil & Cabang
+                    <CardTitle className="text-xl">
+                      Pengisian Data IG{" "}
+                      <span className="text-orange-500">
+                        Sosialisasi Kesamsatan
+                      </span>{" "}
+                      - Kanwil & Cabang
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-6">
