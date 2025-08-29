@@ -300,7 +300,11 @@ export default function MenuDua() {
 
               {/* Content Card */}
               <CardContent className="py-6 italic space-y-6">
+<<<<<<< HEAD
                 {/* Forumula 1 */}
+=======
+                {/* Formula 1 */}
+>>>>>>> 338067e124e7d877e1ef7a00f32b512f4229f2ac
                 <div className="pb-4 border-b last:border-0">
                   <p className="text-sm leading-relaxed text-gray-600">
                     <span className="font-semibold italic text-gray-900">

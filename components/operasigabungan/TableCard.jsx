@@ -1,91 +1,122 @@
 "use client";
 
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
   Card,
+  CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-  CardContent,
 } from "@/components/ui/card";
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function TableCard({ title, description, headers, data, summary, isLoading, highlightIndex }) {
+export default function TableCard({
+  title,
+  description,
+  headers,
+  data,
+  summary,
+  isLoading,
+}) {
+  const normalizedSummary = Array.isArray(summary?.[0])
+    ? summary
+    : summary && summary.length
+    ? [summary]
+    : [];
+
   return (
-    <Card>
+    <Card className="overflow-hidden">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
-      <CardContent>
-        <div className="overflow-x-auto">
-          {isLoading ? (
-            <Skeleton className="h-24 w-full" />
-          ) : (
-            <Table className="w-full table-fixed border border-gray-300 border-collapse">
-              <TableHeader>
-                <TableRow className="bg-gray-100">
-                  {headers.map((header, index) => (
-                    <TableHead
-                      key={index}
-                      className="border border-gray-300 text-center px-2 py-1 text-sm font-semibold whitespace-pre-line min-w-[100px]"
-                    >
-                      {header}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {data.map((row, index) => (
-                  <TableRow key={index} className="border border-gray-300">
-                    {row.map((cell, cellIndex) => (
-                      <TableCell
-                        key={cellIndex}
-                        className="border border-gray-300 text-center px-2 py-1 text-sm"
-                      >
-                        {cellIndex === highlightIndex ? (
-                          <Badge variant="outline">{cell}</Badge>
-                        ) : cellIndex === 4 && cell === "100.00" ? (
-                          <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
-                            {cell}
-                          </Badge>
-                        ) : (
-                          cell
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
+      <CardContent className="overflow-x-auto">
+        {isLoading ? (
+          <div className="space-y-2">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="flex space-x-2">
+                {Array.from({ length: headers.length || 6 }).map((_, j) => (
+                  <Skeleton key={j} className="h-6 w-24" />
                 ))}
-
-                {/* Summary Row */}
-                <TableRow className="bg-gray-200 font-medium">
-                  <TableCell
-                    colSpan={2}
-                    className="border border-gray-300 text-center font-semibold"
+              </div>
+            ))}
+          </div>
+        ) : (
+          <Table className="border border-gray-300 border-collapse w-full">
+            <TableHeader>
+              <TableRow className="bg-gray-100">
+                {headers.map((header, i) => (
+                  <TableHead
+                    key={i}
+                    className="font-semibold text-gray-800 border border-gray-300 px-3 py-2"
                   >
-                    {summary[0]}
+                    {header}
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {Array.isArray(data) && data.length > 0 ? (
+                data.map((row, i) => (
+                  <TableRow key={i} className="hover:bg-gray-50">
+                    {Array.isArray(row)
+                      ? row.map((cell, j) => (
+                          <TableCell
+                            key={j}
+                            className="border border-gray-300 px-3 py-1 text-sm"
+                          >
+                            {cell}
+                          </TableCell>
+                        ))
+                      : null}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={headers.length}
+                    className="text-center text-muted-foreground border border-gray-300 px-3 py-2"
+                  >
+                    Tidak ada data
                   </TableCell>
-                  {summary.slice(1).map((cell, index) => (
-                    <TableCell
-                      key={index}
-                      className="border border-gray-300 text-center font-semibold"
-                    >
-                      {cell}
-                    </TableCell>
-                  ))}
                 </TableRow>
-              </TableBody>
-            </Table>
-          )}
-        </div>
+              )}
+            </TableBody>
+            {normalizedSummary.length > 0 && (
+              <TableFooter>
+                {normalizedSummary.map((row, i) => {
+                  const emptyCells = headers.length - row.length;
+                  return (
+                    <TableRow key={i} className="bg-gray-50 font-semibold">
+                      {Array.from({ length: emptyCells }).map((_, idx) => (
+                        <TableCell
+                          key={`empty-${idx}`}
+                          className="border border-gray-300 px-3 py-1 text-sm"
+                        ></TableCell>
+                      ))}
+                      {row.map((cell, j) => (
+                        <TableCell
+                          key={j}
+                          className="border border-gray-300 px-3 py-1 text-sm"
+                        >
+                          {cell}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  );
+                })}
+              </TableFooter>
+            )}
+          </Table>
+        )}
       </CardContent>
     </Card>
   );
