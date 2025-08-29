@@ -1,11 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import {
   LineChart,
   CartesianGrid,
@@ -30,27 +26,13 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import {
-  SidebarProvider,
-  SidebarInset,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { Separator } from "@/components/ui/separator";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   CalendarDays,
   TrendingUp,
   BarChart3,
-  ArrowUpRight,
   FileText,
   LandPlot,
   Radical,
@@ -125,11 +107,7 @@ export default function MenuDua() {
   // Hitung total skor dari breakdown data
   const totalSkor =
     breakdownData?.data?.reduce((total, item) => total + item.skor, 0) ?? 0;
-  const targetSkor = 8; // nilai maksimum
-
-  // Extract periode data dari API
-  const periodeAwal = periodeData?.periode_awal || "Loading...";
-  const periodeAkhir = periodeData?.periode_akhir || "Loading...";
+  const targetSkor = 8;
 
   const { headerTop, headerBottom, data, summary } = tableData || {};
 
@@ -313,45 +291,45 @@ export default function MenuDua() {
 
           {/* Deskripsi Forumula */}
           {!loading && (
-              <Card className="shadow-sm border border-dashed bg-muted/30">
-                {/* Header Card */}
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium">Forumula</CardTitle>
-                  <Radical className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
+            <Card className="shadow-sm border border-dashed bg-muted/30">
+              {/* Header Card */}
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">Forumula</CardTitle>
+                <Radical className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
 
-                {/* Content Card */}
-                <CardContent className="py-6 italic space-y-6">
-                  {/* Formula 1 */}
-                  <div className="pb-4 border-b last:border-0">
-                    <p className="text-sm leading-relaxed text-gray-600">
-                      <span className="font-semibold italic text-gray-900">
-                        1. Terlaksananya Kebijakan Relaksasi
-                      </span>
-                      {" = "}
-                      <span className="italic">
-                        Ketersediaan Surat Keputusan Gubernur atas Kebijakan
-                        Pembebasan Denda, BBNKB II, dan Pajak Progresif / Target
-                      </span>
-                    </p>
-                  </div>
+              {/* Content Card */}
+              <CardContent className="py-6 italic space-y-6">
+                {/* Forumula 1 */}
+                <div className="pb-4 border-b last:border-0">
+                  <p className="text-sm leading-relaxed text-gray-600">
+                    <span className="font-semibold italic text-gray-900">
+                      1. Terlaksananya Kebijakan Relaksasi
+                    </span>
+                    {" = "}
+                    <span className="italic">
+                      Ketersediaan Surat Keputusan Gubernur atas Kebijakan
+                      Pembebasan Denda, BBNKB II, dan Pajak Progresif / Target
+                    </span>
+                  </p>
+                </div>
 
-                  {/* Formula 2 */}
-                  <div className="pb-4 border-b last:border-0">
-                    <p className="text-sm leading-relaxed text-gray-600">
-                      <span className="font-semibold italic text-gray-900">
-                        2. Pertumbuhan penerimaan SW di periode Relaksasi
-                      </span>
-                      {" = "}
-                      <span className="italic">
-                        Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n
-                        / Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun
-                        n-1 × 100 - 100
-                      </span>
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+                {/* Formula 2 */}
+                <div className="pb-4 border-b last:border-0">
+                  <p className="text-sm leading-relaxed text-gray-600">
+                    <span className="font-semibold italic text-gray-900">
+                      2. Pertumbuhan penerimaan SW di periode Relaksasi
+                    </span>
+                    {" = "}
+                    <span className="italic">
+                      Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n /
+                      Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n-1
+                      × 100 - 100
+                    </span>
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           )}
 
           {/* ===== CHART DARI TABLE1 ===== */}
@@ -373,8 +351,8 @@ export default function MenuDua() {
                 >
                   <LineChart
                     data={table1Data.data.map((row) => ({
-                      name: row[1], // Loket Kantor
-                      growth: parseFloat(row[4].replace("%", "")), // ambil angka dari "125.86%"
+                      name: row[1],
+                      growth: parseFloat(row[4].replace("%", "")),
                     }))}
                     margin={{ top: 20, right: 30, left: 30, bottom: 30 }}
                   >
@@ -426,7 +404,7 @@ export default function MenuDua() {
                       <LabelList
                         dataKey="growth"
                         position="top"
-                        dy={-10} // atur jarak vertikal dari titik
+                        dy={-10}
                         formatter={(val) => `${val}%`}
                         className="text-xs fill-gray-700"
                       />
@@ -461,7 +439,10 @@ export default function MenuDua() {
                         {table1Data.header[0].map((head, i) => (
                           <TableHead
                             key={i}
-                            className="text-center min-w-[120px] border border-gray-300"
+                            className={
+                              "min-w-[120px] border border-gray-300 " +
+                              (i === 1 ? "text-center" : "text-center")
+                            }
                           >
                             {head}
                           </TableHead>
@@ -476,9 +457,9 @@ export default function MenuDua() {
                               key={j}
                               className={
                                 `border-b border-r border-dotted border-gray-300 ` +
-                                (j === 0
+                                (j === 1
                                   ? "text-left font-medium"
-                                  : "text-right")
+                                  : "text-center")
                               }
                             >
                               {cell}
@@ -491,14 +472,14 @@ export default function MenuDua() {
                       <TableRow>
                         <TableCell
                           colSpan={2}
-                          className="font-bold border border-gray-300 text-left"
+                          className="font-bold border border-gray-300 text-center"
                         >
                           {table1Data.summary[0]}
                         </TableCell>
                         {table1Data.summary.slice(1).map((cell, j) => (
                           <TableCell
                             key={j}
-                            className="font-bold border border-gray-300 text-right"
+                            className="font-bold border border-gray-300 text-center"
                           >
                             {cell}
                           </TableCell>
@@ -624,7 +605,7 @@ export default function MenuDua() {
                                 `border-b border-r border-dotted border-gray-300 ` +
                                 (cellIndex === 0
                                   ? "text-left font-medium sticky left-0 bg-white"
-                                  : "text-right") +
+                                  : "text-center") +
                                 (cellIndex === 3 ||
                                 cellIndex === 11 ||
                                 cellIndex === 12 ||
@@ -649,7 +630,7 @@ export default function MenuDua() {
                               `font-bold border border-gray-300 ` +
                               (cellIndex === 0
                                 ? "text-left sticky left-0 bg-white"
-                                : "text-right")
+                                : "text-center")
                             }
                           >
                             {cell}
@@ -667,5 +648,3 @@ export default function MenuDua() {
     </SidebarProvider>
   );
 }
-
-///fixxx ea -periode
