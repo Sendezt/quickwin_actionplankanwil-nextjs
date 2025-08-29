@@ -383,8 +383,8 @@ export default function MenuTujuh() {
           ) : (
             <Card>
               <CardHeader>
-                <CardTitle>
-                  Rekapitulasi Penerimaan SIGNAL & Layanan Online
+                <CardTitle className="text-xl">
+                  Rekapitulasi{" "} <span className="text-red-700">Penerimaan SIGNAL & Layanan Online</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>

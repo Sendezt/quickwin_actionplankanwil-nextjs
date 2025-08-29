@@ -326,8 +326,9 @@ export default function MenuLima() {
           {/* Chart */}
           <Card>
             <CardHeader>
-              <CardTitle>Prosentase Keterisian Data</CardTitle>
-              <CardDescription>Per Loket Kantor</CardDescription>
+              <CardTitle className="text-2xl text-orange-700">
+                Prosentase Keterisian Data
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {loading ? (
@@ -341,8 +342,11 @@ export default function MenuLima() {
 
           {/* Table 1 - Rekapitulasi Data Keterisian */}
           <Card>
-            <CardHeader>
-              <CardTitle>Rekapitulasi Keterisian Data Per Cabang</CardTitle>
+            <CardHeader className="text-xl">
+              <CardTitle>
+                Rekapitulasi{" "}
+                <span className="text-red-700">Keterisian Data</span> Per Cabang
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <TableRekapitulasi table1Data={table1Data} />
@@ -351,8 +355,11 @@ export default function MenuLima() {
 
           {/* Table 2 - Data Detail */}
           <Card>
-            <CardHeader>
-              <CardTitle>Skor Keterisian Data - Per Samsat</CardTitle>
+            <CardHeader className="text-xl">
+              <CardTitle>
+                Skor <span className="text-red-700">Keterisian Data</span> - Per
+                Samsat
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <TableSkorSamsat table2Data={table2Data} />

@@ -1,22 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -24,109 +9,12 @@ import {
   CalendarDays,
   TrendingUp,
   BarChart3,
-  ArrowUpRight,
   FileText,
   LandPlot,
   Radical,
 } from "lucide-react";
 import Navbar from "@/components/navbar";
-
-function TableCard({ title, description, headers, data, summary, isLoading }) {
-  const normalizedSummary = Array.isArray(summary?.[0])
-    ? summary
-    : summary && summary.length
-    ? [summary]
-    : [];
-
-  return (
-    <Card className="overflow-hidden">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className="overflow-x-auto">
-        {isLoading ? (
-          <div className="space-y-2">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="flex space-x-2">
-                {Array.from({ length: headers.length || 6 }).map((_, j) => (
-                  <Skeleton key={j} className="h-6 w-24" />
-                ))}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <Table className="border border-gray-300 border-collapse w-full">
-            <TableHeader>
-              <TableRow className="bg-gray-100">
-                {headers.map((header, i) => (
-                  <TableHead
-                    key={i}
-                    className="font-semibold text-gray-800 border border-gray-300 px-3 py-2"
-                  >
-                    {header}
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {Array.isArray(data) && data.length > 0 ? (
-                data.map((row, i) => (
-                  <TableRow key={i} className="hover:bg-gray-50">
-                    {Array.isArray(row)
-                      ? row.map((cell, j) => (
-                          <TableCell
-                            key={j}
-                            className="border border-gray-300 px-3 py-1 text-sm"
-                          >
-                            {cell}
-                          </TableCell>
-                        ))
-                      : null}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={headers.length}
-                    className="text-center text-muted-foreground border border-gray-300 px-3 py-2"
-                  >
-                    Tidak ada data
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-            {normalizedSummary.length > 0 && (
-              <TableFooter>
-                {normalizedSummary.map((row, i) => {
-                  const emptyCells = headers.length - row.length; // sel kosong di awal
-                  return (
-                    <TableRow key={i} className="bg-gray-50 font-semibold">
-                      {Array.from({ length: emptyCells }).map((_, idx) => (
-                        <TableCell
-                          key={`empty-${idx}`}
-                          className="border border-gray-300 px-3 py-1 text-sm"
-                        ></TableCell>
-                      ))}
-                      {row.map((cell, j) => (
-                        <TableCell
-                          key={j}
-                          className="border border-gray-300 px-3 py-1 text-sm"
-                        >
-                          {cell}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  );
-                })}
-              </TableFooter>
-            )}
-          </Table>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
+import TableCard from "@/components/operasigabungan/TableCard";
 
 export default function MenuTiga() {
   const [table1Data, setTable1Data] = useState(null);
@@ -141,7 +29,6 @@ export default function MenuTiga() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Ambil data table1 & table2 secara paralel
         const [table1Res, table2Res, table3Res, table4Res, table5Res] =
           await Promise.all([
             fetch(
@@ -173,14 +60,12 @@ export default function MenuTiga() {
         setTable4Data(table4Json);
         setTable5Data(table5Json);
 
-        // Ambil breakdown
         const breakdownRes = await fetch(
           "https://magangproject.vercel.app/api/google/getsheet3card"
         );
         const breakdownJson = await breakdownRes.json();
         setBreakdownData(breakdownJson);
 
-        // Ambil range periode
         const rangeRes = await fetch(
           "https://magangproject.vercel.app/api/google/getRange-sheet3"
         );
@@ -206,115 +91,131 @@ export default function MenuTiga() {
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
         <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
+          {/* ---------------- Row pertama ---------------- */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {loading ? (
               Array.from({ length: 4 }).map((_, i) => (
-                <Card key={i} className="p-0 overflow-hidden">
-                  <div className="px-5 py-3 border-b">
-                    <Skeleton className="h-4 w-1/4 mb-2" />
-                  </div>
-                  <CardContent className="py-6 px-5 space-y-2">
-                    <Skeleton className="h-8 w-1/3" />
-                    <Skeleton className="h-4 w-2/3" />
+                <Card
+                  key={i}
+                  className="shadow-sm border border-dashed bg-muted/30"
+                >
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <Skeleton className="h-3 w-20" />
+                    <Skeleton className="h-3 w-3 rounded-full" />
+                  </CardHeader>
+                  <CardContent className="py-2 px-4 space-y-2">
+                    <Skeleton className="h-5 w-24" />
+                    <Skeleton className="h-3 w-32" />
                   </CardContent>
                 </Card>
               ))
             ) : (
               <>
-                <div className="col-span-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-muted-foreground">
-                    {/* Periode */}
-                    {rangeData?.periode_awal && rangeData?.periode_akhir && (
-                      <>
-                        <Card className="shadow-sm border border-dashed bg-muted/30">
-                          <CardHeader className="flex flex-row items-center justify-between pb-1">
-                            <CardTitle className="text-xs font-medium">
-                              Periode Awal
-                            </CardTitle>
-                            <CalendarDays className="h-3 w-3 text-muted-foreground" />
-                          </CardHeader>
-                          <CardContent className="py-1 px-4">
-                            <div className="text-base font-semibold text-gray-900">
-                              {rangeData.periode_awal}
-                            </div>
-                            <p className="text-xs">Tanggal Mulai Periode</p>
-                          </CardContent>
-                        </Card>
-
-                        <Card className="shadow-sm border border-dashed bg-muted/30">
-                          <CardHeader className="flex flex-row items-center justify-between pb-1">
-                            <CardTitle className="text-xs font-medium">
-                              Periode Akhir
-                            </CardTitle>
-                            <CalendarDays className="h-3 w-3 text-muted-foreground" />
-                          </CardHeader>
-                          <CardContent className="py-1 px-4">
-                            <div className="text-base font-semibold text-gray-900">
-                              {rangeData.periode_akhir}
-                            </div>
-                            <p className="text-xs">Tanggal Akhir Periode</p>
-                          </CardContent>
-                        </Card>
-                      </>
-                    )}
-
-                    {/* Obyek Penilaian */}
+                {/* Periode Awal & Akhir */}
+                {rangeData?.periode_awal && rangeData?.periode_akhir && (
+                  <>
                     <Card className="shadow-sm border border-dashed bg-muted/30">
                       <CardHeader className="flex flex-row items-center justify-between pb-1">
                         <CardTitle className="text-xs font-medium">
-                          Obyek Penilaian
+                          Periode Awal
                         </CardTitle>
-                        <LandPlot className="h-3 w-3 text-muted-foreground" />
+                        <CalendarDays className="h-3 w-3 text-muted-foreground" />
                       </CardHeader>
                       <CardContent className="py-1 px-4">
                         <div className="text-base font-semibold text-gray-900">
-                          Kantor Samsat
+                          {rangeData.periode_awal}
                         </div>
-                        <p className="text-xs">1 Obyek Penilaian</p>
+                        <p className="text-xs">Tanggal Mulai Periode</p>
                       </CardContent>
                     </Card>
 
-                    {/* SK Gubernur */}
                     <Card className="shadow-sm border border-dashed bg-muted/30">
                       <CardHeader className="flex flex-row items-center justify-between pb-1">
                         <CardTitle className="text-xs font-medium">
-                          Surat Dukungan Opsgab
+                          Periode Akhir
                         </CardTitle>
-                        <FileText className="h-3 w-3 text-muted-foreground" />
+                        <CalendarDays className="h-3 w-3 text-muted-foreground" />
                       </CardHeader>
                       <CardContent className="py-1 px-4">
-                        <a
-                          href="https://drive.google.com/file/d/1PiK5uwKQ2LPZfLICZZKwmaDX-CW-wmx5/view"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-base font-semibold text-blue-600 hover:underline block"
-                        >
-                          Surat Dukungan Operasi Gabungan
-                        </a>
-                        <p className="text-xs">
-                          Surat Sekda kepada Kapolda No.900.1.13.1/0005203 Hal
-                          Kegiatan Operasi Gabungan Optimalisasi Pajak Kendaraan
-                          Bermotor Tahun 2025
-                        </p>
+                        <div className="text-base font-semibold text-gray-900">
+                          {rangeData.periode_akhir}
+                        </div>
+                        <p className="text-xs">Tanggal Akhir Periode</p>
                       </CardContent>
                     </Card>
-                  </div>
-                </div>
+                  </>
+                )}
+
+                {/* Obyek Penilaian */}
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
+                      Obyek Penilaian
+                    </CardTitle>
+                    <LandPlot className="h-3 w-3 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent className="py-1 px-4">
+                    <div className="text-base font-semibold text-gray-900">
+                      Kantor Samsat
+                    </div>
+                    <p className="text-xs">1 Obyek Penilaian</p>
+                  </CardContent>
+                </Card>
+
+                {/* Surat Dukungan */}
+                <Card className="shadow-sm border border-dashed bg-muted/30">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1">
+                    <CardTitle className="text-xs font-medium">
+                      Surat Dukungan Opsgab
+                    </CardTitle>
+                    <FileText className="h-3 w-3 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent className="py-1 px-4">
+                    <a
+                      href="https://drive.google.com/file/d/1PiK5uwKQ2LPZfLICZZKwmaDX-CW-wmx5/view"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-base font-semibold text-blue-600 hover:underline block"
+                    >
+                      Surat Dukungan Operasi Gabungan
+                    </a>
+                    <p className="text-xs">
+                      Surat Sekda kepada Kapolda No.900.1.13.1/0005203 Hal
+                      Kegiatan Operasi Gabungan Optimalisasi Pajak Kendaraan
+                      Bermotor Tahun 2025
+                    </p>
+                  </CardContent>
+                </Card>
               </>
             )}
           </div>
 
-          {/* Row kedua untuk cards */}
+          {/* ---------------- Row kedua ---------------- */}
           <div className="grid gap-4 md:grid-cols-2">
             {loading ? (
               Array.from({ length: 2 }).map((_, i) => (
-                <Card key={i} className="col-span-1 p-0 overflow-hidden">
-                  <div className="px-5 py-3 border-b">
-                    <Skeleton className="h-4 w-1/4 mb-2" />
+                <Card key={i} className="p-0 overflow-hidden">
+                  <div className="bg-blue-100 px-5 py-3 flex items-center justify-between border-b">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-4 w-4 rounded-full" />
                   </div>
-                  <CardContent className="py-6 px-5 space-y-2">
-                    <Skeleton className="h-8 w-1/3" />
-                    <Skeleton className="h-4 w-2/3" />
+                  <CardContent className="py-6 space-y-3 text-center">
+                    {i === 0 ? (
+                      <>
+                        <Skeleton className="h-14 w-20 mx-auto" />
+                        <Skeleton className="h-3 w-16 mx-auto" />
+                      </>
+                    ) : (
+                      Array.from({ length: 3 }).map((_, j) => (
+                        <div
+                          key={j}
+                          className="flex justify-between items-center px-2"
+                        >
+                          <Skeleton className="h-4 w-24" />
+                          <Skeleton className="h-5 w-8" />
+                        </div>
+                      ))
+                    )}
                   </CardContent>
                 </Card>
               ))
@@ -376,94 +277,120 @@ export default function MenuTiga() {
             )}
           </div>
 
-          {/* Deskripsi Forumula */}
-          <Card className="shadow-sm border border-dashed bg-muted/30">
-            {/* Header Card */}
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Forumula</CardTitle>
-              <Radical className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            {/* Content Card */}
-            <CardContent className="py-6italic space-y-6">
-              {/* Forumula 1 */}
-              <div className="pb-4 border-b last:border-0">
-                <p className="text-sm leading-relaxed text-gray-600">
-                  <span className="font-semibold italic text-gray-900">
-                    1. Terlaksananya Kegiatan Operasi Gabungan
-                  </span>
-                  {" = "}
-                  <span className="italic">Realisasi Kegiatan / Target</span>
-                </p>
-              </div>
-              {/* Forumula 2 */}
-              <div className="pb-4 border-b last:border-0">
-                <p className="text-sm leading-relaxed text-gray-600">
-                  <span className="font-semibold text-gray-900 italic">
-                    2. Kontribusi SW terkutip dari Tunggakan SW
-                  </span>
-                  {" = "}
-                  <span className="italic">
-                    Realisasi SW Terkutip/Tunggakan SW
-                  </span>
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          {/* ---------------- Formula ---------------- */}
+          {loading ? (
+            <Card className="shadow-sm border border-dashed bg-muted/30">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-4 w-4 rounded-full" />
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {Array.from({ length: 2 }).map((_, i) => (
+                  <div key={i} className="border-b last:border-0 pb-2">
+                    <Skeleton className="h-4 w-56" />
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="shadow-sm border border-dashed bg-muted/30">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">Forumula</CardTitle>
+                <Radical className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="py-6italic space-y-6">
+                <div className="pb-4 border-b last:border-0">
+                  <p className="text-sm leading-relaxed text-gray-600">
+                    <span className="font-semibold italic text-gray-900">
+                      1. Terlaksananya Kegiatan Operasi Gabungan
+                    </span>
+                    {" = "}
+                    <span className="italic">Realisasi Kegiatan / Target</span>
+                  </p>
+                </div>
+                <div className="pb-4 border-b last:border-0">
+                  <p className="text-sm leading-relaxed text-gray-600">
+                    <span className="font-semibold text-gray-900 italic">
+                      2. Kontribusi SW terkutip dari Tunggakan SW
+                    </span>
+                    {" = "}
+                    <span className="italic">
+                      Realisasi SW Terkutip/Tunggakan SW
+                    </span>
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
-          <TableCard
-            title="Skor Pelaksanaan Operasi Gabungan - Per Cabang"
-            headers={table1Data?.header?.[0] ?? []}
-            data={table1Data?.data ?? []}
-            summary={table1Data?.summary ?? []}
-            isLoading={!table1Data}
-          />
-          <TableCard
-            title="Skor Kontribusi Penerimaan Operasi Gabungan - Per Cabang"
-            headers={table2Data?.header?.[0] ?? []}
-            data={table2Data?.data ?? []}
-            summary={table2Data?.summary ?? []}
-            isLoading={!table2Data}
-          />
-          <TableCard
-            title="Skor Pelaksanaan Operasi Gabungan - Per Samsat"
-            // description="Skor Pelaksanaan Operasi Gabungan"
-            headers={table3Data?.header?.[0] ?? []}
-            data={
-              table3Data?.data?.flatMap((item) => [
-                [`${item.cabang}`, "", "", "", "", "", ""],
-                ...item.samsat.map((row) => ["", ...row.slice(1)]),
-              ]) ?? []
-            }
-            summary={table3Data?.summary ?? []}
-            isLoading={!table3Data}
-          />
-          <TableCard
-            title="Skor Kontribusi Penerimaan Operasi Gabungan - Per Samsat"
-            // description="Skor Kontribusi Penerimaan Operasi Gabungan"
-            headers={table4Data?.header?.[0] ?? []}
-            data={
-              table4Data?.data?.flatMap((item) => [
-                [`${item.cabang}`, "", "", "", "", "", ""],
-                ...item.samsat.map((row) => ["", ...row.slice(1)]),
-              ]) ?? []
-            }
-            summary={table4Data?.summary ?? []}
-            isLoading={!table4Data}
-          />
-          <TableCard
-            title="Hasil Penerimaan Atas Kegiatan Operasi Gabungan"
-            //
-
-            headers={table5Data?.header?.[0] ?? []}
-            data={
-              table5Data?.data?.flatMap((item) => [
-                [`${item.cabang}`, "", "", "", "", "", ""],
-                ...item.samsat.map((row) => ["", ...row.slice(1)]),
-              ]) ?? []
-            }
-            summary={table5Data?.summary ?? []}
-            isLoading={!table5Data}
-          />
+          {/* ---------------- Tables ---------------- */}
+          {loading ? (
+            Array.from({ length: 5 }).map((_, i) => (
+              <Card key={i} className="overflow-hidden">
+                <div className="px-5 py-3 border-b">
+                  <Skeleton className="h-4 w-52" />
+                </div>
+                <CardContent className="py-4 space-y-2">
+                  {Array.from({ length: 4 }).map((_, j) => (
+                    <Skeleton key={j} className="h-5 w-full" />
+                  ))}
+                </CardContent>
+              </Card>
+            ))
+          ) : (
+            <>
+              <TableCard
+                title="Skor Pelaksanaan Operasi Gabungan - Per Cabang"
+                headers={table1Data?.header?.[0] ?? []}
+                data={table1Data?.data ?? []}
+                summary={table1Data?.summary ?? []}
+                isLoading={!table1Data}
+              />
+              <TableCard
+                title="Skor Kontribusi Penerimaan Operasi Gabungan - Per Cabang"
+                headers={table2Data?.header?.[0] ?? []}
+                data={table2Data?.data ?? []}
+                summary={table2Data?.summary ?? []}
+                isLoading={!table2Data}
+              />
+              <TableCard
+                title="Skor Pelaksanaan Operasi Gabungan - Per Samsat"
+                headers={table3Data?.header?.[0] ?? []}
+                data={
+                  table3Data?.data?.flatMap((item) => [
+                    [`${item.cabang}`, "", "", "", "", "", ""],
+                    ...item.samsat.map((row) => ["", ...row.slice(1)]),
+                  ]) ?? []
+                }
+                summary={table3Data?.summary ?? []}
+                isLoading={!table3Data}
+              />
+              <TableCard
+                title="Skor Kontribusi Penerimaan Operasi Gabungan - Per Samsat"
+                headers={table4Data?.header?.[0] ?? []}
+                data={
+                  table4Data?.data?.flatMap((item) => [
+                    [`${item.cabang}`, "", "", "", "", "", ""],
+                    ...item.samsat.map((row) => ["", ...row.slice(1)]),
+                  ]) ?? []
+                }
+                summary={table4Data?.summary ?? []}
+                isLoading={!table4Data}
+              />
+              <TableCard
+                title="Hasil Penerimaan Atas Kegiatan Operasi Gabungan"
+                headers={table5Data?.header?.[0] ?? []}
+                data={
+                  table5Data?.data?.flatMap((item) => [
+                    [`${item.cabang}`, "", "", "", "", "", ""],
+                    ...item.samsat.map((row) => ["", ...row.slice(1)]),
+                  ]) ?? []
+                }
+                summary={table5Data?.summary ?? []}
+                isLoading={!table5Data}
+              />
+            </>
+          )}
         </div>
       </SidebarInset>
     </SidebarProvider>

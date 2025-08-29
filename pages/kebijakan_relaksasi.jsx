@@ -313,45 +313,45 @@ export default function MenuDua() {
 
           {/* Deskripsi Forumula */}
           {!loading && (
-              <Card className="shadow-sm border border-dashed bg-muted/30">
-                {/* Header Card */}
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium">Forumula</CardTitle>
-                  <Radical className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
+            <Card className="shadow-sm border border-dashed bg-muted/30">
+              {/* Header Card */}
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">Forumula</CardTitle>
+                <Radical className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
 
-                {/* Content Card */}
-                <CardContent className="py-6 italic space-y-6">
-                  {/* Formula 1 */}
-                  <div className="pb-4 border-b last:border-0">
-                    <p className="text-sm leading-relaxed text-gray-600">
-                      <span className="font-semibold italic text-gray-900">
-                        1. Terlaksananya Kebijakan Relaksasi
-                      </span>
-                      {" = "}
-                      <span className="italic">
-                        Ketersediaan Surat Keputusan Gubernur atas Kebijakan
-                        Pembebasan Denda, BBNKB II, dan Pajak Progresif / Target
-                      </span>
-                    </p>
-                  </div>
+              {/* Content Card */}
+              <CardContent className="py-6 italic space-y-6">
+                {/* Formula 1 */}
+                <div className="pb-4 border-b last:border-0">
+                  <p className="text-sm leading-relaxed text-gray-600">
+                    <span className="font-semibold italic text-gray-900">
+                      1. Terlaksananya Kebijakan Relaksasi
+                    </span>
+                    {" = "}
+                    <span className="italic">
+                      Ketersediaan Surat Keputusan Gubernur atas Kebijakan
+                      Pembebasan Denda, BBNKB II, dan Pajak Progresif / Target
+                    </span>
+                  </p>
+                </div>
 
-                  {/* Formula 2 */}
-                  <div className="pb-4 border-b last:border-0">
-                    <p className="text-sm leading-relaxed text-gray-600">
-                      <span className="font-semibold italic text-gray-900">
-                        2. Pertumbuhan penerimaan SW di periode Relaksasi
-                      </span>
-                      {" = "}
-                      <span className="italic">
-                        Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n
-                        / Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun
-                        n-1 × 100 - 100
-                      </span>
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+                {/* Formula 2 */}
+                <div className="pb-4 border-b last:border-0">
+                  <p className="text-sm leading-relaxed text-gray-600">
+                    <span className="font-semibold italic text-gray-900">
+                      2. Pertumbuhan penerimaan SW di periode Relaksasi
+                    </span>
+                    {" = "}
+                    <span className="italic">
+                      Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n /
+                      Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n-1
+                      × 100 - 100
+                    </span>
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           )}
 
           {/* ===== CHART DARI TABLE1 ===== */}
@@ -667,5 +667,3 @@ export default function MenuDua() {
     </SidebarProvider>
   );
 }
-
-///fixxx ea -periode
