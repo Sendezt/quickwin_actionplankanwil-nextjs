@@ -107,7 +107,7 @@ export default function MenuSengkuyung() {
                     )}
                   </div>
 
-                  {/* PNBP
+                  {/* PNBP */}
                   <div className="p-4">
                     <div className="text-sm font-medium text-gray-600">
                       PNBP*
@@ -119,7 +119,7 @@ export default function MenuSengkuyung() {
                         Rp{table2?.summary?.total?.[13]}
                       </div>
                     )}
-                  </div> */}
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -233,7 +233,7 @@ export default function MenuSengkuyung() {
                     )}
                   </div>
 
-                  {/* PNBP
+                  {/* PNBP */}
                   <div className="p-4">
                     <div className="text-sm font-medium text-gray-600">
                       PNBP*
@@ -255,7 +255,7 @@ export default function MenuSengkuyung() {
                         </div>
                       </>
                     )}
-                  </div> */}
+                  </div>
                 </div>
               </CardContent>
             </Card>
