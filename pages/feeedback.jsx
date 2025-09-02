@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, act } from "react";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import Navbar from "@/components/navbar";
@@ -18,14 +18,31 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import FeedbackFormModal from "@/components/feedback/FeedbackFormModal";
-import FeedbackModal from "@/components/feedback/FeedbackModal"; // ⬅️ import konfirmasi modal
+import FeedbackModal from "@/components/feedback/FeedbackModal";
+
+// Loading Component
+const LoadingSpinner = ({ message = "Memuat data..." }) => (
+  <div className="flex items-center justify-center py-12">
+    <div className="flex flex-col items-center gap-4">
+      <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      <p className="text-gray-600 font-medium">{message}</p>
+    </div>
+  </div>
+);
 
 export default function FeedbackPage() {
   const [feedbacks, setFeedbacks] = useState([]);
   const [cabangs, setCabangs] = useState([]);
   const [actionPlans, setActionPlans] = useState([]);
   const [isCreating, setIsCreating] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  // Loading states
+  const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // state modal tambah feedback
   const [showModal, setShowModal] = useState(false);
@@ -39,10 +56,29 @@ export default function FeedbackPage() {
     loadData();
   }, []);
 
-  const loadData = async () => {
-    setFeedbacks(await fetchFeedbacks());
-    setCabangs((await fetchCabangs()) || []);
-    setActionPlans((await fetchActionPlans()) || []);
+  const loadData = async (isRefresh = false) => {
+    try {
+      if (isRefresh) {
+        setIsRefreshing(true);
+      } else {
+        setIsLoading(true);
+      }
+
+      const [feedbacksData, cabangsData, actionPlansData] = await Promise.all([
+        fetchFeedbacks(),
+        fetchCabangs(),
+        fetchActionPlans(),
+      ]);
+
+      setFeedbacks(feedbacksData || []);
+      setCabangs(cabangsData || []);
+      setActionPlans(actionPlansData || []);
+    } catch (error) {
+      toast.error("Gagal memuat data");
+    } finally {
+      setIsLoading(false);
+      setIsRefreshing(false);
+    }
   };
 
   const handleOpenModal = (cabang) => {
@@ -53,16 +89,24 @@ export default function FeedbackPage() {
   const handleCreate = async ({ actionPlanId, task, resetForm }) => {
     if (!selectedCabang || !task || !actionPlanId) return;
 
-    setIsCreating(true);
-    await createFeedback({
-      task,
-      cabangId: Number(selectedCabang.id),
-      actionPlanId: Number(actionPlanId),
-    });
-    setIsCreating(false);
-    setShowModal(false);
-    resetForm();
-    loadData();
+    try {
+      setIsCreating(true);
+      await createFeedback({
+        task,
+        cabangId: Number(selectedCabang.id),
+        actionPlanId: Number(actionPlanId),
+      });
+
+      toast.success("Feedback berhasil ditambahkan");
+
+      setShowModal(false);
+      resetForm();
+      await loadData(true); // Refresh data
+    } catch (error) {
+      toast.error("Gagal menambahkan feedback");
+    } finally {
+      setIsCreating(false);
+    }
   };
 
   // buka modal konfirmasi tandai selesai
@@ -71,10 +115,44 @@ export default function FeedbackPage() {
     setConfirmOpen(true);
   };
 
-  const handleSelesai = async (id) => {
-    await updateFeedbackStatus(id);
-    loadData();
+  const handleSelesai = async () => {
+    if (!selectedFeedback) return;
+
+    try {
+      setIsUpdating(true);
+      await updateFeedbackStatus(selectedFeedback.id);
+
+      toast.success("Feedback berhasil ditandai selesai");
+
+      await loadData(true); // Refresh data
+    } catch (error) {
+      toast.error("Gagal memperbarui status feedback");
+    } finally {
+      setIsUpdating(false);
+      setConfirmOpen(false);
+      setSelectedFeedback(null);
+    }
   };
+
+  const handleRefresh = () => {
+    loadData(true);
+  };
+
+  // Show loading while initial loading
+  if (isLoading) {
+    return (
+      <SidebarProvider defaultOpen>
+        <AppSidebar />
+        <SidebarInset>
+          <Navbar />
+          <div className="p-6">
+            <h1 className="text-2xl font-bold mb-6">Feedback Management</h1>
+            <LoadingSpinner message="Memuat data feedback..." />
+          </div>
+        </SidebarInset>
+      </SidebarProvider>
+    );
+  }
 
   return (
     <SidebarProvider defaultOpen>
@@ -82,92 +160,244 @@ export default function FeedbackPage() {
       <SidebarInset>
         <Navbar />
         <div className="p-6">
-          <h1 className="text-2xl font-bold mb-6">Feedback Management</h1>
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-2xl font-bold">Feedback Management</h1>
+            <Button
+              variant="outline"
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+              className="flex items-center gap-2"
+            >
+              <Loader2
+                className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`}
+              />
+              {isRefreshing ? "Refreshing..." : "Refresh"}
+            </Button>
+          </div>
 
-          <Accordion type="single" collapsible className="w-full">
-            {cabangs.map((cabang) => (
-              <AccordionItem key={cabang.id} value={`cabang-${cabang.id}`}>
-                <AccordionTrigger>{cabang.nama}</AccordionTrigger>
-                <AccordionContent>
-                  {/* Button Tambah */}
-                  <div className="flex justify-end mb-3">
-                    <Button onClick={() => handleOpenModal(cabang)}>
-                      Tambah Feedback
-                    </Button>
-                  </div>
+          {/* Loading overlay saat refresh */}
+          <div className="relative">
+            {isRefreshing && (
+              <div className="absolute inset-0 bg-white/70 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg">
+                <div className="flex items-center gap-3 bg-white px-6 py-3 rounded-lg shadow-lg border">
+                  <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
+                  <span className="text-gray-700 font-medium">
+                    Memuat ulang data...
+                  </span>
+                </div>
+              </div>
+            )}
 
-                  {/* Tabel Feedback */}
-                  <div className="overflow-x-auto border rounded-lg">
-                    <table className="w-full text-sm">
-                      <thead className="bg-gray-100">
-                        <tr>
-                          <th className="p-2 text-left">Action Plan</th>
-                          <th className="p-2 text-left">Feedback</th>
-                          <th className="p-2 text-left">Status</th>
-                          <th className="p-2 text-left">Proses</th>
-                          <th className="p-2 text-left">Selesai</th>
-                          <th className="p-2 text-right">Aksi</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {feedbacks
-                          .filter((fb) => fb.cabangId === cabang.id)
-                          .map((fb) => (
-                            <tr key={fb.id} className="border-t">
-                              <td className="p-2">{fb.actionPlan?.title}</td>
-                              <td className="p-2">{fb.task}</td>
-                              <td className="p-2">{fb.status}</td>
-                              <td className="p-2">
-                                {fb.timestampProses
-                                  ? new Date(fb.timestampProses).toLocaleString(
-                                      "id-ID"
-                                    )
-                                  : "-"}
-                              </td>
-                              <td className="p-2">
-                                {fb.timestampSelesai
-                                  ? new Date(
-                                      fb.timestampSelesai
-                                    ).toLocaleString("id-ID")
-                                  : "-"}
-                              </td>
-                              <td className="p-2 text-right">
-                                {fb.status !== "selesai" && (
-                                  <Button
-                                    size="sm"
-                                    onClick={() => handleSelesai(fb.id)}
-                                    className="bg-green-600 hover:bg-green-700"
-                                  >
-                                    Tandai Selesai
-                                  </Button>
-                                )}
-                              </td>
+            {cabangs.length === 0 && !isRefreshing ? (
+              <LoadingSpinner message="Tidak ada data cabang..." />
+            ) : (
+              <Accordion type="single" collapsible className="w-full">
+                {cabangs.map((cabang) => (
+                  <AccordionItem key={cabang.id} value={`cabang-${cabang.id}`}>
+                    <AccordionTrigger className="hover:no-underline">
+                      <div className="flex items-center gap-3">
+                        <span>{cabang.nama}</span>
+                        {/* Badge jumlah feedback */}
+                        <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                          {
+                            feedbacks.filter((fb) => fb.cabangId === cabang.id)
+                              .length
+                          }
+                        </span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      {/* Button Tambah */}
+                      <div className="flex justify-end mb-3">
+                        <Button
+                          className="bg-blue-500 hover:bg-blue-600 transition-all duration-200"
+                          onClick={() => handleOpenModal(cabang)}
+                          disabled={isRefreshing}
+                        >
+                          Tambah Feedback
+                        </Button>
+                      </div>
+
+                      {/* Tabel Feedback */}
+                      <div className="overflow-x-auto border border-gray-200 rounded-lg shadow-sm bg-white">
+                        <table className="w-full text-sm table-fixed">
+                          <colgroup>
+                            <col />
+                            <col className="w-[25%]" />
+                            <col />
+                            <col />
+                            <col />
+                            <col />
+                          </colgroup>
+                          <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+                            <tr>
+                              <th className="p-4 text-left font-semibold text-gray-700 border-r border-gray-200">
+                                Action Plan
+                              </th>
+                              <th className="p-4 text-left font-semibold text-gray-700 border-r border-gray-200">
+                                Feedback
+                              </th>
+                              <th className="p-4 text-left font-semibold text-gray-700 border-r border-gray-200">
+                                Status
+                              </th>
+                              <th className="p-4 text-left font-semibold text-gray-700 border-r border-gray-200">
+                                Proses
+                              </th>
+                              <th className="p-4 text-left font-semibold text-gray-700 border-r border-gray-200">
+                                Selesai
+                              </th>
+                              <th className="p-4 text-right font-semibold text-gray-700">
+                                Aksi
+                              </th>
                             </tr>
-                          ))}
+                          </thead>
+                          <tbody className="divide-y divide-gray-100">
+                            {feedbacks
+                              .filter((fb) => fb.cabangId === cabang.id)
+                              .map((fb, index) => (
+                                <tr
+                                  key={fb.id}
+                                  className={`
+                                  hover:bg-gray-50 transition-colors duration-150
+                                  ${index % 2 === 0 ? "bg-white" : "bg-gray-25"}
+                                  ${
+                                    isUpdating && selectedFeedback?.id === fb.id
+                                      ? "opacity-50"
+                                      : ""
+                                  }
+                                `}
+                                >
+                                  <td className="p-4 border-r border-gray-100">
+                                    <div className="font-medium text-gray-900">
+                                      {fb.actionPlan?.title}
+                                    </div>
+                                  </td>
+                                  <td className="p-4 border-r border-gray-100">
+                                    <div className="text-gray-700 break-words">
+                                      {fb.task}
+                                    </div>
+                                  </td>
+                                  <td className="p-4 border-r border-gray-100">
+                                    <span
+                                      className={`
+                                      px-3 py-1 rounded-full text-xs font-medium transition-all duration-200
+                                      ${
+                                        fb.status === "selesai"
+                                          ? "bg-green-100 text-green-800 border border-green-200"
+                                          : fb.status === "proses"
+                                          ? "bg-yellow-100 text-yellow-800 border border-yellow-200"
+                                          : "bg-gray-100 text-gray-800 border border-gray-200"
+                                      }
+                                    `}
+                                    >
+                                      {fb.status}
+                                    </span>
+                                  </td>
+                                  <td className="p-4 border-r border-gray-100">
+                                    <div className="text-gray-600">
+                                      {fb.timestampProses ? (
+                                        new Date(
+                                          fb.timestampProses
+                                        ).toLocaleString("id-ID")
+                                      ) : (
+                                        <span className="text-gray-400 italic">
+                                          -
+                                        </span>
+                                      )}
+                                    </div>
+                                  </td>
+                                  <td className="p-4 border-r border-gray-100">
+                                    <div className="text-gray-600">
+                                      {fb.timestampSelesai ? (
+                                        new Date(
+                                          fb.timestampSelesai
+                                        ).toLocaleString("id-ID")
+                                      ) : (
+                                        <span className="text-gray-400 italic">
+                                          -
+                                        </span>
+                                      )}
+                                    </div>
+                                  </td>
+                                  <td className="p-4 text-right">
+                                    {fb.status !== "selesai" && (
+                                      <Button
+                                        size="sm"
+                                        onClick={() => handleOpenConfirm(fb)}
+                                        disabled={
+                                          isUpdating &&
+                                          selectedFeedback?.id === fb.id
+                                        }
+                                        className="
+                                        bg-green-600 hover:bg-green-700 
+                                        text-white font-medium
+                                        px-4 py-2 rounded-md
+                                        transition-all duration-200
+                                        shadow-sm hover:shadow-md
+                                        focus:ring-2 focus:ring-green-500 focus:ring-offset-2
+                                        disabled:opacity-50 disabled:cursor-not-allowed
+                                        flex items-center gap-2
+                                      "
+                                      >
+                                        {isUpdating &&
+                                        selectedFeedback?.id === fb.id ? (
+                                          <>
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                            Processing...
+                                          </>
+                                        ) : (
+                                          "Tandai Selesai"
+                                        )}
+                                      </Button>
+                                    )}
+                                  </td>
+                                </tr>
+                              ))}
 
-                        {feedbacks.filter((fb) => fb.cabangId === cabang.id)
-                          .length === 0 && (
-                          <tr>
-                            <td
-                              colSpan="6"
-                              className="p-3 text-center text-gray-500"
-                            >
-                              Belum ada feedback.
-                            </td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+                            {feedbacks.filter((fb) => fb.cabangId === cabang.id)
+                              .length === 0 && (
+                              <tr>
+                                <td colSpan="6" className="p-8 text-center">
+                                  <div className="flex flex-col items-center space-y-3">
+                                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                                      <svg
+                                        className="w-8 h-8 text-gray-400"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth={2}
+                                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                        />
+                                      </svg>
+                                    </div>
+                                    <div className="text-gray-500 font-medium">
+                                      Belum ada feedback
+                                    </div>
+                                    <div className="text-gray-400 text-xs">
+                                      Feedback akan muncul di sini setelah
+                                      ditambahkan
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            )}
+          </div>
         </div>
 
         {/* Modal Tambah Feedback */}
         <FeedbackFormModal
-          cabangs={cabangs}
           actionPlans={actionPlans}
           isOpen={showModal}
           onClose={() => setShowModal(false)}
@@ -182,6 +412,7 @@ export default function FeedbackPage() {
           onClose={() => setConfirmOpen(false)}
           feedback={selectedFeedback}
           onConfirm={handleSelesai}
+          isUpdating={isUpdating}
         />
       </SidebarInset>
     </SidebarProvider>

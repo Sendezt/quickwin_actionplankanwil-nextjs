@@ -49,10 +49,10 @@ export default function FeedbackFormModal({
                 onChange={(e) => setActionPlanId(e.target.value)}
                 className="w-full rounded-lg border border-gray-300 p-2"
               >
-                <option value="">-- Pilih Action Plan --</option>
-                {actionPlans.map((plan) => (
+                <option value="">Pilih Action Plan</option>
+                {actionPlans.map((plan, index) => (
                   <option key={plan.id} value={plan.id}>
-                    {plan.title}
+                    {index + 1}. {plan.title}
                   </option>
                 ))}
               </select>
