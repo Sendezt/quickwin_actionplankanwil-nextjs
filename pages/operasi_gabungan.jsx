@@ -90,7 +90,7 @@ export default function MenuTiga() {
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
-        <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
+        <div className="flex flex-col gap-6 min-h-screen w-full p-4 md:p-6">
           {/* ---------------- Row pertama ---------------- */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {loading ? (
@@ -103,7 +103,7 @@ export default function MenuTiga() {
                     <Skeleton className="h-3 w-20" />
                     <Skeleton className="h-3 w-3 rounded-full" />
                   </CardHeader>
-                  <CardContent className="py-2 px-4 space-y-2">
+                  <CardContent className="py-2 px-7 space-y-2">
                     <Skeleton className="h-5 w-24" />
                     <Skeleton className="h-3 w-32" />
                   </CardContent>
@@ -121,11 +121,13 @@ export default function MenuTiga() {
                         </CardTitle>
                         <CalendarDays className="h-3 w-3 text-muted-foreground" />
                       </CardHeader>
-                      <CardContent className="py-1 px-4">
+                      <CardContent className="py-1 px-6">
                         <div className="text-base font-semibold text-gray-900">
                           {rangeData.periode_awal}
                         </div>
-                        <p className="text-xs">Tanggal Mulai Periode</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Tanggal Mulai
+                        </p>
                       </CardContent>
                     </Card>
 
@@ -136,11 +138,13 @@ export default function MenuTiga() {
                         </CardTitle>
                         <CalendarDays className="h-3 w-3 text-muted-foreground" />
                       </CardHeader>
-                      <CardContent className="py-1 px-4">
+                      <CardContent className="py-1 px-6">
                         <div className="text-base font-semibold text-gray-900">
                           {rangeData.periode_akhir}
                         </div>
-                        <p className="text-xs">Tanggal Akhir Periode</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Tanggal Akhir
+                        </p>
                       </CardContent>
                     </Card>
                   </>
@@ -154,11 +158,13 @@ export default function MenuTiga() {
                     </CardTitle>
                     <LandPlot className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="py-1 px-4">
+                  <CardContent className="py-1 px-6">
                     <div className="text-base font-semibold text-gray-900">
                       Kantor Samsat
                     </div>
-                    <p className="text-xs">1 Obyek Penilaian</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      1 Obyek Penilaian
+                    </p>
                   </CardContent>
                 </Card>
 
@@ -170,7 +176,7 @@ export default function MenuTiga() {
                     </CardTitle>
                     <FileText className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="py-1 px-4">
+                  <CardContent className="py-1 px-6">
                     <a
                       href="https://drive.google.com/file/d/1PiK5uwKQ2LPZfLICZZKwmaDX-CW-wmx5/view"
                       target="_blank"
@@ -179,7 +185,7 @@ export default function MenuTiga() {
                     >
                       Surat Dukungan Operasi Gabungan
                     </a>
-                    <p className="text-xs">
+                    <p className="text-xs text-muted-foreground mt-1">
                       Surat Sekda kepada Kapolda No.900.1.13.1/0005203 Hal
                       Kegiatan Operasi Gabungan Optimalisasi Pajak Kendaraan
                       Bermotor Tahun 2025
@@ -293,31 +299,34 @@ export default function MenuTiga() {
               </CardContent>
             </Card>
           ) : (
-            <Card className="shadow-sm border border-dashed bg-muted/30">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Forumula</CardTitle>
+            <Card className="shadow-sm border border-dashed bg-muted/30 hover:shadow-md transition-shadow col-span-4">
+              <CardHeader className="flex flex-row items-center justify-between pb-1">
+                <CardTitle className="text-sm font-medium text-gray-700">
+                  Forumula
+                </CardTitle>
                 <Radical className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
-              <CardContent className="py-6italic space-y-6">
-                <div className="pb-4 border-b last:border-0">
-                  <p className="text-sm leading-relaxed text-gray-600">
-                    <span className="font-semibold italic text-gray-900">
-                      1. Terlaksananya Kegiatan Operasi Gabungan
-                    </span>
-                    {" = "}
-                    <span className="italic">Realisasi Kegiatan / Target</span>
-                  </p>
-                </div>
-                <div className="pb-4 border-b last:border-0">
-                  <p className="text-sm leading-relaxed text-gray-600">
-                    <span className="font-semibold text-gray-900 italic">
-                      2. Kontribusi SW terkutip dari Tunggakan SW
-                    </span>
-                    {" = "}
-                    <span className="italic">
-                      Realisasi SW Terkutip/Tunggakan SW
-                    </span>
-                  </p>
+              <CardContent className="py-4">
+                <div className="space-y-3 text-sm">
+                  {/* Formula 1 */}
+                  <div className="border-l-4 border-gray-400 pl-3">
+                    <p className="font-semibold text-gray-900 mb-1">
+                      Terlaksananya Kegiatan Operasi Gabungan
+                    </p>
+                    <p className="text-gray-600 text-xs">
+                      = Realisasi Kegiatan / Target
+                    </p>
+                  </div>
+
+                  {/* Formula 2 */}
+                  <div className="border-l-4 border-gray-400 pl-3">
+                    <p className="font-semibold text-gray-900 mb-1">
+                      Kontribusi SW terkutip dari Tunggakan SW
+                    </p>
+                    <p className="text-gray-600 text-xs">
+                      = Realisasi SW Terkutip / Tunggakan SW
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>

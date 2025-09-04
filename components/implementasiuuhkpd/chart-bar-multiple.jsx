@@ -48,7 +48,10 @@ export function ChartBarMultiple({ data }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Diagram Implementasi UU HKPD Per Cabang</CardTitle>
+        <CardTitle className="text-xl">
+          Diagram <span className="text-yellow-500">Implementasi UU HKPD</span>{" "}
+          Per Cabang
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[300px] w-full">

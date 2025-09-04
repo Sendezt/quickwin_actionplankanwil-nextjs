@@ -16,12 +16,17 @@ export function DashboardTable({ dashboardData, isLoading }) {
   };
 
   const headerRows = dashboardData?.header ?? [];
-  const headers = headerRows.find((row) => row.some((cell) => cell !== "")) ?? [];
+  const headers =
+    headerRows.find((row) => row.some((cell) => cell !== "")) ?? [];
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Rekapitulasi Implementasi UU HKPD Per Cabang</CardTitle>
+        <CardTitle className="text-xl">
+          Rekapitulasi{" "}
+          <span className="text-yellow-500">Implementasi UU HKPD</span> Per
+          Cabang
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">

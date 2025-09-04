@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import RenderTableSort from "@/components/sengkuyung/RenderTableSort";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
@@ -18,7 +18,7 @@ export default function MenuSengkuyung() {
     const fetchTable = async () => {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/sheetI/getsheetItable1" 
+          "https://magangproject.vercel.app/api/sheetI/getsheetItable1"
         );
         const json = await res.json();
         setTable1(json.table1);
@@ -263,7 +263,8 @@ export default function MenuSengkuyung() {
 
           <div className="mt-8 space-y-6">
             <h2 className="text-xl font-semibold mb-2">
-              Ranking Per Kabupaten Kota Berdasarkan Success Rate Penerimaan SWDKLLJ
+              Ranking Per Kabupaten Kota Berdasarkan Success Rate Penerimaan
+              SWDKLLJ
             </h2>
             <Card>
               <CardContent>

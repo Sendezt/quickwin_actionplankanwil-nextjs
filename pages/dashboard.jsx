@@ -8,7 +8,6 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
 import Navbar from "@/components/navbar";
 import RenderTable from "@/components/dashboard/RenderTable";

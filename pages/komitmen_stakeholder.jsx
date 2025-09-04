@@ -167,7 +167,7 @@ const PeriodCard = ({ title, value, description, icon: Icon }) => (
       <CardTitle className="text-xs font-medium">{title}</CardTitle>
       <Icon className="h-3 w-3 text-muted-foreground" />
     </CardHeader>
-    <CardContent className="py-1 px-4">
+    <CardContent className="py-1 px-6">
       <div className="text-base font-semibold text-gray-900">
         {value || "-"}
       </div>
@@ -232,7 +232,7 @@ const InfoCard = ({ title, icon: Icon, children }) => (
       <CardTitle className="text-xs font-medium">{title}</CardTitle>
       <Icon className="h-3 w-3 text-muted-foreground" />
     </CardHeader>
-    <CardContent className="py-2 px-4 text-sm">{children}</CardContent>
+    <CardContent className="py-2 px-6 text-sm">{children}</CardContent>
   </Card>
 );
 
@@ -354,7 +354,7 @@ export default function MenuNine() {
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
-        <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
+        <div className="flex flex-col gap-6 min-h-screen w-full p-4 md:p-6">
           {/* Period Section */}
           <div className="grid gap-4 md:grid-cols-2">
             <PeriodCard
@@ -389,30 +389,29 @@ export default function MenuNine() {
 
             <div className="flex flex-col gap-4">
               <InfoCard title="Obyek Penilaian" icon={LandPlot}>
-                <ol className="list-decimal pl-5 font-semibold text-gray-900 space-y-0.5">
-                  <li>Kantor Wilayah</li>
-                  <li>Kantor Cabang</li>
-                  <li>Kantor Samsat</li>
+                <ol className="list-decimal pl-6 text-sm text-gray-900 font-semibold divide-y divide-gray-200">
+                  <li className="py-2">Kantor Wilayah</li>
+                  <li className="py-2">Kantor Cabang</li>
+                  <li className="py-2">Kantor Samsat</li>
                 </ol>
                 <p className="text-xs text-muted-foreground mt-1">
                   3 Obyek Penilaian
                 </p>
               </InfoCard>
 
-              <InfoCard title="Formula" icon={Radical}>
-                <div className="italic">
-                  <span className="font-semibold text-gray-900">
+              <InfoCard title="Forumula" icon={Radical}>
+                <div className="border-l-4 border-gray-400 pl-3 space-y-1 text-sm">
+                  <p className="font-semibold text-gray-900 mb-1">
                     Terlaksananya sinergi yang diwujudkan dalam bentuk Komitmen
                     Bersama, yang terimplementasi ke dalam sebuah inisiatif
                     strategis, yang selanjutnya dilakukan analisa dan evaluasi
                     atas inisiatif yang dilakukan
-                  </span>
-                  <br />
-                  <span className="text-gray-600">
+                  </p>
+                  <p className="text-gray-600 text-xs">
                     = Ketersediaan komitmen (50%), Implementasi inisiatif
                     strategis (25%), dan ketersediaan hasil analisa dan evaluasi
                     (25%) / Target
-                  </span>
+                  </p>
                 </div>
               </InfoCard>
             </div>

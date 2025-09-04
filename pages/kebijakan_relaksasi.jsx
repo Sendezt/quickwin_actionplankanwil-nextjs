@@ -43,7 +43,6 @@ export default function MenuDua() {
   const [tableData, setTableData] = useState(null);
   const [table1Data, setTable1Data] = useState(null);
   const [breakdownData, setBreakdownData] = useState(null);
-  const [periodeData, setPeriodeData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [rangeData, setRangeData] = useState(null);
 
@@ -119,7 +118,7 @@ export default function MenuDua() {
         <Navbar />
 
         {/* Konten Dashboard */}
-        <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
+        <div className="flex flex-col gap-6 min-h-screen w-full p-4 md:p-6">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {loading ? (
               Array.from({ length: 4 }).map((_, i) => (
@@ -147,11 +146,13 @@ export default function MenuDua() {
                             </CardTitle>
                             <CalendarDays className="h-3 w-3 text-muted-foreground" />
                           </CardHeader>
-                          <CardContent className="py-1 px-4">
+                          <CardContent className="py-1 px-6">
                             <div className="text-base font-semibold text-gray-900">
                               {rangeData.periode_awal}
                             </div>
-                            <p className="text-xs">Tanggal Mulai</p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Tanggal Mulai
+                            </p>
                           </CardContent>
                         </Card>
 
@@ -162,11 +163,13 @@ export default function MenuDua() {
                             </CardTitle>
                             <CalendarDays className="h-3 w-3 text-muted-foreground" />
                           </CardHeader>
-                          <CardContent className="py-1 px-4">
+                          <CardContent className="py-1 px-6">
                             <div className="text-base font-semibold text-gray-900">
                               {rangeData.periode_akhir}
                             </div>
-                            <p className="text-xs">Tanggal Akhir</p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Tanggal Akhir
+                            </p>
                           </CardContent>
                         </Card>
                       </>
@@ -180,11 +183,13 @@ export default function MenuDua() {
                         </CardTitle>
                         <LandPlot className="h-3 w-3 text-muted-foreground" />
                       </CardHeader>
-                      <CardContent className="py-1 px-4">
+                      <CardContent className="py-1 px-6">
                         <div className="text-base font-semibold text-gray-900">
                           Kantor Wilayah
                         </div>
-                        <p className="text-xs">1 Obyek Penilaian</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          1 Obyek Penilaian
+                        </p>
                       </CardContent>
                     </Card>
 
@@ -196,7 +201,7 @@ export default function MenuDua() {
                         </CardTitle>
                         <FileText className="h-3 w-3 text-muted-foreground" />
                       </CardHeader>
-                      <CardContent className="py-1 px-4">
+                      <CardContent className="py-1 px-6">
                         <a
                           href="https://drive.google.com/file/d/1zJc41CQkQ4MFStjR_TD9uIwD9FAN9ODm/view"
                           target="_blank"
@@ -205,7 +210,7 @@ export default function MenuDua() {
                         >
                           Surat Keputusan Gubernur Jawa Tengah
                         </a>
-                        <p className="text-xs">
+                        <p className="text-xs text-muted-foreground mt-1">
                           No. 100.3.3.1/87 Tahun 2025 tentang Pembebasan Pajak
                           Kendaraan Bermotor
                         </p>
@@ -291,42 +296,40 @@ export default function MenuDua() {
 
           {/* Deskripsi Forumula */}
           {!loading && (
-            <Card className="shadow-sm border border-dashed bg-muted/30">
+            <Card className="shadow-sm border border-dashed bg-muted/30 hover:shadow-md transition-shadow col-span-4">
               {/* Header Card */}
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Forumula</CardTitle>
+              <CardHeader className="flex flex-row items-center justify-between pb-1">
+                <CardTitle className="text-sm font-medium text-gray-700">
+                  Forumula
+                </CardTitle>
                 <Radical className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
 
               {/* Content Card */}
-              <CardContent className="py-6 italic space-y-6">
-                {/* Forumula 1 */}
-                <div className="pb-4 border-b last:border-0">
-                  <p className="text-sm leading-relaxed text-gray-600">
-                    <span className="font-semibold italic text-gray-900">
-                      1. Terlaksananya Kebijakan Relaksasi
-                    </span>
-                    {" = "}
-                    <span className="italic">
-                      Ketersediaan Surat Keputusan Gubernur atas Kebijakan
+              <CardContent className="py-4">
+                <div className="space-y-3 text-sm">
+                  {/* Formula 1 */}
+                  <div className="border-l-4 border-gray-400 pl-3">
+                    <p className="font-semibold text-gray-900 mb-1">
+                      Terlaksananya Kebijakan Relaksasi
+                    </p>
+                    <p className="text-gray-600 text-xs">
+                      = Ketersediaan Surat Keputusan Gubernur atas Kebijakan
                       Pembebasan Denda, BBNKB II, dan Pajak Progresif / Target
-                    </span>
-                  </p>
-                </div>
+                    </p>
+                  </div>
 
-                {/* Formula 2 */}
-                <div className="pb-4 border-b last:border-0">
-                  <p className="text-sm leading-relaxed text-gray-600">
-                    <span className="font-semibold italic text-gray-900">
-                      2. Pertumbuhan penerimaan SW di periode Relaksasi
-                    </span>
-                    {" = "}
-                    <span className="italic">
-                      Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n /
-                      Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n-1
-                      × 100 - 100
-                    </span>
-                  </p>
+                  {/* Formula 2 */}
+                  <div className="border-l-4 border-gray-400 pl-3">
+                    <p className="font-semibold text-gray-900 mb-1">
+                      Pertumbuhan penerimaan SW di periode Relaksasi
+                    </p>
+                    <p className="text-gray-600 text-xs">
+                      = Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n
+                      / Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun
+                      n-1 × 100 - 100
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -420,9 +423,12 @@ export default function MenuDua() {
           {/* ================= CARD UNTUK TABLE1 ================= */}
           <Card className="w-full overflow-hidden">
             <CardHeader>
-              <CardTitle className="text-xl font-bold">
-                Rekapitulasi Pertumbuhan Penerimaan SW Periode Pemutihan Per
-                Cabang
+              <CardTitle className="text-xl">
+                Rekapitulasi{" "}
+                <span className="text-yellow-500">
+                  Pertumbuhan Penerimaan SW Periode Pemutihan
+                </span>{" "}
+                Per Cabang
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -495,9 +501,12 @@ export default function MenuDua() {
           {/* ================= CARD UNTUK TABLE2 ================= */}
           <Card className="w-full overflow-hidden">
             <CardHeader>
-              <CardTitle className="text-xl font-bold">
-                Rekapitulasi Pertumbuhan Penerimaan SW Periode Pemutihan Per
-                Cabang
+              <CardTitle className="text-xl">
+                Rekapitulasi{" "}
+                <span className="text-yellow-500">
+                  Pertumbuhan Penerimaan SW Periode Pemutihan
+                </span>{" "}
+                Per Cabang
               </CardTitle>
             </CardHeader>
             <CardContent>

@@ -112,7 +112,7 @@ export default function MenuTen() {
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
-        <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
+        <div className="flex flex-col gap-6 min-h-screen w-full p-4 md:p-6">
           {/* Cards Atas */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {loading ? (
@@ -137,11 +137,11 @@ export default function MenuTen() {
                     </CardTitle>
                     <CalendarDays className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="py-1 px-4">
+                  <CardContent className="py-1 px-6">
                     <div className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_awal ?? "-"}
                     </div>
-                    <p className="text-xs">Tanggal Mulai</p>
+                    <p className="text-xs text-muted-foreground mt-1">Tanggal Mulai</p>
                   </CardContent>
                 </Card>
 
@@ -153,11 +153,11 @@ export default function MenuTen() {
                     </CardTitle>
                     <CalendarDays className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="py-1 px-4">
+                  <CardContent className="py-1 px-6">
                     <div className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_akhir ?? "-"}
                     </div>
-                    <p className="text-xs">Tanggal Akhir</p>
+                    <p className="text-xs text-muted-foreground mt-1">Tanggal Akhir</p>
                   </CardContent>
                 </Card>
 
@@ -169,13 +169,13 @@ export default function MenuTen() {
                     </CardTitle>
                     <LandPlot className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="py-1 px-4">
-                    <ol className="list-decimal pl-4 text-sm font-semibold text-gray-900 mb-1">
-                      <li>Kantor Wilayah</li>
-                      <li>Kantor Cabang</li>
-                      <li>Kantor Samsat</li>
+                  <CardContent className="py-1 px-6">
+                    <ol className="list-decimal pl-6 text-sm text-gray-900 font-semibold divide-y divide-gray-200">
+                      <li className="py-2">Kantor Wilayah</li>
+                      <li className="py-2">Kantor Cabang</li>
+                      <li className="py-2">Kantor Samsat</li>
                     </ol>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-muted-foreground mt-1">
                       3 Obyek Penilaian
                     </p>
                   </CardContent>
@@ -189,14 +189,17 @@ export default function MenuTen() {
                     </CardTitle>
                     <Radical className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="py-2 px-4 italic text-sm">
-                    <span className="font-semibold text-gray-900">
-                      Kontribusi SW Terkutip dari Tunggakan
-                    </span>
-                    <span className="text-gray-600">
-                      {" "}
-                      = Realisasi SW Terkutip / Tunggakan SW
-                    </span>
+                  <CardContent className="py-4">
+                    <div className="space-y-3 text-sm">
+                      <div className="border-l-4 border-gray-400 pl-3">
+                        <p className="font-semibold text-gray-900 mb-1">
+                          Kontribusi SW Terkutip dari Tunggakan
+                        </p>
+                        <p className="text-gray-600 text-xs">
+                          = Realisasi SW Terkutip / Tunggakan SW
+                        </p>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </>

@@ -94,7 +94,7 @@ export default function MenuLima() {
             <Skeleton className="h-4 w-20" />
             <Skeleton className="h-4 w-4" />
           </CardHeader>
-          <CardContent className="py-1 px-4">
+          <CardContent className="py-1 px-6">
             <Skeleton className="h-6 w-24 mb-1" />
             <Skeleton className="h-3 w-32" />
           </CardContent>
@@ -106,7 +106,7 @@ export default function MenuLima() {
             <Skeleton className="h-4 w-20" />
             <Skeleton className="h-4 w-4" />
           </CardHeader>
-          <CardContent className="py-1 px-4">
+          <CardContent className="py-1 px-6">
             <Skeleton className="h-6 w-24 mb-1" />
             <Skeleton className="h-3 w-32" />
           </CardContent>
@@ -138,7 +138,7 @@ export default function MenuLima() {
             <Skeleton className="h-4 w-24" />
             <Skeleton className="h-4 w-4" />
           </CardHeader>
-          <CardContent className="flex flex-col justify-center min-h-24 px-4">
+          <CardContent className="flex flex-col justify-center min-h-24 px-6">
             <Skeleton className="h-6 w-32 mb-1" />
             <Skeleton className="h-3 w-24" />
           </CardContent>
@@ -184,7 +184,7 @@ export default function MenuLima() {
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
-        <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
+        <div className="flex flex-col gap-6 min-h-screen w-full p-4 md:p-6">
           {/* Grid Periode + Info */}
           {loading ? (
             <SkeletonGridFirst />
@@ -198,11 +198,11 @@ export default function MenuLima() {
                   </CardTitle>
                   <CalendarDays className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
-                <CardContent className="py-1 px-4">
+                <CardContent className="py-1 px-6">
                   <div className="text-base font-semibold text-gray-900">
                     {rangeData?.periode_awal ?? "-"}
                   </div>
-                  <p className="text-xs">Tanggal Mulai Periode</p>
+                  <p className="text-xs text-muted-foreground mt-1">Tanggal Mulai</p>
                 </CardContent>
               </Card>
 
@@ -234,11 +234,11 @@ export default function MenuLima() {
                   </CardTitle>
                   <CalendarDays className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
-                <CardContent className="py-1 px-4">
+                <CardContent className="py-1 px-6">
                   <div className="text-base font-semibold text-gray-900">
                     {rangeData?.periode_akhir ?? "-"}
                   </div>
-                  <p className="text-xs">Tanggal Akhir Periode</p>
+                  <p className="text-xs text-muted-foreground mt-1">Tanggal Akhir</p>
                 </CardContent>
               </Card>
             </div>
@@ -257,11 +257,11 @@ export default function MenuLima() {
                   </CardTitle>
                   <LandPlot className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
-                <CardContent className="flex flex-col justify-center min-h-24 px-4">
+                <CardContent className="flex flex-col justify-center min-h-24 px-6">
                   <div className="text-base font-semibold text-gray-900">
                     Kantor Wilayah
                   </div>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-muted-foreground mt-1">
                     1 Obyek Penilaian
                   </p>
                 </CardContent>
@@ -310,14 +310,18 @@ export default function MenuLima() {
                   </CardTitle>
                   <Radical className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
-                <CardContent className="py-6 px-5 italic space-y-6">
-                  <p className="text-sm text-muted-foreground">
-                    <span className="font-semibold text-gray-900">
-                      Tingkat Keterisian Data Kepemilikan Kendaraan sesuai
-                      Target
-                    </span>{" "}
-                    = Realisasi Ceri / Target
-                  </p>
+                <CardContent className="py-4">
+                  <div className="space-y-3 text-sm">
+                    <div className="border-l-4 border-gray-400 pl-3">
+                      <p className="font-semibold text-gray-900 mb-1">
+                        Tingkat Keterisian Data Kepemilikan Kendaraan sesuai
+                        Target
+                      </p>
+                      <p className="text-gray-600 text-xs">
+                        = Realisasi Ceri / Target
+                      </p>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </div>

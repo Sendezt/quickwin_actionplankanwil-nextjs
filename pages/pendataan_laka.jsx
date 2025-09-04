@@ -71,7 +71,7 @@ export default function MenuThirdteen() {
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
-        <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
+        <div className="flex flex-col gap-6 min-h-screen w-full p-4 md:p-6">
           {/* Cards Atas */}
           {loading ? (
             <div className="grid gap-4">
@@ -151,11 +151,11 @@ export default function MenuThirdteen() {
                       </CardTitle>
                       <CalendarDays className="h-3 w-3 text-muted-foreground" />
                     </CardHeader>
-                    <CardContent className="py-1 px-4">
+                    <CardContent className="py-1 px-6">
                       <div className="text-base font-semibold text-gray-900">
                         {rangeData?.periode_awal ?? "-"}
                       </div>
-                      <p className="text-xs">Tanggal Mulai Periode</p>
+                      <p className="text-xs text-muted-foreground mt-1">Tanggal Mulai</p>
                     </CardContent>
                   </Card>
 
@@ -167,11 +167,11 @@ export default function MenuThirdteen() {
                       </CardTitle>
                       <CalendarDays className="h-3 w-3 text-muted-foreground" />
                     </CardHeader>
-                    <CardContent className="py-1 px-4">
+                    <CardContent className="py-1 px-6">
                       <div className="text-base font-semibold text-gray-900">
                         {rangeData?.periode_akhir ?? "-"}
                       </div>
-                      <p className="text-xs">Tanggal Akhir Periode</p>
+                      <p className="text-xs text-muted-foreground mt-1">Tanggal Akhir</p>
                     </CardContent>
                   </Card>
                 </div>
@@ -205,11 +205,11 @@ export default function MenuThirdteen() {
                     </CardTitle>
                     <LandPlot className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="py-1 px-4">
+                  <CardContent className="py-1 px-6">
                     <div className="text-base font-semibold text-gray-900">
                       Kantor Wilayah
                     </div>
-                    <p className="text-xs">1 Obyek Penilaian</p>
+                    <p className="text-xs text-muted-foreground mt-1">1 Obyek Penilaian</p>
                   </CardContent>
                 </Card>
 
@@ -221,15 +221,19 @@ export default function MenuThirdteen() {
                     </CardTitle>
                     <Radical className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="py-1 px-4 italic">
-                    <span className="font-semibold text-gray-900">
-                      % pelunasan PKB dan SWDKLLJ kendaraan terlibat laka lantas
-                    </span>
-                    <span className="text-gray-600">
-                      {" "}
-                      = Jumlah kendaraan terlibat laka lantas yang lunas SW /
-                      Jumlah Kendaraan terlibat laka
-                    </span>
+                  <CardContent className="py-4">
+                    <div className="space-y-3 text-sm">
+                      <div className="border-l-4 border-gray-400 pl-3">
+                        <p className="font-semibold text-gray-900 mb-1">
+                          % pelunasan PKB dan SWDKLLJ kendaraan terlibat laka
+                          lantas
+                        </p>
+                        <p className="text-gray-600 text-xs">
+                          = Jumlah kendaraan terlibat laka lantas yang lunas SW
+                          / Jumlah Kendaraan terlibat laka
+                        </p>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
@@ -254,7 +258,8 @@ export default function MenuThirdteen() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg font-semibold">
-                Hasil Penerimaan SW Atas{" "} <span className="text-yellow-600">Kendaraan Terlibat Laka</span>
+                Hasil Penerimaan SW Atas{" "}
+                <span className="text-yellow-600">Kendaraan Terlibat Laka</span>
               </CardTitle>
             </CardHeader>
             <CardContent>

@@ -156,12 +156,9 @@ export default function MenuEnam() {
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
-        <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-50 p-4 md:p-6">
+        <div className="flex flex-col gap-6 min-h-screen w-full p-4 md:p-6">
           {/* Periode Section */}
           <div className="space-y-3">
-            <h2 className="text-lg font-semibold text-gray-900">
-              Informasi Periode
-            </h2>
             <div className="grid gap-4 md:grid-cols-2">
               {loading ? (
                 <>
@@ -181,8 +178,8 @@ export default function MenuEnam() {
                       <div className="text-lg font-bold text-gray-900 mb-1">
                         {rangeData?.periode_awal || "-"}
                       </div>
-                      <p className="text-xs text-muted-foreground">
-                        Tanggal Mulai Periode
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Tanggal Mulai
                       </p>
                     </CardContent>
                   </Card>
@@ -198,8 +195,8 @@ export default function MenuEnam() {
                       <div className="text-lg font-bold text-gray-900 mb-1">
                         {rangeData?.periode_akhir || "-"}
                       </div>
-                      <p className="text-xs text-muted-foreground">
-                        Tanggal Akhir Periode
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Tanggal Akhir
                       </p>
                     </CardContent>
                   </Card>
@@ -210,9 +207,6 @@ export default function MenuEnam() {
 
           {/* Score Section */}
           <div className="space-y-3">
-            <h2 className="text-lg font-semibold text-gray-900">
-              Skor Penilaian
-            </h2>
             <div className="grid gap-4 md:grid-cols-3">
               {loading ? (
                 <>
@@ -279,9 +273,6 @@ export default function MenuEnam() {
 
           {/* Information Section */}
           <div className="space-y-3">
-            <h2 className="text-lg font-semibold text-gray-900">
-              Informasi Penilaian
-            </h2>
             <div className="grid gap-4 lg:grid-cols-3">
               {loading ? (
                 <>
@@ -298,13 +289,13 @@ export default function MenuEnam() {
                       </CardTitle>
                       <LandPlot className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
-                    <CardContent className="py-4">
-                      <ol className="list-decimal pl-5 text-sm font-semibold text-gray-900 mb-3 space-y-1">
-                        <li>Kantor Wilayah</li>
-                        <li>Kantor Cabang</li>
-                        <li>Kantor Samsat</li>
+                    <CardContent className="p-5">
+                      <ol className="list-decimal pl-6 text-sm text-gray-900 font-semibold divide-y divide-gray-200">
+                        <li className="py-2">Kantor Wilayah</li>
+                        <li className="py-2">Kantor Cabang</li>
+                        <li className="py-2">Kantor Samsat</li>
                       </ol>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-muted-foreground px-2">
                         3 Obyek Penilaian
                       </p>
                     </CardContent>
@@ -317,13 +308,13 @@ export default function MenuEnam() {
                       </CardTitle>
                       <FileText className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
-                    <CardContent className="py-4 space-y-2">
-                      <ol className="list-decimal pl-5 text-sm font-medium text-gray-900 space-y-1">
-                        <li>Banner Terkait Jasa Raharja</li>
-                        <li>Banner Terkait JRku Reward</li>
-                        <li>Banner Terkait Signal</li>
-                        <li>Banner Terkait Layanan Online</li>
-                        <li>
+                    <CardContent className="p-5">
+                      <ol className="list-decimal pl-6 text-sm text-gray-900 font-semibold divide-y divide-gray-200">
+                        <li className="py-2">Banner Terkait Jasa Raharja</li>
+                        <li className="py-2">Banner Terkait JRku Reward</li>
+                        <li className="py-2">Banner Terkait Signal</li>
+                        <li className="py-2">Banner Terkait Layanan Online</li>
+                        <li className="py-2">
                           Banner Terkait Fungsi Regident, PKB, dan SWDKLLJ
                         </li>
                       </ol>
@@ -333,7 +324,7 @@ export default function MenuEnam() {
                   <Card className="shadow-sm border border-dashed bg-muted/30 hover:shadow-md transition-shadow">
                     <CardHeader className="flex flex-row items-center justify-between pb-1">
                       <CardTitle className="text-sm font-medium text-gray-700">
-                        Formula
+                        Forumula
                       </CardTitle>
                       <Radical className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
@@ -387,7 +378,7 @@ export default function MenuEnam() {
             ) : (
               <>
                 <Card className="shadow-sm hover:shadow-md transition-shadow">
-                  <CardHeader className="bg-gray-50 border-b">
+                  <CardHeader className="border-b">
                     <CardTitle className="text-xl">
                       Pelaksanaan{" "}
                       <span className="text-red-700">
@@ -402,7 +393,7 @@ export default function MenuEnam() {
                 </Card>
 
                 <Card className="shadow-sm hover:shadow-md transition-shadow">
-                  <CardHeader className="bg-gray-50 border-b">
+                  <CardHeader className="border-b">
                     <CardTitle className="text-xl">
                       Pelaksanaan{" "}
                       <span className="text-red-700">
@@ -417,7 +408,7 @@ export default function MenuEnam() {
                 </Card>
 
                 <Card className="shadow-sm hover:shadow-md transition-shadow">
-                  <CardHeader className="bg-gray-50 border-b">
+                  <CardHeader className="border-b">
                     <CardTitle className="text-xl">
                       Skor Pelaksanaan{" "}
                       <span className="text-red-700">
@@ -432,7 +423,7 @@ export default function MenuEnam() {
                 </Card>
 
                 <Card className="shadow-sm hover:shadow-md transition-shadow">
-                  <CardHeader className="bg-gray-50 border-b">
+                  <CardHeader className="border-b">
                     <CardTitle className="text-xl">
                       Pengisian Data Banner{" "}
                       <span className="text-red-700">
@@ -447,7 +438,7 @@ export default function MenuEnam() {
                 </Card>
 
                 <Card className="shadow-sm hover:shadow-md transition-shadow">
-                  <CardHeader className="bg-gray-50 border-b">
+                  <CardHeader className="border-b">
                     <CardTitle className="text-xl">
                       Pengisian Data IG{" "}
                       <span className="text-orange-500">

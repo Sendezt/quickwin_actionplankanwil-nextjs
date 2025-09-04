@@ -262,7 +262,7 @@ export default function MenuTujuh() {
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
-        <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
+        <div className="flex flex-col gap-6 min-h-screen w-full p-4 md:p-6">
           {/* Top Info (4 Card) */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {loading ? (
@@ -282,11 +282,11 @@ export default function MenuTujuh() {
                     </CardTitle>
                     <CalendarDays className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="py-1 px-4">
+                  <CardContent className="py-1 px-6">
                     <div className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_awal ?? "-"}
                     </div>
-                    <p className="text-xs">Tanggal Mulai</p>
+                    <p className="text-xs text-muted-foreground mt-1">Tanggal Mulai</p>
                   </CardContent>
                 </Card>
 
@@ -298,11 +298,11 @@ export default function MenuTujuh() {
                     </CardTitle>
                     <CalendarDays className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="py-1 px-4">
+                  <CardContent className="py-1 px-6">
                     <div className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_akhir ?? "-"}
                     </div>
-                    <p className="text-xs">Tanggal Akhir</p>
+                    <p className="text-xs text-muted-foreground mt-1">Tanggal Akhir</p>
                   </CardContent>
                 </Card>
 
@@ -314,11 +314,11 @@ export default function MenuTujuh() {
                     </CardTitle>
                     <LandPlot className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="py-1 px-4">
+                  <CardContent className="py-1 px-6">
                     <div className="text-base font-semibold text-gray-900">
                       Kantor Wilayah
                     </div>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-muted-foreground mt-1">
                       1 Objek Penelitian
                     </p>
                   </CardContent>
@@ -328,22 +328,25 @@ export default function MenuTujuh() {
                 <Card className="shadow-sm border border-dashed bg-muted/30">
                   <CardHeader className="flex flex-row items-center justify-between pb-1">
                     <CardTitle className="text-xs font-medium">
-                      Formula
+                      Forumula
                     </CardTitle>
                     <Radical className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="py-2 px-4">
-                    <p className="mb-1 italic text-sm font-semibold text-gray-900">
-                      Pertumbuhan Penerimaan SWDKLLJ via SIGNAL dan Layanan
-                      Online
-                    </p>
-                    <p className="italic text-xs text-gray-600">
-                      = Realisasi / Target
-                    </p>
-                    <br />
-                    <p className="italic text-xs text-blue-600">
-                      *) Target pertumbuhan 5%
-                    </p>
+                  <CardContent className="py-4">
+                    <div className="space-y-3 text-sm">
+                      <div className="border-l-4 border-gray-400 pl-3">
+                        <p className="font-semibold text-gray-900 mb-1">
+                          Pertumbuhan Penerimaan SWDKLLJ via SIGNAL dan Layanan
+                          Online
+                        </p>
+                        <p className="text-gray-600 text-xs">
+                          = Realisasi / Target
+                        </p>
+                        <p className="text-blue-600 text-xs">
+                          *) Target pertumbuhan 5%
+                        </p>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </>
@@ -384,7 +387,10 @@ export default function MenuTujuh() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-xl">
-                  Rekapitulasi{" "} <span className="text-red-700">Penerimaan SIGNAL & Layanan Online</span>
+                  Rekapitulasi{" "}
+                  <span className="text-red-700">
+                    Penerimaan SIGNAL & Layanan Online
+                  </span>
                 </CardTitle>
               </CardHeader>
               <CardContent>

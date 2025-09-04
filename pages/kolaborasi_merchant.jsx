@@ -119,7 +119,7 @@ export default function MenuDelapan() {
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
-        <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
+        <div className="flex flex-col gap-6 min-h-screen w-full p-4 md:p-6">
           {loading ? (
             <>
               {/* Skeleton untuk Row 1 - Periode dan Obyek Penilaian */}
@@ -308,13 +308,13 @@ export default function MenuDelapan() {
                 <div className="flex flex-col gap-4">
                   {/* Periode Awal */}
                   <Card className="shadow-sm border border-dashed bg-muted/30">
-                    <CardHeader className="flex flex-row items-center justify-between pb-1 px-3">
+                    <CardHeader className="flex flex-row items-center justify-between pb-1 px-6">
                       <CardTitle className="text-xs font-medium">
                         Periode Awal
                       </CardTitle>
                       <CalendarDays className="h-3 w-3 text-muted-foreground" />
                     </CardHeader>
-                    <CardContent className="px-3 pb-2">
+                    <CardContent className="px-6 pb-2">
                       <div className="text-base font-semibold text-gray-900">
                         {rangeData?.periode_awal ?? "-"}
                       </div>
@@ -326,13 +326,13 @@ export default function MenuDelapan() {
 
                   {/* Periode Akhir */}
                   <Card className="shadow-sm border border-dashed bg-muted/30">
-                    <CardHeader className="flex flex-row items-center justify-between pb-1 px-3">
+                    <CardHeader className="flex flex-row items-center justify-between pb-1 px-6">
                       <CardTitle className="text-xs font-medium">
                         Periode Akhir
                       </CardTitle>
                       <CalendarDays className="h-3 w-3 text-muted-foreground" />
                     </CardHeader>
-                    <CardContent className="px-3 pb-2">
+                    <CardContent className="px-6 pb-2">
                       <div className="text-base font-semibold text-gray-900">
                         {rangeData?.periode_akhir ?? "-"}
                       </div>
@@ -344,27 +344,21 @@ export default function MenuDelapan() {
                 </div>
 
                 {/* Kolom Kanan: Obyek Penilaian */}
-                <Card className="p-0 overflow-hidden">
-                  {/* Header */}
-                  <div className="bg-gray-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-                    <h4 className="text-sm font-semibold text-gray-800">
+                <Card className="shadow-sm border border-dashed bg-muted/30 hover:shadow-md transition-shadow">
+                  <CardHeader className="flex flex-row items-center justify-between">
+                    <CardTitle className="text-xs font-medium">
                       Obyek Penilaian
-                    </h4>
-                    <div className="bg-gray-200 rounded-full">
-                      <LandPlot className="h-4 w-4 text-gray-700" />
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <CardContent className="py-3 px-5 space-y-2">
-                    <ol className="list-decimal pl-5 space-y-2 text-sm text-gray-700">
-                      <li className="font-medium">Kantor Wilayah</li>
-                      <li className="font-medium">Kantor Cabang</li>
-                      <li className="font-medium">Kantor Samsat</li>
+                    </CardTitle>
+                    <LandPlot className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent className="p-5">
+                    <ol className="list-decimal pl-6 text-sm text-gray-900 font-semibold divide-y divide-gray-200">
+                      <li className="py-2">Kantor Wilayah</li>
+                      <li className="py-2">Kantor Cabang</li>
+                      <li className="py-2">Kantor Samsat</li>
                     </ol>
-
-                    <p className="text-xs text-gray-500 mt-2 italic">
-                      Total: 3 Obyek Penilaian
+                    <p className="text-[10px] text-muted-foreground px-2">
+                      3 Obyek Penilaian
                     </p>
                   </CardContent>
                 </Card>
@@ -477,26 +471,38 @@ export default function MenuDelapan() {
                   </CardContent>
                 </Card>
 
-                {/* Formula */}
+                {/* Forumula */}
                 <Card className="shadow-sm border border-dashed bg-muted/30">
-                  <CardHeader className="flex flex-row items-center justify-between pb-1 px-3">
+                  <CardHeader className="flex flex-row items-center justify-between pb-1 px-6">
                     <CardTitle className="text-xs font-medium">
-                      Formula
+                      Forumula
                     </CardTitle>
                     <Radical className="h-3 w-3 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent className="px-3 pb-2">
-                    <ol className="list-decimal pl-4 space-y-2 text-xs text-gray-700">
-                      <li className="italic border-b pb-2">
-                        Jumlah merchant yang bekerja sama = Jumlah merchant yang
-                        berhasil diajak kerjasama / Target (3 Merchant)
-                      </li>
-                      <li className="italic">
-                        % Jumlah WP yang memanfaatkan fasilitas merchant =
-                        Jumlah Wajib Pajak yang memanfaatkan fasilitas merchant
-                        / Target (10 Klaim per Merchant)
-                      </li>
-                    </ol>
+                  <CardContent className="py-4">
+                    <div className="space-y-3 text-sm">
+                      {/* Formula 1 */}
+                      <div className="border-l-4 border-gray-400 pl-3">
+                        <p className="font-semibold text-gray-900 mb-1">
+                          Jumlah merchant yang bekerja sama
+                        </p>
+                        <p className="text-gray-600 text-xs">
+                          = Jumlah merchant yang berhasil diajak kerjasama /
+                          Target (3 Merchant)
+                        </p>
+                      </div>
+
+                      {/* Formula 2 */}
+                      <div className="border-l-4 border-gray-400 pl-3">
+                        <p className="font-semibold text-gray-900 mb-1">
+                          % Jumlah WP yang memanfaatkan fasilitas merchant
+                        </p>
+                        <p className="text-gray-600 text-xs">
+                          = Jumlah Wajib Pajak yang memanfaatkan fasilitas
+                          merchant / Target (10 Klaim per Merchant)
+                        </p>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
