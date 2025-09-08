@@ -3,12 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Navbar from "@/components/navbar";
 import RenderTable from "@/components/dashboard/RenderTable";
 // import ChartJS
@@ -151,10 +146,20 @@ export default function Dashboard() {
           const table = json.tables.find(
             (t) => t.name === "Nilai Total Action Plan SAMSAT"
           );
-          if (table) {
-            setBestSamsatCard({
-              summary: table.data[0],
-            });
+
+          if (table && Array.isArray(table.data)) {
+            // cari row dengan nilai tertinggi di kolom index ke-2
+            const bestRow = table.data.reduce((max, row) => {
+              const nilai = parseFloat(row[2]); // ambil angka dari "65.21%"
+              const maxNilai = max ? parseFloat(max[2]) : -Infinity;
+              return nilai > maxNilai ? row : max;
+            }, null);
+
+            if (bestRow) {
+              setBestSamsatCard({
+                summary: bestRow,
+              });
+            }
           }
         }
       } catch (err) {
