@@ -3,7 +3,14 @@
 import * as React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { ChevronRight, Home, Flame, Layers, MessagesSquare } from "lucide-react";
+import {
+  ChevronRight,
+  Home,
+  Flame,
+  Layers,
+  MessagesSquare,
+  LogIn,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 
 import {
@@ -28,13 +35,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button"; // pastikan kamu punya komponen ini
 
 // Menu data
 export const data = {
@@ -104,7 +105,6 @@ export function AppSidebar(props) {
   }, []);
 
   if (!mounted) {
-    // render versi "kosong" dulu biar sama dengan SSR
     return null;
   }
 
@@ -233,6 +233,20 @@ export function AppSidebar(props) {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      {/* Sidebar Footer untuk login */}
+      <SidebarFooter className="p-4 border-t border-gray-200">
+        <Link href="/login" className="w-full">
+          <Button
+            variant="default"
+            className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            <LogIn className="h-4 w-4" />
+            Login
+          </Button>
+        </Link>
+      </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
   );
