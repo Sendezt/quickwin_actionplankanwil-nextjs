@@ -22,7 +22,8 @@ export default function DetailTable({ loket }) {
   // Pakai SWR dengan key unik per-loket supaya cache terpisah
   const { data, error, isLoading } = useSWR(
     `detail-${targetName}`, // key cache
-    () => fetcher("https://magangproject.vercel.app/api/google/getsheet1Detail"),
+    () =>
+      fetcher("https://magangproject.vercel.app/api/sheet1/getsheet1Detail"),
     { revalidateOnFocus: false } // biar tidak auto-refresh saat ganti tab
   );
 

@@ -16,6 +16,7 @@ ChartJS.register(Title, Tooltip, Legend, ArcElement);
 export default function Dashboard() {
   const [skorJatengData, setSkorJatengData] = useState(null);
   const [bestCabangData, setBestCabangData] = useState(null);
+  const [bestCabangCard, setBestCabangCard] = useState(null);
   const [cardDashboardData, setCardDashboardData] = useState([]);
   const [bestSamsatData, setBestSamsatData] = useState(null);
   const [bestSamsatCard, setBestSamsatCard] = useState(null);
@@ -118,13 +119,28 @@ export default function Dashboard() {
             (t) => t.name === "Nilai Total Action Plan Cabang"
           );
 
-          if (table) {
+          if (table && Array.isArray(table.data)) {
+            // Set data lengkap untuk tabel
             setBestCabangData({
               header: [table.header], // bungkus biar cocok dengan RenderTable
               data: table.data,
               summary: [table.data[0][1], table.data[0][2]],
               // misal summary menampilkan baris pertama
             });
+
+            // cari row dengan nilai tertinggi di kolom index ke-2
+            const bestRow = table.data.reduce((max, row) => {
+              const nilai = parseFloat(row[2]); // ambil angka dari "65.21%"
+              const maxNilai = max ? parseFloat(max[2]) : -Infinity;
+              return nilai > maxNilai ? row : max;
+            }, null);
+
+            if (bestRow) {
+              // Set data untuk card dengan nilai tertinggi
+              setBestCabangCard({
+                summary: bestRow,
+              });
+            }
           }
         }
       } catch (err) {
@@ -265,8 +281,8 @@ export default function Dashboard() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex justify-between text-red-900 font-bold p-4">
-                  <span>{bestCabangData?.summary?.[0] ?? "-"}</span>
-                  <span>{bestCabangData?.summary?.[1] ?? "-"}</span>
+                  <span>{bestCabangCard?.summary?.[1] ?? "-"}</span>
+                  <span>{bestCabangCard?.summary?.[2] ?? "-"}</span>
                 </CardContent>
               </Card>
 
