@@ -15,7 +15,6 @@ export default function TableSamsat({
   title,
   description,
   tableData,
-  isLoading,
 }) {
   if (!tableData) return null;
 

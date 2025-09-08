@@ -23,8 +23,8 @@ export default function DetailTable({ loket }) {
   const { data, error, isLoading } = useSWR(
     `detail-${targetName}`, // key cache
     () =>
-      fetcher("https://magangproject.vercel.app/api/sheet1/getsheet1Detail"),
-    { revalidateOnFocus: false } // biar tidak auto-refresh saat ganti tab
+      fetcher("https://magangproject.vercel.app/api/google/getsheet1Detail"),
+    { revalidateOnFocus: false }
   );
 
   if (isLoading) return <div className="p-2 text-sm">Loading...</div>;
