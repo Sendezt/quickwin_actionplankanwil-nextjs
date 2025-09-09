@@ -35,21 +35,21 @@ export default function MenuLima() {
       try {
         // Skor total (table1)
         const res1 = await fetch(
-          "https://magangproject.vercel.app/api/google/getsheet5table1"
+          "https://magangproject.vercel.app/api/sheet5/getsheet5table1"
         );
         const json1 = await res1.json();
         setTable1Data(json1);
 
         // Table2 data
         const res2 = await fetch(
-          "https://magangproject.vercel.app/api/google/getsheet5table2"
+          "https://magangproject.vercel.app/api/sheet5/getsheet5table2"
         );
         const json2 = await res2.json();
         setTable2Data(json2);
 
         // Skor cabang
         const res3 = await fetch(
-          "https://magangproject.vercel.app/api/google/getsheet5card"
+          "https://magangproject.vercel.app/api/sheet5/getsheet5card"
         );
         const json3 = await res3.json();
         setCabangData(json3);
@@ -63,7 +63,7 @@ export default function MenuLima() {
     async function fetchRangeData() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/google/getRange-sheet5"
+          "https://magangproject.vercel.app/api/sheet5/getRange-sheet5"
         );
         const json = await res.json();
         setRangeData(json);

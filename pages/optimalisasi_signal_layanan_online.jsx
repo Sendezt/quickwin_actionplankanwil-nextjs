@@ -24,7 +24,7 @@ export default function MenuTujuh() {
     const fetchData = async () => {
       try {
         const res1 = await fetch(
-          "https://magangproject.vercel.app/api/google/getsheet7table1"
+          "https://magangproject.vercel.app/api/sheet7/getsheet7table1"
         );
         setTable1Data(await res1.json());
       } catch (error) {
@@ -37,7 +37,7 @@ export default function MenuTujuh() {
     async function fetchRangeData() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/google/getRange-sheet7"
+          "https://magangproject.vercel.app/api/sheet7/getRange-sheet7"
         );
         const json = await res.json();
         if (json) setRangeData(json);

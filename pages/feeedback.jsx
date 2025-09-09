@@ -394,22 +394,22 @@ export default function FeedbackPage() {
                             </colgroup>
                             <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
                               <tr>
-                                <th className="p-4 text-left font-semibold text-gray-700 border-r border-gray-200">
+                                <th className="p-4 text-center font-semibold text-gray-700 border-r border-gray-200">
                                   Action Plan
                                 </th>
-                                <th className="p-4 text-left font-semibold text-gray-700 border-r border-gray-200">
+                                <th className="p-4 text-center font-semibold text-gray-700 border-r border-gray-200">
                                   Feedback
                                 </th>
-                                <th className="p-4 text-left font-semibold text-gray-700 border-r border-gray-200">
+                                <th className="p-4 text-center font-semibold text-gray-700 border-r border-gray-200">
                                   Status
                                 </th>
-                                <th className="p-4 text-left font-semibold text-gray-700 border-r border-gray-200">
+                                <th className="p-4 text-center font-semibold text-gray-700 border-r border-gray-200">
                                   Proses
                                 </th>
-                                <th className="p-4 text-left font-semibold text-gray-700 border-r border-gray-200">
+                                <th className="p-4 text-center font-semibold text-gray-700 border-r border-gray-200">
                                   Selesai
                                 </th>
-                                <th className="p-4 text-right font-semibold text-gray-700">
+                                <th className="p-4 text-center font-semibold text-gray-700">
                                   Aksi
                                 </th>
                               </tr>

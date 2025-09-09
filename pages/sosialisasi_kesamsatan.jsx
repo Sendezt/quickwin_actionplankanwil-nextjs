@@ -30,27 +30,27 @@ export default function MenuEnam() {
     const fetchData = async () => {
       try {
         const res1 = await fetch(
-          "https://magangproject.vercel.app/api/google/getsheet6table1"
+          "https://magangproject.vercel.app/api/sheet6/getsheet6table1"
         );
         setTable1Data(await res1.json());
 
         const res2 = await fetch(
-          "https://magangproject.vercel.app/api/google/getsheet6table2"
+          "https://magangproject.vercel.app/api/sheet6/getsheet6table2"
         );
         setTable2Data(await res2.json());
 
         const res3 = await fetch(
-          "https://magangproject.vercel.app/api/google/getsheet6table3"
+          "https://magangproject.vercel.app/api/sheet6/getsheet6table3"
         );
         setTable3Data(await res3.json());
 
         const res4 = await fetch(
-          "https://magangproject.vercel.app/api/google/getsheet6table4"
+          "https://magangproject.vercel.app/api/sheet6/getsheet6table4"
         );
         setTable4Data(await res4.json());
 
         const res5 = await fetch(
-          "https://magangproject.vercel.app/api/google/getsheet6table5"
+          "https://magangproject.vercel.app/api/sheet6/getsheet6table5"
         );
         setTable5Data(await res5.json());
       } catch (error) {
@@ -63,7 +63,7 @@ export default function MenuEnam() {
     async function fetchRangeData() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/google/getRange-sheet6"
+          "https://magangproject.vercel.app/api/sheet6/getRange-sheet6"
         );
         const json = await res.json();
         if (json) setRangeData(json);

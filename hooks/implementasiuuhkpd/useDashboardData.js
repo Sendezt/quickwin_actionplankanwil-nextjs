@@ -12,7 +12,7 @@ export function useDashboardData() {
     async function fetchData() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/google/getsheet1"
+          "https://magangproject.vercel.app/api/sheet1/getsheet1"
         );
         const json = await res.json();
 
@@ -31,7 +31,7 @@ export function useDashboardData() {
     async function fetchRangeData() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/google/getRange-sheet1"
+          "https://magangproject.vercel.app/api/sheet1/getRange-sheet1"
         );
         const json = await res.json();
 

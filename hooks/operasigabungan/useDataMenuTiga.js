@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 
 const API_ENDPOINTS = {
-  table1: "https://magangproject.vercel.app/api/google/getsheet3table1",
-  table2: "https://magangproject.vercel.app/api/google/getsheet3table2",
-  table3: "https://magangproject.vercel.app/api/google/getsheet3table3",
-  table4: "https://magangproject.vercel.app/api/google/getsheet3table4",
-  table5: "https://magangproject.vercel.app/api/google/getsheet3table5",
-  breakdown: "https://magangproject.vercel.app/api/google/getsheet3card",
-  range: "https://magangproject.vercel.app/api/google/getRange-sheet3",
+  table1: "https://magangproject.vercel.app/api/sheet3/getsheet3table1",
+  table2: "https://magangproject.vercel.app/api/sheet3/getsheet3table2",
+  table3: "https://magangproject.vercel.app/api/sheet3/getsheet3table3",
+  table4: "https://magangproject.vercel.app/api/sheet3/getsheet3table4",
+  table5: "https://magangproject.vercel.app/api/sheet3/getsheet3table5",
+  breakdown: "https://magangproject.vercel.app/api/sheet3/getsheet3card",
+  range: "https://magangproject.vercel.app/api/sheet3/getRange-sheet3",
 };
 
 export function useDataMenuTiga() {
