@@ -56,7 +56,7 @@ export default function MenuTwelve() {
     async function fetchRangeData() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/google/getRange-sheet12"
+          "https://magangproject.vercel.app/api/sheet12/getRange-sheet12"
         );
         setRangeData(await res.json());
       } catch (err) {
@@ -155,7 +155,9 @@ export default function MenuTwelve() {
                     <div className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_awal ?? "-"}
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">Tanggal Mulai Periode</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Tanggal Mulai Periode
+                    </p>
                   </CardContent>
                 </Card>
 
@@ -171,7 +173,9 @@ export default function MenuTwelve() {
                     <div className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_akhir ?? "-"}
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">Tanggal Akhir Periode</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Tanggal Akhir Periode
+                    </p>
                   </CardContent>
                 </Card>
               </div>

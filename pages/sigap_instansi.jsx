@@ -56,7 +56,7 @@ export default function MenuSebelas() {
     async function fetchRangeData() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/google/getRange-sheet11"
+          "https://magangproject.vercel.app/api/sheet11/getRange-sheet11"
         );
         setRangeData(await res.json());
       } catch (err) {
@@ -124,7 +124,9 @@ export default function MenuSebelas() {
                     <div className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_awal ?? "-"}
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">Tanggal Mulai</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Tanggal Mulai
+                    </p>
                   </CardContent>
                 </Card>
 
@@ -140,7 +142,9 @@ export default function MenuSebelas() {
                     <div className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_akhir ?? "-"}
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">Tanggal Akhir</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Tanggal Akhir
+                    </p>
                   </CardContent>
                 </Card>
 

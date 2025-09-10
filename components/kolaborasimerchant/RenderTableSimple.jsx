@@ -16,7 +16,7 @@ export default function RenderTableSimple() {
     async function fetchData() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/google/getsheet8table4"
+          "https://magangproject.vercel.app/api/sheet8/getsheet8table4"
         );
         const json = await res.json();
         setData(json);

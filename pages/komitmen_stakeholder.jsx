@@ -26,7 +26,7 @@ const API_ENDPOINTS = {
   table3: `${API_BASE_URL}/sheet9/getsheet9table3`,
   table4: `${API_BASE_URL}/sheet9/getsheet9table4`,
   breakdown: `${API_BASE_URL}/sheet9/getsheet9card`,
-  range: `${API_BASE_URL}/google/getRange-sheet9`,
+  range: `${API_BASE_URL}/sheet9/getRange-sheet9`,
 };
 
 const SCORE_CONFIGS = [

@@ -52,7 +52,7 @@ export default function MenuThirdteen() {
     async function fetchRangeData() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/google/getRange-sheet13"
+          "https://magangproject.vercel.app/api/sheet13/getRange-sheet13"
         );
         setRangeData(await res.json());
       } catch (err) {

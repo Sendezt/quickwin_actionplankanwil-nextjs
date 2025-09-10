@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,7 +52,7 @@ export function LoginForm() {
       localStorage.setItem("user", JSON.stringify(data.user));
 
       // Arahkan ke halaman admin
-      router.push("/adminactionplan");
+      router.push("/admindashboard");
     } catch (err) {
       console.error("Login error:", err);
       setError(err.message);
@@ -85,20 +86,22 @@ export function LoginForm() {
       <div className="login-theme min-h-screen flex items-center justify-center p-4">
         <Card className="backdrop-blur-sm bg-card border-border shadow-2xl w-full max-w-md">
           <CardHeader className="text-center space-y-4 pb-8">
-            <div className="mx-auto mb-6">
-              <img
-                src="/quickwin.png"
-                alt="QuickWin Logo"
-                className="w-30 h-30 mx-auto object-contain"
-              />
-            </div>
+            <Link href="/" className="block cursor-pointer">
+              <div className="mx-auto mb-6">
+                <img
+                  src="/quickwin.png"
+                  alt="QuickWin Logo"
+                  className="w-30 h-30 mx-auto object-contain"
+                />
+              </div>
 
-            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Selamat Datang
-            </CardTitle>
-            <CardDescription className="text-muted-foreground text-lg">
-              Masuk ke akun Anda untuk melanjutkan
-            </CardDescription>
+              <CardTitle className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                Selamat Datang
+              </CardTitle>
+              <CardDescription className="text-muted-foreground text-lg">
+                Masuk ke akun Anda untuk melanjutkan
+              </CardDescription>
+            </Link>
           </CardHeader>
 
           <CardContent className="space-y-6">
