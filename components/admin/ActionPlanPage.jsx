@@ -19,42 +19,119 @@ export default function AgendaTable() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [newTitle, setNewTitle] = useState(""); // untuk create
+  const [editId, setEditId] = useState(null); // id yang sedang diedit
+  const [editTitle, setEditTitle] = useState(""); // judul saat edit
   const pageSize = 8;
 
-  // Ambil data dari API
-  useEffect(() => {
-    async function fetchData() {
-      setLoading(true);
-      setError("");
-      try {
-        const token = localStorage.getItem("token");
-        const res = await fetch(
-          "https://magangproject.vercel.app/api/admin/actionplan/getActionPlan",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
+  async function fetchData() {
+    setLoading(true);
+    setError("");
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(
+        "https://magangproject.vercel.app/api/admin/actionplan/getActionPlan",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
+      );
 
-        const json = await res.json();
-        // Pastikan json.data adalah array
-        setItems(Array.isArray(json.data) ? json.data : []);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-        setError("Gagal memuat data agenda");
-        setItems([]);
-      } finally {
-        setLoading(false);
-      }
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
+      const json = await res.json();
+      setItems(Array.isArray(json.data) ? json.data : []);
+    } catch (err) {
+      console.error("Error fetching data:", err);
+      setError("Gagal memuat data agenda");
+      setItems([]);
+    } finally {
+      setLoading(false);
     }
+  }
 
+  useEffect(() => {
     fetchData();
   }, []);
+
+  // Create
+  async function handleCreate() {
+    if (!newTitle.trim()) return;
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(
+        "https://magangproject.vercel.app/api/admin/actionplan/createActionPlan",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ title: newTitle }),
+        }
+      );
+
+      if (!res.ok) throw new Error("Gagal membuat action plan");
+
+      setNewTitle("");
+      fetchData();
+    } catch (err) {
+      console.error(err);
+      alert("Gagal membuat action plan");
+    }
+  }
+
+  // Update
+  async function handleUpdate(id) {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(
+        `https://magangproject.vercel.app/api/admin/actionplan/updateActionPlan/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ title: editTitle }),
+        }
+      );
+
+      if (!res.ok) throw new Error("Gagal update action plan");
+
+      setEditId(null);
+      setEditTitle("");
+      fetchData();
+    } catch (err) {
+      console.error(err);
+      alert("Gagal update action plan");
+    }
+  }
+
+  // Delete
+  async function handleDelete(id) {
+    if (!confirm("Yakin ingin menghapus data ini?")) return;
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(
+        `https://magangproject.vercel.app/api/admin/actionplan/deleteActionPlan/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!res.ok) throw new Error("Gagal menghapus action plan");
+
+      fetchData();
+    } catch (err) {
+      console.error(err);
+      alert("Gagal menghapus action plan");
+    }
+  }
 
   const filtered = useMemo(() => {
     if (!query) return items;
@@ -91,6 +168,17 @@ export default function AgendaTable() {
         <CardTitle>Daftar Agenda</CardTitle>
       </CardHeader>
       <CardContent>
+        {/* Form Create */}
+        <div className="flex gap-2 mb-4">
+          <Input
+            placeholder="Judul baru..."
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+          />
+          <Button onClick={handleCreate}>Tambah</Button>
+        </div>
+
+        {/* Search */}
         <div className="flex gap-2 mb-4">
           <Input
             placeholder="Cari by id atau judul..."
@@ -125,20 +213,62 @@ export default function AgendaTable() {
                   <TableHead className="w-16">No</TableHead>
                   <TableHead>Judul</TableHead>
                   <TableHead className="w-56">Dibuat</TableHead>
+                  <TableHead className="w-40">Aksi</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {paginated.map((row) => (
                   <TableRow key={row.id}>
                     <TableCell>{row.id}</TableCell>
-                    <TableCell className="font-medium">{row.title}</TableCell>
+                    <TableCell className="font-medium">
+                      {editId === row.id ? (
+                        <Input
+                          value={editTitle}
+                          onChange={(e) => setEditTitle(e.target.value)}
+                        />
+                      ) : (
+                        row.title
+                      )}
+                    </TableCell>
                     <TableCell>{formatDate(row.createdAt)}</TableCell>
+                    <TableCell className="flex gap-2">
+                      {editId === row.id ? (
+                        <>
+                          <Button onClick={() => handleUpdate(row.id)}>
+                            Simpan
+                          </Button>
+                          <Button
+                            variant="secondary"
+                            onClick={() => setEditId(null)}
+                          >
+                            Batal
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Button
+                            onClick={() => {
+                              setEditId(row.id);
+                              setEditTitle(row.title);
+                            }}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            onClick={() => handleDelete(row.id)}
+                          >
+                            Hapus
+                          </Button>
+                        </>
+                      )}
+                    </TableCell>
                   </TableRow>
                 ))}
 
                 {paginated.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={3}>
+                    <TableCell colSpan={4}>
                       <div className="py-6 text-center text-sm text-muted-foreground">
                         Tidak ada data.
                       </div>

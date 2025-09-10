@@ -7,6 +7,7 @@ import DashboardPage from "@/components/admin/DashboardPage";
 import CabangPage from "@/components/admin/CabangPage";
 import ActionPlanPage from "@/components/admin/ActionPlanPage";
 import FeedbackPage from "@/components/admin/FeedbackPage";
+import UserPage from "@/components/admin/UserPage";
 
 export default function AdminPage() {
   const [active, setActive] = useState("Dashboard");
@@ -42,6 +43,7 @@ export default function AdminPage() {
           {active === "Cabang" && <CabangPage />}
           {active === "ActionPlan" && <ActionPlanPage />}
           {active === "Feedback" && <FeedbackPage />}
+          {active === "User" && <UserPage />}
         </main>
       </div>
     </div>

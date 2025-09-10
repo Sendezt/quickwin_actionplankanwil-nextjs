@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
 
-export function LoginForm() {
+export default function LoginForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");

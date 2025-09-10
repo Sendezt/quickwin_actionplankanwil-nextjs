@@ -2,8 +2,8 @@
 
 import React from "react";
 
-export default function Sidebar({ active, setActive, onClose }) {
-  const menus = ["Dashboard", "Cabang", "ActionPlan", "Feedback"];
+export default function Sidebar({ active, setActive }) {
+  const menus = ["Dashboard", "Cabang", "ActionPlan", "Feedback", "User"];
 
   const handleLogout = () => {
     // Hapus token JWT
@@ -18,11 +18,6 @@ export default function Sidebar({ active, setActive, onClose }) {
       {/* Header */}
       <div className="p-4 text-2xl font-bold border-b border-blue-600 flex justify-between items-center">
         <span>Admin Panel</span>
-        {onClose && (
-          <button onClick={onClose} className="text-white hover:text-gray-300">
-            ✕
-          </button>
-        )}
       </div>
 
       {/* Menu */}
