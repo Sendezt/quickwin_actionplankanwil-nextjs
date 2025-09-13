@@ -165,7 +165,7 @@ export default function AgendaTable() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Daftar Agenda</CardTitle>
+        <CardTitle>Daftar Action Plan</CardTitle>
       </CardHeader>
       <CardContent>
         {/* Form Create */}

@@ -4,18 +4,17 @@ import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
 
 export default function FeedbackPage() {
   const [feedbacks, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editing, setEditing] = useState(null); // feedback yang sedang di-edit
+  const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ task: "", status: "" });
 
   // Fetch data
   const fetchFeedbacks = () => {
     setLoading(true);
-    fetch("https://magangproject.vercel.app/api/admin/feedback/getalldata", {
+    fetch("http://localhost:3000/api/admin/feedback/getalldata", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -39,17 +38,14 @@ export default function FeedbackPage() {
 
   // Update feedback
   const handleUpdate = (id) => {
-    fetch(
-      `https://magangproject.vercel.app/api/admin/feedback/updatefeedback/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(form),
-      }
-    )
+    fetch(`http://localhost:3000/api/admin/feedback/updatefeedback/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(form),
+    })
       .then((res) => res.json())
       .then(() => {
         setEditing(null);
@@ -62,15 +58,12 @@ export default function FeedbackPage() {
   // Delete feedback
   const handleDelete = (id) => {
     if (!confirm("Yakin hapus feedback ini?")) return;
-    fetch(
-      `https://magangproject.vercel.app/api/admin/feedback/deletedata/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
+    fetch(`http://localhost:3000/api/admin/feedback/deletedata/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
       .then(() => fetchFeedbacks())
       .catch((err) => console.error("Error deleting feedback:", err));
   };
@@ -78,7 +71,7 @@ export default function FeedbackPage() {
   // Clear all feedback
   const handleClearAll = () => {
     if (!confirm("Yakin hapus semua feedback?")) return;
-    fetch("https://magangproject.vercel.app/api/admin/feedback/clearfeedback", {
+    fetch("http://localhost:3000/api/admin/feedback/clearfeedback", {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -86,6 +79,16 @@ export default function FeedbackPage() {
     })
       .then(() => fetchFeedbacks())
       .catch((err) => console.error("Error clearing feedback:", err));
+  };
+
+  // Helper format date
+  const formatDate = (dateString) => {
+    if (!dateString) return "-";
+    const d = new Date(dateString);
+    return d.toLocaleString("id-ID", {
+      dateStyle: "short",
+      timeStyle: "short",
+    });
   };
 
   return (
@@ -102,24 +105,45 @@ export default function FeedbackPage() {
           <p>Loading...</p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse border border-gray-300 text-sm">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="border px-4 py-2">ID</th>
-                  <th className="border px-4 py-2">Cabang</th>
-                  <th className="border px-4 py-2">Action Plan</th>
-                  <th className="border px-4 py-2">Task</th>
-                  <th className="border px-4 py-2">Status</th>
-                  <th className="border px-4 py-2">Aksi</th>
+            <table className="w-full border-separate border-spacing-y-2 text-sm">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="px-6 py-3 text-left font-semibold text-gray-700 uppercase">
+                    ID
+                  </th>
+                  <th className="px-6 py-3 text-left font-semibold text-gray-700 uppercase">
+                    Cabang
+                  </th>
+                  <th className="px-6 py-3 text-left font-semibold text-gray-700 uppercase">
+                    Action Plan
+                  </th>
+                  <th className="px-6 py-3 text-left font-semibold text-gray-700 uppercase">
+                    Task
+                  </th>
+                  <th className="px-6 py-3 text-left font-semibold text-gray-700 uppercase">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left font-semibold text-gray-700 uppercase">
+                    Proses
+                  </th>
+                  <th className="px-6 py-3 text-left font-semibold text-gray-700 uppercase">
+                    Selesai
+                  </th>
+                  <th className="px-6 py-3 text-left font-semibold text-gray-700 uppercase">
+                    Aksi
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {feedbacks.map((fb) => (
-                  <tr key={fb.id} className="hover:bg-gray-50">
-                    <td className="border px-4 py-2">{fb.id}</td>
-                    <td className="border px-4 py-2">{fb.cabang?.nama}</td>
-                    <td className="border px-4 py-2">{fb.actionPlan?.title}</td>
-                    <td className="border px-4 py-2">
+                  <tr
+                    key={fb.id}
+                    className="bg-white shadow rounded hover:bg-gray-50 transition"
+                  >
+                    <td className="px-6 py-3">{fb.id}</td>
+                    <td className="px-6 py-3">{fb.cabang?.nama}</td>
+                    <td className="px-6 py-3">{fb.actionPlan?.title}</td>
+                    <td className="px-6 py-3">
                       {editing === fb.id ? (
                         <Input
                           value={form.task}
@@ -132,10 +156,10 @@ export default function FeedbackPage() {
                         fb.task
                       )}
                     </td>
-                    <td className="border px-4 py-2">
+                    <td className="px-6 py-3">
                       {editing === fb.id ? (
                         <select
-                          className="border p-1 rounded"
+                          className="border p-2 rounded"
                           value={form.status}
                           onChange={(e) =>
                             setForm({ ...form, status: e.target.value })
@@ -149,7 +173,13 @@ export default function FeedbackPage() {
                         fb.status
                       )}
                     </td>
-                    <td className="border px-4 py-2 flex gap-2">
+                    <td className="px-6 py-3">
+                      {formatDate(fb.timestampProses)}
+                    </td>
+                    <td className="px-6 py-3">
+                      {formatDate(fb.timestampSelesai)}
+                    </td>
+                    <td className="px-6 py-3 flex gap-2">
                       {editing === fb.id ? (
                         <>
                           <Button size="sm" onClick={() => handleUpdate(fb.id)}>
