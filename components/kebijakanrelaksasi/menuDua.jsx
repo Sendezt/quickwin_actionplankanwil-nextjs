@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import {
   LineChart,
@@ -32,6 +33,15 @@ import {
   LandPlot,
   Radical,
 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  DialogBackdrop,
+} from "@headlessui/react";
+import { FeedbackTable } from "../feedback/FeedbackTable";
+import FeedbackInfoModal from "../feedback/FeedbackInfoModal";
 
 // Skeleton Components
 export const SkeletonCard = () => (
@@ -79,27 +89,35 @@ export const PeriodeCards = ({ rangeData, loading }) => {
             <>
               <Card className="shadow-sm border border-dashed bg-muted/30">
                 <CardHeader className="flex flex-row items-center justify-between pb-1">
-                  <CardTitle className="text-xs font-medium">Periode Awal</CardTitle>
+                  <CardTitle className="text-xs font-medium">
+                    Periode Awal
+                  </CardTitle>
                   <CalendarDays className="h-3 w-3 text-muted-foreground" />
                 </CardHeader>
                 <CardContent className="py-1 px-6">
                   <div className="text-base font-semibold text-gray-900">
                     {rangeData.periode_awal}
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">Tanggal Mulai</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Tanggal Mulai
+                  </p>
                 </CardContent>
               </Card>
 
               <Card className="shadow-sm border border-dashed bg-muted/30">
                 <CardHeader className="flex flex-row items-center justify-between pb-1">
-                  <CardTitle className="text-xs font-medium">Periode Akhir</CardTitle>
+                  <CardTitle className="text-xs font-medium">
+                    Periode Akhir
+                  </CardTitle>
                   <CalendarDays className="h-3 w-3 text-muted-foreground" />
                 </CardHeader>
                 <CardContent className="py-1 px-6">
                   <div className="text-base font-semibold text-gray-900">
                     {rangeData.periode_akhir}
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">Tanggal Akhir</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Tanggal Akhir
+                  </p>
                 </CardContent>
               </Card>
             </>
@@ -108,19 +126,27 @@ export const PeriodeCards = ({ rangeData, loading }) => {
           {/* Obyek Penilaian */}
           <Card className="shadow-sm border border-dashed bg-muted/30">
             <CardHeader className="flex flex-row items-center justify-between pb-1">
-              <CardTitle className="text-xs font-medium">Obyek Penilaian</CardTitle>
+              <CardTitle className="text-xs font-medium">
+                Obyek Penilaian
+              </CardTitle>
               <LandPlot className="h-3 w-3 text-muted-foreground" />
             </CardHeader>
             <CardContent className="py-1 px-6">
-              <div className="text-base font-semibold text-gray-900">Kantor Wilayah</div>
-              <p className="text-xs text-muted-foreground mt-1">1 Obyek Penilaian</p>
+              <div className="text-base font-semibold text-gray-900">
+                Kantor Wilayah
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                1 Obyek Penilaian
+              </p>
             </CardContent>
           </Card>
 
           {/* SK Gubernur */}
           <Card className="shadow-sm border border-dashed bg-muted/30">
             <CardHeader className="flex flex-row items-center justify-between pb-1">
-              <CardTitle className="text-xs font-medium">SK Gubernur Jateng</CardTitle>
+              <CardTitle className="text-xs font-medium">
+                SK Gubernur Jateng
+              </CardTitle>
               <FileText className="h-3 w-3 text-muted-foreground" />
             </CardHeader>
             <CardContent className="py-1 px-6">
@@ -133,7 +159,8 @@ export const PeriodeCards = ({ rangeData, loading }) => {
                 Surat Keputusan Gubernur Jawa Tengah
               </a>
               <p className="text-xs text-muted-foreground mt-1">
-                No. 100.3.3.1/87 Tahun 2025 tentang Pembebasan Pajak Kendaraan Bermotor
+                No. 100.3.3.1/87 Tahun 2025 tentang Pembebasan Pajak Kendaraan
+                Bermotor
               </p>
             </CardContent>
           </Card>
@@ -145,7 +172,8 @@ export const PeriodeCards = ({ rangeData, loading }) => {
 
 // Score Cards Component
 export const ScoreCards = ({ breakdownData, loading }) => {
-  const totalSkor = breakdownData?.data?.reduce((total, item) => total + item.skor, 0) ?? 0;
+  const totalSkor =
+    breakdownData?.data?.reduce((total, item) => total + item.skor, 0) ?? 0;
   const targetSkor = 8;
 
   if (loading) {
@@ -179,7 +207,9 @@ export const ScoreCards = ({ breakdownData, loading }) => {
       {/* Breakdown Skor */}
       <Card className="p-0 overflow-hidden">
         <div className="bg-blue-100 px-5 py-3 flex items-center justify-between rounded-t-xl border-b">
-          <h4 className="text-sm font-semibold text-blue-800">Breakdown Skor</h4>
+          <h4 className="text-sm font-semibold text-blue-800">
+            Breakdown Skor
+          </h4>
           <div className="bg-blue-200 rounded-full">
             <BarChart3 className="h-4 w-4 text-blue-700" />
           </div>
@@ -212,7 +242,9 @@ export const FormulaCard = ({ loading }) => {
   return (
     <Card className="shadow-sm border border-dashed bg-muted/30 hover:shadow-md transition-shadow col-span-4">
       <CardHeader className="flex flex-row items-center justify-between pb-1">
-        <CardTitle className="text-sm font-medium text-gray-700">Forumula</CardTitle>
+        <CardTitle className="text-sm font-medium text-gray-700">
+          Forumula
+        </CardTitle>
         <Radical className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent className="py-4">
@@ -222,7 +254,8 @@ export const FormulaCard = ({ loading }) => {
               Terlaksananya Kebijakan Relaksasi
             </p>
             <p className="text-gray-600 text-xs">
-              = Ketersediaan Surat Keputusan Gubernur atas Kebijakan Pembebasan Denda, BBNKB II, dan Pajak Progresif / Target
+              = Ketersediaan Surat Keputusan Gubernur atas Kebijakan Pembebasan
+              Denda, BBNKB II, dan Pajak Progresif / Target
             </p>
           </div>
           <div className="border-l-4 border-gray-400 pl-3">
@@ -230,7 +263,9 @@ export const FormulaCard = ({ loading }) => {
               Pertumbuhan penerimaan SW di periode Relaksasi
             </p>
             <p className="text-gray-600 text-xs">
-              = Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n / Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n-1 × 100 - 100
+              = Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n /
+              Jumlah Penerimaan di Periode Relaksasi Kebijakan tahun n-1 × 100 -
+              100
             </p>
           </div>
         </div>
@@ -329,193 +364,379 @@ export const GrowthChart = ({ table1Data, loading }) => {
 };
 
 // Data Table 1 Component
-export const DataTable1 = ({ table1Data, loading }) => {
+export const DataTable1 = ({ table1Data, loading, feedbackData }) => {
+  const [selectedCabang, setSelectedCabang] = useState(null);
+  const [selectedFeedback, setSelectedFeedback] = useState(null);
+  const [previousCabang, setPreviousCabang] = useState(null);
+
+  const getStatusVariant = (status) => {
+    switch (status?.toLowerCase()) {
+      case "selesai":
+        return "bg-green-500 text-white hover:bg-green-600";
+      case "proses":
+        return "bg-yellow-500 text-black hover:bg-yellow-600";
+      default:
+        return "bg-gray-300 text-black hover:bg-gray-400";
+    }
+  };
+
+  // Ambil feedback dari API yang sudah di-fetch sebelumnya
+  const getFeedbackByCabang = (namaCabang) => {
+    return (
+      feedbackData?.filter(
+        (f) =>
+          f.cabang?.nama?.trim().toLowerCase() ===
+            namaCabang?.trim().toLowerCase() &&
+          f.actionPlanId === 2 &&
+          f.subActionPlanId === 1
+      ) || []
+    );
+  };
+
   return (
-    <Card className="w-full overflow-hidden">
-      <CardHeader>
-        <CardTitle className="text-xl">
-          Rekapitulasi{" "}
-          <span className="text-yellow-500">
-            Pertumbuhan Penerimaan SW Periode Pemutihan
-          </span>{" "}
-          Per Cabang
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {loading ? (
-          <SkeletonTable
-            rows={5}
-            cols={table1Data?.header[0]?.length || 6}
-          />
-        ) : (
-          <div className="overflow-x-auto w-full scrollbar-hide">
-            <Table className="min-w-max border border-gray-300 w-full">
-              <TableHeader>
-                <TableRow>
-                  {table1Data.header[0].map((head, i) => (
-                    <TableHead
-                      key={i}
-                      className={
-                        "min-w-[120px] border border-gray-300 " +
-                        (i === 1 ? "text-center" : "text-center")
-                      }
+    <>
+      <Card className="w-full overflow-hidden">
+        <CardHeader>
+          <CardTitle className="text-xl">
+            Rekapitulasi{" "}
+            <span className="text-yellow-500">
+              Pertumbuhan Penerimaan SW Periode Pemutihan
+            </span>{" "}
+            Per Cabang
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {loading ? (
+            <SkeletonTable rows={5} cols={table1Data?.header[0]?.length || 6} />
+          ) : (
+            <div className="overflow-x-auto w-full scrollbar-hide">
+              <Table className="min-w-max border border-gray-300 w-full">
+                <TableHeader>
+                  <TableRow>
+                    {table1Data.header[0].map((head, i) => (
+                      <TableHead
+                        key={i}
+                        className="min-w-[120px] border border-gray-300 text-center"
+                      >
+                        {head}
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {table1Data.data.map((row, i) => {
+                    const cabangName = row[1];
+
+                    return (
+                      <TableRow
+                        key={i}
+                        className="cursor-pointer hover:bg-gray-50"
+                      >
+                        {row.map((cell, j) => (
+                          <TableCell
+                            key={j}
+                            className={
+                              `border-b border-r border-dotted border-gray-300 ` +
+                              (j === 1
+                                ? "text-left font-medium cursor-pointer text-blue-600 hover:underline"
+                                : "text-center")
+                            }
+                            onClick={
+                              j === 1
+                                ? () => setSelectedCabang(cabangName)
+                                : undefined
+                            }
+                          >
+                            {cell}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+                <TableFooter>
+                  <TableRow>
+                    <TableCell
+                      colSpan={2}
+                      className="font-bold border border-gray-300 text-center"
                     >
-                      {head}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {table1Data.data.map((row, i) => (
-                  <TableRow key={i}>
-                    {row.map((cell, j) => (
+                      {table1Data.summary[0]}
+                    </TableCell>
+                    {table1Data.summary.slice(1).map((cell, j) => (
                       <TableCell
                         key={j}
-                        className={
-                          `border-b border-r border-dotted border-gray-300 ` +
-                          (j === 1
-                            ? "text-left font-medium"
-                            : "text-center")
-                        }
+                        className="font-bold border border-gray-300 text-center"
                       >
                         {cell}
                       </TableCell>
                     ))}
                   </TableRow>
-                ))}
-              </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TableCell
-                    colSpan={2}
-                    className="font-bold border border-gray-300 text-center"
-                  >
-                    {table1Data.summary[0]}
-                  </TableCell>
-                  {table1Data.summary.slice(1).map((cell, j) => (
-                    <TableCell
-                      key={j}
-                      className="font-bold border border-gray-300 text-center"
-                    >
-                      {cell}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableFooter>
-            </Table>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+                </TableFooter>
+              </Table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Modal Feedback */}
+      <Dialog
+        open={!!selectedCabang}
+        onClose={() => setSelectedCabang(null)}
+        className="relative z-[500]"
+      >
+        <DialogBackdrop className="fixed inset-0 bg-black/30" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <DialogPanel
+            className="
+              bg-white rounded-lg shadow-lg
+              w-full max-w-4xl sm:max-w-[90vw]
+              max-h-[90vh] overflow-y-auto
+              p-6
+            "
+          >
+            <DialogTitle className="text-lg font-bold mb-4">
+              Feedback untuk {selectedCabang}
+            </DialogTitle>
+
+            <FeedbackTable
+              feedbacks={getFeedbackByCabang(selectedCabang).filter(
+                (f) => f.status?.toLowerCase() === "selesai"
+              )}
+              hasActiveFilters={false}
+              totalFeedbacks={0}
+              onSelesai={(fb) => console.log("Selesai:", fb)}
+              onInfo={(fb) => {
+                setPreviousCabang(selectedCabang);
+                setSelectedCabang(null);
+                setSelectedFeedback(fb);
+              }}
+              isUpdating={false}
+              selectedFeedbackId={null}
+            />
+
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={() => setSelectedCabang(null)}
+                className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+              >
+                Tutup
+              </button>
+            </div>
+          </DialogPanel>
+        </div>
+      </Dialog>
+
+      {/* Modal Info Feedback */}
+      <FeedbackInfoModal
+        open={!!selectedFeedback}
+        onClose={() => {
+          setSelectedFeedback(null);
+          setSelectedCabang(previousCabang);
+        }}
+        feedback={selectedFeedback}
+      />
+    </>
   );
 };
 
-// Data Table 2 Component  
-export const DataTable2 = ({ tableData, loading }) => {
+// Data Table 2 Component
+export const DataTable2 = ({ tableData, loading, feedbackData }) => {
   const { headerTop, headerBottom, data, summary } = tableData || {};
+  const [selectedCabang, setSelectedCabang] = useState(null);
+  const [selectedFeedback, setSelectedFeedback] = useState(null);
+  const [previousCabang, setPreviousCabang] = useState(null);
+
+  // filter feedback berdasarkan nama cabang + actionPlanId + subActionPlanId
+  const getFeedbackByCabang = (namaCabang) => {
+    return (
+      feedbackData?.filter(
+        (f) =>
+          f.cabang?.nama?.trim().toLowerCase() ===
+            namaCabang?.trim().toLowerCase() &&
+          f.actionPlanId === 2 &&
+          f.subActionPlanId === 2
+      ) || []
+    );
+  };
 
   return (
-    <Card className="w-full overflow-hidden">
-      <CardHeader>
-        <CardTitle className="text-xl">
-          Rekapitulasi{" "}
-          <span className="text-yellow-500">
-            Pertumbuhan Penerimaan SW Periode Pemutihan
-          </span>{" "}
-          Per Cabang
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {loading ? (
-          <SkeletonTable rows={5} cols={headerBottom?.length || 6} />
-        ) : (
-          <div className="overflow-x-auto w-full">
-            <Table className="min-w-max border border-gray-300 w-full">
-              <TableHeader>
-                {/* Header Top Row */}
-                <TableRow>
-                  <TableHead
-                    rowSpan={2}
-                    className="text-center min-w-[120px] sticky left-0 bg-white border border-gray-300 z-10 px-2 py-3"
-                  >
-                    {headerTop[0][0]}
-                  </TableHead>
-                  {headerTop[0].slice(1, 11).map((header, index) => (
-                    <TableHead
-                      key={index}
-                      colSpan={1}
-                      className="text-center min-w-[150px] border border-gray-300 px-2 py-1"
-                    >
-                      {header}
-                    </TableHead>
-                  ))}
-                  <TableHead
-                    colSpan={4}
-                    className="text-center min-w-[600px] border border-gray-300 px-2 py-1"
-                  >
-                    {headerTop[0][11]}
-                  </TableHead>
-                </TableRow>
-
-                {/* Header Bottom Row */}
-                <TableRow>
-                  {headerBottom.map((item, index) => (
-                    <TableHead
-                      key={index}
-                      className="text-center min-w-[120px] border border-gray-300 px-2 py-2 text-sm"
-                    >
-                      {item}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {data.map((row, rowIndex) => (
-                  <TableRow key={rowIndex}>
-                    {row.map((cell, cellIndex) => (
-                      <TableCell
-                        key={cellIndex}
-                        className={
-                          `border-b border-r border-dotted border-gray-300 ` +
-                          (cellIndex === 0
-                            ? "text-left font-medium sticky left-0 bg-white"
-                            : "text-center") +
-                          (cellIndex === 3 ||
-                          cellIndex === 11 ||
-                          cellIndex === 12 ||
-                          cellIndex === 13 ||
-                          cellIndex === 14
-                            ? " text-green-600"
-                            : "")
-                        }
+    <>
+      <Card className="w-full overflow-hidden">
+        <CardHeader>
+          <CardTitle className="text-xl">
+            Rekapitulasi{" "}
+            <span className="text-yellow-500">
+              Pertumbuhan Penerimaan SW Periode Pemutihan
+            </span>{" "}
+            Per Cabang
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {loading ? (
+            <SkeletonTable rows={5} cols={headerBottom?.length || 6} />
+          ) : (
+            <>
+              {/* Tabel Utama */}
+              <div className="overflow-x-auto w-full">
+                <Table className="min-w-max border border-gray-300 w-full">
+                  <TableHeader>
+                    {/* Header Top Row */}
+                    <TableRow>
+                      <TableHead
+                        rowSpan={2}
+                        className="text-center min-w-[120px] sticky left-0 bg-white border border-gray-300 z-10 px-2 py-3"
                       >
-                        {cell}
-                      </TableCell>
+                        {headerTop[0][0]}
+                      </TableHead>
+                      {headerTop[0].slice(1, 11).map((header, index) => (
+                        <TableHead
+                          key={index}
+                          colSpan={1}
+                          className="text-center min-w-[150px] border border-gray-300 px-2 py-1"
+                        >
+                          {header}
+                        </TableHead>
+                      ))}
+                      <TableHead
+                        colSpan={4}
+                        className="text-center min-w-[600px] border border-gray-300 px-2 py-1"
+                      >
+                        {headerTop[0][11]}
+                      </TableHead>
+                    </TableRow>
+
+                    {/* Header Bottom Row */}
+                    <TableRow>
+                      {headerBottom.map((item, index) => (
+                        <TableHead
+                          key={index}
+                          className="text-center min-w-[120px] border border-gray-300 px-2 py-2 text-sm"
+                        >
+                          {item}
+                        </TableHead>
+                      ))}
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {data.map((row, rowIndex) => (
+                      <TableRow key={rowIndex}>
+                        {row.map((cell, cellIndex) => (
+                          <TableCell
+                            key={cellIndex}
+                            className={
+                              `border-b border-r border-dotted border-gray-300 ` +
+                              (cellIndex === 0
+                                ? "text-left font-medium sticky left-0 bg-white cursor-pointer text-blue-600 hover:underline"
+                                : "text-center") +
+                              (cellIndex === 3 ||
+                              cellIndex === 11 ||
+                              cellIndex === 12 ||
+                              cellIndex === 13 ||
+                              cellIndex === 14
+                                ? " text-green-600"
+                                : "")
+                            }
+                            onClick={
+                              cellIndex === 0
+                                ? () => setSelectedCabang(cell) // klik nama cabang
+                                : undefined
+                            }
+                          >
+                            {cell}
+                          </TableCell>
+                        ))}
+                      </TableRow>
                     ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-              <TableFooter>
-                <TableRow>
-                  {summary.map((cell, cellIndex) => (
-                    <TableCell
-                      key={cellIndex}
-                      className={
-                        `font-bold border border-gray-300 ` +
-                        (cellIndex === 0
-                          ? "text-left sticky left-0 bg-white"
-                          : "text-center")
-                      }
-                    >
-                      {cell}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableFooter>
-            </Table>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+                  </TableBody>
+                  <TableFooter>
+                    <TableRow>
+                      {summary.map((cell, cellIndex) => (
+                        <TableCell
+                          key={cellIndex}
+                          className={
+                            `font-bold border border-gray-300 ` +
+                            (cellIndex === 0
+                              ? "text-left sticky left-0 bg-white"
+                              : "text-center")
+                          }
+                        >
+                          {cell}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableFooter>
+                </Table>
+              </div>
+            </>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Modal Feedback */}
+      <Dialog
+        open={!!selectedCabang}
+        onClose={() => setSelectedCabang(null)}
+        className="relative z-[500]"
+      >
+        <DialogBackdrop className="fixed inset-0 bg-black/30" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <DialogPanel
+            className="
+        bg-white rounded-lg shadow-lg
+        w-full max-w-4xl sm:max-w-[90vw]   /* responsif */
+        max-h-[90vh] overflow-y-auto      /* biar konten panjang bisa scroll */
+        p-6
+      "
+          >
+            <DialogTitle className="text-lg font-bold mb-4 flex items-center gap-2">
+              <span>Feedback untuk {selectedCabang}</span>
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                {
+                  getFeedbackByCabang(selectedCabang).filter(
+                    (f) => f.status?.toLowerCase() === "selesai"
+                  ).length
+                }{" "}
+                feedback selesai
+              </span>
+            </DialogTitle>
+
+            <FeedbackTable
+              feedbacks={getFeedbackByCabang(selectedCabang).filter(
+                (f) => f.status?.toLowerCase() === "selesai"
+              )}
+              hasActiveFilters={false}
+              totalFeedbacks={0}
+              onSelesai={(fb) => console.log("Selesai:", fb)}
+              onInfo={(fb) => {
+                setPreviousCabang(selectedCabang); // simpan modal pertama
+                setSelectedCabang(null); // tutup modal pertama
+                setSelectedFeedback(fb); // buka modal kedua
+              }}
+              isUpdating={false}
+              selectedFeedbackId={null}
+            />
+
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={() => setSelectedCabang(null)}
+                className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+              >
+                Tutup
+              </button>
+            </div>
+          </DialogPanel>
+        </div>
+      </Dialog>
+
+      {/* Modal Info Feedback */}
+      <FeedbackInfoModal
+        open={!!selectedFeedback}
+        onClose={() => {
+          setSelectedFeedback(null); // tutup modal kedua
+          setSelectedCabang(previousCabang); // buka lagi modal pertama
+        }}
+        feedback={selectedFeedback}
+      />
+    </>
   );
 };

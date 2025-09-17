@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   ChevronRight,
@@ -71,10 +71,10 @@ export const data = {
         { title: "Kebijakan Relaksasi", url: "/kebijakan-relaksasi" },
         { title: "Operasi Gabungan", url: "/operasi-gabungan" },
         { title: "Rekonsiliasi Data", url: "/rekonsiliasi-data" },
-        { title: "Keterisian Data Valid", url: "/keterisian-data" }, // index 4
+        { title: "Keterisian Data Valid", url: "/keterisian-data" },
         { title: "Sosialisasi Kesamsatan", url: "/sosialisasi-kesamsatan" },
         {
-          title: "SIGNAL & ONLINE", // index 6
+          title: "SIGNAL & ONLINE",
           url: "/optimalisasi-signal-layanan-online",
         },
         { title: "Merchant", url: "/kolaborasi-merchant" },
@@ -82,7 +82,7 @@ export const data = {
         { title: "SIGAP Prioritas", url: "/sigap-prioritas" },
         { title: "SIGAP Instansi", url: "/sigap-instansi" },
         { title: "WA Blast", url: "/wa-blast" },
-        { title: "Pendataan Terlibat Laka", url: "/pendataan-laka" }, // index 12
+        { title: "Pendataan Terlibat Laka", url: "/pendataan-laka" },
       ].map((item, index) => ({
         ...item,
         title: `${index + 1}. ${item.title}`,
@@ -99,21 +99,42 @@ export const data = {
 export function AppSidebar(props) {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
+
+    // cek token saat komponen mount
+    const checkToken = () => {
+      const token = localStorage.getItem("token");
+      setIsLoggedIn(!!token);
+    };
+
+    checkToken();
+
+    // listener untuk perubahan token di localStorage (realtime)
+    const handleStorageChange = () => checkToken();
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
-  if (!mounted) {
-    return null;
-  }
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // hapus token
+    setIsLoggedIn(false);
+    router.push("/login"); // redirect ke login
+  };
+
+  if (!mounted) return null;
 
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
         <div className="flex flex-col items-center gap-2 p-4">
           <Link href="/" className="flex flex-col items-center">
-            {/* Logo */}
             <div className="h-24 w-24 flex items-center justify-center rounded-2xl bg-white shadow-md border border-gray-200">
               <img
                 src="/logo.png"
@@ -121,8 +142,6 @@ export function AppSidebar(props) {
                 className="h-20 w-20 object-contain"
               />
             </div>
-
-            {/* Judul di bawah logo */}
             <div className="text-center mt-1">
               <span className="block font-bold text-gray-900 text-md">
                 QuickWin
@@ -234,17 +253,27 @@ export function AppSidebar(props) {
         </SidebarGroup>
       </SidebarContent>
 
-      {/* Sidebar Footer untuk login */}
+      {/* Sidebar Footer untuk login/logout */}
       <SidebarFooter className="p-4 border-t border-gray-200">
-        <Link href="/login" className="w-full">
+        {isLoggedIn ? (
           <Button
             variant="default"
-            className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+            className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white"
+            onClick={handleLogout}
           >
-            <LogIn className="h-4 w-4" />
-            Login
+            Logout
           </Button>
-        </Link>
+        ) : (
+          <Link href="/login" className="w-full">
+            <Button
+              variant="default"
+              className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              <LogIn className="h-4 w-4" />
+              Login
+            </Button>
+          </Link>
+        )}
       </SidebarFooter>
 
       <SidebarRail />

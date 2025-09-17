@@ -22,6 +22,11 @@ const apiService = {
     );
     return res.json();
   },
+
+  fetchFeedbackData: async () => {
+    const res = await fetch("http://localhost:3000/api/feedback/read");
+    return res.json();
+  },
 };
 
 // Custom hook for MenuDua data management
@@ -31,6 +36,7 @@ export const useMenuDuaData = () => {
     table1Data: null,
     breakdownData: null,
     rangeData: null,
+    feedbackData: null,
     loading: true,
   });
 
@@ -38,10 +44,11 @@ export const useMenuDuaData = () => {
     const fetchAllData = async () => {
       try {
         // Fetch all data concurrently
-        const [mainData, breakdownData, rangeData] = await Promise.all([
+        const [mainData, breakdownData, rangeData, feedbackData] = await Promise.all([
           apiService.fetchMainData(),
           apiService.fetchBreakdownData(),
           apiService.fetchRangeData(),
+          apiService.fetchFeedbackData(),
         ]);
 
         setState({
@@ -49,6 +56,7 @@ export const useMenuDuaData = () => {
           table1Data: mainData.table1,
           breakdownData: breakdownData,
           rangeData: rangeData,
+          feedbackData: feedbackData,
           loading: false,
         });
       } catch (error) {

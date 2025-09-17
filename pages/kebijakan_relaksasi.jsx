@@ -19,8 +19,14 @@ import {
 import { useMenuDuaData } from "../hooks/kebijakanrelaksasi/useDataMenuDua";
 
 export default function MenuDua() {
-  const { tableData, table1Data, breakdownData, rangeData, loading } =
-    useMenuDuaData();
+  const {
+    tableData,
+    table1Data,
+    breakdownData,
+    rangeData,
+    loading,
+    feedbackData,
+  } = useMenuDuaData();
 
   return (
     <SidebarProvider defaultOpen={true}>
@@ -41,8 +47,16 @@ export default function MenuDua() {
           <GrowthChart table1Data={table1Data} loading={loading} />
 
           {/* Data Tables */}
-          <DataTable1 table1Data={table1Data} loading={loading} />
-          <DataTable2 tableData={tableData} loading={loading} />
+          <DataTable1
+            table1Data={table1Data}
+            loading={loading}
+            feedbackData={feedbackData}
+          />
+          <DataTable2
+            tableData={tableData}
+            loading={loading}
+            feedbackData={feedbackData}
+          />
         </div>
       </SidebarInset>
     </SidebarProvider>

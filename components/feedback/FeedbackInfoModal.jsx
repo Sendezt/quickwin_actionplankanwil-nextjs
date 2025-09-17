@@ -70,6 +70,16 @@ export default function FeedbackInfoModal({ open, onClose, feedback }) {
                 </p>
               </div>
 
+              {/* SubAction Plan Info */}
+              <div className="bg-blue-50 rounded-lg p-4 border border-yellow-200">
+                <h3 className="font-semibold text-yellow-900 mb-2">
+                  Sub Action Plan
+                </h3>
+                <p className="text-yellow-800">
+                  {feedback.subActionPlan?.title || "N/A"}
+                </p>
+              </div>
+
               {/* Feedback Task */}
               <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
                 <h3 className="font-semibold text-gray-900 mb-2">Feedback</h3>
