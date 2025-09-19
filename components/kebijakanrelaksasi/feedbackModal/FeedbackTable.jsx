@@ -6,7 +6,6 @@ export function FeedbackTable({
   feedbacks,
   hasActiveFilters,
   totalFeedbacks,
-  onSelesai,
   onInfo,
   isUpdating,
   selectedFeedbackId,
@@ -31,12 +30,6 @@ export function FeedbackTable({
     <div className="space-y-4">
       <div className="overflow-x-auto border border-gray-200 rounded-lg shadow-sm bg-white">
         <table className="w-full text-sm table-fixed">
-          <colgroup>
-            <col />
-            <col />
-            <col />
-            <col />
-          </colgroup>
           <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
             <tr>
               <th className="p-4 text-center font-semibold text-gray-700 border-r border-gray-200">
@@ -109,35 +102,17 @@ export function FeedbackTable({
                   </span>
                 </td>
 
-                {/* Aksi */}
+                {/* Aksi → Selalu Info */}
                 <td className="p-4 text-right">
-                  {fb.status !== "selesai" ? (
-                    <Button
-                      size="sm"
-                      onClick={() => onSelesai(fb)}
-                      disabled={isUpdating && selectedFeedbackId === fb.id}
-                      className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-md transition-all duration-200 shadow-sm hover:shadow-md focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                    >
-                      {isUpdating && selectedFeedbackId === fb.id ? (
-                        <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          Processing...
-                        </>
-                      ) : (
-                        "Tandai Selesai"
-                      )}
-                    </Button>
-                  ) : (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => onInfo(fb)}
-                      className="flex items-center gap-2 text-blue-600 border-blue-300 hover:bg-blue-50"
-                    >
-                      <Info className="w-4 h-4" />
-                      Info
-                    </Button>
-                  )}
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => onInfo(fb)}
+                    className="flex items-center gap-2 text-blue-600 border-blue-300 hover:bg-blue-50"
+                  >
+                    <Info className="w-4 h-4" />
+                    Info
+                  </Button>
                 </td>
               </tr>
             ))}

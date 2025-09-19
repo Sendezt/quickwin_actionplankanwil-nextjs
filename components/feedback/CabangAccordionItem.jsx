@@ -23,6 +23,7 @@ export function CabangAccordionItem({
   isRefreshing,
   isUpdating,
   selectedFeedbackId,
+  setOpenCabang, // ✅ terima di sini
 }) {
   return (
     <AccordionItem key={cabang.id} value={`cabang-${cabang.id}`}>

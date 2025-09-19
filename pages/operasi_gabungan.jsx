@@ -25,6 +25,7 @@ export default function MenuTiga() {
     loading,
     totalSkor,
     targetSkor,
+    feedback,
   } = useDataMenuTiga();
 
   return (
@@ -60,6 +61,7 @@ export default function MenuTiga() {
             table3Data={table3Data}
             table4Data={table4Data}
             table5Data={table5Data}
+            feedback={feedback}
             loading={loading}
           />
         </div>

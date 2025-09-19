@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import {
@@ -40,7 +42,7 @@ import {
   DialogTitle,
   DialogBackdrop,
 } from "@headlessui/react";
-import { FeedbackTable } from "../feedback/FeedbackTable";
+import { FeedbackTable } from "./feedbackModal/FeedbackTable";
 import FeedbackInfoModal from "../feedback/FeedbackInfoModal";
 
 // Skeleton Components
@@ -364,10 +366,12 @@ export const GrowthChart = ({ table1Data, loading }) => {
 };
 
 // Data Table 1 Component
+import { useRouter } from "next/navigation";
 export const DataTable1 = ({ table1Data, loading, feedbackData }) => {
   const [selectedCabang, setSelectedCabang] = useState(null);
   const [selectedFeedback, setSelectedFeedback] = useState(null);
   const [previousCabang, setPreviousCabang] = useState(null);
+  const router = useRouter();
 
   const getStatusVariant = (status) => {
     switch (status?.toLowerCase()) {
@@ -391,6 +395,20 @@ export const DataTable1 = ({ table1Data, loading, feedbackData }) => {
           f.subActionPlanId === 1
       ) || []
     );
+  };
+
+  // Hitung jumlah feedback per status
+  const getFeedbackCounts = (namaCabang) => {
+    const feedbacksCabang = getFeedbackByCabang(namaCabang) || [];
+    const totalCount = feedbacksCabang.length;
+    const selesaiCount = feedbacksCabang.filter(
+      (f) => f.status?.toLowerCase() === "selesai"
+    ).length;
+    const prosesCount = feedbacksCabang.filter(
+      (f) => f.status?.toLowerCase() === "proses"
+    ).length;
+
+    return { totalCount, selesaiCount, prosesCount };
   };
 
   return (
@@ -488,20 +506,53 @@ export const DataTable1 = ({ table1Data, loading, feedbackData }) => {
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <DialogPanel
             className="
-              bg-white rounded-lg shadow-lg
-              w-full max-w-4xl sm:max-w-[90vw]
-              max-h-[90vh] overflow-y-auto
-              p-6
-            "
+        bg-white rounded-lg shadow-lg
+        w-full max-w-4xl sm:max-w-[90vw]
+        max-h-[90vh] overflow-y-auto
+        p-6
+      "
           >
-            <DialogTitle className="text-lg font-bold mb-4">
-              Feedback untuk {selectedCabang}
-            </DialogTitle>
+            {selectedCabang && (
+              <DialogTitle className="text-lg font-bold mb-4 pb-3 border-b border-gray-200">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  {/* Main Title */}
+                  <h2 className="text-lg font-bold text-gray-800">
+                    Feedback untuk {selectedCabang}
+                  </h2>
+
+                  {/* Statistics */}
+                  {(() => {
+                    const { totalCount, selesaiCount, prosesCount } =
+                      getFeedbackCounts(selectedCabang);
+                    return (
+                      <div className="text-sm text-gray-600 flex gap-4">
+                        <span className="flex items-center gap-1">
+                          <span className="font-medium">Total:</span>
+                          <span className="font-bold text-gray-800 bg-gray-100 px-2 py-0.5 rounded">
+                            {totalCount}
+                          </span>
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <span className="font-medium">Selesai:</span>
+                          <span className="font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded">
+                            {selesaiCount}
+                          </span>
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <span className="font-medium">Proses:</span>
+                          <span className="font-bold text-orange-700 bg-orange-100 px-2 py-0.5 rounded">
+                            {prosesCount}
+                          </span>
+                        </span>
+                      </div>
+                    );
+                  })()}
+                </div>
+              </DialogTitle>
+            )}
 
             <FeedbackTable
-              feedbacks={getFeedbackByCabang(selectedCabang).filter(
-                (f) => f.status?.toLowerCase() === "selesai"
-              )}
+              feedbacks={getFeedbackByCabang(selectedCabang)}
               hasActiveFilters={false}
               totalFeedbacks={0}
               onSelesai={(fb) => console.log("Selesai:", fb)}
@@ -514,12 +565,27 @@ export const DataTable1 = ({ table1Data, loading, feedbackData }) => {
               selectedFeedbackId={null}
             />
 
-            <div className="mt-4 flex justify-end">
+            <div className="mt-4 flex justify-end gap-2">
               <button
                 onClick={() => setSelectedCabang(null)}
                 className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
               >
                 Tutup
+              </button>
+
+              {/* Button Detail */}
+              <button
+                onClick={() => {
+                  const cabang = feedbackData?.find(
+                    (f) => f.cabang?.nama === selectedCabang
+                  );
+                  if (cabang?.cabang?.id) {
+                    router.push(`/feedback?cabangId=${cabang.cabang.id}`);
+                  }
+                }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Detail
               </button>
             </div>
           </DialogPanel>
@@ -545,6 +611,7 @@ export const DataTable2 = ({ tableData, loading, feedbackData }) => {
   const [selectedCabang, setSelectedCabang] = useState(null);
   const [selectedFeedback, setSelectedFeedback] = useState(null);
   const [previousCabang, setPreviousCabang] = useState(null);
+  const router = useRouter();
 
   // filter feedback berdasarkan nama cabang + actionPlanId + subActionPlanId
   const getFeedbackByCabang = (namaCabang) => {
@@ -557,6 +624,20 @@ export const DataTable2 = ({ tableData, loading, feedbackData }) => {
           f.subActionPlanId === 2
       ) || []
     );
+  };
+
+  // Hitung jumlah feedback per status
+  const getFeedbackCounts = (namaCabang) => {
+    const feedbacksCabang = getFeedbackByCabang(namaCabang) || [];
+    const totalCount = feedbacksCabang.length;
+    const selesaiCount = feedbacksCabang.filter(
+      (f) => f.status?.toLowerCase() === "selesai"
+    ).length;
+    const prosesCount = feedbacksCabang.filter(
+      (f) => f.status?.toLowerCase() === "proses"
+    ).length;
+
+    return { totalCount, selesaiCount, prosesCount };
   };
 
   return (
@@ -683,45 +764,85 @@ export const DataTable2 = ({ tableData, loading, feedbackData }) => {
           <DialogPanel
             className="
         bg-white rounded-lg shadow-lg
-        w-full max-w-4xl sm:max-w-[90vw]   /* responsif */
-        max-h-[90vh] overflow-y-auto      /* biar konten panjang bisa scroll */
+        w-full max-w-4xl sm:max-w-[90vw]
+        max-h-[90vh] overflow-y-auto
         p-6
       "
           >
-            <DialogTitle className="text-lg font-bold mb-4 flex items-center gap-2">
-              <span>Feedback untuk {selectedCabang}</span>
-              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                {
-                  getFeedbackByCabang(selectedCabang).filter(
-                    (f) => f.status?.toLowerCase() === "selesai"
-                  ).length
-                }{" "}
-                feedback selesai
-              </span>
-            </DialogTitle>
+            {selectedCabang && (
+              <DialogTitle className="text-lg font-bold mb-4 pb-3 border-b border-gray-200">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  {/* Main Title */}
+                  <h2 className="text-lg font-bold text-gray-800">
+                    Feedback untuk {selectedCabang}
+                  </h2>
+
+                  {/* Statistics */}
+                  {(() => {
+                    const { totalCount, selesaiCount, prosesCount } =
+                      getFeedbackCounts(selectedCabang);
+                    return (
+                      <div className="text-sm text-gray-600 flex gap-4">
+                        <span className="flex items-center gap-1">
+                          <span className="font-medium">Total:</span>
+                          <span className="font-bold text-gray-800 bg-gray-100 px-2 py-0.5 rounded">
+                            {totalCount}
+                          </span>
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <span className="font-medium">Selesai:</span>
+                          <span className="font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded">
+                            {selesaiCount}
+                          </span>
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <span className="font-medium">Proses:</span>
+                          <span className="font-bold text-orange-700 bg-orange-100 px-2 py-0.5 rounded">
+                            {prosesCount}
+                          </span>
+                        </span>
+                      </div>
+                    );
+                  })()}
+                </div>
+              </DialogTitle>
+            )}
 
             <FeedbackTable
-              feedbacks={getFeedbackByCabang(selectedCabang).filter(
-                (f) => f.status?.toLowerCase() === "selesai"
-              )}
+              feedbacks={getFeedbackByCabang(selectedCabang)}
               hasActiveFilters={false}
               totalFeedbacks={0}
               onSelesai={(fb) => console.log("Selesai:", fb)}
               onInfo={(fb) => {
-                setPreviousCabang(selectedCabang); // simpan modal pertama
-                setSelectedCabang(null); // tutup modal pertama
-                setSelectedFeedback(fb); // buka modal kedua
+                setPreviousCabang(selectedCabang);
+                setSelectedCabang(null);
+                setSelectedFeedback(fb);
               }}
               isUpdating={false}
               selectedFeedbackId={null}
             />
 
-            <div className="mt-4 flex justify-end">
+            <div className="mt-4 flex justify-end gap-2">
               <button
                 onClick={() => setSelectedCabang(null)}
                 className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
               >
                 Tutup
+              </button>
+
+              {/* Button Detail */}
+              <button
+                onClick={() => {
+                  const cabang = feedbackData?.find(
+                    (f) => f.cabang?.nama === selectedCabang
+                  );
+                  if (cabang?.cabang?.id) {
+                    router.push(`/feedback?cabangId=${cabang.cabang.id}`);
+                  }
+                }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Detail
               </button>
             </div>
           </DialogPanel>
@@ -732,8 +853,8 @@ export const DataTable2 = ({ tableData, loading, feedbackData }) => {
       <FeedbackInfoModal
         open={!!selectedFeedback}
         onClose={() => {
-          setSelectedFeedback(null); // tutup modal kedua
-          setSelectedCabang(previousCabang); // buka lagi modal pertama
+          setSelectedFeedback(null);
+          setSelectedCabang(previousCabang);
         }}
         feedback={selectedFeedback}
       />

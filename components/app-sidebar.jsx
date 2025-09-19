@@ -35,7 +35,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-import { Button } from "@/components/ui/button"; // pastikan kamu punya komponen ini
+import { Button } from "@/components/ui/button";
 
 // Menu data
 export const data = {
@@ -100,32 +100,54 @@ export function AppSidebar(props) {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [tokenValid, setTokenValid] = useState(false);
   const router = useRouter();
+
+  // fungsi cek token valid
+  const checkToken = () => {
+    const token = localStorage.getItem("token");
+    if (!token) return false;
+    try {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
+      );
+      const decoded = JSON.parse(jsonPayload);
+      const currentTime = Date.now() / 1000;
+      return decoded.exp > currentTime;
+    } catch (error) {
+      return false;
+    }
+  };
 
   useEffect(() => {
     setMounted(true);
 
-    // cek token saat komponen mount
-    const checkToken = () => {
-      const token = localStorage.getItem("token");
-      setIsLoggedIn(!!token);
-    };
+    // set state saat mount
+    const valid = checkToken();
+    setIsLoggedIn(valid);
+    setTokenValid(valid);
 
-    checkToken();
-
-    // listener untuk perubahan token di localStorage (realtime)
-    const handleStorageChange = () => checkToken();
+    // cek berkala dan listen storage
+    const interval = setInterval(() => setTokenValid(checkToken()), 30000);
+    const handleStorageChange = () => setTokenValid(checkToken());
     window.addEventListener("storage", handleStorageChange);
 
     return () => {
+      clearInterval(interval);
       window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // hapus token
+    localStorage.removeItem("token");
     setIsLoggedIn(false);
-    router.push("/login"); // redirect ke login
+    setTokenValid(false);
+    router.push("/login");
   };
 
   if (!mounted) return null;
@@ -255,7 +277,7 @@ export function AppSidebar(props) {
 
       {/* Sidebar Footer untuk login/logout */}
       <SidebarFooter className="p-4 border-t border-gray-200">
-        {isLoggedIn ? (
+        {tokenValid ? (
           <Button
             variant="default"
             className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white"

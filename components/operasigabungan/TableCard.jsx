@@ -56,7 +56,9 @@ export default function TableCard({
                 {headers.map((header, i) => (
                   <TableHead
                     key={i}
-                    className="font-semibold text-gray-800 border border-gray-300 px-3 py-2"
+                    className={`font-semibold text-gray-800 border border-gray-300 px-3 py-2 ${
+                      i === 0 || i === 1 ? "text-left" : "text-center"
+                    }`}
                   >
                     {header}
                   </TableHead>
@@ -71,7 +73,9 @@ export default function TableCard({
                       ? row.map((cell, j) => (
                           <TableCell
                             key={j}
-                            className="border border-gray-300 px-3 py-1 text-sm"
+                            className={`border border-gray-300 px-3 py-1 text-sm ${
+                              j === 0 || j === 1 ? "text-left" : "text-center"
+                            }`}
                           >
                             {cell}
                           </TableCell>
@@ -92,24 +96,68 @@ export default function TableCard({
             </TableBody>
             {normalizedSummary.length > 0 && (
               <TableFooter>
-                {normalizedSummary.map((row, i) => {
-                  const emptyCells = headers.length - row.length;
+                {normalizedSummary.map((origRow, i) => {
+                  const totalCols = headers.length; // jumlah kolom di tabel
+                  let row = Array.isArray(origRow) ? [...origRow] : [];
+
+                  // jika cell pertama kemungkinan label (ada huruf), ambil sebagai label
+                  let label = null;
+                  if (
+                    row.length &&
+                    typeof row[0] === "string" &&
+                    /[A-Za-z]/.test(row[0])
+                  ) {
+                    label = row.shift(); // remove first element jadi row = data angka selanjutnya
+                  }
+
+                  const dataCount = row.length;
+                  // posisi paling kiri tempat data harus mulai agar data berakhir di kolom terakhir
+                  // pastikan tidak mulai sebelum kolom ke-2 (karena 0+1 untuk No + Loket Kantor)
+                  const startCol = Math.max(2, totalCols - dataCount);
+
                   return (
-                    <TableRow key={i} className="bg-gray-50 font-semibold">
-                      {Array.from({ length: emptyCells }).map((_, idx) => (
+                    <TableRow
+                      key={`summary-${i}`}
+                      className="bg-gray-50 font-semibold"
+                    >
+                      {/* baris pertama: merge 2 kolom pertama dan tampilkan label (atau "Total") */}
+                      {i === 0 ? (
                         <TableCell
-                          key={`empty-${idx}`}
-                          className="border border-gray-300 px-3 py-1 text-sm"
-                        ></TableCell>
-                      ))}
-                      {row.map((cell, j) => (
-                        <TableCell
-                          key={j}
-                          className="border border-gray-300 px-3 py-1 text-sm"
+                          colSpan={2}
+                          className="border border-gray-300 px-3 py-1 text-sm text-center"
                         >
-                          {cell}
+                          {label ?? "Total"}
                         </TableCell>
-                      ))}
+                      ) : (
+                        // baris lainnya: dua cell kosong di depan (agar angka bergeser kanan)
+                        <>
+                          <TableCell className="border border-gray-300 px-3 py-1 text-sm" />
+                          <TableCell className="border border-gray-300 px-3 py-1 text-sm" />
+                        </>
+                      )}
+
+                      {/* render sisa kolom (dari kolom index 2 sampai akhir) */}
+                      {Array.from({ length: totalCols - 2 }).map(
+                        (_, colIndex) => {
+                          const col = colIndex + 2;
+                          const dataIndex = col - startCol; // index di row[] jika ada
+                          const cellContent =
+                            dataIndex >= 0 && dataIndex < dataCount
+                              ? row[dataIndex]
+                              : null;
+
+                          return (
+                            <TableCell
+                              key={`summary-${i}-c${col}`}
+                              className={`border border-gray-300 px-3 py-1 text-sm ${
+                                cellContent ? "text-center" : "text-center"
+                              }`}
+                            >
+                              {cellContent}
+                            </TableCell>
+                          );
+                        }
+                      )}
                     </TableRow>
                   );
                 })}

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+// Removed useRouter import - using browser API instead
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import Navbar from "@/components/navbar";
@@ -26,6 +27,9 @@ import FeedbackModal from "@/components/feedback/FeedbackModal";
 import FeedbackInfoModal from "@/components/feedback/FeedbackInfoModal";
 
 export default function FeedbackPage() {
+  // ✅ Get cabangId from URL using browser API
+  const [cabangIdFromUrl, setCabangIdFromUrl] = useState(null);
+
   const { feedbacks, cabangs, actionPlans, isLoading, isRefreshing, loadData } =
     useFeedbackData();
   const {
@@ -52,6 +56,65 @@ export default function FeedbackPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginAlert, setShowLoginAlert] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
+
+  // Open Cabang
+  const [openCabang, setOpenCabang] = useState(null);
+
+  // ✅ Extract cabangId from URL on component mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const cabangId = urlParams.get("cabangId");
+      setCabangIdFromUrl(cabangId);
+    }
+  }, []);
+
+  // ✅ Auto-open accordion berdasarkan cabangId dari URL
+  useEffect(() => {
+    if (cabangIdFromUrl && cabangs.length > 0) {
+      // Cari cabang berdasarkan ID
+      const targetCabang = cabangs.find(
+        (cabang) => cabang.id === parseInt(cabangIdFromUrl)
+      );
+
+      if (targetCabang) {
+        // Set accordion terbuka untuk cabang tersebut
+        setOpenCabang(`cabang-${cabangIdFromUrl}`);
+
+        // Optional: Scroll ke accordion yang terbuka setelah render
+        setTimeout(() => {
+          const accordionElement = document.querySelector(
+            `[data-accordion-item="cabang-${cabangIdFromUrl}"]`
+          );
+          if (accordionElement) {
+            accordionElement.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        }, 100);
+
+        // Clear URL parameter setelah accordion terbuka
+        if (typeof window !== "undefined") {
+          const newUrl = window.location.pathname;
+          window.history.replaceState({}, "", newUrl);
+        }
+      }
+    }
+  }, [cabangIdFromUrl, cabangs]);
+
+  // ✅ Clear URL params after accordion is opened (optional)
+  useEffect(() => {
+    if (openCabang && cabangIdFromUrl) {
+      // Hapus cabangId dari URL setelah accordion terbuka
+      // untuk mencegah auto-open lagi saat refresh
+      if (typeof window !== "undefined") {
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, "", newUrl);
+        setCabangIdFromUrl(null); // Reset state
+      }
+    }
+  }, [openCabang, cabangIdFromUrl]);
 
   // Check authentication status
   useEffect(() => {
@@ -241,7 +304,13 @@ export default function FeedbackPage() {
             {cabangs.length === 0 && !isRefreshing ? (
               <LoadingSpinner message="Tidak ada data cabang..." />
             ) : (
-              <Accordion type="single" collapsible className="w-full">
+              <Accordion
+                type="single"
+                collapsible
+                value={openCabang}
+                onValueChange={setOpenCabang}
+                className="w-full"
+              >
                 {cabangs.map((cabang) => {
                   const filteredFeedbacks = getFilteredFeedbacks(
                     feedbacks,
@@ -266,11 +335,14 @@ export default function FeedbackPage() {
                       clearFilters={clearFilters}
                       onAddFeedback={handleOpenModal}
                       onSelesai={handleOpenConfirm}
-                      onInfo={handleOpenInfo}
+                      onInfo={(feedback) => {
+                        setOpenCabang(`cabang-${cabang.id}`);
+                        handleOpenInfo(feedback);
+                      }}
                       isRefreshing={isRefreshing}
                       isUpdating={isUpdating}
                       selectedFeedbackId={selectedFeedback?.id}
-                      isLoggedIn={isLoggedIn} // Pass login status to child components
+                      isLoggedIn={isLoggedIn}
                     />
                   );
                 })}
