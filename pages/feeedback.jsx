@@ -187,9 +187,21 @@ export default function FeedbackPage() {
   };
 
   const handleFormSubmit = async (formData) => {
-    const success = await handleCreate({ ...formData, selectedCabang });
-    if (success) {
-      setShowModal(false);
+    try {
+      const success = await handleCreate({ ...formData, selectedCabang });
+
+      if (success) {
+        // ✅ Tutup modal hanya jika penyimpanan sukses
+        setShowModal(false);
+
+        // Optional: reset form di FeedbackFormModal
+        formData.resetForm?.();
+      } else {
+        // Optional: tampilkan alert gagal
+        console.error("Gagal menyimpan feedback");
+      }
+    } catch (err) {
+      console.error("Error saat menyimpan feedback:", err);
     }
   };
 

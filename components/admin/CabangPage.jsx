@@ -11,7 +11,7 @@ import LoadingSkeleton from "@/components/admin/Cabang/LoadingSkeleton";
 import AlertMessage from "@/components/admin/Cabang/AlertMessage";
 
 export default function CabangPage() {
-  const baseURL = "http://localhost:3000";
+  const baseURL = "https://magangproject.vercel.app";
   const [cabangs, setCabangs] = useState([]);
   const [filteredCabangs, setFilteredCabangs] = useState([]);
   const [loading, setLoading] = useState(true);

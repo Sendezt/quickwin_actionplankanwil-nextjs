@@ -112,7 +112,7 @@ export default function FeedbackPage() {
   // Clear all feedback
   const handleClearAll = () => {
     if (!confirm("Yakin hapus semua feedback?")) return;
-    fetch("http://localhost:3000/api/admin/feedback/clearfeedback", {
+    fetch("https://magangproject.vercel.app/api/admin/feedback/clearfeedback", {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,

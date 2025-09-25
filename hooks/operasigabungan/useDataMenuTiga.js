@@ -8,7 +8,7 @@ const API_ENDPOINTS = {
   table5: "https://magangproject.vercel.app/api/sheet3/getsheet3table5",
   breakdown: "https://magangproject.vercel.app/api/sheet3/getsheet3card",
   range: "https://magangproject.vercel.app/api/sheet3/getRange-sheet3",
-  feedback: "http://localhost:3000/api/feedback/read"
+  feedback: "https://magangproject.vercel.app/api/feedback/read",
 };
 
 export function useDataMenuTiga() {
@@ -29,27 +29,39 @@ export function useDataMenuTiga() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
-        // Fetch table data in parallel
-        const [table1Res, table2Res, table3Res, table4Res, table5Res, feedbackRes] =
-          await Promise.all([
-            fetch(API_ENDPOINTS.table1),
-            fetch(API_ENDPOINTS.table2),
-            fetch(API_ENDPOINTS.table3),
-            fetch(API_ENDPOINTS.table4),
-            fetch(API_ENDPOINTS.table5),
-            fetch(API_ENDPOINTS.feedback)
-          ]);
 
-        const [table1Json, table2Json, table3Json, table4Json, table5Json, feedbackJson] =
-          await Promise.all([
-            table1Res.json(),
-            table2Res.json(),
-            table3Res.json(),
-            table4Res.json(),
-            table5Res.json(),
-            feedbackRes.json()
-          ]);
+        // Fetch table data in parallel
+        const [
+          table1Res,
+          table2Res,
+          table3Res,
+          table4Res,
+          table5Res,
+          feedbackRes,
+        ] = await Promise.all([
+          fetch(API_ENDPOINTS.table1),
+          fetch(API_ENDPOINTS.table2),
+          fetch(API_ENDPOINTS.table3),
+          fetch(API_ENDPOINTS.table4),
+          fetch(API_ENDPOINTS.table5),
+          fetch(API_ENDPOINTS.feedback),
+        ]);
+
+        const [
+          table1Json,
+          table2Json,
+          table3Json,
+          table4Json,
+          table5Json,
+          feedbackJson,
+        ] = await Promise.all([
+          table1Res.json(),
+          table2Res.json(),
+          table3Res.json(),
+          table4Res.json(),
+          table5Res.json(),
+          feedbackRes.json(),
+        ]);
 
         // Fetch additional data
         const [breakdownRes, rangeRes] = await Promise.all([
@@ -84,7 +96,8 @@ export function useDataMenuTiga() {
   }, []);
 
   // Computed values
-  const totalSkor = data.breakdown?.data?.reduce((total, item) => total + item.skor, 0) ?? 0;
+  const totalSkor =
+    data.breakdown?.data?.reduce((total, item) => total + item.skor, 0) ?? 0;
   const targetSkor = 4;
 
   return {

@@ -18,9 +18,12 @@ export default function UserManagement() {
   // fetch users
   const fetchUsers = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/admin/admin/getuser", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      const res = await fetch(
+        "https://magangproject.vercel.app/api/admin/admin/getuser",
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       const data = await res.json();
       setUsers(Array.isArray(data) ? data : data.data || []);
     } catch (err) {
@@ -31,7 +34,9 @@ export default function UserManagement() {
   // fetch cabangs
   const fetchCabangs = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/cabang/read");
+      const res = await fetch(
+        "https://magangproject.vercel.app/api/cabang/read"
+      );
       const data = await res.json();
       setCabangs(data);
     } catch {}
@@ -45,18 +50,21 @@ export default function UserManagement() {
   // create user
   const handleCreate = async (formData) => {
     try {
-      const res = await fetch("http://localhost:3000/api/admin/admin/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          ...formData,
-          cabangId:
-            formData.role === "Kacab" ? parseInt(formData.cabangId) : null,
-        }),
-      });
+      const res = await fetch(
+        "https://magangproject.vercel.app/api/admin/admin/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            ...formData,
+            cabangId:
+              formData.role === "Kacab" ? parseInt(formData.cabangId) : null,
+          }),
+        }
+      );
 
       if (!res.ok) throw new Error();
       toast.success("User berhasil ditambahkan");
@@ -71,7 +79,7 @@ export default function UserManagement() {
   const handleEdit = async (formData) => {
     try {
       const res = await fetch(
-        `http://localhost:3000/api/admin/admin/updateuser/${selectedUser.id}`,
+        `https://magangproject.vercel.app/api/admin/admin/updateuser/${selectedUser.id}`,
         {
           method: "PUT",
           headers: {
@@ -100,7 +108,7 @@ export default function UserManagement() {
   const handleDelete = async (id) => {
     try {
       const res = await fetch(
-        `http://localhost:3000/api/admin/admin/deleteuser/${id}`,
+        `https://magangproject.vercel.app/api/admin/admin/deleteuser/${id}`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

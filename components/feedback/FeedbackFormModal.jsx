@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Dialog,
   DialogPanel,
@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { Button } from "@/components/ui/button";
+import { jwtDecode } from "jwt-decode";
 
 export default function FeedbackFormModal({
   actionPlans,
@@ -14,30 +15,29 @@ export default function FeedbackFormModal({
   onClose,
   onSubmit,
   isCreating,
-  selectedCabang, // Optional: untuk display saja
+  selectedCabang,
 }) {
   const [actionPlanId, setActionPlanId] = useState("");
   const [subActionPlanId, setSubActionPlanId] = useState("");
   const [task, setTask] = useState("");
   const [subActionPlans, setSubActionPlans] = useState([]);
   const [loadingSub, setLoadingSub] = useState(false);
-
-  // Get user info from localStorage untuk display
   const [userInfo, setUserInfo] = useState(null);
 
+  const resetForm = useCallback(() => {
+    setActionPlanId("");
+    setSubActionPlanId("");
+    setTask("");
+    setSubActionPlans([]);
+  }, []);
+
+  // Ambil user info dari token saat modal terbuka
   useEffect(() => {
+    if (!isOpen) return;
     const token = localStorage.getItem("token");
     if (token) {
       try {
-        const base64Url = token.split(".")[1];
-        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-        const jsonPayload = decodeURIComponent(
-          atob(base64)
-            .split("")
-            .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-            .join("")
-        );
-        const decoded = JSON.parse(jsonPayload);
+        const decoded = jwtDecode(token); // jauh lebih simpel
         setUserInfo(decoded);
       } catch (error) {
         console.error("Error decoding token:", error);
@@ -45,70 +45,52 @@ export default function FeedbackFormModal({
     }
   }, [isOpen]);
 
-  const resetForm = () => {
-    setActionPlanId("");
-    setSubActionPlanId("");
-    setTask("");
-    setSubActionPlans([]);
-  };
+  // Fetch subActionPlans sesuai actionPlanId
+  const fetchSubActionPlans = useCallback(async () => {
+    if (!actionPlanId) {
+      setSubActionPlans([]);
+      return;
+    }
 
-  // Fetch subActionPlans dari backend sesuai actionPlanId
-  useEffect(() => {
-    const fetchSubActionPlans = async () => {
-      if (!actionPlanId) {
-        setSubActionPlans([]);
+    try {
+      setLoadingSub(true);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No token found");
         return;
       }
 
-      try {
-        setLoadingSub(true);
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-          console.error("No token found");
-          return;
+      const res = await fetch(
+        `https://magangproject.vercel.app/api/admin/sub/getsub?actionPlanId=${actionPlanId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
+      );
 
-        const res = await fetch(
-          `http://localhost:3000/api/admin/sub/getsub?actionPlanId=${actionPlanId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+      if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
 
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-        }
-
-        const json = await res.json();
-        setSubActionPlans(json.data || []);
-      } catch (err) {
-        console.error("Gagal fetch subActionPlans:", err);
-        setSubActionPlans([]);
-      } finally {
-        setLoadingSub(false);
-      }
-    };
-
-    fetchSubActionPlans();
+      const json = await res.json();
+      setSubActionPlans(json.data || []);
+    } catch (err) {
+      console.error("Gagal fetch subActionPlans:", err);
+      setSubActionPlans([]);
+    } finally {
+      setLoadingSub(false);
+    }
   }, [actionPlanId]);
+
+  useEffect(() => {
+    fetchSubActionPlans();
+  }, [fetchSubActionPlans]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validasi client-side
-    if (!actionPlanId || !task.trim()) {
-      console.log("Validation failed: actionPlanId / task kosong");
-      return;
-    }
-
-    if (subActionPlans.length > 0 && !subActionPlanId) {
-      console.log("Validation failed: subActionPlan wajib dipilih");
-      return;
-    }
+    if (!actionPlanId || !task.trim()) return;
+    if (subActionPlans.length > 0 && !subActionPlanId) return;
 
     onSubmit({
       actionPlanId,
@@ -118,12 +100,9 @@ export default function FeedbackFormModal({
     });
   };
 
-  // Get display name for cabang
-  const getCabangDisplayName = () => {
-    if (selectedCabang) return selectedCabang.nama;
-    if (userInfo) return `Cabang ID: ${userInfo.cabangId}`;
-    return "Cabang Anda";
-  };
+  const cabangDisplayName =
+    selectedCabang?.nama ||
+    (userInfo ? `Cabang ID: ${userInfo.cabangId}` : "Cabang Anda");
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
@@ -132,7 +111,7 @@ export default function FeedbackFormModal({
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <DialogPanel className="w-full max-w-md rounded-2xl bg-white p-6 shadow-lg">
           <DialogTitle className="text-lg font-semibold mb-4">
-            Tambah Feedback - {getCabangDisplayName()}
+            Tambah Feedback - {cabangDisplayName}
           </DialogTitle>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -161,9 +140,9 @@ export default function FeedbackFormModal({
 
             {/* Sub Action Plan */}
             {loadingSub ? (
-              <div className="text-sm text-gray-500 py-2">
+              <p className="text-sm text-gray-500 py-2">
                 Memuat sub action plan...
-              </div>
+              </p>
             ) : (
               subActionPlans.length > 0 && (
                 <div>
@@ -174,7 +153,7 @@ export default function FeedbackFormModal({
                     value={subActionPlanId}
                     onChange={(e) => setSubActionPlanId(e.target.value)}
                     className="w-full rounded-lg border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    required={subActionPlans.length > 0}
+                    required
                   >
                     <option value="">Pilih Sub Action Plan</option>
                     {subActionPlans.map((sub, index) => (

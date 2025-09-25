@@ -24,7 +24,9 @@ const apiService = {
   },
 
   fetchFeedbackData: async () => {
-    const res = await fetch("http://localhost:3000/api/feedback/read");
+    const res = await fetch(
+      "https://magangproject.vercel.app/api/feedback/read"
+    );
     return res.json();
   },
 };
@@ -44,12 +46,13 @@ export const useMenuDuaData = () => {
     const fetchAllData = async () => {
       try {
         // Fetch all data concurrently
-        const [mainData, breakdownData, rangeData, feedbackData] = await Promise.all([
-          apiService.fetchMainData(),
-          apiService.fetchBreakdownData(),
-          apiService.fetchRangeData(),
-          apiService.fetchFeedbackData(),
-        ]);
+        const [mainData, breakdownData, rangeData, feedbackData] =
+          await Promise.all([
+            apiService.fetchMainData(),
+            apiService.fetchBreakdownData(),
+            apiService.fetchRangeData(),
+            apiService.fetchFeedbackData(),
+          ]);
 
         setState({
           tableData: mainData.table2,
