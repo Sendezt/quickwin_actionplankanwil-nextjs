@@ -18,11 +18,11 @@ export default function QuickwinSamsat() {
         const fetchData = async () => {
             try {
                 // fetch table 1
-                const res1 = await fetch("https://magangproject.vercel.app/api/dashboard/getquickwinsamsat");
+                const res1 = await fetch("https://quickwin-jateng.vercel.app/api/dashboard/getquickwinsamsat");
                 setTable1Data(await res1.json());
 
                 // fetch table 2
-                const res2 = await fetch("https://magangproject.vercel.app/api/dashboard/getquickwinsamsattable");
+                const res2 = await fetch("https://quickwin-jateng.vercel.app/api/dashboard/getquickwinsamsattable");
                 const json2 = await res2.json();
                 setTable2Data(json2);
 

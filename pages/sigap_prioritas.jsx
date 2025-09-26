@@ -35,25 +35,25 @@ export default function MenuTen() {
       try {
         // Tabel 1
         const res1 = await fetch(
-          "https://magangproject.vercel.app/api/sheet10/getsheet10table1"
+          "https://quickwin-jateng.vercel.app/api/sheet10/getsheet10table1"
         );
         setTable1Data(await res1.json());
 
         // Tabel 2
         const res2 = await fetch(
-          "https://magangproject.vercel.app/api/sheet10/getsheet10table2"
+          "https://quickwin-jateng.vercel.app/api/sheet10/getsheet10table2"
         );
         setTable2Data(await res2.json());
 
         // Tabel 3
         const res3 = await fetch(
-          "https://magangproject.vercel.app/api/sheet10/getsheet10table3"
+          "https://quickwin-jateng.vercel.app/api/sheet10/getsheet10table3"
         );
         setTable3Data(await res3.json());
 
         // Tabel 4
         const res4 = await fetch(
-          "https://magangproject.vercel.app/api/sheet10/getsheet10table4"
+          "https://quickwin-jateng.vercel.app/api/sheet10/getsheet10table4"
         );
         setTable4Data(await res4.json());
       } catch (error) {
@@ -66,7 +66,7 @@ export default function MenuTen() {
     async function fetchRangeData() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/sheet10/getRange-sheet10"
+          "https://quickwin-jateng.vercel.app/api/sheet10/getRange-sheet10"
         );
         setRangeData(await res.json());
       } catch (err) {

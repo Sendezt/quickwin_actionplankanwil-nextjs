@@ -25,13 +25,13 @@ export default function QuickwinCabang() {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/dashboard/getquickwincabangtable"
+          "https://quickwin-jateng.vercel.app/api/dashboard/getquickwincabangtable"
         );
         const json = await res.json();
         setTables(json.tables || []);
 
         const res2 = await fetch(
-          "https://magangproject.vercel.app/api/dashboard/getquickwincabang"
+          "https://quickwin-jateng.vercel.app/api/dashboard/getquickwincabang"
         );
         const json2 = await res2.json();
         setTables2(json2);

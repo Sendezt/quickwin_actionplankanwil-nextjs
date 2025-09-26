@@ -35,7 +35,7 @@ export default function FeedbackPage() {
   // Fetch data
   const fetchFeedbacks = () => {
     setLoading(true);
-    fetch("https://magangproject.vercel.app/api/admin/feedback/getalldata", {
+    fetch("https://quickwin-jateng.vercel.app/api/admin/feedback/getalldata", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -70,7 +70,7 @@ export default function FeedbackPage() {
     try {
       setSaving(true);
       const res = await fetch(
-        `https://magangproject.vercel.app/api/admin/feedback/updatefeedback/${editingData.id}`,
+        `https://quickwin-jateng.vercel.app/api/admin/feedback/updatefeedback/${editingData.id}`,
         {
           method: "PUT",
           headers: {
@@ -97,7 +97,7 @@ export default function FeedbackPage() {
   const handleDelete = (id) => {
     if (!confirm("Yakin hapus feedback ini?")) return;
     fetch(
-      `https://magangproject.vercel.app/api/admin/feedback/deletedata/${id}`,
+      `https://quickwin-jateng.vercel.app/api/admin/feedback/deletedata/${id}`,
       {
         method: "DELETE",
         headers: {
@@ -112,7 +112,7 @@ export default function FeedbackPage() {
   // Clear all feedback
   const handleClearAll = () => {
     if (!confirm("Yakin hapus semua feedback?")) return;
-    fetch("https://magangproject.vercel.app/api/admin/feedback/clearfeedback", {
+    fetch("https://quickwin-jateng.vercel.app/api/admin/feedback/clearfeedback", {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,

@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 
 const API_ENDPOINTS = {
-  table1: "https://magangproject.vercel.app/api/sheet3/getsheet3table1",
-  table2: "https://magangproject.vercel.app/api/sheet3/getsheet3table2",
-  table3: "https://magangproject.vercel.app/api/sheet3/getsheet3table3",
-  table4: "https://magangproject.vercel.app/api/sheet3/getsheet3table4",
-  table5: "https://magangproject.vercel.app/api/sheet3/getsheet3table5",
-  breakdown: "https://magangproject.vercel.app/api/sheet3/getsheet3card",
-  range: "https://magangproject.vercel.app/api/sheet3/getRange-sheet3",
-  feedback: "https://magangproject.vercel.app/api/feedback/read",
+  table1: "https://quickwin-jateng.vercel.app/api/sheet3/getsheet3table1",
+  table2: "https://quickwin-jateng.vercel.app/api/sheet3/getsheet3table2",
+  table3: "https://quickwin-jateng.vercel.app/api/sheet3/getsheet3table3",
+  table4: "https://quickwin-jateng.vercel.app/api/sheet3/getsheet3table4",
+  table5: "https://quickwin-jateng.vercel.app/api/sheet3/getsheet3table5",
+  breakdown: "https://quickwin-jateng.vercel.app/api/sheet3/getsheet3card",
+  range: "https://quickwin-jateng.vercel.app/api/sheet3/getRange-sheet3",
+  feedback: "https://quickwin-jateng.vercel.app/api/feedback/read",
 };
 
 export function useDataMenuTiga() {

@@ -46,7 +46,7 @@ export default function Dashboard() {
     async function fetchCharts() {
       try {
         const res1 = await fetch(
-          "https://magangproject.vercel.app/api/dashboard/getdashboardchart1"
+          "https://quickwin-jateng.vercel.app/api/dashboard/getdashboardchart1"
         );
         const data1 = await res1.json();
 
@@ -65,7 +65,7 @@ export default function Dashboard() {
         }
 
         const res2 = await fetch(
-          "https://magangproject.vercel.app/api/dashboard/getdashboardchart2"
+          "https://quickwin-jateng.vercel.app/api/dashboard/getdashboardchart2"
         );
         const data2 = await res2.json();
 
@@ -90,7 +90,7 @@ export default function Dashboard() {
     async function fetchCardDashboard() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/dashboard/getdashboardcard"
+          "https://quickwin-jateng.vercel.app/api/dashboard/getdashboardcard"
         );
         const json = await res.json();
 
@@ -107,7 +107,7 @@ export default function Dashboard() {
     async function fetchDataBestCabang() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/dashboard/getdashboardtable1"
+          "https://quickwin-jateng.vercel.app/api/dashboard/getdashboardtable1"
         );
         const json = await res.json();
 
@@ -151,7 +151,7 @@ export default function Dashboard() {
     async function fetchDataBestSamsat() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/dashboard/getdashboardtable2"
+          "https://quickwin-jateng.vercel.app/api/dashboard/getdashboardtable2"
         );
         const json = await res.json();
 
@@ -186,7 +186,7 @@ export default function Dashboard() {
     async function fetchDataJateng() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/dashboard/getquickwinjateng"
+          "https://quickwin-jateng.vercel.app/api/dashboard/getquickwinjateng"
         );
         const json = await res.json();
 

@@ -18,7 +18,7 @@ import RenderTableArray from "@/components/komitmenstakeholder/RenderTableArray"
 import RenderTableScroll from "@/components/komitmenstakeholder/RenderTableScroll";
 
 // Constants
-const API_BASE_URL = "https://magangproject.vercel.app/api";
+const API_BASE_URL = "https://quickwin-jateng.vercel.app/api";
 
 const API_ENDPOINTS = {
   table1: `${API_BASE_URL}/sheet9/getsheet9table1`,

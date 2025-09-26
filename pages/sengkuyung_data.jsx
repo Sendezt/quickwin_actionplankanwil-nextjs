@@ -18,7 +18,7 @@ export default function MenuSengkuyung() {
     const fetchTable = async () => {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/sheetI/getsheetItable1"
+          "https://quickwin-jateng.vercel.app/api/sheetI/getsheetItable1"
         );
         const json = await res.json();
         setTable1(json.table1);

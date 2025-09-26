@@ -22,7 +22,7 @@ export default function QuickwinJateng() {
     const fetchData = async () => {
       try {
         const res1 = await fetch(
-          "https://magangproject.vercel.app/api/dashboard/getquickwinjateng"
+          "https://quickwin-jateng.vercel.app/api/dashboard/getquickwinjateng"
         );
         setTable1Data(await res1.json());
       } catch (error) {

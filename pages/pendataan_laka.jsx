@@ -33,13 +33,13 @@ export default function MenuThirdteen() {
       try {
         // Tabel 1
         const res1 = await fetch(
-          "https://magangproject.vercel.app/api/sheet13/getsheet13table1"
+          "https://quickwin-jateng.vercel.app/api/sheet13/getsheet13table1"
         );
         setTable1Data(await res1.json());
 
         // Tabel 2
         const res2 = await fetch(
-          "https://magangproject.vercel.app/api/sheet13/getsheet13table2"
+          "https://quickwin-jateng.vercel.app/api/sheet13/getsheet13table2"
         );
         setTable2Data(await res2.json());
       } catch (error) {
@@ -52,7 +52,7 @@ export default function MenuThirdteen() {
     async function fetchRangeData() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/sheet13/getRange-sheet13"
+          "https://quickwin-jateng.vercel.app/api/sheet13/getRange-sheet13"
         );
         setRangeData(await res.json());
       } catch (err) {

@@ -10,6 +10,7 @@ import {
   MessageSquare,
   Users,
   LogOut,
+  ListTree,
 } from "lucide-react";
 
 export default function Sidebar({ active, setActive }) {
@@ -19,6 +20,7 @@ export default function Sidebar({ active, setActive }) {
     { name: "Dashboard", icon: <LayoutDashboard size={20} /> },
     { name: "Cabang", icon: <Building2 size={20} /> },
     { name: "ActionPlan", icon: <ListTodo size={20} /> },
+    { name: "Sub ActionPlan", icon: <ListTree size={20} /> },
     { name: "Feedback", icon: <MessageSquare size={20} /> },
     { name: "User", icon: <Users size={20} /> },
   ];

@@ -19,7 +19,7 @@ export default function UserManagement() {
   const fetchUsers = async () => {
     try {
       const res = await fetch(
-        "https://magangproject.vercel.app/api/admin/admin/getuser",
+        "https://quickwin-jateng.vercel.app/api/admin/admin/getuser",
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
@@ -35,7 +35,7 @@ export default function UserManagement() {
   const fetchCabangs = async () => {
     try {
       const res = await fetch(
-        "https://magangproject.vercel.app/api/cabang/read"
+        "https://quickwin-jateng.vercel.app/api/cabang/read"
       );
       const data = await res.json();
       setCabangs(data);
@@ -51,7 +51,7 @@ export default function UserManagement() {
   const handleCreate = async (formData) => {
     try {
       const res = await fetch(
-        "https://magangproject.vercel.app/api/admin/admin/create",
+        "https://quickwin-jateng.vercel.app/api/admin/admin/create",
         {
           method: "POST",
           headers: {
@@ -79,7 +79,7 @@ export default function UserManagement() {
   const handleEdit = async (formData) => {
     try {
       const res = await fetch(
-        `https://magangproject.vercel.app/api/admin/admin/updateuser/${selectedUser.id}`,
+        `https://quickwin-jateng.vercel.app/api/admin/admin/updateuser/${selectedUser.id}`,
         {
           method: "PUT",
           headers: {
@@ -108,7 +108,7 @@ export default function UserManagement() {
   const handleDelete = async (id) => {
     try {
       const res = await fetch(
-        `https://magangproject.vercel.app/api/admin/admin/deleteuser/${id}`,
+        `https://quickwin-jateng.vercel.app/api/admin/admin/deleteuser/${id}`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

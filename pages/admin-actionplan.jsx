@@ -29,7 +29,7 @@ export default function AgendaTable() {
       try {
         const token = localStorage.getItem("token");
         const res = await fetch(
-          "https://magangproject.vercel.app/api/admin/actionplan/getActionPlan",
+          "https://quickwin-jateng.vercel.app/api/admin/actionplan/getActionPlan",
           {
             headers: {
               Authorization: `Bearer ${token}`,

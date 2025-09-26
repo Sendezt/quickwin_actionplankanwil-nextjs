@@ -21,25 +21,25 @@ export default function MenuEmpat() {
     const fetchData = async () => {
       try {
         const res1 = await fetch(
-          "https://magangproject.vercel.app/api/sheet4/getsheet4table1"
+          "https://quickwin-jateng.vercel.app/api/sheet4/getsheet4table1"
         );
         const json1 = await res1.json();
         setTable1Data(json1);
 
         const res2 = await fetch(
-          "https://magangproject.vercel.app/api/sheet4/getsheet4table2"
+          "https://quickwin-jateng.vercel.app/api/sheet4/getsheet4table2"
         );
         const json2 = await res2.json();
         setTable2Data(json2);
 
         const res3 = await fetch(
-          "https://magangproject.vercel.app/api/sheet4/getsheet4table3"
+          "https://quickwin-jateng.vercel.app/api/sheet4/getsheet4table3"
         );
         const json3 = await res3.json();
         setTable3Data(json3);
 
         const cabangRes = await fetch(
-          "https://magangproject.vercel.app/api/sheet4/getsheet4card"
+          "https://quickwin-jateng.vercel.app/api/sheet4/getsheet4card"
         );
         const cabangJson = await cabangRes.json();
         setCabangData(cabangJson);
@@ -53,7 +53,7 @@ export default function MenuEmpat() {
     async function fetchRangeData() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/sheet4/getRange-sheet4"
+          "https://quickwin-jateng.vercel.app/api/sheet4/getRange-sheet4"
         );
         const json = await res.json();
         if (json) {

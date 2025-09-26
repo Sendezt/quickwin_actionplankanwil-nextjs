@@ -28,22 +28,22 @@ export default function MenuSebelas() {
     const fetchData = async () => {
       try {
         const res1 = await fetch(
-          "https://magangproject.vercel.app/api/sheet11/getsheet11table1"
+          "https://quickwin-jateng.vercel.app/api/sheet11/getsheet11table1"
         );
         setTable1Data(await res1.json());
 
         const res2 = await fetch(
-          "https://magangproject.vercel.app/api/sheet11/getsheet11table2"
+          "https://quickwin-jateng.vercel.app/api/sheet11/getsheet11table2"
         );
         setTable2Data(await res2.json());
 
         const res3 = await fetch(
-          "https://magangproject.vercel.app/api/sheet11/getsheet11table3"
+          "https://quickwin-jateng.vercel.app/api/sheet11/getsheet11table3"
         );
         setTable3Data(await res3.json());
 
         const res4 = await fetch(
-          "https://magangproject.vercel.app/api/sheet11/getsheet11table4"
+          "https://quickwin-jateng.vercel.app/api/sheet11/getsheet11table4"
         );
         setTable4Data(await res4.json());
       } catch (error) {
@@ -56,7 +56,7 @@ export default function MenuSebelas() {
     async function fetchRangeData() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/sheet11/getRange-sheet11"
+          "https://quickwin-jateng.vercel.app/api/sheet11/getRange-sheet11"
         );
         setRangeData(await res.json());
       } catch (err) {

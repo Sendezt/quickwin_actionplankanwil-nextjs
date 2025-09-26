@@ -9,7 +9,9 @@ export default function ActionPlanTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("https://magangproject.vercel.app/api/actionplan");
+        const res = await fetch(
+          "https://quickwin-jateng.vercel.app/api/actionplan"
+        );
         const json = await res.json();
         setData(json);
       } catch (error) {

@@ -23,7 +23,7 @@ export default function DetailTable({ loket }) {
   const { data, error, isLoading } = useSWR(
     `detail-${targetName}`, // key cache
     () =>
-      fetcher("https://magangproject.vercel.app/api/sheet1/getsheet1Detail"),
+      fetcher("https://quickwin-jateng.vercel.app/api/sheet1/getsheet1Detail"),
     { revalidateOnFocus: false }
   );
 

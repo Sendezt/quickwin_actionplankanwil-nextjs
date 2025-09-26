@@ -45,47 +45,47 @@ export default function MenuDelapan() {
     const fetchData = async () => {
       try {
         const res1 = await fetch(
-          "https://magangproject.vercel.app/api/sheet8/getsheet8table1"
+          "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8table1"
         );
         setTable1Data(await res1.json());
 
         const res2 = await fetch(
-          "https://magangproject.vercel.app/api/sheet8/getsheet8table4"
+          "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8table4"
         );
         setTable2Data(await res2.json());
 
         const res3 = await fetch(
-          "https://magangproject.vercel.app/api/sheet8/getsheet8table2"
+          "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8table2"
         );
         setTable3Data(await res3.json());
 
         const res4 = await fetch(
-          "https://magangproject.vercel.app/api/sheet8/getsheet8table5"
+          "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8table5"
         );
         setTable4Data(await res4.json());
 
         const res5 = await fetch(
-          "https://magangproject.vercel.app/api/sheet8/getsheet8table3"
+          "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8table3"
         );
         setTable5Data(await res5.json());
 
         const res6 = await fetch(
-          "https://magangproject.vercel.app/api/sheet8/getsheet8table6"
+          "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8table6"
         );
         setTable6Data(await res6.json());
 
         const res7 = await fetch(
-          "https://magangproject.vercel.app/api/sheet8/getsheet8table7"
+          "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8table7"
         );
         setTable7Data(await res7.json());
 
         const res8 = await fetch(
-          "https://magangproject.vercel.app/api/sheet8/getsheet8table8"
+          "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8table8"
         );
         setTable8Data(await res8.json());
 
         const breakdownRes = await fetch(
-          "https://magangproject.vercel.app/api/sheet8/getsheet8card"
+          "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8card"
         );
         setBreakdownData(await breakdownRes.json());
       } catch (error) {
@@ -98,7 +98,7 @@ export default function MenuDelapan() {
     async function fetchRangeData() {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/sheet8/getRange-sheet8"
+          "https://quickwin-jateng.vercel.app/api/sheet8/getRange-sheet8"
         );
         setRangeData(await res.json());
       } catch (err) {

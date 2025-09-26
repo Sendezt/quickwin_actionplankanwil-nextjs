@@ -4,28 +4,28 @@ import { useState, useEffect } from "react";
 const apiService = {
   fetchMainData: async () => {
     const res = await fetch(
-      "https://magangproject.vercel.app/api/sheet2/getsheet2"
+      "https://quickwin-jateng.vercel.app/api/sheet2/getsheet2"
     );
     return res.json();
   },
 
   fetchBreakdownData: async () => {
     const res = await fetch(
-      "https://magangproject.vercel.app/api/sheet2/getsheet2card"
+      "https://quickwin-jateng.vercel.app/api/sheet2/getsheet2card"
     );
     return res.json();
   },
 
   fetchRangeData: async () => {
     const res = await fetch(
-      "https://magangproject.vercel.app/api/sheet2/getRange-sheet2"
+      "https://quickwin-jateng.vercel.app/api/sheet2/getRange-sheet2"
     );
     return res.json();
   },
 
   fetchFeedbackData: async () => {
     const res = await fetch(
-      "https://magangproject.vercel.app/api/feedback/read"
+      "https://quickwin-jateng.vercel.app/api/feedback/read"
     );
     return res.json();
   },

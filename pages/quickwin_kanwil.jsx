@@ -1,10 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -19,7 +16,7 @@ export default function QuickwinKanwil() {
     const fetchData = async () => {
       try {
         const res1 = await fetch(
-          "https://magangproject.vercel.app/api/dashboard/getquickwinkanwil"
+          "https://quickwin-jateng.vercel.app/api/dashboard/getquickwinkanwil"
         );
         setTable1Data(await res1.json());
       } catch (error) {
