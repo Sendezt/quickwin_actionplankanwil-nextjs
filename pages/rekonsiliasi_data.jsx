@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CalendarDays, BarChart3, LandPlot, Radical } from "lucide-react";
 import Navbar from "@/components/navbar";
 import TableCardWrapper from "@/components/rekonsiliasidata/Table1";
+import TableCardFeedback from "@/components/rekonsiliasidata/FeedbackCard";
 
 export default function MenuEmpat() {
   const [table1Data, setTable1Data] = useState(null);
@@ -16,6 +17,7 @@ export default function MenuEmpat() {
   const [rangeData, setRangeData] = useState(null);
   const [cabangData, setCabangData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [feedbackData, setFeedbackData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,6 +52,18 @@ export default function MenuEmpat() {
       }
     };
 
+    const fetchFeedbackData = async () => {
+      try {
+        const res = await fetch(
+          "https://magangproject.vercel.app/api/feedback/read"
+        );
+        const json = await res.json();
+        setFeedbackData(json);
+      } catch (err) {
+        console.error("Gagal fetch feedbackData:", err);
+      }
+    };
+
     async function fetchRangeData() {
       try {
         const res = await fetch(
@@ -66,6 +80,7 @@ export default function MenuEmpat() {
 
     fetchData();
     fetchRangeData();
+    fetchFeedbackData();
   }, []);
 
   // Skeleton sesuai struktur card
@@ -298,7 +313,7 @@ export default function MenuEmpat() {
             </div>
 
             {/* === Tambahan Tabel === */}
-            <TableCardWrapper
+            <TableCardFeedback
               title={
                 <>
                   <span className="text-xl">
@@ -311,9 +326,10 @@ export default function MenuEmpat() {
               headers={table1Data?.header?.[0] ?? []}
               data={table1Data?.data ?? []}
               summary={table1Data?.summary ?? []}
-              isLoading={!table1Data}
               isNested={false}
+              feedbackData={feedbackData}
             />
+
             <TableCardWrapper
               title={
                 <>
