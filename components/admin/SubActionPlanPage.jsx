@@ -32,6 +32,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 export default function AgendaTable() {
   const [query, setQuery] = useState("");
@@ -42,10 +49,14 @@ export default function AgendaTable() {
   const [newTitle, setNewTitle] = useState("");
   const [editId, setEditId] = useState(null);
   const [editTitle, setEditTitle] = useState("");
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // modal create & edit
   const [saving, setSaving] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const pageSize = 8;
+  const [actionPlans, setActionPlans] = useState([]);
+  const [selectedActionPlan, setSelectedActionPlan] = useState("");
+  const [openEdit, setOpenEdit] = useState(false); // khusus edit modal
+
+  const pageSize = 10;
 
   async function fetchData() {
     setLoading(true);
@@ -53,7 +64,7 @@ export default function AgendaTable() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/admin/actionplan/getActionPlan",
+        "https://quickwin-jateng.vercel.app/api/api/admin/sub/getsub",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -74,36 +85,56 @@ export default function AgendaTable() {
     }
   }
 
+  async function fetchActionPlans() {
+    try {
+      const res = await fetch(
+        "https://quickwin-jateng.vercel.app/api/api/actionplan"
+      );
+      if (!res.ok) throw new Error("Gagal fetch action plans");
+
+      const json = await res.json();
+      setActionPlans(Array.isArray(json) ? json : []);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   useEffect(() => {
     fetchData();
+    fetchActionPlans();
   }, []);
 
   // Create
   async function handleCreate(e) {
     e.preventDefault();
-    if (!newTitle.trim()) return;
+    if (!newTitle.trim() || !selectedActionPlan) return;
     try {
       setIsSubmitting(true);
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/admin/actionplan/createActionPlan",
+        "https://quickwin-jateng.vercel.app/api/api/admin/sub/createsub",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ title: newTitle }),
+          body: JSON.stringify({
+            actionPlanId: Number(selectedActionPlan),
+            title: newTitle,
+          }),
         }
       );
 
-      if (!res.ok) throw new Error("Gagal membuat action plan");
+      if (!res.ok) throw new Error("Gagal membuat sub action plan");
 
       setNewTitle("");
+      setSelectedActionPlan("");
+      setOpen(false);
       fetchData();
     } catch (err) {
       console.error(err);
-      alert("Gagal membuat action plan");
+      alert("Gagal membuat sub action plan");
     } finally {
       setIsSubmitting(false);
     }
@@ -113,7 +144,7 @@ export default function AgendaTable() {
   function handleOpenEdit(row) {
     setEditId(row.id);
     setEditTitle(row.title);
-    setOpen(true);
+    setOpenEdit(true);
   }
 
   // Update
@@ -123,7 +154,7 @@ export default function AgendaTable() {
       setSaving(true);
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `https://quickwin-jateng.vercel.app/api/admin/actionplan/updateActionPlan/${editId}`,
+        `https://quickwin-jateng.vercel.app/api/api/admin/sub/updatesub/${editId}`,
         {
           method: "PUT",
           headers: {
@@ -134,15 +165,15 @@ export default function AgendaTable() {
         }
       );
 
-      if (!res.ok) throw new Error("Gagal update action plan");
+      if (!res.ok) throw new Error("Gagal update sub action plan");
 
-      setOpen(false);
+      setOpenEdit(false);
       setEditId(null);
       setEditTitle("");
       fetchData();
     } catch (err) {
       console.error(err);
-      alert("Gagal update action plan");
+      alert("Gagal update sub action plan");
     } finally {
       setSaving(false);
     }
@@ -153,7 +184,7 @@ export default function AgendaTable() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `https://quickwin-jateng.vercel.app/api/admin/actionplan/deleteActionPlan/${id}`,
+        `https://quickwin-jateng.vercel.app/api/api/admin/sub/deletesub/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -162,12 +193,12 @@ export default function AgendaTable() {
         }
       );
 
-      if (!res.ok) throw new Error("Gagal menghapus action plan");
+      if (!res.ok) throw new Error("Gagal menghapus sub action plan");
 
       fetchData();
     } catch (err) {
       console.error(err);
-      alert("Gagal menghapus action plan");
+      alert("Gagal menghapus sub action plan");
     }
   }
 
@@ -187,262 +218,304 @@ export default function AgendaTable() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
 
   function formatDate(iso) {
+    if (!iso) return "-";
     try {
       return new Date(iso).toLocaleString("id-ID", {
         day: "2-digit",
-        month: "long",
-        year: "numeric",
+        month: "short",
+        year: "2-digit",
         hour: "2-digit",
         minute: "2-digit",
       });
-    } catch (e) {
+    } catch {
       return iso;
     }
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center gap-3">
-        <div className="p-2 bg-blue-100 rounded-lg">
-          <ListTodo className="h-6 w-6 text-blue-600" />
+    <div className="container mx-auto p-3 md:p-6 space-y-4 max-w-7xl">
+      {/* Header */}
+      <div className="flex items-center gap-2">
+        <div className="p-1.5 bg-blue-100 rounded-md">
+          <ListTodo className="h-4 w-4 md:h-5 md:w-5 text-blue-600" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold">Manajemen Action Plan</h1>
-          <p className="text-gray-600">
-            Kelola semua action plan perusahaan Anda
+          <h1 className="text-xl md:text-2xl font-bold">
+            Manajemen Sub Action Plan
+          </h1>
+          <p className="text-sm text-gray-600 hidden md:block">
+            Kelola semua sub action plan perusahaan Anda
           </p>
         </div>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <Plus className="h-5 w-5" />
-            Tambah Cabang Baru
-          </CardTitle>
+      {/* Main Table */}
+      <Card className="shadow-sm">
+        <CardHeader className="pb-3">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <CardTitle className="text-base md:text-lg">
+              Daftar Sub Action Plan
+            </CardTitle>
+            <Button onClick={() => setOpen(true)} size="sm">
+              <Plus className="mr-1 h-4 w-4" /> Tambah Sub ActionPlan
+            </Button>
+          </div>
         </CardHeader>
-        <CardContent>
-          <motion.form
-            onSubmit={handleCreate}
-            className="flex gap-3 items-center bg-white p-4 rounded-2xl shadow-md border border-gray-200"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-          >
-            {/* Input */}
-            <motion.div className="flex-1">
-              <Input
-                type="text"
-                placeholder="Masukkan nama cabang baru..."
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
-                className="h-11 rounded-xl border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 transition-all"
-                disabled={isSubmitting}
-              />
-            </motion.div>
-
-            {/* Button */}
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                type="submit"
-                disabled={isSubmitting || !newTitle.trim()} // ✅ fix pakai newTitle
-                className="h-11 px-6 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed shadow-sm"
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Menyimpan...
-                  </>
-                ) : (
-                  <>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Tambah
-                  </>
-                )}
-              </Button>
-            </motion.div>
-          </motion.form>
-        </CardContent>
-      </Card>
-
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Daftar Action Plan</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {/* Form Create */}
-          {/* <div className="flex gap-2 mb-4">
-          <Input
-            placeholder="Judul baru..."
-            value={newTitle}
-            onChange={(e) => setNewTitle(e.target.value)}
-          />
-          <Button onClick={handleCreate}>Tambah</Button>
-        </div> */}
-
+        <CardContent className="pt-0">
           {/* Search */}
-          <div className="flex gap-2 mb-4">
+          <div className="flex flex-col sm:flex-row gap-2 mb-4">
             <Input
-              placeholder="Cari by id atau judul..."
+              placeholder="Cari by ID atau judul..."
               value={query}
               onChange={(e) => {
                 setQuery(e.target.value);
                 setPage(1);
               }}
+              className="h-9 text-sm flex-1"
             />
             <Button
               onClick={() => {
                 setQuery("");
                 setPage(1);
               }}
+              variant="outline"
+              size="sm"
+              className="h-9 px-4 text-sm sm:w-auto w-full"
             >
               Reset
             </Button>
           </div>
 
           {loading && (
-            <div className="text-center py-6 text-muted-foreground">
+            <div className="text-center py-8 text-sm text-muted-foreground">
               Memuat data...
             </div>
           )}
           {error && (
-            <div className="text-center py-6 text-red-500">{error}</div>
+            <div className="text-center py-8 text-sm text-red-500">{error}</div>
           )}
 
           {!loading && !error && (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-16">No</TableHead>
-                    <TableHead>Judul</TableHead>
-                    <TableHead className="w-56">Dibuat</TableHead>
-                    <TableHead className="w-40">Aksi</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {paginated.map((row) => (
-                    <TableRow key={row.id}>
-                      <TableCell>{row.id}</TableCell>
-                      <TableCell className="font-medium">{row.title}</TableCell>
-                      <TableCell>{formatDate(row.createdAt)}</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleOpenEdit(row)}
-                          className="h-8 px-3 hover:border-blue-500 hover:text-blue-600 transition-colors"
-                        >
-                          <Edit3 className="mr-1 h-3 w-3" />
-                          Edit
-                        </Button>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
+            <div className="overflow-x-auto -mx-6 md:mx-0">
+              <div className="min-w-full px-6 md:px-0">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="text-xs">
+                      <TableHead className="w-12 py-2 text-center">
+                        ID
+                      </TableHead>
+                      <TableHead className="py-2 text-center">Judul</TableHead>
+                      <TableHead className="w-20 py-2 hidden sm:table-cell text-center">
+                        ActionPlan ID
+                      </TableHead>
+                      <TableHead className="w-32 py-2 hidden md:table-cell text-center">
+                        Dibuat
+                      </TableHead>
+                      <TableHead className="w-28 py-2 text-center">
+                        Aksi
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {paginated.map((row, index) => (
+                      <TableRow key={row.id} className="text-sm">
+                        <TableCell className="py-2 font-mono text-xs text-center">
+                          {index + 1}
+                        </TableCell>
+                        <TableCell className="py-2 font-medium pr-2 whitespace-normal break-words">
+                          <div>{row.title}</div>
+                        </TableCell>
+                        <TableCell className="py-2 hidden sm:table-cell font-mono text-xs text-center">
+                          {row.actionPlanId}
+                        </TableCell>
+                        <TableCell className="py-2 hidden md:table-cell text-xs text-muted-foreground text-center">
+                          {formatDate(row.created_at)}
+                        </TableCell>
+                        <TableCell className="py-2">
+                          <div className="flex gap-1 justify-center">
                             <Button
-                              variant="outline"
+                              variant="ghost"
                               size="sm"
-                              className="h-8 px-3 text-red-600 hover:text-red-700 hover:bg-red-50"
+                              onClick={() => handleOpenEdit(row)}
+                              className="h-7 w-7 p-0 hover:bg-blue-50 hover:text-blue-600"
                             >
-                              <Trash2 className="mr-1 h-3 w-3" />
-                              Hapus
+                              <Edit3 className="h-3 w-3" />
                             </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>
-                                Konfirmasi Hapus
-                              </AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Apakah Anda yakin ingin menghapus action plan "
-                                {row.title}"? Tindakan ini tidak dapat
-                                dibatalkan.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Batal</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={() => handleDelete(row.id)}
-                                className="bg-red-600 hover:bg-red-700"
-                              >
-                                Ya, Hapus
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-7 w-7 p-0 text-red-600 hover:bg-red-50 hover:text-red-700"
+                                >
+                                  <Trash2 className="h-3 w-3" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent className="max-w-md">
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle className="text-base">
+                                    Konfirmasi Hapus
+                                  </AlertDialogTitle>
+                                  <AlertDialogDescription className="text-sm">
+                                    Hapus sub action plan "{row.title}"?
+                                    Tindakan ini tidak dapat dibatalkan.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel className="text-sm">
+                                    Batal
+                                  </AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => handleDelete(row.id)}
+                                    className="bg-red-600 hover:bg-red-700 text-sm"
+                                  >
+                                    Hapus
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
 
-                  {paginated.length === 0 && (
-                    <TableRow>
-                      <TableCell colSpan={4}>
-                        <div className="py-6 text-center text-sm text-muted-foreground">
-                          Tidak ada data.
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
+                    {paginated.length === 0 && (
+                      <TableRow>
+                        <TableCell colSpan={5}>
+                          <div className="py-8 text-center text-sm text-muted-foreground">
+                            Tidak ada data.
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
             </div>
           )}
 
-          {/* Pagination simple */}
-          <div className="flex items-center justify-between mt-4">
-            <div className="text-sm text-muted-foreground">
-              Menampilkan {filtered.length} hasil
+          {/* Pagination */}
+          <div className="flex flex-col sm:flex-row items-center justify-between mt-4 gap-2">
+            <div className="text-xs text-muted-foreground order-2 sm:order-1">
+              {filtered.length} hasil
             </div>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2 order-1 sm:order-2">
               <Button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
+                variant="outline"
+                size="sm"
+                className="h-8 px-3 text-xs"
               >
-                Sebelumnya
+                ← Prev
               </Button>
-              <div className="flex items-center px-3">
-                {page} / {totalPages}
+              <div className="flex items-center px-2 text-xs font-medium">
+                {page}/{totalPages}
               </div>
               <Button
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
+                variant="outline"
+                size="sm"
+                className="h-8 px-3 text-xs"
               >
-                Berikutnya
+                Next →
               </Button>
             </div>
           </div>
         </CardContent>
+      </Card>
 
-        {/* Dialog Edit */}
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Edit Action Plan</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <Input
-                value={editTitle}
-                onChange={(e) => setEditTitle(e.target.value)}
-                placeholder="Masukkan judul baru"
-              />
-            </div>
-            <DialogFooter className="gap-2 pt-4">
+      {/* Modal Create Sub Action Plan */}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-base">
+              Tambah Sub Action Plan
+            </DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleCreate} className="flex flex-col gap-3">
+            <Select
+              onValueChange={(value) => setSelectedActionPlan(value)}
+              value={selectedActionPlan}
+            >
+              <SelectTrigger className="h-9 text-sm">
+                <SelectValue placeholder="Pilih Action Plan" />
+              </SelectTrigger>
+              <SelectContent>
+                {actionPlans.map((ap) => (
+                  <SelectItem key={ap.id} value={String(ap.id)}>
+                    {ap.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Input
+              type="text"
+              placeholder="Nama Sub Action Plan..."
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+              className="h-9 text-sm"
+            />
+
+            <DialogFooter className="gap-2 pt-2">
               <Button
+                type="button"
                 variant="outline"
-                onClick={() => {
-                  setOpen(false);
-                  setEditId(null);
-                  setEditTitle("");
-                }}
+                onClick={() => setOpen(false)}
+                size="sm"
               >
                 Batal
               </Button>
-              <Button disabled={saving} onClick={handleUpdate}>
-                {saving ? "Menyimpan..." : "Simpan"}
+              <Button
+                type="submit"
+                disabled={
+                  isSubmitting || !newTitle.trim() || !selectedActionPlan
+                }
+                size="sm"
+              >
+                {isSubmitting ? "Menyimpan..." : "Simpan"}
               </Button>
             </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </Card>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal Edit Sub Action Plan */}
+      <Dialog open={openEdit} onOpenChange={setOpenEdit}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-base">
+              Edit Sub Action Plan
+            </DialogTitle>
+          </DialogHeader>
+          <div className="py-2">
+            <Input
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
+              placeholder="Masukkan judul baru"
+              className="h-9 text-sm"
+            />
+          </div>
+          <DialogFooter className="gap-2 pt-2">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setOpenEdit(false);
+                setEditId(null);
+                setEditTitle("");
+              }}
+              size="sm"
+            >
+              Batal
+            </Button>
+            <Button disabled={saving} onClick={handleUpdate} size="sm">
+              {saving ? "Menyimpan..." : "Simpan"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

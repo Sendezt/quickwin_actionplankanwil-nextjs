@@ -23,6 +23,7 @@ export default function FeedbackFormModal({
   const [subActionPlans, setSubActionPlans] = useState([]);
   const [loadingSub, setLoadingSub] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
+  const [cabangName, setCabangName] = useState("");
 
   const resetForm = useCallback(() => {
     setActionPlanId("");

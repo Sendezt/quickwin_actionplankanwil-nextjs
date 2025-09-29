@@ -218,7 +218,7 @@ export default function AgendaTable() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
             <Plus className="h-5 w-5" />
-            Tambah Cabang Baru
+            Tambah ActionPlan Baru
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -233,7 +233,7 @@ export default function AgendaTable() {
             <motion.div className="flex-1">
               <Input
                 type="text"
-                placeholder="Masukkan nama cabang baru..."
+                placeholder="Masukkan nama actionplan baru..."
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
                 className="h-11 rounded-xl border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 transition-all"

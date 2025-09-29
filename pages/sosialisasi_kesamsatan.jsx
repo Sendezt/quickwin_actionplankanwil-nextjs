@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
@@ -15,7 +15,8 @@ import {
 import Navbar from "@/components/navbar";
 import RenderTable4 from "@/components/sosialisasikesamsatan/RenderTable4";
 import RenderTable from "@/components/sosialisasikesamsatan/RenderTable";
-import React from "react";
+import { RenderTable1 } from "@/components/sosialisasikesamsatan/RenderTable1";
+import { RenderTable2 } from "@/components/sosialisasikesamsatan/RenderTable2";
 
 export default function MenuEnam() {
   const [table1Data, setTable1Data] = useState(null);
@@ -25,34 +26,40 @@ export default function MenuEnam() {
   const [table5Data, setTable5Data] = useState(null);
   const [rangeData, setRangeData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [feedbackData, setFeedbackData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res1 = await fetch(
-          "https://quickwin-jateng.vercel.app/api/sheet6/getsheet6table1"
+          "https://magangproject.vercel.app/api/sheet6/getsheet6table1"
         );
         setTable1Data(await res1.json());
 
         const res2 = await fetch(
-          "https://quickwin-jateng.vercel.app/api/sheet6/getsheet6table2"
+          "https://magangproject.vercel.app/api/sheet6/getsheet6table2"
         );
         setTable2Data(await res2.json());
 
         const res3 = await fetch(
-          "https://quickwin-jateng.vercel.app/api/sheet6/getsheet6table3"
+          "https://magangproject.vercel.app/api/sheet6/getsheet6table3"
         );
         setTable3Data(await res3.json());
 
         const res4 = await fetch(
-          "https://quickwin-jateng.vercel.app/api/sheet6/getsheet6table4"
+          "https://magangproject.vercel.app/api/sheet6/getsheet6table4"
         );
         setTable4Data(await res4.json());
 
         const res5 = await fetch(
-          "https://quickwin-jateng.vercel.app/api/sheet6/getsheet6table5"
+          "https://magangproject.vercel.app/api/sheet6/getsheet6table5"
         );
         setTable5Data(await res5.json());
+
+        const res6 = await fetch(
+          "https://magangproject.vercel.app/api/feedback/read"
+        );
+        setFeedbackData(await res6.json());
       } catch (error) {
         console.error("Gagal fetch data:", error);
       } finally {
@@ -63,7 +70,7 @@ export default function MenuEnam() {
     async function fetchRangeData() {
       try {
         const res = await fetch(
-          "https://quickwin-jateng.vercel.app/api/sheet6/getRange-sheet6"
+          "https://magangproject.vercel.app/api/sheet6/getRange-sheet6"
         );
         const json = await res.json();
         if (json) setRangeData(json);
@@ -388,7 +395,11 @@ export default function MenuEnam() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-6">
-                    <RenderTable data={table1Data} />
+                    <RenderTable1
+                      table1Data={table1Data}
+                      loading={loading}
+                      feedbackData={feedbackData}
+                    />
                   </CardContent>
                 </Card>
 
@@ -403,7 +414,11 @@ export default function MenuEnam() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-6">
-                    <RenderTable data={table2Data} />
+                    <RenderTable2
+                      table2Data={table2Data}
+                      loading={loading}
+                      feedbackData={feedbackData}
+                    />
                   </CardContent>
                 </Card>
 
