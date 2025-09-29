@@ -14,11 +14,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CalendarDays, BarChart3, LandPlot, Radical } from "lucide-react";
 import Navbar from "@/components/navbar";
 import React from "react";
+import { Button } from "@/components/ui/button";
+import { FeedbackModal } from "@/components/optimalisasisignal/FeedbackModal";
 
 export default function MenuTujuh() {
   const [table1Data, setTable1Data] = useState(null);
   const [rangeData, setRangeData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [feedbackData, setFeedbackData] = useState([]);
+  const [openFeedbackModal, setOpenFeedbackModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,6 +35,18 @@ export default function MenuTujuh() {
         console.error("Gagal fetch data:", error);
       } finally {
         setLoading(false);
+      }
+    };
+
+    const fetchFeedbackData = async () => {
+      try {
+        const res = await fetch(
+          "https://magangproject.vercel.app/api/feedback/read"
+        );
+        const json = await res.json();
+        setFeedbackData(json);
+      } catch (err) {
+        console.error("Gagal fetch feedbackData:", err);
       }
     };
 
@@ -48,6 +64,7 @@ export default function MenuTujuh() {
 
     fetchData();
     fetchRangeData();
+    fetchFeedbackData();
   }, []);
 
   // Skeleton untuk Top Info Card
@@ -286,7 +303,9 @@ export default function MenuTujuh() {
                     <div className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_awal ?? "-"}
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">Tanggal Mulai</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Tanggal Mulai
+                    </p>
                   </CardContent>
                 </Card>
 
@@ -302,7 +321,9 @@ export default function MenuTujuh() {
                     <div className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_akhir ?? "-"}
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">Tanggal Akhir</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Tanggal Akhir
+                    </p>
                   </CardContent>
                 </Card>
 
@@ -385,17 +406,31 @@ export default function MenuTujuh() {
             <SkeletonTable />
           ) : (
             <Card>
-              <CardHeader>
-                <CardTitle className="text-xl">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle className="text-xl flex items-center gap-2">
                   Rekapitulasi{" "}
                   <span className="text-red-700">
                     Penerimaan SIGNAL & Layanan Online
                   </span>
                 </CardTitle>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setOpenFeedbackModal(true)}
+                  className="cursor-pointer hover:bg-blue-600 hover:text-white transition"
+                >
+                  Feedback
+                </Button>
               </CardHeader>
               <CardContent>
                 <RenderTable data={table1Data} />
               </CardContent>
+
+              <FeedbackModal
+                open={openFeedbackModal}
+                onClose={() => setOpenFeedbackModal(false)}
+                feedbackData={feedbackData}
+              />
             </Card>
           )}
         </div>
