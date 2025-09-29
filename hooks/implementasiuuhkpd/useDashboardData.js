@@ -5,9 +5,22 @@ export function useDashboardData() {
   const [dashboardData, setDashboardData] = useState(null);
   const [rangeData, setRangeData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [feedbackData, setFeedbackData] = useState(null);
 
   useEffect(() => {
     let interval;
+
+    const fetchFeedbackData = async () => {
+      try {
+        const res = await fetch(
+          "https://magangproject.vercel.app/api/feedback/read"
+        );
+        const json = await res.json();
+        setFeedbackData(json);
+      } catch (err) {
+        console.error("Gagal fetch feedbackData:", err);
+      }
+    };
 
     async function fetchData() {
       try {
@@ -47,11 +60,12 @@ export function useDashboardData() {
 
     fetchData();
     fetchRangeData();
+    fetchFeedbackData();
 
     interval = setInterval(fetchData, 10000);
 
     return () => clearInterval(interval);
   }, []);
 
-  return { dashboardData, rangeData, isLoading };
+  return { dashboardData, rangeData, isLoading, feedbackData };
 }
