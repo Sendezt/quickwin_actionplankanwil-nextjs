@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { FeedbackTable } from "@/components/kolaborasimerchant/feedback/FeedbackTable";
 import FeedbackInfoModal from "@/components/feedback/FeedbackInfoModal";
 
-export default function RenderTable4({ data, feedbackData }) {
+export default function RenderTable({ data, feedbackData }) {
   const router = useRouter();
   const [selectedCabang, setSelectedCabang] = useState(null);
   const [selectedFeedback, setSelectedFeedback] = useState(null);
@@ -27,7 +27,7 @@ export default function RenderTable4({ data, feedbackData }) {
         f.cabang?.nama?.trim().toLowerCase() ===
           namaCabang?.trim().toLowerCase() &&
         f.actionPlanId === 8 &&
-        f.subActionPlanId === 10
+        f.subActionPlanId === 9
     ) || [];
 
   const getFeedbackCounts = (namaCabang) => {
@@ -43,95 +43,59 @@ export default function RenderTable4({ data, feedbackData }) {
   };
 
   const headers = data?.header?.[0] || [];
-  const rows = (data?.data || []).filter((r) => r.length > 0);
+  const rows = data?.data || [];
   const summary = data?.summary || null;
-  const total = (data?.total || []).filter((t) => t !== null);
 
   return (
     <>
       <div className="overflow-x-auto">
-        <Table className="w-full border border-gray-300">
-          {/* Header */}
+        <Table>
           <TableHeader>
-            <TableRow className="bg-gray-100">
+            <TableRow>
               {headers.map((col, idx) => (
                 <TableHead
                   key={idx}
-                  className={`border border-gray-300 px-2 py-2 font-bold ${
-                    idx === 0
-                      ? "text-center"
-                      : idx === 1
-                      ? "text-left"
-                      : "text-center"
-                  }`}
+                  className={idx === 1 ? "text-left" : "text-center"}
                 >
-                  {col.replace("\n", " ")}
+                  {col}
                 </TableHead>
               ))}
-              {total && (
-                <TableHead className="border border-gray-300 px-2 py-2 font-bold text-center">
-                  {data?.totalHeader ?? "TOTAL"}
-                </TableHead>
-              )}
             </TableRow>
           </TableHeader>
 
-          {/* Body */}
           <TableBody>
             {rows.map((row, idx) => (
-              <TableRow key={idx} className="hover:bg-gray-50">
+              <TableRow key={idx}>
                 {row.map((cell, cidx) => (
                   <TableCell
                     key={cidx}
-                    className={`border border-gray-200 px-2 py-1 ${
-                      cidx === 0
-                        ? "text-center"
-                        : cidx === 1
+                    className={
+                      cidx === 1
                         ? "border border-gray-300 px-4 py-2 text-left text-blue-600 cursor-pointer hover:underline"
                         : "border border-gray-300 px-4 py-2 text-center"
-                    }`}
+                    }
                     onClick={() => setSelectedCabang(row[1])}
                   >
                     {cell}
                   </TableCell>
                 ))}
-                {total && (
-                  <TableCell className="border border-gray-200 px-2 py-1 font-semibold text-center">
-                    {total[idx] ?? ""}
-                  </TableCell>
-                )}
               </TableRow>
             ))}
           </TableBody>
 
-          {/* Footer / Summary */}
+          {/* Footer untuk summary */}
           {summary && (
             <TableFooter>
-              <TableRow className="bg-gray-50">
-                {/* gabungkan cell kosong + "Total" */}
-                <TableCell
-                  colSpan={2}
-                  className="border border-gray-300 px-2 py-1 font-semibold text-center"
-                >
-                  {summary[1] ?? "TOTAL"}
+              <TableRow>
+                {/* Merge kolom No + Samsat Induk */}
+                <TableCell colSpan={2} className="font-bold text-center">
+                  {summary[0]}
                 </TableCell>
-
-                {/* sisanya tetap jalan normal */}
-                {summary.slice(2).map((cell, idx) => (
-                  <TableCell
-                    key={idx}
-                    className="border border-gray-300 px-2 py-1 font-semibold text-center"
-                  >
+                {summary.slice(1).map((cell, idx) => (
+                  <TableCell key={idx} className="font-semibold text-center">
                     {cell}
                   </TableCell>
                 ))}
-
-                {/* isi kolom total terakhir */}
-                {total && (
-                  <TableCell className="border border-gray-300 px-2 py-1 font-semibold text-center">
-                    {total[total.length - 1] ?? ""}
-                  </TableCell>
-                )}
               </TableRow>
             </TableFooter>
           )}

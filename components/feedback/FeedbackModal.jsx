@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,13 +9,26 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useDropzone } from "react-dropzone";
 
 export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  if (!feedback) return null;
+  // Hooks SELALU dipanggil di sini
+  const onDrop = useCallback((acceptedFiles) => {
+    if (acceptedFiles && acceptedFiles.length > 0) {
+      setFile(acceptedFiles[0]);
+    }
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: { "image/*": [] },
+    multiple: false,
+  });
+
+  if (!feedback) return null; // <- ini setelah semua hook
 
   const handleConfirm = async () => {
     if (!file) {
@@ -24,10 +37,8 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
     }
 
     setLoading(true);
-
-    // FormData untuk dikirim ke backend
     const formData = new FormData();
-    formData.append("status", "selesai"); // status selalu selesai
+    formData.append("status", "selesai");
     formData.append("file", file);
     if (feedback.task) {
       formData.append("task", feedback.task);
@@ -42,7 +53,6 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
         }
       );
 
-      // Cek response content-type
       const contentType = response.headers.get("content-type");
       let data;
       if (contentType && contentType.includes("application/json")) {
@@ -56,7 +66,7 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
         throw new Error(data.message || "Gagal update feedback");
       }
 
-      onConfirm(data.data); // callback untuk refresh data
+      onConfirm(data.data);
       onClose();
     } catch (err) {
       alert(err.message);
@@ -75,14 +85,30 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
             <span className="text-green-600">Selesai</span>?
           </DialogDescription>
 
-          {/* Input file */}
+          {/* Dropzone */}
           <div className="mt-4">
             <label className="font-semibold block mb-2">Upload Bukti:</label>
-            <Input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setFile(e.target.files[0])}
-            />
+            <div
+              {...getRootProps()}
+              className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${
+                isDragActive
+                  ? "border-green-500 bg-green-50"
+                  : "border-gray-300"
+              }`}
+            >
+              <input {...getInputProps()} />
+              {file ? (
+                <p className="text-sm text-gray-700">
+                  {file.name} ({Math.round(file.size / 1024)} KB)
+                </p>
+              ) : (
+                <p className="text-sm text-gray-500">
+                  {isDragActive
+                    ? "Lepaskan file di sini..."
+                    : "Seret & jatuhkan gambar, atau klik untuk pilih file"}
+                </p>
+              )}
+            </div>
           </div>
         </DialogHeader>
 

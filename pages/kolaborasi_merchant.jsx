@@ -21,12 +21,13 @@ import {
   Car,
 } from "lucide-react";
 import Navbar from "@/components/navbar";
-import RenderTable from "@/components/kolaborasimerchant/RenderTable";
+import RenderTableFeedback from "@/components/kolaborasimerchant/RenderTableFeedback";
 import RenderTableArray from "@/components/kolaborasimerchant/RenderTableArray";
 import RenderTableSimple from "@/components/kolaborasimerchant/RenderTableSimple";
 import RenderTable6 from "@/components/kolaborasimerchant/RenderTable6";
 import RenderTableScroll from "@/components/kolaborasimerchant/RenderTableScroll";
 import RenderTable4 from "@/components/kolaborasimerchant/RenderTable4";
+import RenderTable from "@/components/kolaborasimerchant/RenderTable";
 
 export default function MenuDelapan() {
   const [table1Data, setTable1Data] = useState(null);
@@ -40,6 +41,7 @@ export default function MenuDelapan() {
   const [breakdownData, setBreakdownData] = useState(null);
   const [rangeData, setRangeData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [feedbackData, setFeedbackData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -95,6 +97,18 @@ export default function MenuDelapan() {
       }
     };
 
+    const fetchFeedback = async () => {
+      try {
+        const res = await fetch(
+          "https://magangproject.vercel.app/api/feedback/read"
+        );
+        const data = await res.json();
+        setFeedbackData(data);
+      } catch (err) {
+        console.error("Error fetch feedback:", err);
+      }
+    };
+
     async function fetchRangeData() {
       try {
         const res = await fetch(
@@ -108,6 +122,7 @@ export default function MenuDelapan() {
 
     fetchData();
     fetchRangeData();
+    fetchFeedback();
   }, []);
 
   const skorKanwil = table2Data?.total?.[1] ?? "-";
@@ -558,7 +573,10 @@ export default function MenuDelapan() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <RenderTable data={table3Data} />
+                  <RenderTableFeedback
+                    data={table3Data}
+                    feedbackData={feedbackData}
+                  />
                 </CardContent>
               </Card>
 
@@ -571,7 +589,7 @@ export default function MenuDelapan() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <RenderTable4 data={table4Data} />
+                  <RenderTable4 data={table4Data} feedbackData={feedbackData} />
                 </CardContent>
               </Card>
 
