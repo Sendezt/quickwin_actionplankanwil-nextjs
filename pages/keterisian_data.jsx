@@ -29,6 +29,7 @@ export default function MenuLima() {
   const [cabangData, setCabangData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [rangeData, setRangeData] = useState(null);
+  const [feedbackData, setFeedbackData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,6 +54,12 @@ export default function MenuLima() {
         );
         const json3 = await res3.json();
         setCabangData(json3);
+
+        const res4 = await fetch(
+          "https://magangproject.vercel.app/api/feedback/read"
+        );
+        const json4 = await res4.json();
+        setFeedbackData(json4);
       } catch (error) {
         console.error("Gagal fetch data:", error);
       } finally {
@@ -82,6 +89,8 @@ export default function MenuLima() {
   // Ambil data cabang
   const skorCabangList = cabangData?.data ?? [];
   const targetSkor = cabangData?.summary?.[1] ?? "";
+
+  console.log("Feedback: ", feedbackData);
 
   // Skeleton untuk grid pertama (2 kolom, dengan row-span-2 di kanan)
   const SkeletonGridFirst = () => (
@@ -357,7 +366,10 @@ export default function MenuLima() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <TableRekapitulasi table1Data={table1Data} />
+              <TableRekapitulasi
+                table1Data={table1Data}
+                feedbackData={feedbackData}
+              />
             </CardContent>
           </Card>
 

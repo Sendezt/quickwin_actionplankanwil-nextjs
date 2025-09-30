@@ -217,7 +217,7 @@ export default function TableCardFeedback({
             />
           </div>
 
-          <div className="px-6 py-4 border-t border-gray-200 flex justify-end gap-2 bg-gray-50">
+          <div className="mt-4 flex justify-end gap-2">
             <button
               onClick={() => setSelectedCabang(null)}
               className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
