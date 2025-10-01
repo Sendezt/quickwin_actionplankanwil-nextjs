@@ -24,7 +24,7 @@ export const FeedbackModal = ({ open, onClose, feedbackData }) => {
   const cabangOptions = [
     ...new Map(
       (feedbackData || [])
-        .filter((f) => f.actionPlanId === 9 && f.subActionPlanId === 11)
+        .filter((f) => f.actionPlanId === 10)
         .map((f) => [f.cabang?.id, f.cabang?.nama])
     ).entries(),
   ];

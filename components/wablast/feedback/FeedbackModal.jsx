@@ -24,14 +24,14 @@ export const FeedbackModal = ({ open, onClose, feedbackData }) => {
   const cabangOptions = [
     ...new Map(
       (feedbackData || [])
-        .filter((f) => f.actionPlanId === 9 && f.subActionPlanId === 11)
+        .filter((f) => f.actionPlanId === 9 && f.subActionPlanId === 12)
         .map((f) => [f.cabang?.id, f.cabang?.nama])
     ).entries(),
   ];
 
   // Filter feedback berdasarkan cabang
   const getAllFeedbacks = () => {
-    let filtered = feedbackData?.filter((f) => f.actionPlanId === 11) || [];
+    let filtered = feedbackData?.filter((f) => f.actionPlanId === 12) || [];
 
     if (selectedCabang !== "all") {
       filtered = filtered.filter((f) => f.cabangId === Number(selectedCabang));

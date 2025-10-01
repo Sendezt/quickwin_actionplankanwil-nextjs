@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 import {
   CalendarDays,
   BarChart3,
@@ -15,6 +16,8 @@ import {
 import Navbar from "@/components/navbar";
 import RenderTable from "@/components/sigapinstansi/RenderTable";
 import RenderTableArray from "@/components/sigapinstansi/RenderTableArray";
+import { FeedbackModal } from "@/components/sigapinstansi/feedback/FeedbackModal";
+import RenderTableFeedback from "@/components/sigapinstansi/RenderTableFeedback";
 
 export default function MenuSebelas() {
   const [table1Data, setTable1Data] = useState(null);
@@ -23,6 +26,8 @@ export default function MenuSebelas() {
   const [table4Data, setTable4Data] = useState(null);
   const [rangeData, setRangeData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [feedbackData, setFeedbackData] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,8 +69,21 @@ export default function MenuSebelas() {
       }
     }
 
+    const fetchFeedback = async () => {
+      try {
+        const res = await fetch(
+          "https://magangproject.vercel.app/api/feedback/read"
+        );
+        const data = await res.json();
+        setFeedbackData(data);
+      } catch (err) {
+        console.error("Error fetch feedback:", err);
+      }
+    };
+
     fetchData();
     fetchRangeData();
+    fetchFeedback();
   }, []);
 
   function getNilaiAkhir(table) {
@@ -283,11 +301,27 @@ export default function MenuSebelas() {
                 {/* Table 1 */}
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-xl">
-                      Skor Kontribusi Penerimaan{" "}
-                      <span className="text-red-700">SIGAP Instansi</span> -
-                      Kanwil
-                    </CardTitle>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-xl">
+                        Skor Kontribusi Penerimaan{" "}
+                        <span className="text-red-700">SIGAP Prioritas</span> -
+                        Kanwil
+                      </CardTitle>
+
+                      {/* Tombol Feedback */}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setModalOpen(true);
+                          // kalau mau filter per cabang bisa ganti "all" ke id tertentu
+                          // setSelectedCabang("all");
+                        }}
+                        className="cursor-pointer hover:bg-blue-600 hover:text-white transition"
+                      >
+                        Feedback
+                      </Button>
+                    </div>
                   </CardHeader>
                   <CardContent>
                     <RenderTable data={table1Data} />
@@ -304,7 +338,10 @@ export default function MenuSebelas() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <RenderTable data={table2Data} />
+                    <RenderTableFeedback
+                      data={table2Data}
+                      feedbackData={feedbackData}
+                    />
                   </CardContent>
                 </Card>
 
@@ -334,6 +371,11 @@ export default function MenuSebelas() {
                     <RenderTableArray data={table4Data} />
                   </CardContent>
                 </Card>
+                <FeedbackModal
+                  open={modalOpen}
+                  onClose={() => setModalOpen(false)}
+                  feedbackData={feedbackData}
+                />
               </>
             )}
           </div>
