@@ -18,9 +18,12 @@ import {
   Radical,
   LandPlot,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import Navbar from "@/components/navbar";
 import RenderTable from "@/components/sigapprioritas/RenderTable";
 import RenderTableArray from "@/components/sigapprioritas/RenderTableArray";
+import { FeedbackModal } from "@/components/sigapprioritas/feedback/FeedbackModal";
+import RenderTableFeedback from "@/components/sigapprioritas/RenderTableFeedback";
 
 export default function MenuTen() {
   const [table1Data, setTable1Data] = useState(null);
@@ -29,6 +32,8 @@ export default function MenuTen() {
   const [table4Data, setTable4Data] = useState(null);
   const [rangeData, setRangeData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [feedbackData, setFeedbackData] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,8 +79,21 @@ export default function MenuTen() {
       }
     }
 
+    const fetchFeedback = async () => {
+      try {
+        const res = await fetch(
+          "https://magangproject.vercel.app/api/feedback/read"
+        );
+        const data = await res.json();
+        setFeedbackData(data);
+      } catch (err) {
+        console.error("Error fetch feedback:", err);
+      }
+    };
+
     fetchData();
     fetchRangeData();
+    fetchFeedback();
   }, []);
 
   function getNilaiAkhir(table) {
@@ -141,7 +159,9 @@ export default function MenuTen() {
                     <div className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_awal ?? "-"}
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">Tanggal Mulai</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Tanggal Mulai
+                    </p>
                   </CardContent>
                 </Card>
 
@@ -157,7 +177,9 @@ export default function MenuTen() {
                     <div className="text-base font-semibold text-gray-900">
                       {rangeData?.periode_akhir ?? "-"}
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">Tanggal Akhir</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Tanggal Akhir
+                    </p>
                   </CardContent>
                 </Card>
 
@@ -274,10 +296,26 @@ export default function MenuTen() {
           {/* Table 1 */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-xl">
-                Skor Kontribusi Penerimaan{" "}
-                <span className="text-red-700">SIGAP Prioritas</span> - Kanwil
-              </CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl">
+                  Skor Kontribusi Penerimaan{" "}
+                  <span className="text-red-700">SIGAP Prioritas</span> - Kanwil
+                </CardTitle>
+
+                {/* Tombol Feedback */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setModalOpen(true);
+                    // kalau mau filter per cabang bisa ganti "all" ke id tertentu
+                    // setSelectedCabang("all");
+                  }}
+                  className="cursor-pointer hover:bg-blue-600 hover:text-white transition"
+                >
+                  Feedback
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
               <RenderTable data={table1Data} />
@@ -294,7 +332,10 @@ export default function MenuTen() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <RenderTable data={table2Data} />
+              <RenderTableFeedback
+                data={table2Data}
+                feedbackData={feedbackData}
+              />
             </CardContent>
           </Card>
 
@@ -324,6 +365,11 @@ export default function MenuTen() {
               <RenderTableArray data={table4Data} />
             </CardContent>
           </Card>
+          <FeedbackModal
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+            feedbackData={feedbackData}
+          />
         </div>
       </SidebarInset>
     </SidebarProvider>
