@@ -12,10 +12,13 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CalendarDays, BarChart3, LandPlot, Radical } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import Navbar from "@/components/navbar";
 import RenderTable from "@/components/komitmenstakeholder/RenderTable";
+import RenderTableFeedback from "@/components/komitmenstakeholder/RenderTableFeedback";
 import RenderTableArray from "@/components/komitmenstakeholder/RenderTableArray";
 import RenderTableScroll from "@/components/komitmenstakeholder/RenderTableScroll";
+import { FeedbackModal } from "@/components/komitmenstakeholder/feedback/FeedbackModal";
 
 // Constants
 const API_BASE_URL = "https://quickwin-jateng.vercel.app/api";
@@ -27,6 +30,7 @@ const API_ENDPOINTS = {
   table4: `${API_BASE_URL}/sheet9/getsheet9table4`,
   breakdown: `${API_BASE_URL}/sheet9/getsheet9card`,
   range: `${API_BASE_URL}/sheet9/getRange-sheet9`,
+  feedback: "https://magangproject.vercel.app/api/feedback/read",
 };
 
 const SCORE_CONFIGS = [
@@ -255,6 +259,7 @@ const useDataFetching = () => {
     table4Data: null,
     breakdownData: null,
     rangeData: null,
+    feedback: null,
   });
   const [loading, setLoading] = useState(true);
 
@@ -270,6 +275,7 @@ const useDataFetching = () => {
           table4Response,
           breakdownResponse,
           rangeResponse,
+          feedbackResponse,
         ] = await Promise.all([
           fetch(API_ENDPOINTS.table1),
           fetch(API_ENDPOINTS.table2),
@@ -277,6 +283,7 @@ const useDataFetching = () => {
           fetch(API_ENDPOINTS.table4),
           fetch(API_ENDPOINTS.breakdown),
           fetch(API_ENDPOINTS.range),
+          fetch(API_ENDPOINTS.feedback),
         ]);
 
         const [
@@ -286,6 +293,7 @@ const useDataFetching = () => {
           table4Data,
           breakdownData,
           rangeData,
+          feedback,
         ] = await Promise.all([
           table1Response.json(),
           table2Response.json(),
@@ -293,6 +301,7 @@ const useDataFetching = () => {
           table4Response.json(),
           breakdownResponse.json(),
           rangeResponse.json(),
+          feedbackResponse.json(),
         ]);
 
         setData({
@@ -302,6 +311,7 @@ const useDataFetching = () => {
           table4Data,
           breakdownData,
           rangeData,
+          feedback,
         });
       } catch (error) {
         console.error("Failed to fetch data:", error);
@@ -326,7 +336,11 @@ export default function MenuNine() {
     breakdownData,
     rangeData,
     loading,
+    feedback,
   } = useDataFetching();
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedCabang, setSelectedCabang] = useState("all");
 
   // Computed values
   const scores = [
@@ -420,16 +434,30 @@ export default function MenuNine() {
           {/* Tables Section */}
           <DataTable
             title={
-              <>
-                <span className="text-xl">Skor</span>{" "}
-                <span className="text-red-700 font-semibold text-xl">
-                  Jumlah Komitmen Stakeholder
-                </span>{" "}
-                <span className="text-xl">- Kanwil</span>
-              </>
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-xl">Skor</span>{" "}
+                  <span className="text-red-700 font-semibold text-xl">
+                    Jumlah Komitmen Stakeholder
+                  </span>{" "}
+                  <span className="text-xl">- Kanwil</span>
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setModalOpen(true);
+                    setSelectedCabang("all"); // default lihat semua
+                  }}
+                  className="cursor-pointer hover:bg-blue-600 hover:text-white transition"
+                >
+                  Feedback
+                </Button>
+              </div>
             }
           >
-            <RenderTable data={table1Data} />
+            <RenderTableFeedback data={table1Data} feedbackData={feedback} />
           </DataTable>
 
           <DataTable
@@ -471,6 +499,11 @@ export default function MenuNine() {
           >
             <RenderTableScroll data={table4Data} />
           </DataTable>
+          <FeedbackModal
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+            feedbackData={feedback}
+          />
         </div>
       </SidebarInset>
     </SidebarProvider>
