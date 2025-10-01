@@ -27,6 +27,7 @@ export default function MenuThirdteen() {
   const [table2Data, setTable2Data] = useState(null);
   const [rangeData, setRangeData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [feedbackData, setFeedbackData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,8 +61,21 @@ export default function MenuThirdteen() {
       }
     }
 
+    const fetchFeedback = async () => {
+      try {
+        const res = await fetch(
+          "https://magangproject.vercel.app/api/feedback/read"
+        );
+        const data = await res.json();
+        setFeedbackData(data);
+      } catch (err) {
+        console.error("Error fetch feedback:", err);
+      }
+    };
+
     fetchData();
     fetchRangeData();
+    fetchFeedback();
   }, []);
 
   const skorTotal = table1Data?.summary?.[5] ?? "-";
@@ -155,7 +169,9 @@ export default function MenuThirdteen() {
                       <div className="text-base font-semibold text-gray-900">
                         {rangeData?.periode_awal ?? "-"}
                       </div>
-                      <p className="text-xs text-muted-foreground mt-1">Tanggal Mulai</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Tanggal Mulai
+                      </p>
                     </CardContent>
                   </Card>
 
@@ -171,7 +187,9 @@ export default function MenuThirdteen() {
                       <div className="text-base font-semibold text-gray-900">
                         {rangeData?.periode_akhir ?? "-"}
                       </div>
-                      <p className="text-xs text-muted-foreground mt-1">Tanggal Akhir</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Tanggal Akhir
+                      </p>
                     </CardContent>
                   </Card>
                 </div>
@@ -209,7 +227,9 @@ export default function MenuThirdteen() {
                     <div className="text-base font-semibold text-gray-900">
                       Kantor Wilayah
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">1 Obyek Penilaian</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      1 Obyek Penilaian
+                    </p>
                   </CardContent>
                 </Card>
 
@@ -250,7 +270,7 @@ export default function MenuThirdteen() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <RenderTable data={table1Data} />
+              <RenderTable data={table1Data} feedbackData={feedbackData} />
             </CardContent>
           </Card>
 

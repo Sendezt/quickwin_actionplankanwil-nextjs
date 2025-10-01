@@ -21,15 +21,11 @@ export default function RenderTable({ data, feedbackData }) {
   const [previousCabang, setPreviousCabang] = useState(null);
   if (!data) return null;
 
-  const headers = data?.header?.[0] || [];
-  const rows = data?.data || [];
-  const summary = data?.summary || null;
-
   const getFeedbackByCabang = (namaCabang) =>
     feedbackData?.filter(
       (f) =>
         f.cabang?.nama?.trim().toLowerCase() ===
-          namaCabang?.trim().toLowerCase() && f.actionPlanId === 13
+          namaCabang?.trim().toLowerCase() && f.actionPlanId === 12
     ) || [];
 
   const getFeedbackCounts = (namaCabang) => {
@@ -43,6 +39,10 @@ export default function RenderTable({ data, feedbackData }) {
     ).length;
     return { totalCount, selesaiCount, prosesCount };
   };
+
+  const headers = data?.header?.[0] || [];
+  const rows = data?.data || [];
+  const summary = data?.summary || null;
 
   return (
     <>

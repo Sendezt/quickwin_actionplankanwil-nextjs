@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 import {
   CalendarDays,
   BarChart3,
@@ -15,6 +16,8 @@ import {
 import Navbar from "@/components/navbar";
 import RenderTable from "@/components/wablast/RenderTable";
 import RenderTableArray from "@/components/wablast/RenderTableArray";
+import { FeedbackModal } from "@/components/wablast/feedback/FeedbackModal";
+import RenderTableFeedback from "@/components/wablast/RenderTableFeedback";
 
 export default function MenuTwelve() {
   const [table1Data, setTable1Data] = useState(null);
@@ -23,6 +26,8 @@ export default function MenuTwelve() {
   const [table4Data, setTable4Data] = useState(null);
   const [rangeData, setRangeData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [feedbackData, setFeedbackData] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,8 +69,21 @@ export default function MenuTwelve() {
       }
     }
 
+    const fetchFeedback = async () => {
+      try {
+        const res = await fetch(
+          "https://magangproject.vercel.app/api/feedback/read"
+        );
+        const data = await res.json();
+        setFeedbackData(data);
+      } catch (err) {
+        console.error("Error fetch feedback:", err);
+      }
+    };
+
     fetchData();
     fetchRangeData();
+    fetchFeedback();
   }, []);
 
   const skorTotal = table1Data?.data?.[0]?.[6] ?? "-";
@@ -242,10 +260,26 @@ export default function MenuTwelve() {
           {/* Table 1 */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-xl">
-                Skor Kontribusi Penerimaan{" "}
-                <span className="text-red-700">WA Blast</span> - Kanwil
-              </CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl">
+                  Skor Kontribusi Penerimaan{" "}
+                  <span className="text-red-700">SIGAP Prioritas</span> - Kanwil
+                </CardTitle>
+
+                {/* Tombol Feedback */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setModalOpen(true);
+                    // kalau mau filter per cabang bisa ganti "all" ke id tertentu
+                    // setSelectedCabang("all");
+                  }}
+                  className="cursor-pointer hover:bg-blue-600 hover:text-white transition"
+                >
+                  Feedback
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
               <RenderTable data={table1Data} />
@@ -261,7 +295,10 @@ export default function MenuTwelve() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <RenderTable data={table2Data} />
+              <RenderTableFeedback
+                data={table2Data}
+                feedbackData={feedbackData}
+              />
             </CardContent>
           </Card>
 
@@ -290,6 +327,11 @@ export default function MenuTwelve() {
               <RenderTableArray data={table4Data} />
             </CardContent>
           </Card>
+          <FeedbackModal
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+            feedbackData={feedbackData}
+          />
         </div>
       </SidebarInset>
     </SidebarProvider>
