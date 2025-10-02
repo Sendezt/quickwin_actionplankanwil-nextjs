@@ -12,12 +12,8 @@ export function useFeedbackActions(loadData) {
 
     const { actionPlanId, subActionPlanId, task, resetForm } = formData;
 
-    // Validasi input - selectedCabang tidak diperlukan karena backend ambil dari token
+    // Validasi input
     if (!task || !actionPlanId) {
-      console.log("Missing required data:", {
-        task: !!task,
-        actionPlanId: !!actionPlanId,
-      });
       toast.error("Action Plan dan Task wajib diisi");
       return false;
     }
@@ -32,35 +28,33 @@ export function useFeedbackActions(loadData) {
     try {
       setIsCreating(true);
 
-      // Data sesuai dengan backend endpoint (cabangId otomatis dari req.user)
       const feedbackData = {
         actionPlanId: Number(actionPlanId),
         subActionPlanId: subActionPlanId ? Number(subActionPlanId) : null,
         task: task.trim(),
-        // status: "proses" - default di backend
       };
 
-      console.log("Sending data to createFeedback:", feedbackData);
-      console.log("Token exists:", !!token);
-
       const result = await createFeedback(feedbackData);
-      console.log("Create feedback result:", result);
 
       toast.success("Feedback berhasil ditambahkan");
-      resetForm();
-      await loadData(true); // Refresh data
+
+      // ✅ Tutup dan reset form langsung, tanpa menunggu loadData
+      if (typeof resetForm === "function") {
+        resetForm();
+      }
+
+      // ✅ Load data jalan di background
+      loadData(true).catch((err) => console.error("Gagal Reload", err));
+
       return true;
     } catch (error) {
       console.error("Error in handleCreate:", error);
 
-      // Handle different error types
       if (
         error.message.includes("401") ||
         error.message.includes("unauthorized")
       ) {
         toast.error("Session expired. Silakan login ulang");
-        // Optional: redirect to login
-        // window.location.href = '/login';
       } else if (error.message.includes("400")) {
         toast.error("Data tidak valid. Periksa kembali form Anda");
       } else if (error.message.includes("cabang")) {
@@ -78,7 +72,6 @@ export function useFeedbackActions(loadData) {
   const handleSelesai = async (feedbackId) => {
     if (!feedbackId) return;
 
-    // Validasi token
     const token = localStorage.getItem("token");
     if (!token) {
       toast.error("Session expired. Silakan login ulang");
@@ -89,7 +82,10 @@ export function useFeedbackActions(loadData) {
       setIsUpdating(true);
       await updateFeedbackStatus(feedbackId);
       toast.success("Feedback berhasil ditandai selesai");
+
+      // reload data setelah update
       await loadData(true);
+
       return true;
     } catch (error) {
       console.error("Error in handleSelesai:", error);

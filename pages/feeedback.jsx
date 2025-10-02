@@ -35,6 +35,8 @@ export default function FeedbackPage() {
   const {
     filterActionPlan,
     setFilterActionPlan,
+    filterSubActionPlan,
+    setFilterSubActionPlan,
     filterStatus,
     setFilterStatus,
     getFilteredFeedbacks,
@@ -191,14 +193,11 @@ export default function FeedbackPage() {
       const success = await handleCreate({ ...formData, selectedCabang });
 
       if (success) {
-        // ✅ Tutup modal hanya jika penyimpanan sukses
-        setShowModal(false);
-
-        // Optional: reset form di FeedbackFormModal
+        // 🔹 Reset form lebih dulu
         formData.resetForm?.();
-      } else {
-        // Optional: tampilkan alert gagal
-        console.error("Gagal menyimpan feedback");
+
+        // 🔹 Baru tutup modal
+        setShowModal(false);
       }
     } catch (err) {
       console.error("Error saat menyimpan feedback:", err);
@@ -342,6 +341,8 @@ export default function FeedbackPage() {
                       actionPlans={actionPlans}
                       filterActionPlan={filterActionPlan}
                       setFilterActionPlan={setFilterActionPlan}
+                      filterSubActionPlan={filterSubActionPlan}
+                      setFilterSubActionPlan={setFilterSubActionPlan}
                       filterStatus={filterStatus}
                       setFilterStatus={setFilterStatus}
                       clearFilters={clearFilters}
@@ -355,6 +356,7 @@ export default function FeedbackPage() {
                       isUpdating={isUpdating}
                       selectedFeedbackId={selectedFeedback?.id}
                       isLoggedIn={isLoggedIn}
+                      userCabangId={userInfo?.cabangId}
                     />
                   );
                 })}

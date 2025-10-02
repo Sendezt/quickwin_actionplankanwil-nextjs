@@ -10,9 +10,10 @@ export function FeedbackTable({
   onInfo,
   isUpdating,
   selectedFeedbackId,
+  userCabangId, // ✅ TAMBAHKAN: ID cabang user yang login
 }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // jumlah feedback per halaman
+  const itemsPerPage = 5;
 
   const totalPages = Math.ceil(feedbacks.length / itemsPerPage);
 
@@ -57,90 +58,98 @@ export function FeedbackTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {paginatedFeedbacks.map((fb, index) => (
-              <tr
-                key={fb.id}
-                className={`
-                  hover:bg-gray-50 transition-colors duration-150
-                  ${index % 2 === 0 ? "bg-white" : "bg-gray-25"}
-                  ${
-                    isUpdating && selectedFeedbackId === fb.id
-                      ? "opacity-50"
-                      : ""
-                  }
-                `}
-              >
-                {/* Action Plan */}
-                <td className="p-4 border-r border-gray-100">
-                  <div className="font-medium text-gray-900">
-                    {fb.actionPlan?.title}
-                  </div>
-                </td>
+            {paginatedFeedbacks.map((fb, index) => {
+              // ✅ Cek apakah feedback ini milik cabang user
+              const isOwnCabang = userCabangId && fb.cabangId === userCabangId;
 
-                {/* Sub Action Plan */}
-                <td className="p-4 border-r border-gray-100">
-                  <div className="font-medium text-gray-700">
-                    {fb.subActionPlan?.title || (
-                      <span className="text-gray-400 italic">-</span>
-                    )}
-                  </div>
-                </td>
+              return (
+                <tr
+                  key={fb.id}
+                  className={`
+                    hover:bg-gray-50 transition-colors duration-150
+                    ${index % 2 === 0 ? "bg-white" : "bg-gray-25"}
+                    ${
+                      isUpdating && selectedFeedbackId === fb.id
+                        ? "opacity-50"
+                        : ""
+                    }
+                  `}
+                >
+                  {/* Action Plan */}
+                  <td className="p-4 border-r border-gray-100">
+                    <div className="font-medium text-gray-900">
+                      {fb.actionPlan?.title}
+                    </div>
+                  </td>
 
-                {/* Task / Feedback */}
-                <td className="p-4 border-r border-gray-100">
-                  <div className="text-gray-700 break-words">{fb.task}</div>
-                </td>
-
-                {/* Status */}
-                <td className="p-4 border-r border-gray-100">
-                  <span
-                    className={`
-                      px-3 py-1 rounded-full text-xs font-medium transition-all duration-200
-                      ${
-                        fb.status === "selesai"
-                          ? "bg-green-100 text-green-800 border border-green-200"
-                          : fb.status === "proses"
-                          ? "bg-yellow-100 text-yellow-800 border border-yellow-200"
-                          : "bg-gray-100 text-gray-800 border border-gray-200"
-                      }
-                    `}
-                  >
-                    {fb.status}
-                  </span>
-                </td>
-
-                {/* Aksi */}
-                <td className="p-4 text-right">
-                  {fb.status !== "selesai" ? (
-                    <Button
-                      size="sm"
-                      onClick={() => onSelesai(fb)}
-                      disabled={isUpdating && selectedFeedbackId === fb.id}
-                      className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-md transition-all duration-200 shadow-sm hover:shadow-md focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                    >
-                      {isUpdating && selectedFeedbackId === fb.id ? (
-                        <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          Processing...
-                        </>
-                      ) : (
-                        "Tandai Selesai"
+                  {/* Sub Action Plan */}
+                  <td className="p-4 border-r border-gray-100">
+                    <div className="font-medium text-gray-700">
+                      {fb.subActionPlan?.title || (
+                        <span className="text-gray-400 italic">-</span>
                       )}
-                    </Button>
-                  ) : (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => onInfo(fb)}
-                      className="flex items-center gap-2 text-blue-600 border-blue-300 hover:bg-blue-50"
+                    </div>
+                  </td>
+
+                  {/* Task / Feedback */}
+                  <td className="p-4 border-r border-gray-100">
+                    <div className="text-gray-700 break-words">{fb.task}</div>
+                  </td>
+
+                  {/* Status */}
+                  <td className="p-4 border-r border-gray-100">
+                    <span
+                      className={`
+                        px-3 py-1 rounded-full text-xs font-medium transition-all duration-200
+                        ${
+                          fb.status === "selesai"
+                            ? "bg-green-100 text-green-800 border border-green-200"
+                            : fb.status === "proses"
+                            ? "bg-yellow-100 text-yellow-800 border border-yellow-200"
+                            : "bg-gray-100 text-gray-800 border border-gray-200"
+                        }
+                      `}
                     >
-                      <Info className="w-4 h-4" />
-                      Info
-                    </Button>
-                  )}
-                </td>
-              </tr>
-            ))}
+                      {fb.status}
+                    </span>
+                  </td>
+
+                  {/* Aksi */}
+                  <td className="p-4 text-right">
+                    {/* ✅ Logika baru: */}
+                    {fb.status !== "selesai" && isOwnCabang ? (
+                      // Tampilkan tombol "Tandai Selesai" hanya untuk cabang sendiri
+                      <Button
+                        size="sm"
+                        onClick={() => onSelesai(fb)}
+                        disabled={isUpdating && selectedFeedbackId === fb.id}
+                        className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-md transition-all duration-200 shadow-sm hover:shadow-md focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                      >
+                        {isUpdating && selectedFeedbackId === fb.id ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Processing...
+                          </>
+                        ) : (
+                          "Tandai Selesai"
+                        )}
+                      </Button>
+                    ) : (
+                      // Tampilkan tombol "Info" untuk cabang lain atau yang sudah selesai
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => onInfo(fb)}
+                        className="flex items-center gap-2 text-blue-600 border-blue-300 hover:bg-blue-50"
+                      >
+                        <Info className="w-4 h-4" />
+                        Info
+                      </Button>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
 
             {/* Jika feedback kosong */}
             {paginatedFeedbacks.length === 0 && (

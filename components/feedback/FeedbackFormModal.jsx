@@ -62,7 +62,7 @@ export default function FeedbackFormModal({
       }
 
       const res = await fetch(
-        `https://quickwin-jateng.vercel.app/api/admin/sub/getsub?actionPlanId=${actionPlanId}`,
+        `https://magangproject.vercel.app/api/admin/sub/getsub?actionPlanId=${actionPlanId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

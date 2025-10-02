@@ -29,7 +29,7 @@ export default function LoginForm() {
     setLoading(true);
 
     try {
-      const res = await fetch("https://quickwin-jateng.vercel.app/api/login", {
+      const res = await fetch("https://magangproject.vercel.app/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),

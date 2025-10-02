@@ -1,38 +1,4 @@
-// "use client";
-// import { Search, Filter } from "lucide-react";
-
-// export default function FeedbackFilters({ searchTerm, setSearchTerm, statusFilter, setStatusFilter }) {
-//   return (
-//     <div className="bg-white rounded-lg shadow-sm p-6 mb-6 flex flex-col sm:flex-row gap-4">
-//       {/* Search */}
-//       <div className="flex-1 relative">
-//         <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-//         <input
-//           type="text"
-//           placeholder="Cari feedback..."
-//           value={searchTerm}
-//           onChange={(e) => setSearchTerm(e.target.value)}
-//           className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-//         />
-//       </div>
-
-//       {/* Status Filter */}
-//       <div className="flex items-center gap-2">
-//         <Filter className="w-5 h-5 text-gray-400" />
-//         <select
-//           value={statusFilter}
-//           onChange={(e) => setStatusFilter(e.target.value)}
-//           className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-//         >
-//           <option value="all">Semua Status</option>
-//           <option value="proses">Dalam Proses</option>
-//           <option value="selesai">Selesai</option>
-//         </select>
-//       </div>
-//     </div>
-//   );
-// }
-
+import { useEffect, useState } from "react";
 import { Filter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -42,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { fetchSubActionPlans } from "@/lib/apifeedback";
 
 export function FeedbackFilters({
   cabangNama,
@@ -54,84 +21,133 @@ export function FeedbackFilters({
   clearFilters,
   onAddFeedback,
   isRefreshing,
+  filterSubActionPlan,
+  setFilterSubActionPlan,
 }) {
+  const [subActionPlans, setSubActionPlans] = useState([]);
+
+  useEffect(() => {
+    const loadSubs = async () => {
+      const res = await fetchSubActionPlans();
+      if (res.success) {
+        setSubActionPlans(res.data);
+      }
+    };
+    loadSubs();
+  }, []);
+
+  // ✅ filter subActionPlan sesuai actionPlan yang dipilih
+  const filteredSubs =
+    filterActionPlan && filterActionPlan !== "all"
+      ? subActionPlans.filter(
+          (sub) => sub.actionPlanId === Number(filterActionPlan)
+        )
+      : [];
+
   return (
     <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 mb-4 shadow-sm">
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-4 flex-1">
-          <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-gray-600" />
-            <span className="text-sm font-medium text-gray-700">
-              Filter {cabangNama}:
-            </span>
-            {hasActiveFilters && (
-              <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
-                {[
-                  filterActionPlan !== "all" ? "Action Plan" : null,
-                  filterStatus !== "all" ? "Status" : null,
-                ].filter(Boolean).length}{" "}
-                aktif
-              </span>
-            )}
-          </div>
+      {/* Header dengan Badge */}
+      <div className="flex items-center gap-2 mb-3">
+        <Filter className="w-4 h-4 text-gray-600" />
+        <span className="text-sm font-medium text-gray-700">
+          Filter {cabangNama}:
+        </span>
+        {hasActiveFilters && (
+          <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+            {
+              [
+                filterActionPlan !== "all" ? "Action Plan" : null,
+                filterSubActionPlan !== "all" ? "SubAction Plan" : null,
+                filterStatus !== "all" ? "Status" : null,
+              ].filter(Boolean).length
+            }{" "}
+            aktif
+          </span>
+        )}
+      </div>
 
+      {/* Filter Controls - Flex Wrap Layout */}
+      <div className="flex flex-wrap items-center gap-3">
+        {/* Filter Action Plan */}
+        <div className="flex items-center gap-2">
+          <label className="text-sm text-gray-600 whitespace-nowrap">
+            Action Plan:
+          </label>
+          <Select
+            value={filterActionPlan}
+            onValueChange={(val) => {
+              setFilterActionPlan(val);
+              setFilterSubActionPlan("all"); // reset subaction jika actionplan ganti
+            }}
+          >
+            <SelectTrigger className="w-45">
+              <SelectValue placeholder="Semua Action Plan" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Semua Action Plan</SelectItem>
+              {actionPlans.map((plan, index) => (
+                <SelectItem key={plan.id} value={plan.id.toString()}>
+                  {index + 1}. {plan.title}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* ✅ Filter SubActionPlan - akan wrap ke baris baru jika tidak cukup ruang */}
+        {filterActionPlan !== "all" && filteredSubs.length > 0 && (
           <div className="flex items-center gap-2">
             <label className="text-sm text-gray-600 whitespace-nowrap">
-              Action Plan:
+              SubAction Plan:
             </label>
-            <Select value={filterActionPlan} onValueChange={setFilterActionPlan}>
-              <SelectTrigger className="w-45">
-                <SelectValue placeholder="Semua Action Plan" />
+            <Select
+              value={filterSubActionPlan}
+              onValueChange={setFilterSubActionPlan}
+            >
+              <SelectTrigger className="w-48">
+                <SelectValue placeholder="Semua SubAction Plan" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Semua Action Plan</SelectItem>
-                {actionPlans.map((plan, index) => (
-                  <SelectItem key={plan.id} value={plan.id.toString()}>
-                    {index + 1}. {plan.title}
+                <SelectItem value="all">Semua SubAction Plan</SelectItem>
+                {filteredSubs.map((sub, index) => (
+                  <SelectItem key={sub.id} value={sub.id.toString()}>
+                    {index + 1}. {sub.title}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
+        )}
 
-          <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-600 whitespace-nowrap">
-              Status:
-            </label>
-            <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Semua Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Semua Status</SelectItem>
-                <SelectItem value="proses">Proses</SelectItem>
-                <SelectItem value="selesai">Selesai</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {hasActiveFilters && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={clearFilters}
-              className="flex items-center justify-center w-8 h-8 p-0 text-gray-600 hover:text-gray-800 hover:bg-gray-100"
-              title="Clear Filters"
-            >
-              <X className="w-4 h-4" />
-            </Button>
-          )}
+        {/* Filter Status */}
+        <div className="flex items-center gap-2">
+          <label className="text-sm text-gray-600 whitespace-nowrap">
+            Status:
+          </label>
+          <Select value={filterStatus} onValueChange={setFilterStatus}>
+            <SelectTrigger className="w-40">
+              <SelectValue placeholder="Semua Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Semua Status</SelectItem>
+              <SelectItem value="proses">Proses</SelectItem>
+              <SelectItem value="selesai">Selesai</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
-        {/* <div className="flex-shrink-0">
+        {/* Clear Filter Button */}
+        {hasActiveFilters && (
           <Button
-            className="bg-blue-500 hover:bg-blue-600 transition-all duration-200"
-            onClick={onAddFeedback}
-            disabled={isRefreshing}
+            variant="outline"
+            size="sm"
+            onClick={clearFilters}
+            className="flex items-center justify-center w-8 h-8 p-0 text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+            title="Clear Filters"
           >
-            Tambah Feedback
+            <X className="w-4 h-4" />
           </Button>
-        </div> */}
+        )}
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -28,6 +28,14 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
     multiple: false,
   });
 
+  // Reset file & loading setiap kali modal ditutup
+  useEffect(() => {
+    if (!open) {
+      setFile(null);
+      setLoading(false);
+    }
+  }, [open]);
+
   if (!feedback) return null; // <- ini setelah semua hook
 
   const handleConfirm = async () => {
@@ -46,7 +54,7 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
 
     try {
       const response = await fetch(
-        `https://quickwin-jateng.vercel.app/api/feedback/${feedback.id}/selesai`,
+        `https://magangproject.vercel.app/api/feedback/${feedback.id}/selesai`,
         {
           method: "PUT",
           body: formData,
@@ -67,6 +75,7 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
       }
 
       onConfirm(data.data);
+      setFile(null);
       onClose();
     } catch (err) {
       alert(err.message);

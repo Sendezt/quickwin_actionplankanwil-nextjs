@@ -14,6 +14,8 @@ export function CabangAccordionItem({
   actionPlans,
   filterActionPlan,
   setFilterActionPlan,
+  filterSubActionPlan,
+  setFilterSubActionPlan,
   filterStatus,
   setFilterStatus,
   clearFilters,
@@ -24,6 +26,7 @@ export function CabangAccordionItem({
   isUpdating,
   selectedFeedbackId,
   setOpenCabang, // ✅ terima di sini
+  userCabangId,
 }) {
   return (
     <AccordionItem key={cabang.id} value={`cabang-${cabang.id}`}>
@@ -55,6 +58,8 @@ export function CabangAccordionItem({
           actionPlans={actionPlans}
           filterActionPlan={filterActionPlan}
           setFilterActionPlan={setFilterActionPlan}
+          filterSubActionPlan={filterSubActionPlan}
+          setFilterSubActionPlan={setFilterSubActionPlan}
           filterStatus={filterStatus}
           setFilterStatus={setFilterStatus}
           hasActiveFilters={hasActiveFilters}
@@ -70,6 +75,7 @@ export function CabangAccordionItem({
           onInfo={onInfo}
           isUpdating={isUpdating}
           selectedFeedbackId={selectedFeedbackId}
+          userCabangId={userCabangId}
         />
       </AccordionContent>
     </AccordionItem>
