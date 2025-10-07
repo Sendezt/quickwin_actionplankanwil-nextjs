@@ -87,7 +87,7 @@ export default function RenderTable4({ data, feedbackData }) {
                       cidx === 0
                         ? "text-center"
                         : cidx === 1
-                        ? "border border-gray-300 px-4 py-2 text-left text-blue-600 cursor-pointer hover:underline"
+                        ? "border border-gray-300 px-4 py-2 text-left font-medium text-blue-600 cursor-pointer hover:underline"
                         : "border border-gray-300 px-4 py-2 text-center"
                     }`}
                     onClick={() => setSelectedCabang(row[1])}

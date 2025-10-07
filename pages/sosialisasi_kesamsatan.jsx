@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 import {
   CalendarDays,
   BarChart3,
@@ -17,6 +18,7 @@ import RenderTable4 from "@/components/sosialisasikesamsatan/RenderTable4";
 import RenderTable from "@/components/sosialisasikesamsatan/RenderTable";
 import { RenderTable1 } from "@/components/sosialisasikesamsatan/RenderTable1";
 import { RenderTable2 } from "@/components/sosialisasikesamsatan/RenderTable2";
+import { FeedbackModal } from "@/components/sosialisasikesamsatan/feedback/FeedbackModal";
 
 export default function MenuEnam() {
   const [table1Data, setTable1Data] = useState(null);
@@ -27,6 +29,7 @@ export default function MenuEnam() {
   const [rangeData, setRangeData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [feedbackData, setFeedbackData] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -385,14 +388,30 @@ export default function MenuEnam() {
             ) : (
               <>
                 <Card className="shadow-sm hover:shadow-md transition-shadow">
-                  <CardHeader className="border-b">
-                    <CardTitle className="text-xl">
-                      Pelaksanaan{" "}
-                      <span className="text-red-700">
-                        Sosialisasi Kesamsatan
-                      </span>{" "}
-                      - Kanwil
-                    </CardTitle>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-xl">
+                        Pelaksanaan{" "}
+                        <span className="text-red-700">
+                          Sosialiasasi Kesamsatan
+                        </span>{" "}
+                        - Kanwil
+                      </CardTitle>
+
+                      {/* Tombol Feedback */}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setModalOpen(true);
+                          // kalau mau filter per cabang bisa ganti "all" ke id tertentu
+                          // setSelectedCabang("all");
+                        }}
+                        className="cursor-pointer hover:bg-blue-600 hover:text-white transition"
+                      >
+                        Feedback
+                      </Button>
+                    </div>
                   </CardHeader>
                   <CardContent className="p-6">
                     <RenderTable1
@@ -466,6 +485,11 @@ export default function MenuEnam() {
                     <RenderTable data={table5Data} isTable5={true} />
                   </CardContent>
                 </Card>
+                <FeedbackModal
+                  open={modalOpen}
+                  onClose={() => setModalOpen(false)}
+                  feedbackData={feedbackData}
+                />
               </>
             )}
           </div>

@@ -104,56 +104,60 @@ export default function LoginForm() {
         }
       `}</style>
 
-      <div className="login-theme min-h-screen flex items-center justify-center p-4">
-        <Card className="backdrop-blur-sm bg-card border-border shadow-2xl w-full max-w-md">
-          <CardHeader className="text-center space-y-4 pb-8">
-            <div className="mx-auto mb-6">
+      <div className="login-theme min-h-screen max-h-screen overflow-y-auto flex items-center justify-center p-4 py-6">
+        <Card className="backdrop-blur-sm bg-card border-border shadow-2xl w-full max-w-md my-auto">
+          <CardHeader className="text-center space-y-2 pb-4 pt-6">
+            <div className="mx-auto mb-2">
               <Link href="/">
                 <img
                   src="/quickwin.png"
                   alt="QuickWin Logo"
-                  className="w-30 h-30 mx-auto object-contain"
+                  className="w-24 h-24 mx-auto object-contain"
                 />
               </Link>
             </div>
 
-            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               Selamat Datang
             </CardTitle>
-            <CardDescription className="text-muted-foreground text-lg">
+            <CardDescription className="text-muted-foreground text-base">
               Masuk ke akun Anda untuk melanjutkan
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="space-y-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <CardContent className="space-y-4 pb-6">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="username">Username</Label>
+                <Label htmlFor="username" className="text-sm">
+                  Username
+                </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                   <Input
                     id="username"
                     type="text"
                     placeholder="Masukkan username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="pl-10 h-12 rounded-2xl border-2 border-border focus:border-primary focus:ring-primary bg-input"
+                    className="pl-10 h-11 rounded-2xl border-2 border-border focus:border-primary focus:ring-primary bg-input"
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="text-sm">
+                  Password
+                </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Masukkan password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-10 h-12 rounded-2xl border-2 border-border focus:border-primary focus:ring-primary bg-input"
+                    className="pl-10 pr-10 h-11 rounded-2xl border-2 border-border focus:border-primary focus:ring-primary bg-input"
                     required
                   />
                   <button
@@ -167,9 +171,9 @@ export default function LoginForm() {
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
                     {showPassword ? (
-                      <EyeOff className="w-5 h-5" />
+                      <EyeOff className="w-4 h-4" />
                     ) : (
-                      <Eye className="w-5 h-5" />
+                      <Eye className="w-4 h-4" />
                     )}
                   </button>
                 </div>
@@ -182,7 +186,7 @@ export default function LoginForm() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full h-12 rounded-2xl bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-primary-foreground font-semibold text-lg shadow-lg flex items-center justify-center"
+                className="w-full h-11 rounded-2xl bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-primary-foreground font-semibold text-base shadow-lg flex items-center justify-center"
               >
                 {loading ? (
                   <>

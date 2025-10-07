@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"; // hanya import yang ada
 import { Skeleton } from "@/components/ui/skeleton";
-import { FeedbackTable } from "@/components/sosialisasikesamsatan/FeedbackTable";
+import { FeedbackTable } from "@/components/sosialisasikesamsatan/feedback/FeedbackTable";
 import FeedbackInfoModal from "@/components/feedback/FeedbackInfoModal";
 
 export const RenderTable2 = ({ table2Data, loading, feedbackData }) => {
@@ -154,10 +154,12 @@ export const RenderTable2 = ({ table2Data, loading, feedbackData }) => {
       {/* Modal Feedback */}
       <Dialog
         open={!!selectedCabang}
-        onClose={() => setSelectedCabang(null)}
+        onOpenChange={(open) => {
+          if (!open) setSelectedCabang(null);
+        }}
         className="fixed inset-0 z-[500] flex items-center justify-center bg-black/30 p-4"
       >
-        <DialogContent className="bg-white rounded-lg shadow-lg w-full max-w-4xl sm:max-w-[90vw] max-h-[90vh] overflow-y-auto p-6">
+        <DialogContent className="bg-white rounded-lg shadow-lg w-full max-w-4xl sm:max-w-[90vw] max-h-[90vh] overflow-y-auto p-6 [&>button]:hidden">
           {selectedCabang && (
             <DialogTitle className="text-lg font-bold mb-4 pb-3 border-b border-gray-200">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">

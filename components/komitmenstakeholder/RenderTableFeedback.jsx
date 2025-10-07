@@ -12,7 +12,7 @@ import {
   TableFooter,
 } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { FeedbackTable } from "@/components/komitmenstakeholder/feedback/FeedbackTable"; // bisa diganti sesuai path
+import { FeedbackTable } from "@/components/komitmenstakeholder/feedback/FeedbackTable";
 import FeedbackInfoModal from "@/components/feedback/FeedbackInfoModal";
 
 // ✅ Select dari shadcn/ui

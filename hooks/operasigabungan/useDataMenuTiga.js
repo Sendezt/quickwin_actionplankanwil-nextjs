@@ -8,7 +8,7 @@ const API_ENDPOINTS = {
   table5: "https://quickwin-jateng.vercel.app/api/sheet3/getsheet3table5",
   breakdown: "https://quickwin-jateng.vercel.app/api/sheet3/getsheet3card",
   range: "https://quickwin-jateng.vercel.app/api/sheet3/getRange-sheet3",
-  feedback: "https://quickwin-jateng.vercel.app/api/feedback/read",
+  feedback: "https://magangproject.vercel.app/api/feedback/read",
 };
 
 export function useDataMenuTiga() {

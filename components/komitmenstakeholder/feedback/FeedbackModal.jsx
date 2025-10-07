@@ -59,10 +59,10 @@ export const FeedbackModal = ({ open, onClose, feedbackData }) => {
     <>
       <Dialog
         open={open}
-        onClose={onClose}
+        onOpenChange={onClose}
         className="fixed inset-0 z-[500] flex items-center justify-center bg-black/30 p-4"
       >
-        <DialogContent className="bg-white rounded-lg shadow-lg w-full max-w-4xl sm:max-w-[90vw] max-h-[90vh] overflow-y-auto p-6">
+        <DialogContent className="bg-white rounded-lg shadow-lg w-full max-w-4xl sm:max-w-[90vw] max-h-[90vh] overflow-y-auto p-6 [&>button]:hidden">
           <DialogTitle className="text-lg font-bold mb-4 pb-3 border-b border-gray-200">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <h2 className="text-lg font-bold text-gray-800">Feedback</h2>

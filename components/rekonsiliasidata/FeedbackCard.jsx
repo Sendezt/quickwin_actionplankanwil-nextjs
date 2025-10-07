@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { FeedbackTable } from "@/components/sosialisasikesamsatan/FeedbackTable";
+import { FeedbackTable } from "@/components/sosialisasikesamsatan/feedback/FeedbackTable";
 import FeedbackInfoModal from "@/components/feedback/FeedbackInfoModal";
 
 const normalizeTableData = (data) => {
@@ -119,7 +119,7 @@ export default function TableCardFeedback({
                               key={cellIndex}
                               className={
                                 cellIndex === 1
-                                  ? "border border-gray-300 px-4 py-2 text-sm text-blue-600 text-left cursor-pointer hover:underline"
+                                  ? "border border-gray-300 px-4 py-2 text-sm font-medium text-blue-600 text-left cursor-pointer hover:underline"
                                   : "border border-gray-300 px-4 py-2 text-sm text-gray-700 text-center"
                               }
                               onClick={
@@ -217,10 +217,10 @@ export default function TableCardFeedback({
             />
           </div>
 
-          <div className="mt-4 flex justify-end gap-2">
+          <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-end gap-3">
             <button
               onClick={() => setSelectedCabang(null)}
-              className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+              className="px-5 py-2.5 bg-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-300 transition-colors"
             >
               Tutup
             </button>
@@ -232,7 +232,7 @@ export default function TableCardFeedback({
                 if (cabang?.cabang?.id)
                   router.push(`/feedback?cabangId=${cabang.cabang.id}`);
               }}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              className="px-5 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
             >
               Detail
             </button>

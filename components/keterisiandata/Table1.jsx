@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { FeedbackTable } from "@/components/sosialisasikesamsatan/FeedbackTable";
+import { FeedbackTable } from "@/components/sosialisasikesamsatan/feedback/FeedbackTable";
 import FeedbackInfoModal from "@/components/feedback/FeedbackInfoModal";
 
 export default function TableRekapitulasiFeedback({
@@ -66,7 +66,7 @@ export default function TableRekapitulasiFeedback({
                         key={cellIdx}
                         className={
                           cellIdx === 1
-                            ? "border border-gray-300 px-4 py-2 text-left text-blue-600 cursor-pointer hover:underline"
+                            ? "border border-gray-300 px-4 py-2 text-left font-medium text-blue-600 cursor-pointer hover:underline"
                             : "border border-gray-300 px-4 py-2 text-center"
                         }
                         onClick={

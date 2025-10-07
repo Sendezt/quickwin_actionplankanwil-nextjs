@@ -3,20 +3,44 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { FeedbackTable } from "@/components/optimalisasisignal/FeedbackTable";
+import { FeedbackTable } from "@/components/implementasiuuhkpd/feedback/FeedbackTable";
 import FeedbackInfoModal from "@/components/feedback/FeedbackInfoModal";
+
+// ✅ import komponen Select dari shadcn/ui
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const FeedbackModal = ({ open, onClose, feedbackData }) => {
   const [selectedFeedback, setSelectedFeedback] = useState(null);
+  const [selectedCabang, setSelectedCabang] = useState("all"); // state filter cabang
   const router = useRouter();
 
-  // Ambil semua feedback untuk actionPlanId = 6 DAN subActionPlanId = 6 atau 7
+  // Ambil daftar cabang unik dari feedbackData yang actionPlanId = 1
+  const cabangOptions = [
+    ...new Map(
+      (feedbackData || [])
+        .filter((f) => f.actionPlanId === 6 && f.subActionPlanId === 5)
+        .map((f) => [f.cabang?.id, f.cabang?.nama])
+    ).entries(),
+  ];
+
+  // Filter feedback berdasarkan cabang
   const getAllFeedbacks = () => {
-    return (
+    let filtered =
       feedbackData?.filter(
-        (f) => f.actionPlanId === 7 && f.subActionPlanId === 8
-      ) || []
-    );
+        (f) => f.actionPlanId === 6 && f.subActionPlanId === 5
+      ) || [];
+
+    if (selectedCabang !== "all") {
+      filtered = filtered.filter((f) => f.cabangId === Number(selectedCabang));
+    }
+
+    return filtered;
   };
 
   const getFeedbackCounts = () => {
@@ -42,6 +66,26 @@ export const FeedbackModal = ({ open, onClose, feedbackData }) => {
           <DialogTitle className="text-lg font-bold mb-4 pb-3 border-b border-gray-200">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <h2 className="text-lg font-bold text-gray-800">Feedback</h2>
+
+              {/* ✅ Filter Cabang pakai Select shadcn */}
+              <Select
+                value={selectedCabang}
+                onValueChange={(value) => setSelectedCabang(value)}
+              >
+                <SelectTrigger className="w-[220px]">
+                  <SelectValue placeholder="Pilih cabang" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">🏢 Semua Cabang</SelectItem>
+                  {cabangOptions.map(([id, nama]) => (
+                    <SelectItem key={id} value={String(id)}>
+                      📍 {nama}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Summary Count */}
               {(() => {
                 const { totalCount, selesaiCount, prosesCount } =
                   getFeedbackCounts();
@@ -73,8 +117,8 @@ export const FeedbackModal = ({ open, onClose, feedbackData }) => {
 
           <FeedbackTable
             feedbacks={getAllFeedbacks()}
-            hasActiveFilters={false}
-            totalFeedbacks={0}
+            hasActiveFilters={selectedCabang !== "all"}
+            totalFeedbacks={getAllFeedbacks().length}
             onSelesai={(fb) => console.log("Selesai:", fb)}
             onInfo={(fb) => setSelectedFeedback(fb)}
             isUpdating={false}

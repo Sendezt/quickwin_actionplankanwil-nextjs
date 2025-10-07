@@ -116,11 +116,12 @@ export default function TableCardWithModal({
                           ? row.map((cell, j) => (
                               <TableCell
                                 key={j}
-                                className={`border border-gray-300 px-3 py-1 text-sm ${
-                                  j === 1
-                                    ? "text-blue-600 cursor-pointer hover:underline"
-                                    : "text-center"
-                                }`}
+                                className={
+                                  `border-b border-r border-dotted border-gray-300 ` +
+                                  (j === 1
+                                    ? "text-left font-medium cursor-pointer text-blue-600 hover:underline"
+                                    : "text-center")
+                                }
                                 onClick={
                                   j === 1
                                     ? () => setSelectedCabang(cabangName)
@@ -183,69 +184,90 @@ export default function TableCardWithModal({
       >
         <DialogBackdrop className="fixed inset-0 bg-black/30" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <DialogPanel className="bg-white rounded-lg shadow-lg w-full max-w-4xl sm:max-w-[90vw] max-h-[90vh] overflow-y-auto p-6">
+          <DialogPanel
+            className="
+              bg-white rounded-lg shadow-lg
+              w-full max-w-4xl sm:max-w-[90vw]
+              max-h-[90vh] overflow-y-auto
+              p-6
+            "
+          >
             {selectedCabang && (
-              <>
-                <DialogTitle className="text-lg font-bold mb-4 pb-3 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <span className="text-lg font-bold text-gray-800">
+              <DialogTitle className="text-lg font-bold mb-4 pb-3 border-b border-gray-200">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  {/* Main Title */}
+                  <h2 className="text-lg font-bold text-gray-800">
                     Feedback untuk {selectedCabang}
-                  </span>
-                  <span className="text-sm text-gray-600 flex gap-4">
-                    {(() => {
-                      const { totalCount, selesaiCount, prosesCount } =
-                        getFeedbackCounts(selectedCabang);
-                      return (
-                        <>
-                          <span>Total: {totalCount}</span>
-                          <span className="text-green-700">
-                            Selesai: {selesaiCount}
-                          </span>
-                          <span className="text-orange-700">
-                            Proses: {prosesCount}
-                          </span>
-                        </>
-                      );
-                    })()}
-                  </span>
-                </DialogTitle>
+                  </h2>
 
-                <FeedbackTable
-                  feedbacks={getFeedbackByCabang(selectedCabang)}
-                  hasActiveFilters={false}
-                  totalFeedbacks={0}
-                  onSelesai={(fb) => console.log("Selesai:", fb)}
-                  onInfo={(fb) => {
-                    setPreviousCabang(selectedCabang);
-                    setSelectedCabang(null);
-                    setSelectedFeedback(fb);
-                  }}
-                  isUpdating={false}
-                  selectedFeedbackId={null}
-                />
-
-                <div className="mt-4 flex justify-end gap-2">
-                  <button
-                    onClick={() => setSelectedCabang(null)}
-                    className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
-                  >
-                    Tutup
-                  </button>
-                  <button
-                    onClick={() => {
-                      const cabang = feedbackData?.find(
-                        (f) => f.cabang?.nama === selectedCabang
-                      );
-                      if (cabang?.cabang?.id) {
-                        router.push(`/feedback?cabangId=${cabang.cabang.id}`);
-                      }
-                    }}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                  >
-                    Detail
-                  </button>
+                  {/* Statistics */}
+                  {(() => {
+                    const { totalCount, selesaiCount, prosesCount } =
+                      getFeedbackCounts(selectedCabang);
+                    return (
+                      <div className="text-sm text-gray-600 flex gap-4">
+                        <span className="flex items-center gap-1">
+                          <span className="font-medium">Total:</span>
+                          <span className="font-bold text-gray-800 bg-gray-100 px-2 py-0.5 rounded">
+                            {totalCount}
+                          </span>
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <span className="font-medium">Selesai:</span>
+                          <span className="font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded">
+                            {selesaiCount}
+                          </span>
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <span className="font-medium">Proses:</span>
+                          <span className="font-bold text-orange-700 bg-orange-100 px-2 py-0.5 rounded">
+                            {prosesCount}
+                          </span>
+                        </span>
+                      </div>
+                    );
+                  })()}
                 </div>
-              </>
+              </DialogTitle>
             )}
+
+            <FeedbackTable
+              feedbacks={getFeedbackByCabang(selectedCabang)}
+              hasActiveFilters={false}
+              totalFeedbacks={0}
+              onSelesai={(fb) => console.log("Selesai:", fb)}
+              onInfo={(fb) => {
+                setPreviousCabang(selectedCabang);
+                setSelectedCabang(null);
+                setSelectedFeedback(fb);
+              }}
+              isUpdating={false}
+              selectedFeedbackId={null}
+            />
+
+            <div className="mt-4 flex justify-end gap-2">
+              <button
+                onClick={() => setSelectedCabang(null)}
+                className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+              >
+                Tutup
+              </button>
+
+              {/* Button Detail */}
+              <button
+                onClick={() => {
+                  const cabang = feedbackData?.find(
+                    (f) => f.cabang?.nama === selectedCabang
+                  );
+                  if (cabang?.cabang?.id) {
+                    router.push(`/feedback?cabangId=${cabang.cabang.id}`);
+                  }
+                }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Detail
+              </button>
+            </div>
           </DialogPanel>
         </div>
       </Dialog>
