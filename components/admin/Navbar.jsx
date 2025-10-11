@@ -4,26 +4,31 @@ import React from "react";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function Navbar({ toggleSidebar }) {
+export default function Navbar({ toggleSidebar, title = "Admin Dashboard" }) {
   return (
-    <div className="w-full h-14 bg-white shadow flex items-center px-4 justify-between">
-      <Button
-        variant="ghost"
-        size="icon"
-        className="md:hidden"
-        onClick={toggleSidebar}
-      >
-        <Menu className="h-6 w-6" />
-      </Button>
-      <h1 className="font-semibold text-lg">Admin Dashboard</h1>
-      <div className="flex items-center gap-2">
-        <span className="text-gray-700">Admin</span>
-        <img
-          src="https://ui-avatars.com/api/?name=Admin"
-          alt="avatar"
-          className="w-8 h-8 rounded-full"
-        />
+    <header className="bg-white border-b border-gray-200 px-8 py-4 shadow-sm">
+      <div className="flex items-center justify-between">
+        {/* Tombol toggle sidebar (hanya tampil di mobile) */}
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={toggleSidebar}
+          >
+            <Menu className="h-6 w-6 text-gray-700" />
+          </Button>
+          <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
+        </div>
+
+        {/* Info Admin */}
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-medium text-gray-600">Admin</span>
+          <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-md">
+            AD
+          </div>
+        </div>
       </div>
-    </div>
+    </header>
   );
 }

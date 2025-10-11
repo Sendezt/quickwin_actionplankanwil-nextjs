@@ -1,21 +1,21 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Card, CardContent } from "@/components/ui/card";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Eye, EyeOff, ArrowRight } from "lucide-react";
 
-export default function LoginForm() {
+export default function LoginForm({ className, ...props }) {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
@@ -36,7 +36,6 @@ export default function LoginForm() {
       });
 
       const contentType = res.headers.get("content-type");
-
       if (!contentType || !contentType.includes("application/json")) {
         const text = await res.text();
         throw new Error(`Respons bukan JSON: ${text}`);
@@ -55,7 +54,7 @@ export default function LoginForm() {
       } else if (data.user.role === "Kacab") {
         router.push("/feedback");
       } else {
-        router.push("/"); // fallback
+        router.push("/");
       }
     } catch (err) {
       console.error("Login error:", err);
@@ -66,109 +65,63 @@ export default function LoginForm() {
   };
 
   return (
-    <>
-      <style jsx>{`
-        .login-theme {
-          --background: #f3f8fc;
-          --foreground: #0a2239;
-          --card: #ffffff;
-          --card-foreground: #0a2239;
-          --primary: #0079c2;
-          --primary-foreground: #ffffff;
-          --secondary: #339dd9;
-          --secondary-foreground: #ffffff;
-          --muted: #e6f0f7;
-          --muted-foreground: #4a6072;
-          --accent: #0079c2;
-          --accent-foreground: #ffffff;
-          --border: #c9e2f2;
-          --input: #ffffff;
-          --ring: rgba(0, 121, 194, 0.5);
-        }
-        .loader {
-          border: 2px solid #f3f3f3;
-          border-top: 2px solid #0079c2;
-          border-radius: 50%;
-          width: 16px;
-          height: 16px;
-          animation: spin 0.8s linear infinite;
-          display: inline-block;
-        }
-        @keyframes spin {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
-      `}</style>
-
-      <div className="login-theme min-h-screen max-h-screen overflow-y-auto flex items-center justify-center p-4 py-6">
-        <Card className="backdrop-blur-sm bg-card border-border shadow-2xl w-full max-w-md my-auto">
-          <CardHeader className="text-center space-y-2 pb-4 pt-6">
-            <div className="mx-auto mb-2">
-              <Link href="/">
-                <img
-                  src="/quickwin.png"
-                  alt="QuickWin Logo"
-                  className="w-24 h-24 mx-auto object-contain"
-                />
-              </Link>
-            </div>
-
-            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Selamat Datang
-            </CardTitle>
-            <CardDescription className="text-muted-foreground text-base">
-              Masuk ke akun Anda untuk melanjutkan
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent className="space-y-4 pb-6">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="username" className="text-sm">
-                  Username
-                </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                  <Input
-                    id="username"
-                    type="text"
-                    placeholder="Masukkan username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className="pl-10 h-11 rounded-2xl border-2 border-border focus:border-primary focus:ring-primary bg-input"
-                    required
-                  />
-                </div>
+    <div
+      className={cn(
+        "flex flex-col gap-6 min-h-screen items-center justify-center",
+        className
+      )}
+      {...props}
+    >
+      <Card className="overflow-hidden p-0 shadow-lg w-full max-w-3xl">
+        <CardContent className="grid p-0 md:grid-cols-2">
+          {/* === FORM LOGIN === */}
+          <form onSubmit={handleSubmit} className="p-6 md:p-8">
+            <FieldGroup>
+              <div className="flex flex-col items-center gap-2 text-center mb-4">
+                <h1 className="text-2xl font-bold">Selamat Datang</h1>
+                <p className="text-muted-foreground text-balance">
+                  Masuk ke akun Anda untuk melanjutkan
+                </p>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm">
-                  Password
-                </Label>
+              {/* Username */}
+              <Field>
+                <FieldLabel htmlFor="username">Username</FieldLabel>
+                <Input
+                  id="username"
+                  type="text"
+                  placeholder="Masukkan username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
+              </Field>
+
+              {/* Password */}
+              <Field>
+                <div className="flex items-center">
+                  <FieldLabel htmlFor="password">Password</FieldLabel>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="ml-auto text-sm underline-offset-2 hover:underline"
+                  >
+                    {showPassword ? "Sembunyikan" : "Tampilkan"}
+                  </button>
+                </div>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Masukkan password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-10 h-11 rounded-2xl border-2 border-border focus:border-primary focus:ring-primary bg-input"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    title={
-                      showPassword
-                        ? "Sembunyikan password"
-                        : "Tampilkan password"
-                    }
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
                   >
                     {showPassword ? (
                       <EyeOff className="w-4 h-4" />
@@ -177,33 +130,53 @@ export default function LoginForm() {
                     )}
                   </button>
                 </div>
-              </div>
+              </Field>
 
+              {/* Error message */}
               {error && (
                 <p className="text-red-500 text-sm font-medium">{error}</p>
               )}
 
-              <Button
-                type="submit"
-                disabled={loading}
-                className="w-full h-11 rounded-2xl bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-primary-foreground font-semibold text-base shadow-lg flex items-center justify-center"
-              >
-                {loading ? (
-                  <>
-                    <span>Memproses...</span>
-                    <span className="loader ml-3"></span>
-                  </>
-                ) : (
-                  <>
-                    <span>Masuk</span>
-                    <ArrowRight className="ml-2 w-5 h-5" />
-                  </>
-                )}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
-    </>
+              {/* Submit Button */}
+              <Field>
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full flex justify-center items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors duration-200"
+                >
+                  {loading ? (
+                    <>
+                      <span>Memproses...</span>
+                      <span className="w-4 h-4 border-2 border-t-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Masuk</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </Button>
+              </Field>
+            </FieldGroup>
+          </form>
+
+          {/* === GAMBAR SAMPING === */}
+          <div className="bg-muted relative hidden md:block">
+            <Image
+              src="/wilayah.jpg"
+              alt="Login illustration"
+              fill
+              className="object-cover dark:brightness-[0.2] dark:grayscale"
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      <FieldDescription className="px-6 text-center">
+        Aplikasi ini diperuntukkan bagi pegawai{" "}
+        <span className="font-semibold">PT Jasa Raharja</span>. Setiap aktivitas
+        login akan tercatat untuk keperluan audit dan keamanan sistem.
+      </FieldDescription>
+    </div>
   );
 }

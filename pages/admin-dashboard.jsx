@@ -1,53 +1,11 @@
 "use client";
+import AdminLayout from "@/components/admin/AdminLayout";
 
-import React, { useState } from "react";
-import Sidebar from "@/components/admin/Sidebar";
-import Navbar from "@/components/admin/Navbar";
-import DashboardPage from "@/components/admin/DashboardPage";
-import CabangPage from "@/components/admin/CabangPage";
-import ActionPlanPage from "@/components/admin/ActionPlanPage";
-import FeedbackPage from "@/components/admin/FeedbackPage";
-import UserPage from "@/components/admin/UserPage";
-import SubActionPlanPage from "@/components/admin/SubActionPlanPage";
-
-export default function AdminPage() {
-  const [active, setActive] = useState("Dashboard");
-  const [showSidebar, setShowSidebar] = useState(false);
-
-  const toggleSidebar = () => setShowSidebar(!showSidebar);
-
+export default function AdminDashboard() {
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar Desktop */}
-      <div className="hidden md:block">
-        <Sidebar active={active} setActive={setActive} />
-      </div>
-
-      {/* Sidebar Mobile */}
-      {showSidebar && (
-        <div className="fixed inset-0 z-50 flex">
-          <div className="w-64">
-            <Sidebar active={active} setActive={setActive} />
-          </div>
-          <div
-            className="flex-1 bg-black/50"
-            onClick={() => setShowSidebar(false)}
-          />
-        </div>
-      )}
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        <Navbar toggleSidebar={toggleSidebar} />
-        <main className="p-6 overflow-y-auto">
-          {active === "Dashboard" && <DashboardPage />}
-          {active === "Cabang" && <CabangPage />}
-          {active === "ActionPlan" && <ActionPlanPage />}
-          {active === "Sub ActionPlan" && <SubActionPlanPage />}
-          {active === "Feedback" && <FeedbackPage />}
-          {active === "User" && <UserPage />}
-        </main>
-      </div>
-    </div>
+    <AdminLayout>
+      <h1 className="text-2xl font-semibold mb-4">Admin Dashboard</h1>
+      <p>Ini konten dashboard...</p>
+    </AdminLayout>
   );
 }

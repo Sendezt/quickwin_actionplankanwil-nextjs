@@ -64,7 +64,7 @@ export default function AgendaTable() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/api/admin/sub/getsub",
+        "https://magangproject.vercel.app/api/admin/sub/getsub",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -88,7 +88,7 @@ export default function AgendaTable() {
   async function fetchActionPlans() {
     try {
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/api/actionplan"
+        "https://magangproject.vercel.app/api/actionplan"
       );
       if (!res.ok) throw new Error("Gagal fetch action plans");
 
@@ -112,7 +112,7 @@ export default function AgendaTable() {
       setIsSubmitting(true);
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/api/admin/sub/createsub",
+        "https://magangproject.vercel.app/api/api/admin/sub/createsub",
         {
           method: "POST",
           headers: {
@@ -154,7 +154,7 @@ export default function AgendaTable() {
       setSaving(true);
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `https://quickwin-jateng.vercel.app/api/api/admin/sub/updatesub/${editId}`,
+        `https://magangproject.vercel.app/api/api/admin/sub/updatesub/${editId}`,
         {
           method: "PUT",
           headers: {
@@ -184,7 +184,7 @@ export default function AgendaTable() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `https://quickwin-jateng.vercel.app/api/api/admin/sub/deletesub/${id}`,
+        `https://magangproject.vercel.app/api/api/admin/sub/deletesub/${id}`,
         {
           method: "DELETE",
           headers: {

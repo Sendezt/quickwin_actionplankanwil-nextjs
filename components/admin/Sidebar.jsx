@@ -11,18 +11,40 @@ import {
   Users,
   LogOut,
   ListTree,
+  Activity,
 } from "lucide-react";
 
-export default function Sidebar({ active, setActive }) {
+export default function Sidebar({ onNavigate, activePath }) {
   const [collapsed, setCollapsed] = useState(false);
 
   const menus = [
-    { name: "Dashboard", icon: <LayoutDashboard size={20} /> },
-    { name: "Cabang", icon: <Building2 size={20} /> },
-    { name: "ActionPlan", icon: <ListTodo size={20} /> },
-    { name: "Sub ActionPlan", icon: <ListTree size={20} /> },
-    { name: "Feedback", icon: <MessageSquare size={20} /> },
-    { name: "User", icon: <Users size={20} /> },
+    {
+      name: "Dashboard",
+      icon: <LayoutDashboard size={20} />,
+      path: "/admindashboard",
+    },
+    // { name: "Cabang", icon: <Building2 size={20} />, path: "/admincabang" },
+    {
+      name: "ActionPlan",
+      icon: <ListTodo size={20} />,
+      path: "/adminactionplan",
+    },
+    // {
+    //   name: "Sub ActionPlan",
+    //   icon: <ListTree size={20} />,
+    //   path: "/adminsubactionplan",
+    // },
+    // {
+    //   name: "Feedback",
+    //   icon: <MessageSquare size={20} />,
+    //   path: "/adminfeedback",
+    // },
+    // { name: "User", icon: <Users size={20} />, path: "/adminuser" },
+    // {
+    //   name: "Log Activity",
+    //   icon: <Activity size={20} />,
+    //   path: "/adminlogactivity",
+    // },
   ];
 
   const handleLogout = () => {
@@ -59,12 +81,12 @@ export default function Sidebar({ active, setActive }) {
         {menus.map((menu) => (
           <button
             key={menu.name}
-            onClick={() => setActive(menu.name)}
+            onClick={() => onNavigate(menu.path)}
             className={`flex items-center ${
               collapsed ? "justify-center" : "px-5"
             } py-3 w-full text-left rounded-md transition-all duration-200
             ${
-              active === menu.name
+              activePath === menu.path
                 ? "bg-blue-600 text-white font-medium shadow-md"
                 : "text-slate-300 hover:bg-slate-700 hover:text-white"
             }`}

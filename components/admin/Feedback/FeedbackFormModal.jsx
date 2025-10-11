@@ -1,4 +1,3 @@
-// components\feedback\FeedbackFormModal.jsx
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import {
@@ -12,6 +11,7 @@ import { jwtDecode } from "jwt-decode";
 
 export default function FeedbackFormModal({
   actionPlans,
+  cabangs, // ✅ diterima dari parent
   isOpen,
   onClose,
   onSubmit,
@@ -24,22 +24,23 @@ export default function FeedbackFormModal({
   const [subActionPlans, setSubActionPlans] = useState([]);
   const [loadingSub, setLoadingSub] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
-  const [cabangName, setCabangName] = useState("");
+  const [cabangId, setCabangId] = useState("");
 
   const resetForm = useCallback(() => {
     setActionPlanId("");
     setSubActionPlanId("");
     setTask("");
     setSubActionPlans([]);
+    setCabangId("");
   }, []);
 
-  // Ambil user info dari token saat modal terbuka
+  // Ambil user info dari token
   useEffect(() => {
     if (!isOpen) return;
     const token = localStorage.getItem("token");
     if (token) {
       try {
-        const decoded = jwtDecode(token); // jauh lebih simpel
+        const decoded = jwtDecode(token);
         setUserInfo(decoded);
       } catch (error) {
         console.error("Error decoding token:", error);
@@ -73,7 +74,6 @@ export default function FeedbackFormModal({
       );
 
       if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-
       const json = await res.json();
       setSubActionPlans(json.data || []);
     } catch (err) {
@@ -90,13 +90,13 @@ export default function FeedbackFormModal({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!actionPlanId || !task.trim()) return;
+    if (!cabangId || !actionPlanId || !task.trim()) return;
     if (subActionPlans.length > 0 && !subActionPlanId) return;
 
     onSubmit({
-      actionPlanId,
-      subActionPlanId: subActionPlanId || null,
+      cabangId: parseInt(cabangId),
+      actionPlanId: parseInt(actionPlanId),
+      subActionPlanId: subActionPlanId ? parseInt(subActionPlanId) : null,
       task: task.trim(),
       resetForm,
     });
@@ -117,6 +117,26 @@ export default function FeedbackFormModal({
           </DialogTitle>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Pilih Cabang */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Pilih Cabang *
+              </label>
+              <select
+                value={cabangId}
+                onChange={(e) => setCabangId(e.target.value)}
+                className="w-full rounded-lg border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              >
+                <option value="">Pilih Cabang</option>
+                {cabangs.map((cabang) => (
+                  <option key={cabang.id} value={cabang.id}>
+                    {cabang.nama}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Action Plan */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -197,6 +217,7 @@ export default function FeedbackFormModal({
                 type="submit"
                 disabled={
                   isCreating ||
+                  !cabangId ||
                   !actionPlanId ||
                   !task.trim() ||
                   (subActionPlans.length > 0 && !subActionPlanId)

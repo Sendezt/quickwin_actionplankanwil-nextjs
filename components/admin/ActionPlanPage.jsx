@@ -31,9 +31,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../ui/alert-dialog";
+} from "@/components/ui/alert-dialog";
+import { useRouter } from "next/navigation";
 
 export default function AgendaTable() {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [items, setItems] = useState([]);
@@ -47,13 +49,26 @@ export default function AgendaTable() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const pageSize = 8;
 
+  // Function to check token and redirect if not exists
+  const checkTokenAndRedirect = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/");
+      return false;
+    }
+    return true;
+  };
+
   async function fetchData() {
+    // Check token before fetching
+    if (!checkTokenAndRedirect()) return;
+
     setLoading(true);
     setError("");
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/admin/actionplan/getActionPlan",
+        "https://magangproject.vercel.app/api/admin/actionplan/getActionPlan",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -81,12 +96,16 @@ export default function AgendaTable() {
   // Create
   async function handleCreate(e) {
     e.preventDefault();
+
+    // Check token before creating
+    if (!checkTokenAndRedirect()) return;
+
     if (!newTitle.trim()) return;
     try {
       setIsSubmitting(true);
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/admin/actionplan/createActionPlan",
+        "https://magangproject.vercel.app/api/admin/actionplan/createActionPlan",
         {
           method: "POST",
           headers: {
@@ -111,6 +130,9 @@ export default function AgendaTable() {
 
   // Open dialog edit
   function handleOpenEdit(row) {
+    // Check token before editing
+    if (!checkTokenAndRedirect()) return;
+
     setEditId(row.id);
     setEditTitle(row.title);
     setOpen(true);
@@ -118,12 +140,15 @@ export default function AgendaTable() {
 
   // Update
   async function handleUpdate() {
+    // Check token before updating
+    if (!checkTokenAndRedirect()) return;
+
     if (!editId) return;
     try {
       setSaving(true);
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `https://quickwin-jateng.vercel.app/api/admin/actionplan/updateActionPlan/${editId}`,
+        `https://magangproject.vercel.app/api/admin/actionplan/updateActionPlan/${editId}`,
         {
           method: "PUT",
           headers: {
@@ -150,10 +175,13 @@ export default function AgendaTable() {
 
   // Delete
   async function handleDelete(id) {
+    // Check token before deleting
+    if (!checkTokenAndRedirect()) return;
+
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `https://quickwin-jateng.vercel.app/api/admin/actionplan/deleteActionPlan/${id}`,
+        `https://magangproject.vercel.app/api/admin/actionplan/deleteActionPlan/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -245,7 +273,7 @@ export default function AgendaTable() {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 type="submit"
-                disabled={isSubmitting || !newTitle.trim()} // ✅ fix pakai newTitle
+                disabled={isSubmitting || !newTitle.trim()}
                 className="h-11 px-6 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed shadow-sm"
               >
                 {isSubmitting ? (
@@ -270,16 +298,6 @@ export default function AgendaTable() {
           <CardTitle>Daftar Action Plan</CardTitle>
         </CardHeader>
         <CardContent>
-          {/* Form Create */}
-          {/* <div className="flex gap-2 mb-4">
-          <Input
-            placeholder="Judul baru..."
-            value={newTitle}
-            onChange={(e) => setNewTitle(e.target.value)}
-          />
-          <Button onClick={handleCreate}>Tambah</Button>
-        </div> */}
-
           {/* Search */}
           <div className="flex gap-2 mb-4">
             <Input

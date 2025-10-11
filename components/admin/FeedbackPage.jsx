@@ -1,6 +1,7 @@
+// components\admin\FeedbackPage.jsx
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,8 +22,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Edit, Trash2 } from "lucide-react";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
+import { Edit, Trash2, Plus } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
+
+import FeedbackFormModal from "@/components/admin/Feedback/FeedbackFormModal";
 
 export default function FeedbackPage() {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -32,10 +45,29 @@ export default function FeedbackPage() {
   const [formData, setFormData] = useState({ task: "", status: "" });
   const [saving, setSaving] = useState(false);
 
-  // Fetch data
-  const fetchFeedbacks = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+  const [actionPlans, setActionPlans] = useState([]);
+  const [cabangs, setCabangs] = useState([]);
+
+  // Fetch Cabang
+  const fetchCabangs = useCallback(async () => {
+    try {
+      const res = await fetch(
+        "https://magangproject.vercel.app/api/cabang/read"
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      setCabangs(data || []);
+    } catch (err) {
+      console.error("Gagal memuat cabang:", err);
+    }
+  }, []);
+
+  // Fetch feedbacks
+  const fetchFeedbacks = useCallback(() => {
     setLoading(true);
-    fetch("https://quickwin-jateng.vercel.app/api/admin/feedback/getalldata", {
+    fetch("https://magangproject.vercel.app/api/admin/feedback/getalldata", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -51,13 +83,29 @@ export default function FeedbackPage() {
         console.error("Error fetching feedbacks:", err);
         setLoading(false);
       });
-  };
+  }, []);
+
+  // Fetch action plans
+  const fetchActionPlans = useCallback(async () => {
+    try {
+      const res = await fetch(
+        "https://magangproject.vercel.app/api/actionplan"
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      setActionPlans(data || []);
+    } catch (err) {
+      console.error("Gagal memuat action plan:", err);
+    }
+  }, []);
 
   useEffect(() => {
     fetchFeedbacks();
-  }, []);
+    fetchActionPlans();
+    fetchCabangs();
+  }, [fetchFeedbacks, fetchActionPlans, fetchCabangs]);
 
-  // Open dialog for edit
+  // Edit handler
   const handleEdit = (fb) => {
     setEditingData(fb);
     setFormData({ task: fb.task, status: fb.status || "" });
@@ -70,7 +118,7 @@ export default function FeedbackPage() {
     try {
       setSaving(true);
       const res = await fetch(
-        `https://quickwin-jateng.vercel.app/api/admin/feedback/updatefeedback/${editingData.id}`,
+        `https://magangproject.vercel.app/api/admin/feedback/updatefeedback/${editingData.id}`,
         {
           method: "PUT",
           headers: {
@@ -97,7 +145,7 @@ export default function FeedbackPage() {
   const handleDelete = (id) => {
     if (!confirm("Yakin hapus feedback ini?")) return;
     fetch(
-      `https://quickwin-jateng.vercel.app/api/admin/feedback/deletedata/${id}`,
+      `https://magangproject.vercel.app/api/admin/feedback/deletedata/${id}`,
       {
         method: "DELETE",
         headers: {
@@ -112,7 +160,7 @@ export default function FeedbackPage() {
   // Clear all feedback
   const handleClearAll = () => {
     if (!confirm("Yakin hapus semua feedback?")) return;
-    fetch("https://quickwin-jateng.vercel.app/api/admin/feedback/clearfeedback", {
+    fetch("https://magangproject.vercel.app/api/admin/feedback/clearfeedback", {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -122,7 +170,43 @@ export default function FeedbackPage() {
       .catch((err) => console.error("Error clearing feedback:", err));
   };
 
-  // Helper format date
+  // Submit feedback baru
+  const handleCreateFeedback = async (formData) => {
+    setIsCreating(true);
+    try {
+      const res = await fetch(
+        "https://magangproject.vercel.app/api/admin/feedback/createfeedback",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            cabangId: formData.cabangId,
+            actionPlanId: formData.actionPlanId,
+            subActionPlanId: formData.subActionPlanId,
+            task: formData.task,
+          }),
+        }
+      );
+
+      const data = await res.json();
+      if (data.success) {
+        fetchFeedbacks();
+        setModalOpen(false);
+        formData.resetForm();
+      } else {
+        console.error("Gagal menyimpan feedback:", data);
+      }
+    } catch (err) {
+      console.error("Error create feedback:", err);
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  // Format tanggal
   const formatDate = (dateString) => {
     if (!dateString) return "-";
     const d = new Date(dateString);
@@ -132,7 +216,7 @@ export default function FeedbackPage() {
     });
   };
 
-  // Helper render badge status
+  // Render badge status
   const renderStatus = (status) => {
     if (status === "selesai") {
       return (
@@ -160,9 +244,17 @@ export default function FeedbackPage() {
       <CardContent>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">Manajemen Feedback</h2>
-          <Button variant="destructive" onClick={handleClearAll}>
-            Clear All
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={() => setModalOpen(true)}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              <Plus className="h-4 w-4 mr-2" /> Tambah Feedback
+            </Button>
+            <Button variant="destructive" onClick={handleClearAll}>
+              Clear All
+            </Button>
+          </div>
         </div>
 
         {loading ? (
@@ -172,37 +264,21 @@ export default function FeedbackPage() {
             <table className="w-full border-separate border-spacing-y-2 text-sm">
               <thead>
                 <tr className="bg-gray-100">
-                  <th className="px-6 py-3 text-left font-semibold text-gray-700 uppercase">
-                    No
-                  </th>
-                  <th className="px-6 py-3 text-left font-semibold text-gray-700 uppercase">
-                    Cabang
-                  </th>
-                  <th className="px-6 py-3 text-left font-semibold text-gray-700 uppercase">
-                    Action Plan
-                  </th>
-                  <th className="px-6 py-3 text-left font-semibold text-gray-700 uppercase">
-                    Task
-                  </th>
-                  <th className="px-6 py-3 text-left font-semibold text-gray-700 uppercase">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left font-semibold text-gray-700 uppercase">
-                    Proses
-                  </th>
-                  <th className="px-6 py-3 text-left font-semibold text-gray-700 uppercase">
-                    Selesai
-                  </th>
-                  <th className="px-6 py-3 text-left font-semibold text-gray-700 uppercase">
-                    Aksi
-                  </th>
+                  <th className="px-6 py-3 text-left">No</th>
+                  <th className="px-6 py-3 text-left">Cabang</th>
+                  <th className="px-6 py-3 text-left">Action Plan</th>
+                  <th className="px-6 py-3 text-left">Task</th>
+                  <th className="px-6 py-3 text-left">Status</th>
+                  <th className="px-6 py-3 text-left">Proses</th>
+                  <th className="px-6 py-3 text-left">Selesai</th>
+                  <th className="px-6 py-3 text-left">Aksi</th>
                 </tr>
               </thead>
               <tbody>
-                {feedbacks.map((fb,index) => (
+                {feedbacks.map((fb, index) => (
                   <tr
                     key={fb.id}
-                    className="bg-white shadow rounded hover:bg-gray-50 transition"
+                    className="bg-white shadow rounded hover:bg-gray-50"
                   >
                     <td className="px-6 py-3">{index + 1}</td>
                     <td className="px-6 py-3">{fb.cabang?.nama}</td>
@@ -228,31 +304,26 @@ export default function FeedbackPage() {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="border-gray-300 text-gray-600 hover:bg-red-50 hover:text-red-700 hover:border-red-300 transition-all duration-200"
+                            className="border-gray-300 text-gray-600 hover:bg-red-50 hover:text-red-700 hover:border-red-300"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </AlertDialogTrigger>
-                        <AlertDialogContent className="bg-white border border-gray-200">
+                        <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle className="text-gray-900">
+                            <AlertDialogTitle>
                               Konfirmasi Hapus
                             </AlertDialogTitle>
-                            <AlertDialogDescription className="text-gray-600">
-                              Yakin ingin menghapus cabang{" "}
-                              <strong className="text-gray-900">
-                                {fb.cabang?.nama}
-                              </strong>
-                              ? Tindakan ini tidak dapat dibatalkan.
+                            <AlertDialogDescription>
+                              Yakin ingin menghapus feedback dari{" "}
+                              <strong>{fb.cabang?.nama}</strong>?
                             </AlertDialogDescription>
                           </AlertDialogHeader>
-                          <AlertDialogFooter className="gap-2">
-                            <AlertDialogCancel className="border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
-                              Batal
-                            </AlertDialogCancel>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Batal</AlertDialogCancel>
                             <AlertDialogAction
-                              onClick={() => onDelete(user.id)}
-                              className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 transition-colors"
+                              onClick={() => handleDelete(fb.id)}
+                              className="bg-red-600 text-white hover:bg-red-700"
                             >
                               Hapus
                             </AlertDialogAction>
@@ -268,39 +339,43 @@ export default function FeedbackPage() {
         )}
       </CardContent>
 
+      {/* Modal Tambah Feedback */}
+      <FeedbackFormModal
+        actionPlans={actionPlans}
+        cabangs={cabangs}
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSubmit={handleCreateFeedback}
+        isCreating={isCreating}
+        selectedCabang={null}
+      />
+
       {/* Dialog Edit */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-xl font-semibold text-gray-900">
-              Edit Feedback
-            </DialogTitle>
-            <DialogDescription className="text-gray-600">
-              Perbarui informasi feedback
-            </DialogDescription>
+            <DialogTitle>Edit Feedback</DialogTitle>
+            <DialogDescription>Perbarui informasi feedback</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
-            <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700">Task</Label>
+            <div>
+              <Label>Task</Label>
               <Input
                 value={formData.task}
                 onChange={(e) =>
                   setFormData({ ...formData, task: e.target.value })
                 }
-                placeholder="Masukan Task"
               />
             </div>
-            <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700">
-                Status
-              </Label>
+            <div>
+              <Label>Status</Label>
               <Select
                 value={formData.status}
                 onValueChange={(val) =>
                   setFormData({ ...formData, status: val })
                 }
               >
-                <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-colors">
+                <SelectTrigger>
                   <SelectValue placeholder="Pilih status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -310,19 +385,11 @@ export default function FeedbackPage() {
               </Select>
             </div>
           </div>
-          <DialogFooter className="gap-2 pt-4">
-            <Button
-              variant="outline"
-              onClick={() => setOpen(false)}
-              className="border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
-            >
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpen(false)}>
               Batal
             </Button>
-            <Button
-              disabled={saving}
-              onClick={handleUpdate}
-              className="bg-blue-600 hover:bg-blue-700 text-white transition-colors focus:ring-blue-500"
-            >
+            <Button disabled={saving} onClick={handleUpdate}>
               {saving ? "Menyimpan..." : "Simpan"}
             </Button>
           </DialogFooter>
