@@ -355,9 +355,17 @@ export default function FeedbackPage() {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Edit Feedback</DialogTitle>
-            <DialogDescription>Perbarui informasi feedback</DialogDescription>
+            <DialogDescription>
+              {editingData?.status === "proses"
+                ? "Perbarui task atau unggah file untuk menyelesaikan feedback."
+                : editingData?.status === "selesai"
+                ? "Feedback telah selesai. Anda dapat mengedit task atau mengembalikannya ke status proses."
+                : "Perbarui informasi feedback."}
+            </DialogDescription>
           </DialogHeader>
+
           <div className="space-y-4">
+            {/* Edit Task */}
             <div>
               <Label>Task</Label>
               <Input
@@ -367,31 +375,160 @@ export default function FeedbackPage() {
                 }
               />
             </div>
-            <div>
-              <Label>Status</Label>
-              <Select
-                value={formData.status}
-                onValueChange={(val) =>
-                  setFormData({ ...formData, status: val })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Pilih status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="proses">Proses</SelectItem>
-                  <SelectItem value="selesai">Selesai</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+
+            {/* Jika status PROSES → tampilkan upload file */}
+            {editingData?.status === "proses" && (
+              <div>
+                <Label>Upload File Bukti</Label>
+                <Input
+                  type="file"
+                  accept="image/*,application/pdf"
+                  onChange={(e) =>
+                    setFormData({ ...formData, file: e.target.files[0] })
+                  }
+                />
+              </div>
+            )}
           </div>
-          <DialogFooter>
+
+          <DialogFooter className="flex flex-wrap justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => setOpen(false)}>
               Batal
             </Button>
-            <Button disabled={saving} onClick={handleUpdate}>
-              {saving ? "Menyimpan..." : "Simpan"}
-            </Button>
+
+            {/* Jika status SELESAI → tampilkan 2 tombol: Edit & Kembalikan */}
+            {editingData?.status === "selesai" ? (
+              <>
+                <Button
+                  disabled={saving}
+                  onClick={async () => {
+                    try {
+                      setSaving(true);
+                      const updateRes = await fetch(
+                        `https://magangproject.vercel.app/api/admin/feedback/updatefeedback/${editingData.id}`,
+                        {
+                          method: "PUT",
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem(
+                              "token"
+                            )}`,
+                          },
+                          body: JSON.stringify({ task: formData.task }),
+                        }
+                      );
+                      const result = await updateRes.json();
+                      if (!result.success) throw new Error(result.message);
+                      fetchFeedbacks();
+                      setOpen(false);
+                      setEditingData(null);
+                    } catch (err) {
+                      console.error("Error updating task:", err);
+                    } finally {
+                      setSaving(false);
+                    }
+                  }}
+                >
+                  {saving ? "Menyimpan..." : "Edit Task"}
+                </Button>
+
+                <Button
+                  variant="destructive"
+                  onClick={async () => {
+                    const confirmReset = confirm(
+                      "Apakah Anda yakin ingin mengembalikan feedback ini ke status 'proses'? File bukti akan dihapus."
+                    );
+                    if (!confirmReset) return;
+                    try {
+                      setSaving(true);
+                      const res = await fetch(
+                        `https://magangproject.vercel.app/api/admin/feedback/updatefeedback/${editingData.id}`,
+                        {
+                          method: "PUT",
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem(
+                              "token"
+                            )}`,
+                          },
+                          body: JSON.stringify({ status: "proses" }),
+                        }
+                      );
+                      const data = await res.json();
+                      if (data.success) {
+                        fetchFeedbacks();
+                        setOpen(false);
+                        setEditingData(null);
+                      }
+                    } catch (err) {
+                      console.error("Error reverting feedback:", err);
+                    } finally {
+                      setSaving(false);
+                    }
+                  }}
+                >
+                  Kembalikan ke Proses
+                </Button>
+              </>
+            ) : (
+              /* Jika status bukan selesai (misal proses atau pending) */
+              <Button
+                disabled={saving}
+                onClick={async () => {
+                  try {
+                    setSaving(true);
+
+                    // Jika ada file dan status proses → upload file
+                    if (formData.file && editingData?.status === "proses") {
+                      const fd = new FormData();
+                      fd.append("file", formData.file);
+
+                      const uploadRes = await fetch(
+                        `https://magangproject.vercel.app/api/admin/feedback/uploadfeedback/${editingData.id}`,
+                        {
+                          method: "POST",
+                          headers: {
+                            Authorization: `Bearer ${localStorage.getItem(
+                              "token"
+                            )}`,
+                          },
+                          body: fd,
+                        }
+                      );
+                      const result = await uploadRes.json();
+                      if (!result.success) throw new Error(result.message);
+                    } else {
+                      // Update task biasa
+                      const updateRes = await fetch(
+                        `https://magangproject.vercel.app/api/admin/feedback/updatefeedback/${editingData.id}`,
+                        {
+                          method: "PUT",
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem(
+                              "token"
+                            )}`,
+                          },
+                          body: JSON.stringify({ task: formData.task }),
+                        }
+                      );
+                      const result = await updateRes.json();
+                      if (!result.success) throw new Error(result.message);
+                    }
+
+                    fetchFeedbacks();
+                    setOpen(false);
+                    setEditingData(null);
+                  } catch (err) {
+                    console.error("Error saving feedback:", err);
+                  } finally {
+                    setSaving(false);
+                  }
+                }}
+              >
+                {saving ? "Menyimpan..." : "Simpan"}
+              </Button>
+            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>

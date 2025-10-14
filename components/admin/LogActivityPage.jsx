@@ -1,3 +1,4 @@
+// components\admin\LogActivityPage.jsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -13,6 +14,7 @@ import {
   Building2,
   User,
   icons,
+  CheckCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -29,6 +31,12 @@ const actionTypeConfig = {
     icon: Plus,
     category: "create",
   },
+  create_cabang: {
+    label: "Create cabang",
+    color: "bg-blue-100 text-blue-700",
+    icon: Plus,
+    category: "create",
+  },
   create_action_plan: {
     label: "Create Action Plan",
     color: "bg-blue-100 text-blue-700",
@@ -41,20 +49,44 @@ const actionTypeConfig = {
     icon: Plus,
     category: "create",
   },
+  create_user: {
+    label: "Create User",
+    color: "bg-blue-100 text-blue-700",
+    icon: Plus,
+    category: "create",
+  },
   edit_cabang: {
     label: "Edit Cabang",
     color: "bg-purple-100 text-purple-700",
     icon: Edit,
     category: "edit",
   },
-  edit_feedback: {
+  update_feedback: {
     label: "Edit Feedback",
     color: "bg-purple-100 text-purple-700",
     icon: Edit,
     category: "edit",
   },
-  edit_user: {
+  update_user: {
     label: "Edit User",
+    color: "bg-purple-100 text-purple-700",
+    icon: Edit,
+    category: "edit",
+  },
+  update_action_plan: {
+    label: "Edit Action Plan",
+    color: "bg-purple-100 text-purple-700",
+    icon: Edit,
+    category: "edit",
+  },
+  update_sub_action_plan: {
+    label: "Edit Sub Action Plan",
+    color: "bg-purple-100 text-purple-700",
+    icon: Edit,
+    category: "edit",
+  },
+  update_cabang: {
+    label: "Edit Cabang",
     color: "bg-purple-100 text-purple-700",
     icon: Edit,
     category: "edit",
@@ -65,6 +97,12 @@ const actionTypeConfig = {
     icon: Edit,
     category: "edit",
   },
+  selesaikan_feedback: {
+    label: "Feedback Selesai",
+    color: "bg-yellow-100 text-yellow-700",
+    icon: CheckCheck,
+    category: "complete",
+  },
   delete_user: {
     label: "Delete User",
     color: "bg-red-100 text-red-700",
@@ -73,6 +111,30 @@ const actionTypeConfig = {
   },
   delete_action_plan: {
     label: "Delete Action Plan",
+    color: "bg-red-100 text-red-700",
+    icon: Trash2,
+    category: "delete",
+  },
+  delete_sub_action_plan: {
+    label: "Delete Sub Action Plan",
+    color: "bg-red-100 text-red-700",
+    icon: Trash2,
+    category: "delete",
+  },
+  delete_cabang: {
+    label: "Delete Cabang",
+    color: "bg-red-100 text-red-700",
+    icon: Trash2,
+    category: "delete",
+  },
+  delete_feedback: {
+    label: "Delete Feedback",
+    color: "bg-red-100 text-red-700",
+    icon: Trash2,
+    category: "delete",
+  },
+  clear_feedback: {
+    label: "Clear Feedback",
     color: "bg-red-100 text-red-700",
     icon: Trash2,
     category: "delete",
@@ -153,6 +215,9 @@ export default function LogActivityContent() {
     delete: logs.filter(
       (log) => actionTypeConfig[log.action]?.category === "delete"
     ).length,
+    complete: logs.filter(
+      (log) => actionTypeConfig[log.action]?.category === "complete"
+    ).length,
   };
 
   if (loading) {
@@ -169,12 +234,18 @@ export default function LogActivityContent() {
   return (
     <div className="p-8 space-y-6">
       {/* Statistik */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
         {[
           { label: "Login", count: stats.login, color: "green", icon: LogIn },
           { label: "Create", count: stats.create, color: "blue", icon: Plus },
           { label: "Edit", count: stats.edit, color: "purple", icon: Edit },
           { label: "Delete", count: stats.delete, color: "red", icon: Trash2 },
+          {
+            label: "Complete",
+            count: stats.complete,
+            color: "yellow",
+            icon: CheckCheck,
+          },
         ].map((item, idx) => {
           const Icon = item.icon;
           return (
@@ -214,7 +285,7 @@ export default function LogActivityContent() {
             <div>
               <h3 className="text-xl font-bold text-gray-900">Log Aktivitas</h3>
               <p className="text-sm text-gray-600 mt-1">
-                Riwayat login, create, edit, dan delete dalam sistem
+                Riwayat login, create, edit, delete dan complete dalam sistem
               </p>
             </div>
 
@@ -246,6 +317,7 @@ export default function LogActivityContent() {
               <option value="create">Create</option>
               <option value="edit">Edit</option>
               <option value="delete">Delete</option>
+              <option value="complete">Complete</option>
             </select>
           </div>
         </div>

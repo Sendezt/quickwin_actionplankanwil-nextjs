@@ -51,7 +51,7 @@ export default function UserManagement() {
   const handleCreate = async (formData) => {
     try {
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/admin/admin/create",
+        "https://quickwin-jateng.vercel.app/api/admin/admin/createuser",
         {
           method: "POST",
           headers: {

@@ -40,7 +40,7 @@ import {
   SelectValue,
 } from "../ui/select";
 
-export default function AgendaTable() {
+export default function SubAgendaTable() {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [items, setItems] = useState([]);

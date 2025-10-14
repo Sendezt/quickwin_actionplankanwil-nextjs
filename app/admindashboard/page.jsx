@@ -1,5 +1,11 @@
-import AdminPage from "@/pages/admin-dashboard";
+"use client";
+import AdminLayout from "@/components/admin/AdminLayout";
+import { DashboardContent } from "@/components/admin/DashboardPage";
 
 export default function Page() {
-  return <AdminPage />;
+  return (
+    <AdminLayout>
+      <DashboardContent />
+    </AdminLayout>
+  );
 }
