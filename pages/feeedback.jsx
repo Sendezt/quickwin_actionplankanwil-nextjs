@@ -27,6 +27,14 @@ import FeedbackModal from "@/components/feedback/FeedbackModal";
 import FeedbackInfoModal from "@/components/feedback/FeedbackInfoModal";
 
 export default function FeedbackPage() {
+  const now = new Date();
+  const jakartaTime = new Date(
+    now.toLocaleString("en-US", { timeZone: "Asia/Jakarta" })
+  );
+  const currentDate = jakartaTime.getDate();
+
+  const forceButton = process.env.NEXT_PUBLIC_FORCE_FEEDBACK_BUTTON === "false";
+  const isAllowedDate = forceButton || (currentDate >= 25 && currentDate <= 28);
   // ✅ Get cabangId from URL using browser API
   const [cabangIdFromUrl, setCabangIdFromUrl] = useState(null);
 
@@ -273,18 +281,20 @@ export default function FeedbackPage() {
                 {isRefreshing ? "Refreshing..." : "Refresh"}
               </Button>
 
-              <Button
-                className={`transition-all duration-200 flex items-center gap-2 ${
-                  isLoggedIn
-                    ? "bg-blue-500 hover:bg-blue-600"
-                    : "bg-gray-500 hover:bg-gray-600"
-                }`}
-                onClick={handleTambahFeedbackClick}
-                disabled={isRefreshing}
-              >
-                {!isLoggedIn && <LogIn className="w-4 h-4" />}
-                Tambah Feedback
-              </Button>
+              {isAllowedDate && (
+                <Button
+                  className={`transition-all duration-200 flex items-center gap-2 ${
+                    isLoggedIn
+                      ? "bg-blue-500 hover:bg-blue-600"
+                      : "bg-gray-500 hover:bg-gray-600"
+                  }`}
+                  onClick={handleTambahFeedbackClick}
+                  disabled={isRefreshing}
+                >
+                  {!isLoggedIn && <LogIn className="w-4 h-4" />}
+                  Tambah Feedback
+                </Button>
+              )}
             </div>
 
             {/* Login status indicator */}
