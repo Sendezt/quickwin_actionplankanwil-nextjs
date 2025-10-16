@@ -145,6 +145,7 @@ export function AppSidebar(props) {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setIsLoggedIn(false);
     setTokenValid(false);
     router.push("/login");
@@ -280,7 +281,7 @@ export function AppSidebar(props) {
         {tokenValid ? (
           <Button
             variant="default"
-            className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white"
+            className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white cursor-pointer"
             onClick={handleLogout}
           >
             Logout
@@ -289,7 +290,7 @@ export function AppSidebar(props) {
           <Link href="/login" className="w-full">
             <Button
               variant="default"
-              className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+              className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
             >
               <LogIn className="h-4 w-4" />
               Login

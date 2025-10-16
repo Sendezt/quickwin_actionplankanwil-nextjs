@@ -1,28 +1,86 @@
-import { Bell, Search } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-
 import {
   Breadcrumb,
+  BreadcrumbList,
   BreadcrumbItem,
   BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+  BreadcrumbPage,
+} from "./ui/breadcrumb";
+import { Bell, Search } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { data } from "@/components/app-sidebar"; // ambil data menu
+import { data } from "@/components/app-sidebar";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 function Navbar() {
   const [show, setShow] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [query, setQuery] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [username, setUsername] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
   const pathname = usePathname();
+  const router = useRouter();
 
-  // cari breadcrumbs
+  const checkToken = () => {
+    const token = localStorage.getItem("token");
+    if (!token) return false;
+    try {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
+      );
+      const decoded = JSON.parse(jsonPayload);
+      const currentTime = Date.now() / 1000;
+      return decoded.exp > currentTime;
+    } catch {
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    const tokenValid = checkToken();
+    setLoggedIn(tokenValid);
+
+    if (tokenValid) {
+      const userData = JSON.parse(localStorage.getItem("user") || "{}");
+      setUsername(userData.username || "");
+      setAvatarUrl(userData.avatar || "");
+    }
+
+    const handleStorageChange = () => {
+      const valid = checkToken();
+      setLoggedIn(valid);
+      if (valid) {
+        const userData = JSON.parse(localStorage.getItem("user") || "{}");
+        setUsername(userData.username || "");
+        setAvatarUrl(userData.avatar || "");
+      } else {
+        setUsername("");
+        setAvatarUrl("");
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  const getInitials = (name) => {
+    if (!name) return "";
+    return name.slice(0, 2).toUpperCase();
+  };
+
+  // breadcrumbs (sama seperti sebelumnya)
   const getBreadcrumbs = () => {
     for (const item of data.navMain) {
       if (item.url === pathname) return [item];
@@ -42,7 +100,6 @@ function Navbar() {
   };
   const breadcrumbs = getBreadcrumbs();
 
-  // daftar extra pages yg tidak ada di sidebar
   const extraPrograms = [
     { title: "Quickwin Jateng", url: "/quickwin-jateng" },
     { title: "Quickwin Kanwil", url: "/quickwin-kanwil" },
@@ -50,27 +107,22 @@ function Navbar() {
     { title: "Quickwin Samsat", url: "/quickwin-samsat" },
   ];
 
-  // ambil semua program dari sidebar
   const allProgramsFromSidebar = data.navMain.flatMap((item) =>
     item.items ? item.items : [item]
   );
 
-  // gabungkan dengan extraPrograms
   const allPrograms = [...allProgramsFromSidebar, ...extraPrograms];
 
-  // filter sesuai query
   const filteredPrograms = query
     ? allPrograms.filter((p) =>
         p.title.toLowerCase().includes(query.toLowerCase())
       )
     : [];
 
-  // hide/show navbar on scroll
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      if (currentScrollY < lastScrollY) setShow(true);
-      if (currentScrollY > lastScrollY) setShow(false);
+      setShow(currentScrollY < lastScrollY || currentScrollY === 0);
       setLastScrollY(currentScrollY);
     };
     window.addEventListener("scroll", handleScroll);
@@ -109,8 +161,9 @@ function Navbar() {
         </Breadcrumb>
       </div>
 
-      {/* Right: Search */}
-      <div className="ml-auto flex items-center gap-2">
+      {/* Right: Search + User Avatar */}
+      <div className="ml-auto flex items-center gap-4">
+        {/* Search */}
         <div className="relative hidden md:block">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
@@ -121,7 +174,6 @@ function Navbar() {
             onChange={(e) => setQuery(e.target.value)}
           />
 
-          {/* Dropdown hasil pencarian */}
           {filteredPrograms.length > 0 && (
             <div className="absolute mt-1 w-full rounded-md border bg-white shadow-md z-50">
               {filteredPrograms.map((prog, idx) => (
@@ -137,6 +189,26 @@ function Navbar() {
             </div>
           )}
         </div>
+
+        {/* User Avatar */}
+        {loggedIn && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button onClick={() => router.push("/userdetail")}>
+                <Avatar className="w-10 h-10 cursor-pointer">
+                  {avatarUrl ? (
+                    <AvatarImage src={avatarUrl} alt="User Avatar" />
+                  ) : (
+                    <AvatarFallback>{getInitials(username)}</AvatarFallback>
+                  )}
+                </Avatar>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" className="text-sm">
+              {username}
+            </TooltipContent>
+          </Tooltip>
+        )}
       </div>
     </header>
   );
