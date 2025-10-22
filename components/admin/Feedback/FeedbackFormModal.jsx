@@ -64,7 +64,7 @@ export default function FeedbackFormModal({
       }
 
       const res = await fetch(
-        `https://magangproject.vercel.app/api/admin/sub/getsub?actionPlanId=${actionPlanId}`,
+        `https://quickwin-jateng.vercel.app/api/admin/sub/getsub?actionPlanId=${actionPlanId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -113,7 +113,7 @@ export default function FeedbackFormModal({
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <DialogPanel className="w-full max-w-md rounded-2xl bg-white p-6 shadow-lg">
           <DialogTitle className="text-lg font-semibold mb-4">
-            Tambah Feedback - {cabangDisplayName}
+            Tambah Feedback
           </DialogTitle>
 
           <form onSubmit={handleSubmit} className="space-y-4">

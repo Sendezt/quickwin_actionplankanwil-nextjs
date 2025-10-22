@@ -30,7 +30,7 @@ const API_ENDPOINTS = {
   table4: `${API_BASE_URL}/sheet9/getsheet9table4`,
   breakdown: `${API_BASE_URL}/sheet9/getsheet9card`,
   range: `${API_BASE_URL}/sheet9/getRange-sheet9`,
-  feedback: "https://magangproject.vercel.app/api/feedback/read",
+  feedback: "https://quickwin-jateng.vercel.app/api/feedback/read",
 };
 
 const SCORE_CONFIGS = [

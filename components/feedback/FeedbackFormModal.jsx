@@ -37,10 +37,17 @@ export default function FeedbackFormModal({
   useEffect(() => {
     if (!isOpen) return;
     const token = localStorage.getItem("token");
-    if (token) {
+    const userData = localStorage.getItem("user");
+    if (token && userData) {
       try {
         const decoded = jwtDecode(token); // jauh lebih simpel
-        setUserInfo(decoded);
+        const parsedUser = JSON.parse(userData);
+
+        setUserInfo({
+          ...decoded,
+          cabangNama: parsedUser.cabang?.nama || " ",
+          cabangId: parsedUser.cabang?.id || decoded.cabangId,
+        });
       } catch (error) {
         console.error("Error decoding token:", error);
       }
@@ -63,7 +70,7 @@ export default function FeedbackFormModal({
       }
 
       const res = await fetch(
-        `https://magangproject.vercel.app/api/admin/sub/getsub?actionPlanId=${actionPlanId}`,
+        `https://quickwin-jateng.vercel.app/api/admin/sub/getsub?actionPlanId=${actionPlanId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -104,7 +111,7 @@ export default function FeedbackFormModal({
 
   const cabangDisplayName =
     selectedCabang?.nama ||
-    (userInfo ? `Cabang ID: ${userInfo.cabangId}` : "Cabang Anda");
+    (userInfo?.cabangNama ? `Cabang ${userInfo.cabangNama}` : "Cabang Anda");
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">

@@ -68,7 +68,7 @@ export default function AgendaTable() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "https://magangproject.vercel.app/api/admin/actionplan/getActionPlan",
+        "https://quickwin-jateng.vercel.app/api/admin/actionplan/getActionPlan",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -105,7 +105,7 @@ export default function AgendaTable() {
       setIsSubmitting(true);
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "https://magangproject.vercel.app/api/admin/actionplan/createActionPlan",
+        "https://quickwin-jateng.vercel.app/api/admin/actionplan/createActionPlan",
         {
           method: "POST",
           headers: {
@@ -148,7 +148,7 @@ export default function AgendaTable() {
       setSaving(true);
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `https://magangproject.vercel.app/api/admin/actionplan/updateActionPlan/${editId}`,
+        `https://quickwin-jateng.vercel.app/api/admin/actionplan/updateActionPlan/${editId}`,
         {
           method: "PUT",
           headers: {
@@ -181,7 +181,7 @@ export default function AgendaTable() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `https://magangproject.vercel.app/api/admin/actionplan/deleteActionPlan/${id}`,
+        `https://quickwin-jateng.vercel.app/api/admin/actionplan/deleteActionPlan/${id}`,
         {
           method: "DELETE",
           headers: {

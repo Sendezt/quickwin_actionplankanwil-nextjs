@@ -33,10 +33,11 @@ export function FeedbackTable({
       <div className="overflow-x-auto border border-gray-200 rounded-lg shadow-sm bg-white">
         <table className="w-full text-sm table-fixed">
           <colgroup>
-            <col />
-            <col />
-            <col />
-            <col />
+            <col className="w-[15%]" />
+            <col className="w-[15%]" />
+            <col className="w-[40%]" />
+            <col className="w-[10%]" />
+            <col className="w-[15%]" />
           </colgroup>
           <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
             <tr>
@@ -93,11 +94,13 @@ export function FeedbackTable({
 
                   {/* Task / Feedback */}
                   <td className="p-4 border-r border-gray-100">
-                    <div className="text-gray-700 break-words">{fb.task}</div>
+                    <div className="text-gray-700 break-words max-h-20 overflow-y-auto line-clamp-5">
+                      {fb.task}
+                    </div>
                   </td>
 
                   {/* Status */}
-                  <td className="p-4 border-r border-gray-100">
+                  <td className="p-4 border-r border-gray-100 text-center">
                     <span
                       className={`
                         px-3 py-1 rounded-full text-xs font-medium transition-all duration-200
@@ -115,7 +118,7 @@ export function FeedbackTable({
                   </td>
 
                   {/* Aksi */}
-                  <td className="p-4 text-right">
+                  <td className="p-4 text-left">
                     {/* ✅ Logika baru: */}
                     {fb.status !== "selesai" && isOwnCabang ? (
                       // Tampilkan tombol "Tandai Selesai" hanya untuk cabang sendiri

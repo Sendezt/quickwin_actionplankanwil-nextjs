@@ -56,7 +56,7 @@ export default function MenuLima() {
         setCabangData(json3);
 
         const res4 = await fetch(
-          "https://magangproject.vercel.app/api/feedback/read"
+          "https://quickwin-jateng.vercel.app/api/feedback/read"
         );
         const json4 = await res4.json();
         setFeedbackData(json4);

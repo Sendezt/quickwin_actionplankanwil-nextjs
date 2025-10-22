@@ -41,7 +41,7 @@ export default function UserDetailPage() {
         const userId = parsedUser.id;
 
         const response = await fetch(
-          `https://magangproject.vercel.app/api/admin/admin/getuser/${userId}`,
+          `https://quickwin-jateng.vercel.app/api/admin/admin/getuser/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

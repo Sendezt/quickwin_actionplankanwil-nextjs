@@ -82,7 +82,7 @@ export default function MenuTen() {
     const fetchFeedback = async () => {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/feedback/read"
+          "https://quickwin-jateng.vercel.app/api/feedback/read"
         );
         const data = await res.json();
         setFeedbackData(data);

@@ -41,7 +41,7 @@ export default function MenuTujuh() {
     const fetchFeedbackData = async () => {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/feedback/read"
+          "https://quickwin-jateng.vercel.app/api/feedback/read"
         );
         const json = await res.json();
         setFeedbackData(json);

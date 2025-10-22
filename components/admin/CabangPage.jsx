@@ -11,7 +11,7 @@ import LoadingSkeleton from "@/components/admin/Cabang/LoadingSkeleton";
 import AlertMessage from "@/components/admin/Cabang/AlertMessage";
 
 export default function CabangPage() {
-  const baseURL = "https://magangproject.vercel.app";
+  const baseURL = "https://quickwin-jateng.vercel.app";
   const [cabangs, setCabangs] = useState([]);
   const [filteredCabangs, setFilteredCabangs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,9 +29,21 @@ export default function CabangPage() {
 
   const [deletingId, setDeletingId] = useState(null);
 
+  const [token, setToken] = useState(null);
+
+  // Ambil token setelah komponen mount di browser
   useEffect(() => {
-    fetchCabangs();
+    const storedToken = localStorage.getItem("token");
+    if (!storedToken) {
+      setError("Anda harus login untuk mengakses halaman ini");
+      return;
+    }
+    setToken(storedToken);
   }, []);
+
+  useEffect(() => {
+    if (token) fetchCabangs();
+  }, [token]);
 
   useEffect(() => {
     if (searchTerm) {
@@ -48,7 +60,12 @@ export default function CabangPage() {
   async function fetchCabangs() {
     setLoading(true);
     try {
-      const res = await fetch(`${baseURL}/api/admin/cabang/getcabang`);
+      const res = await fetch(`${baseURL}/api/admin/cabang/getcabang`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await res.json();
       if (data.success) setCabangs(data.cabangs);
       else setError("Gagal memuat data cabang");
@@ -66,7 +83,10 @@ export default function CabangPage() {
     try {
       const res = await fetch(`${baseURL}/api/admin/cabang/createcabang`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({ nama: newCabang.trim() }),
       });
       const data = await res.json();
@@ -74,10 +94,7 @@ export default function CabangPage() {
         setNewCabang("");
         setSuccess("Cabang berhasil ditambahkan!");
         fetchCabangs();
-
-        setTimeout(() => {
-          setSuccess("");
-        }, 5000);
+        setTimeout(() => setSuccess(""), 5000);
       } else setError(data.message || "Gagal menambahkan cabang");
     } catch {
       setError("Terjadi kesalahan saat menambahkan cabang");
@@ -88,7 +105,12 @@ export default function CabangPage() {
 
   async function openEditModal(id) {
     try {
-      const res = await fetch(`${baseURL}/api/admin/cabang/getcabang/${id}`);
+      const res = await fetch(`${baseURL}/api/admin/cabang/getcabang/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await res.json();
       if (data.success) {
         setEditCabang(data.cabang);
@@ -109,7 +131,10 @@ export default function CabangPage() {
         `${baseURL}/api/admin/cabang/updatecabang/${editCabang.id}`,
         {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
           body: JSON.stringify({ nama: editNama.trim() }),
         }
       );
@@ -133,6 +158,9 @@ export default function CabangPage() {
         `${baseURL}/api/admin/cabang/deletecabang/${id}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       const data = await res.json();
@@ -149,7 +177,6 @@ export default function CabangPage() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      {/* Header */}
       <div className="flex items-center gap-3">
         <div className="p-2 bg-blue-100 rounded-lg">
           <Building2 className="h-6 w-6 text-blue-600" />
@@ -162,7 +189,6 @@ export default function CabangPage() {
 
       <AlertMessage error={error} success={success} />
 
-      {/* Add Cabang */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
@@ -180,7 +206,6 @@ export default function CabangPage() {
         </CardContent>
       </Card>
 
-      {/* List Cabang */}
       <Card>
         <CardHeader>
           <div className="flex justify-between">
@@ -210,7 +235,6 @@ export default function CabangPage() {
         </CardContent>
       </Card>
 
-      {/* Modal Edit */}
       <EditCabangModal
         open={openEdit}
         setOpen={setOpenEdit}

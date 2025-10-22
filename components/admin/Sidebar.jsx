@@ -9,10 +9,9 @@ import {
   ListTodo,
   MessageSquare,
   Users,
-  LogOut,
-  LogIn,
   ListTree,
   Activity,
+  LogOut,
 } from "lucide-react";
 
 export default function Sidebar({ onNavigate, activePath }) {
@@ -79,11 +78,7 @@ export default function Sidebar({ onNavigate, activePath }) {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setIsAuthenticated(false);
-    window.location.href = "/";
-  };
-
-  const handleLogin = () => {
+    // Langsung redirect tanpa mengubah state
     window.location.href = "/";
   };
 
@@ -133,41 +128,20 @@ export default function Sidebar({ onNavigate, activePath }) {
         ))}
       </nav>
 
-      {/* Login / Logout */}
-      <div className="p-4 border-t border-[#2a2b32]">
-        {checkingAuth ? (
-          <div
-            className={`flex items-center ${
-              collapsed ? "justify-center" : "pl-4"
-            } py-3 w-full bg-[#2a2b32] rounded-lg`}
-          >
-            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-            {!collapsed && (
-              <span className="ml-3 text-gray-400 text-sm">Checking...</span>
-            )}
-          </div>
-        ) : isAuthenticated ? (
+      {/* Logout */}
+      {isAuthenticated && !checkingAuth && (
+        <div className="p-4 border-t border-[#2a2b32]">
           <button
             onClick={handleLogout}
-            className={`flex items-center gap-3 ${
+            className={`flex items-center gap-3 cursor-pointer ${
               collapsed ? "justify-center" : "pl-4"
             } py-3 w-full bg-red-600 hover:bg-red-700 rounded-lg transition-all duration-200 font-medium`}
           >
             <LogOut size={20} />
             {!collapsed && <span>Logout</span>}
           </button>
-        ) : (
-          <button
-            onClick={handleLogin}
-            className={`flex items-center gap-3 ${
-              collapsed ? "justify-center" : "pl-4"
-            } py-3 w-full bg-green-600 hover:bg-green-700 rounded-lg transition-all duration-200 font-medium`}
-          >
-            <LogIn size={20} />
-            {!collapsed && <span>Login</span>}
-          </button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
