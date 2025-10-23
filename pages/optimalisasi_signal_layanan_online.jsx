@@ -10,7 +10,7 @@ import Navbar from "@/components/navbar";
 import { FeedbackModal } from "@/components/optimalisasisignal/FeedbackModal";
 
 // Import custom hook
-import { useMenuTujuhData } from "@/hooks/signalonline/useDataMenuTujuh";
+import { useDataMenuTujuh } from "@/hooks/signalonline/useDataMenuTujuh";
 
 // Import card components
 import { PeriodCard } from "@/components/optimalisasisignal/cards/PeriodCard";
@@ -29,7 +29,7 @@ import { SkeletonTable } from "@/components/optimalisasisignal/skeletons/Skeleto
 import NotAuthenticatedPage from "@/components/not-Authenticate";
 
 export default function MenuTujuh() {
-  const { table1Data, rangeData, feedbackData, loading } = useMenuTujuhData();
+  const { table1Data, rangeData, feedbackData, loading } = useDataMenuTujuh();
   const [openFeedbackModal, setOpenFeedbackModal] = useState(false);
 
   const skorKanwil = table1Data?.summary?.[8] ?? "?";

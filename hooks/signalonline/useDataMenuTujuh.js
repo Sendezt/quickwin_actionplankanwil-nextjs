@@ -1,7 +1,7 @@
 // hooks\signalonline\useDataMenuTujuh.js
 import { useState, useEffect } from "react";
 
-export const useMenuTujuhData = () => {
+export const useDataMenuTujuh = () => {
   const [state, setState] = useState({
     table1Data: null,
     rangeData: null,
