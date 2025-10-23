@@ -6,7 +6,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { ChartBarMultiple } from "@/components/implementasiuuhkpd/chart-bar-multiple";
 import Navbar from "@/components/navbar";
-import { useDashboardData } from "@/hooks/implementasiuuhkpd/useDashboardData";
+import { useDashboardData } from "@/hooks/implementasiuuhkpd/useDataMenuSatu";
 import { DashboardStats } from "@/components/implementasiuuhkpd/DashboardStats";
 import { DashboardTable } from "@/components/implementasiuuhkpd/DashboardTable";
 import { FeedbackModal } from "@/components/implementasiuuhkpd/feedback/FeedbackModal";

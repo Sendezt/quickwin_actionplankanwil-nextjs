@@ -9,7 +9,7 @@ import TableCardWrapper from "@/components/rekonsiliasidata/Table1";
 import TableCardFeedback from "@/components/rekonsiliasidata/FeedbackCard";
 
 // Import custom hooks
-import { useDataFetching } from "@/hooks/rekonsiliasidata/useDataFetching";
+import { useDataFetching } from "@/hooks/rekonsiliasidata/useDataMenuEmpat";
 
 // Import card components
 import { PeriodCard } from "@/components/rekonsiliasidata/cards/PeriodCard";
