@@ -1,0 +1,61 @@
+// hooks\komitmenstakeholder\useDataMenuSembilan.js
+import { useState, useEffect } from "react";
+
+const API_BASE_URL = "https://quickwin-jateng.vercel.app/api";
+
+const API_ENDPOINTS = {
+  table1: `${API_BASE_URL}/sheet9/getsheet9table1`,
+  table2: `${API_BASE_URL}/sheet9/getsheet9table2`,
+  table3: `${API_BASE_URL}/sheet9/getsheet9table3`,
+  table4: `${API_BASE_URL}/sheet9/getsheet9table4`,
+  breakdown: `${API_BASE_URL}/sheet9/getsheet9card`,
+  range: `${API_BASE_URL}/sheet9/getRange-sheet9`,
+  feedback: `${API_BASE_URL}/feedback/read`,
+};
+
+export const useDataMenuSembilan = () => {
+  const [state, setState] = useState({
+    table1Data: null,
+    table2Data: null,
+    table3Data: null,
+    table4Data: null,
+    breakdownData: null,
+    rangeData: null,
+    feedback: null,
+    loading: true,
+  });
+
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        const [table1, table2, table3, table4, breakdown, range, feedback] = await Promise.all([
+          fetch(API_ENDPOINTS.table1).then(r => r.json()),
+          fetch(API_ENDPOINTS.table2).then(r => r.json()),
+          fetch(API_ENDPOINTS.table3).then(r => r.json()),
+          fetch(API_ENDPOINTS.table4).then(r => r.json()),
+          fetch(API_ENDPOINTS.breakdown).then(r => r.json()),
+          fetch(API_ENDPOINTS.range).then(r => r.json()),
+          fetch(API_ENDPOINTS.feedback).then(r => r.json()),
+        ]);
+
+        setState({
+          table1Data: table1,
+          table2Data: table2,
+          table3Data: table3,
+          table4Data: table4,
+          breakdownData: breakdown,
+          rangeData: range,
+          feedback: feedback,
+          loading: false,
+        });
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+        setState(prev => ({ ...prev, loading: false }));
+      }
+    };
+
+    fetchAllData();
+  }, []);
+
+  return state;
+};
