@@ -12,6 +12,8 @@ import {
   FormulaCard,
 } from "@/components/operasigabungan/InfoCard";
 import { TableSections } from "@/components/operasigabungan/TableSections";
+import NotAuthenticatedPage from "@/components/not-Authenticate";
+import { useEffect, useState } from "react";
 
 export default function MenuTiga() {
   const {
@@ -27,6 +29,46 @@ export default function MenuTiga() {
     targetSkor,
     feedback,
   } = useDataMenuTiga();
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+
+  useEffect(() => {
+    const storeduser = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+
+    setTimeout(() => {
+      if (!storeduser || !token) {
+        setIsAuthenticated(false);
+        return;
+      }
+
+      setIsAuthenticated(true);
+
+      const user = JSON.parse(storeduser);
+      const logData = {
+        adminId: user.id,
+        action: "visit",
+        description: `${user.username} mengunjungi halaman Operasi Gabungan`,
+      };
+      fetch("https://magangproject.vercel.app/api/logs/createlog", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(logData),
+      }).catch((err) => console.error("Gagal mengirim log: ", err));
+    }, 800);
+  }, []);
+
+  if (isAuthenticated == null) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-gray-600 text-lg mt-4">Memerikasa Auntentikasi...</p>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <NotAuthenticatedPage />;
+  }
 
   return (
     <SidebarProvider defaultOpen={true}>

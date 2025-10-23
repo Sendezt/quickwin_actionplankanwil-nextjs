@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -6,7 +8,7 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from "./ui/breadcrumb";
-import { Bell, Search } from "lucide-react";
+import { Bell, Search, LayoutDashboard } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
@@ -14,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { data } from "@/components/app-sidebar";
-
+import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
@@ -25,6 +27,7 @@ function Navbar() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
+  const [role, setRole] = useState(""); // 🔹 Tambah state role
   const pathname = usePathname();
   const router = useRouter();
 
@@ -56,6 +59,7 @@ function Navbar() {
       const userData = JSON.parse(localStorage.getItem("user") || "{}");
       setUsername(userData.username || "");
       setAvatarUrl(userData.avatar || "");
+      setRole(userData.role || ""); // 🔹 Ambil role dari userData
     }
 
     const handleStorageChange = () => {
@@ -65,9 +69,11 @@ function Navbar() {
         const userData = JSON.parse(localStorage.getItem("user") || "{}");
         setUsername(userData.username || "");
         setAvatarUrl(userData.avatar || "");
+        setRole(userData.role || ""); // 🔹 Update role jika berubah
       } else {
         setUsername("");
         setAvatarUrl("");
+        setRole("");
       }
     };
 
@@ -80,7 +86,7 @@ function Navbar() {
     return name.slice(0, 2).toUpperCase();
   };
 
-  // breadcrumbs (sama seperti sebelumnya)
+  // Breadcrumbs
   const getBreadcrumbs = () => {
     for (const item of data.navMain) {
       if (item.url === pathname) return [item];
@@ -100,6 +106,7 @@ function Navbar() {
   };
   const breadcrumbs = getBreadcrumbs();
 
+  // Search filter
   const extraPrograms = [
     { title: "Quickwin Jateng", url: "/quickwin-jateng" },
     { title: "Quickwin Kanwil", url: "/quickwin-kanwil" },
@@ -161,7 +168,7 @@ function Navbar() {
         </Breadcrumb>
       </div>
 
-      {/* Right: Search + User Avatar */}
+      {/* Right: Search + Admin Button (conditional) + Avatar */}
       <div className="ml-auto flex items-center gap-4">
         {/* Search */}
         <div className="relative hidden md:block">
@@ -173,7 +180,6 @@ function Navbar() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-
           {filteredPrograms.length > 0 && (
             <div className="absolute mt-1 w-full rounded-md border bg-white shadow-md z-50">
               {filteredPrograms.map((prog, idx) => (
@@ -190,7 +196,26 @@ function Navbar() {
           )}
         </div>
 
-        {/* User Avatar */}
+        {/* 🔹 Tampilkan tombol admin hanya jika role = Admin */}
+        {loggedIn && role === "Admin" && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hover:bg-gray-100 cursor-pointer"
+                onClick={() => router.push("/admindashboard")}
+              >
+                <LayoutDashboard className="h-6 w-6 text-gray-700" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" className="text-sm">
+              Ke Admin Dashboard
+            </TooltipContent>
+          </Tooltip>
+        )}
+
+        {/* Avatar User */}
         {loggedIn && (
           <Tooltip>
             <TooltipTrigger asChild>

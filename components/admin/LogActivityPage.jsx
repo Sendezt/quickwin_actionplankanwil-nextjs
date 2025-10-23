@@ -13,7 +13,7 @@ import {
   Trash2,
   Building2,
   User,
-  icons,
+  Monitor,
   CheckCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -139,6 +139,12 @@ const actionTypeConfig = {
     icon: Trash2,
     category: "delete",
   },
+  visit: {
+    label: "visit",
+    color: "bg-cyan-100 text-blue-700",
+    icon: Monitor,
+    category: "visit",
+  },
 };
 
 const formatDate = (isoString) => {
@@ -218,6 +224,9 @@ export default function LogActivityContent() {
     complete: logs.filter(
       (log) => actionTypeConfig[log.action]?.category === "complete"
     ).length,
+    visit: logs.filter(
+      (log) => actionTypeConfig[log.action]?.category === "visit"
+    ).length,
   };
 
   if (loading) {
@@ -245,6 +254,12 @@ export default function LogActivityContent() {
             count: stats.complete,
             color: "yellow",
             icon: CheckCheck,
+          },
+          {
+            label: "visit",
+            count: stats.visit,
+            color: "cyan",
+            icon: Monitor,
           },
         ].map((item, idx) => {
           const Icon = item.icon;
@@ -318,6 +333,7 @@ export default function LogActivityContent() {
               <option value="edit">Edit</option>
               <option value="delete">Delete</option>
               <option value="complete">Complete</option>
+              <option value="visit">Visit</option>
             </select>
           </div>
         </div>

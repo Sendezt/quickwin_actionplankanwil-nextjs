@@ -102,10 +102,6 @@ export default function FeedbackFormModal({
     });
   };
 
-  const cabangDisplayName =
-    selectedCabang?.nama ||
-    (userInfo ? `Cabang ID: ${userInfo.cabangId}` : "Cabang Anda");
-
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <DialogBackdrop className="fixed inset-0 bg-black/30" />

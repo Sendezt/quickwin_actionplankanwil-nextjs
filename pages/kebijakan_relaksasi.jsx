@@ -17,6 +17,7 @@ import {
 
 // Custom hooks
 import { useMenuDuaData } from "../hooks/kebijakanrelaksasi/useDataMenuDua";
+import NotAuthenticatedPage from "@/components/not-Authenticate";
 
 export default function MenuDua() {
   const {
@@ -27,6 +28,46 @@ export default function MenuDua() {
     loading,
     feedbackData,
   } = useMenuDuaData();
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+
+    setTimeout(() => {
+      if (!storedUser || !token) {
+        setIsAuthenticated(false);
+        return;
+      }
+
+      setIsAuthenticated(true);
+
+      const user = JSON.parse(storedUser);
+      const logData = {
+        adminId: user.id,
+        action: "visit",
+        description: `${user.username} mengunjungi halaman Kebijakan Relaksasi`,
+      };
+      fetch("https://magangproject.vercel.app/api/logs/createlog", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(logData),
+      }).catch((err) => console.error("Gagal mengirim log:", err));
+    }, 800);
+  }, []);
+
+  if (isAuthenticated === null) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-gray-600 text-lg mt-4">Memeriksa autentikasi...</p>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <NotAuthenticatedPage />;
+  }
 
   return (
     <SidebarProvider defaultOpen={true}>

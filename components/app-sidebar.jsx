@@ -57,9 +57,9 @@ export const data = {
       items: [
         { title: "SENGKUYUNG", url: "/sengkuyung" },
         { title: "PROMITRA", url: "/404" },
-        { title: "OPSGAB", url: "/404" },
-        { title: "SOWAN", url: "/404" },
-        { title: "OK DEALER!", url: "/404" },
+        // { title: "OPSGAB", url: "/404" },
+        // { title: "SOWAN", url: "/404" },
+        // { title: "OK DEALER!", url: "/404" },
       ],
     },
     {

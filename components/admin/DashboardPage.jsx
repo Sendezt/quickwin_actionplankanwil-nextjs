@@ -220,28 +220,41 @@ export function DashboardContent() {
 
         const response = await fetch(
           "https://magangproject.vercel.app/api/logs/getLog",
-          { headers: { Authorization: `Bearear ${token}` } }
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
-        const result = await response.json();
 
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("Logs API Response:", result); // Debug log
+
+        // ✅ PERBAIKAN: Handle response structure yang benar
         if (result.success && Array.isArray(result.data)) {
           const sorted = result.data
-            .sort(
-              (a, b) =>
-                new Date(b.createdAt).getTime() -
-                new Date(a.createdAt).getTime()
-            )
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
             .slice(0, 5);
 
+          console.log("Sorted activities:", sorted); // Debug log
           setActivities(sorted);
         } else {
+          console.warn("Format data logs tidak valid:", result);
           setActivities([]);
         }
       } catch (error) {
-        console.error("Gagal mengambil log aktivitas", error);
+        console.error("Gagal mengambil log aktivitas:", error);
+        setActivities([]);
       }
     };
-  });
+
+    fetchLogs();
+  }, []); // ✅ Jangan lupa tambahkan dependency array
 
   useEffect(() => {
     const decodeJwt = (token) => {
@@ -316,6 +329,42 @@ export function DashboardContent() {
       }
     }
   }, []);
+
+  // Tambahkan fungsi ini sebelum return statement
+  const timeAgo = (date) => {
+    if (!date) return "Waktu tidak diketahui";
+
+    const now = new Date();
+    const past = new Date(date);
+    const diffInSeconds = Math.floor((now - past) / 1000);
+
+    if (diffInSeconds < 60) {
+      return `${diffInSeconds} detik yang lalu`;
+    }
+
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    if (diffInMinutes < 60) {
+      return `${diffInMinutes} menit yang lalu`;
+    }
+
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) {
+      return `${diffInHours} jam yang lalu`;
+    }
+
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays < 30) {
+      return `${diffInDays} hari yang lalu`;
+    }
+
+    const diffInMonths = Math.floor(diffInDays / 30);
+    if (diffInMonths < 12) {
+      return `${diffInMonths} bulan yang lalu`;
+    }
+
+    const diffInYears = Math.floor(diffInMonths / 12);
+    return `${diffInYears} tahun yang lalu`;
+  };
 
   return (
     <div className="p-8 space-y-6">
