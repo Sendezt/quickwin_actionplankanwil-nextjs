@@ -18,7 +18,7 @@ import {
   X,
   Loader2,
 } from "lucide-react";
-import { replaceFeedbackFile } from "@/lib/apifeedback"; // Sesuaikan path
+import { replaceFeedbackFile } from "@/hooks/feedback/apifeedback"; // Sesuaikan path
 
 export default function FeedbackInfoModal({
   open,

@@ -6,7 +6,7 @@ import {
   fetchActionPlans,
   createFeedback,
   updateFeedbackStatus,
-} from "@/lib/apifeedback";
+} from "@/hooks/feedback/apifeedback";
 
 export function useFeedbackData() {
   const [feedbacks, setFeedbacks] = useState([]);

@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { createFeedback, updateFeedbackStatus } from "@/lib/apifeedback";
+import {
+  createFeedback,
+  updateFeedbackStatus,
+} from "@/hooks/feedback/apifeedback";
 
 export function useFeedbackActions(loadData) {
   const [isCreating, setIsCreating] = useState(false);
