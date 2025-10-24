@@ -1,3 +1,4 @@
+// app\admindashboard\page.jsx
 "use client";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { DashboardContent } from "@/components/admin/DashboardPage";

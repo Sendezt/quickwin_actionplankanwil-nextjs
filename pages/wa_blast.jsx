@@ -1,92 +1,104 @@
+// ============ FILE: pages/MenuDuaBelas.jsx (MAIN FILE) ============
 "use client";
 
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import {
-  CalendarDays,
-  BarChart3,
-  FileText,
-  LandPlot,
-  Radical,
-} from "lucide-react";
 import Navbar from "@/components/navbar";
 import RenderTable from "@/components/wablast/RenderTable";
 import RenderTableArray from "@/components/wablast/RenderTableArray";
-import { FeedbackModal } from "@/components/wablast/feedback/FeedbackModal";
 import RenderTableFeedback from "@/components/wablast/RenderTableFeedback";
+import { FeedbackModal } from "@/components/wablast/feedback/FeedbackModal";
 
-export default function MenuTwelve() {
-  const [table1Data, setTable1Data] = useState(null);
-  const [table2Data, setTable2Data] = useState(null);
-  const [table3Data, setTable3Data] = useState(null);
-  const [table4Data, setTable4Data] = useState(null);
-  const [rangeData, setRangeData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [feedbackData, setFeedbackData] = useState([]);
+// Import custom hook
+import { useDataMenuDuabelas } from "@/hooks/wablast/useDataMenuDuaBelas";
+
+// Import card components
+import { PeriodCard } from "@/components/wablast/cards/PeriodCard";
+import { TotalScoreCard } from "@/components/wablast/cards/TotalScoreCard";
+import { ObjectCard } from "@/components/wablast/cards/ObjectCard";
+import { FormulaWaBlastCard } from "@/components/wablast/cards/FormulaWaBlastCard";
+import { TableCard } from "@/components/wablast/tables/TableCard";
+
+// Import loading components
+import { SkeletonTopSection } from "@/components/wablast/skeletons/SkeletonTopSection";
+import { SkeletonTableList } from "@/components/wablast/skeletons/SkeletonTableList";
+
+import NotAuthenticatedPage from "@/components/not-Authenticate";
+
+export default function MenuDuaBelas() {
+  const {
+    table1Data,
+    table2Data,
+    table3Data,
+    table4Data,
+    rangeData,
+    feedbackData,
+    loading,
+  } = useDataMenuDuabelas();
+
   const [modalOpen, setModalOpen] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res1 = await fetch(
-          "https://quickwin-jateng.vercel.app/api/sheet12/getsheet12table1"
-        );
-        setTable1Data(await res1.json());
-
-        const res2 = await fetch(
-          "https://quickwin-jateng.vercel.app/api/sheet12/getsheet12table2"
-        );
-        setTable2Data(await res2.json());
-
-        const res3 = await fetch(
-          "https://quickwin-jateng.vercel.app/api/sheet12/getsheet12table3"
-        );
-        setTable3Data(await res3.json());
-
-        const res4 = await fetch(
-          "https://quickwin-jateng.vercel.app/api/sheet12/getsheet12table4"
-        );
-        setTable4Data(await res4.json());
-      } catch (error) {
-        console.error("Gagal fetch data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    async function fetchRangeData() {
-      try {
-        const res = await fetch(
-          "https://quickwin-jateng.vercel.app/api/sheet12/getRange-sheet12"
-        );
-        setRangeData(await res.json());
-      } catch (err) {
-        console.error("Gagal fetch getRange-sheet12: ", err);
-      }
-    }
-
-    const fetchFeedback = async () => {
-      try {
-        const res = await fetch(
-          "https://quickwin-jateng.vercel.app/api/feedback/read"
-        );
-        const data = await res.json();
-        setFeedbackData(data);
-      } catch (err) {
-        console.error("Error fetch feedback:", err);
-      }
-    };
-
-    fetchData();
-    fetchRangeData();
-    fetchFeedback();
-  }, []);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   const skorTotal = table1Data?.data?.[0]?.[6] ?? "-";
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const storedUser = localStorage.getItem("user");
+      const token = localStorage.getItem("token");
+
+      if (!storedUser || !token) {
+        setIsAuthenticated(false);
+        return;
+      }
+
+      setIsAuthenticated(true);
+
+      // Kirim log kunjungan
+      const user = JSON.parse(storedUser);
+      const logData = {
+        adminId: user.id,
+        action: "visit",
+        description: `User ${user.username} mengunjungi halaman WA Blast`,
+      };
+      fetch("https://magangproject.vercel.app/api/logs/createlog", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(logData),
+      }).catch((err) => console.error("Gagal mengirim log:", err));
+    };
+
+    // Jalankan pertama kali (dengan delay spinner)
+    const initialTimeout = setTimeout(checkAuth, 800);
+
+    // Jalankan ulang setiap 30 detik
+    const interval = setInterval(checkAuth, 30000);
+
+    // Dengarkan perubahan di localStorage (real-time logout)
+    const handleStorageChange = (e) => {
+      if (e.key === "token" && !e.newValue) {
+        setIsAuthenticated(false);
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+
+    // Cleanup
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
+  // Spinner awal
+  if (isAuthenticated === null) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-gray-600 text-lg mt-4">Memeriksa autentikasi...</p>
+      </div>
+    );
+  }
 
   return (
     <SidebarProvider defaultOpen={true}>
@@ -94,244 +106,106 @@ export default function MenuTwelve() {
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
         <div className="flex flex-col gap-6 min-h-screen w-full p-4 md:p-6">
-          {/* Cards Atas */}
-          {loading ? (
-            <div className="grid gap-4">
-              {/* Baris 1 */}
-              <div className="grid gap-4 md:grid-cols-2">
-                {/* Kolom kiri: Periode Awal & Akhir */}
-                <div className="flex flex-col gap-4">
-                  <Card>
-                    <CardHeader className="pb-1">
-                      <Skeleton className="h-3 w-20 mb-2" />
-                    </CardHeader>
-                    <CardContent>
-                      <Skeleton className="h-5 w-24 mb-1" />
-                      <Skeleton className="h-3 w-32" />
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardHeader className="pb-1">
-                      <Skeleton className="h-3 w-20 mb-2" />
-                    </CardHeader>
-                    <CardContent>
-                      <Skeleton className="h-5 w-24 mb-1" />
-                      <Skeleton className="h-3 w-32" />
-                    </CardContent>
-                  </Card>
-                </div>
-
-                {/* Kolom kanan: Skor Total */}
-                <Card>
-                  <CardHeader className="pb-2">
-                    <Skeleton className="h-4 w-28 mb-2" />
-                  </CardHeader>
-                  <CardContent>
-                    <Skeleton className="h-10 w-20 mb-2" />
-                    <Skeleton className="h-3 w-32" />
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Baris 2: Obyek Penilaian & Formula */}
-              <div className="grid grid-cols-2 gap-4">
-                <Card>
-                  <CardHeader className="pb-1">
-                    <Skeleton className="h-3 w-28 mb-2" />
-                  </CardHeader>
-                  <CardContent>
-                    <Skeleton className="h-5 w-32 mb-1" />
-                    <Skeleton className="h-3 w-24" />
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader className="pb-1">
-                    <Skeleton className="h-3 w-28 mb-2" />
-                  </CardHeader>
-                  <CardContent>
-                    <Skeleton className="h-5 w-40 mb-2" />
-                    <Skeleton className="h-3 w-32" />
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
+          {!isAuthenticated ? (
+            <NotAuthenticatedPage />
           ) : (
-            <div className="grid gap-4 md:grid-cols-2">
-              {/* Kolom Kiri: Periode Awal & Akhir */}
-              <div className="flex flex-col gap-4">
-                {/* Periode Awal */}
-                <Card className="shadow-sm border border-dashed bg-muted/30">
-                  <CardHeader className="flex flex-row items-center justify-between pb-1">
-                    <CardTitle className="text-xs font-medium">
-                      Periode Awal
-                    </CardTitle>
-                    <CalendarDays className="h-3 w-3 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent className="py-1 px-6">
-                    <div className="text-base font-semibold text-gray-900">
-                      {rangeData?.periode_awal ?? "-"}
+            <>
+              {/* Cards Atas */}
+              {loading ? (
+                <SkeletonTopSection />
+              ) : (
+                <>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    {/* Kolom Kiri: Periode Awal & Akhir */}
+                    <div className="flex flex-col gap-4">
+                      <PeriodCard
+                        title="Periode Awal"
+                        date={rangeData?.periode_awal}
+                      />
+                      <PeriodCard
+                        title="Periode Akhir"
+                        date={rangeData?.periode_akhir}
+                      />
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Tanggal Mulai Periode
-                    </p>
-                  </CardContent>
-                </Card>
 
-                {/* Periode Akhir */}
-                <Card className="shadow-sm border border-dashed bg-muted/30">
-                  <CardHeader className="flex flex-row items-center justify-between pb-1">
-                    <CardTitle className="text-xs font-medium">
-                      Periode Akhir
-                    </CardTitle>
-                    <CalendarDays className="h-3 w-3 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent className="py-1 px-6">
-                    <div className="text-base font-semibold text-gray-900">
-                      {rangeData?.periode_akhir ?? "-"}
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Tanggal Akhir Periode
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Kolom Kanan: Skor Total (utama) */}
-              <Card className="bg-gradient-to-br from-blue-100 to-blue-200 border-blue-300 shadow-md">
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-base font-semibold text-blue-900">
-                    Skor Total
-                  </CardTitle>
-                  <BarChart3 className="h-5 w-5 text-blue-800" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-4xl font-extrabold text-blue-900">
-                    {skorTotal}
+                    {/* Kolom Kanan: Skor Total */}
+                    <TotalScoreCard score={skorTotal} />
                   </div>
-                  <p className="text-sm text-blue-700">Nilai Akhir (Max 4)</p>
-                </CardContent>
-              </Card>
-            </div>
+
+                  {/* Obyek Penilaian & Formula sejajar */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <ObjectCard />
+                    <FormulaWaBlastCard />
+                  </div>
+                </>
+              )}
+
+              {/* Tables Section */}
+              {loading ? (
+                <SkeletonTableList count={4} />
+              ) : (
+                <>
+                  <TableCard
+                    title={
+                      <>
+                        Skor Kontribusi Penerimaan{" "}
+                        <span className="text-red-700">SIGAP Prioritas</span> -
+                        Kanwil
+                      </>
+                    }
+                    showFeedback
+                    onFeedbackClick={() => setModalOpen(true)}
+                  >
+                    <RenderTable data={table1Data} />
+                  </TableCard>
+
+                  <TableCard
+                    title={
+                      <>
+                        Skor Kontribusi Penerimaan{" "}
+                        <span className="text-red-700">WA Blast</span> - Per
+                        Cabang
+                      </>
+                    }
+                  >
+                    <RenderTableFeedback
+                      data={table2Data}
+                      feedbackData={feedbackData}
+                    />
+                  </TableCard>
+
+                  <TableCard
+                    title={
+                      <>
+                        Skor Kontribusi Penerimaan{" "}
+                        <span className="text-red-700">WA Blast</span> - Per
+                        Samsat
+                      </>
+                    }
+                  >
+                    <RenderTableArray data={table3Data} />
+                  </TableCard>
+
+                  <TableCard
+                    title={
+                      <>
+                        Hasil Penerimaan Atas Kegiatan{" "}
+                        <span className="text-orange-500">WA Blast</span>
+                      </>
+                    }
+                  >
+                    <RenderTableArray data={table4Data} />
+                  </TableCard>
+
+                  <FeedbackModal
+                    open={modalOpen}
+                    onClose={() => setModalOpen(false)}
+                    feedbackData={feedbackData}
+                  />
+                </>
+              )}
+            </>
           )}
-
-          {/* Obyek Penilaian & Formula sejajar */}
-          <div className="grid grid-cols-2 gap-4">
-            {/* Obyek Penilaian */}
-            {!loading && (
-              <Card className="shadow-sm border border-dashed bg-muted/30">
-                <CardHeader className="flex flex-row items-center justify-between pb-1">
-                  <CardTitle className="text-xs font-medium">
-                    Obyek Penilaian
-                  </CardTitle>
-                  <LandPlot className="h-3 w-3 text-muted-foreground" />
-                </CardHeader>
-                <CardContent className="py-1 px-6">
-                  <div className="text-base font-semibold text-gray-900">
-                    Kantor Wilayah
-                  </div>
-                  <p className="text-xs">1 Obyek Penilaian</p>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Formula */}
-            <Card className="shadow-sm border border-dashed bg-muted/30">
-              <CardHeader className="flex flex-row items-center justify-between pb-1">
-                <CardTitle className="text-xs font-medium">Forumula</CardTitle>
-                <Radical className="h-3 w-3 text-muted-foreground" />
-              </CardHeader>
-              <CardContent className="py-4">
-                <div className="space-y-3 text-sm">
-                  <div className="border-l-4 border-gray-400 pl-3">
-                    <p className="font-semibold text-gray-900 mb-1">
-                      Kontribusi SW Terkutip dari Tunggakan
-                    </p>
-                    <p className="text-gray-600 text-xs">
-                      = Realisasi SW Terkutip / Tunggakan SW
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Table 1 */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-xl">
-                  Skor Kontribusi Penerimaan{" "}
-                  <span className="text-red-700">SIGAP Prioritas</span> - Kanwil
-                </CardTitle>
-
-                {/* Tombol Feedback */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setModalOpen(true);
-                    // kalau mau filter per cabang bisa ganti "all" ke id tertentu
-                    // setSelectedCabang("all");
-                  }}
-                  className="cursor-pointer hover:bg-blue-600 hover:text-white transition"
-                >
-                  Feedback
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <RenderTable data={table1Data} />
-            </CardContent>
-          </Card>
-
-          {/* Table 2 */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-xl">
-                Skor Kontribusi Penerimaan{" "}
-                <span className="text-red-700">WA Blast</span> - Per Cabang
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <RenderTableFeedback
-                data={table2Data}
-                feedbackData={feedbackData}
-              />
-            </CardContent>
-          </Card>
-
-          {/* Table 3 */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-xl">
-                Skor Kontribusi Penerimaan{" "}
-                <span className="text-red-700">WA Blast</span> - Per Samsat
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <RenderTableArray data={table3Data} />
-            </CardContent>
-          </Card>
-
-          {/* Table 4 */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-xl">
-                Hasil Penerimaan Atas Kegiatan{" "}
-                <span className="text-orange-500">WA Blast</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <RenderTableArray data={table4Data} />
-            </CardContent>
-          </Card>
-          <FeedbackModal
-            open={modalOpen}
-            onClose={() => setModalOpen(false)}
-            feedbackData={feedbackData}
-          />
         </div>
       </SidebarInset>
     </SidebarProvider>

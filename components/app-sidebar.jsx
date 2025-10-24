@@ -37,7 +37,6 @@ import {
 
 import { Button } from "@/components/ui/button";
 
-// Menu data
 export const data = {
   user: {
     name: "Admin User",
@@ -57,9 +56,6 @@ export const data = {
       items: [
         { title: "SENGKUYUNG", url: "/sengkuyung" },
         { title: "PROMITRA", url: "/404" },
-        // { title: "OPSGAB", url: "/404" },
-        // { title: "SOWAN", url: "/404" },
-        // { title: "OK DEALER!", url: "/404" },
       ],
     },
     {
@@ -99,7 +95,6 @@ export const data = {
 export function AppSidebar(props) {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [tokenValid, setTokenValid] = useState(false);
   const router = useRouter();
 
@@ -107,6 +102,7 @@ export function AppSidebar(props) {
   const checkToken = () => {
     const token = localStorage.getItem("token");
     if (!token) return false;
+
     try {
       const base64Url = token.split(".")[1];
       const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
@@ -119,9 +115,17 @@ export function AppSidebar(props) {
       const decoded = JSON.parse(jsonPayload);
       const currentTime = Date.now() / 1000;
       return decoded.exp > currentTime;
-    } catch (error) {
+    } catch {
       return false;
     }
+  };
+
+  // hapus token & user
+  const clearAuthData = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setTokenValid(false);
+    console.log("🔴 Token expired, data dihapus dari localStorage");
   };
 
   useEffect(() => {
@@ -129,12 +133,25 @@ export function AppSidebar(props) {
 
     // set state saat mount
     const valid = checkToken();
-    setIsLoggedIn(valid);
     setTokenValid(valid);
 
-    // cek berkala dan listen storage
-    const interval = setInterval(() => setTokenValid(checkToken()), 30000);
-    const handleStorageChange = () => setTokenValid(checkToken());
+    // interval cek token kadaluarsa tiap 30 detik
+    const interval = setInterval(() => {
+      const stillValid = checkToken();
+      if (!stillValid) {
+        clearAuthData();
+      } else {
+        setTokenValid(true);
+      }
+    }, 30000);
+
+    // sinkron antar-tab
+    const handleStorageChange = () => {
+      const valid = checkToken();
+      if (!valid) clearAuthData();
+      setTokenValid(valid);
+    };
+
     window.addEventListener("storage", handleStorageChange);
 
     return () => {
@@ -144,10 +161,7 @@ export function AppSidebar(props) {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setIsLoggedIn(false);
-    setTokenValid(false);
+    clearAuthData();
     router.push("/login");
   };
 
@@ -241,9 +255,6 @@ export function AppSidebar(props) {
                                       }
                                     >
                                       <a href={subItem.url}>
-                                        {subItem.icon && (
-                                          <subItem.icon className="size-4" />
-                                        )}
                                         <span>{subItem.title}</span>
                                       </a>
                                     </SidebarMenuSubButton>
@@ -276,7 +287,7 @@ export function AppSidebar(props) {
         </SidebarGroup>
       </SidebarContent>
 
-      {/* Sidebar Footer untuk login/logout */}
+      {/* Footer login/logout */}
       <SidebarFooter className="p-4 border-t border-gray-200">
         {tokenValid ? (
           <Button

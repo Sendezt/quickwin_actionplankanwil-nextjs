@@ -19,11 +19,10 @@ export default function MenuSatu() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
+    const checkAuth = () => {
+      const storedUser = localStorage.getItem("user");
+      const token = localStorage.getItem("token");
 
-    // Simulasi delay biar spinner terlihat
-    setTimeout(() => {
       if (!storedUser || !token) {
         setIsAuthenticated(false);
         return;
@@ -43,57 +42,79 @@ export default function MenuSatu() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(logData),
       }).catch((err) => console.error("Gagal mengirim log:", err));
-    }, 800);
+    };
+
+    // Jalankan pertama kali (dengan delay spinner)
+    const initialTimeout = setTimeout(checkAuth, 800);
+
+    // Jalankan ulang setiap 30 detik
+    const interval = setInterval(checkAuth, 30000);
+
+    // Dengarkan perubahan di localStorage (real-time logout)
+    const handleStorageChange = (e) => {
+      if (e.key === "token" && !e.newValue) {
+        setIsAuthenticated(false);
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+
+    // Cleanup
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
+  // Spinner awal
   if (isAuthenticated === null) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-        {/* Spinner */}
         <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
         <p className="text-gray-600 text-lg mt-4">Memeriksa autentikasi...</p>
       </div>
     );
   }
 
-  if (!isAuthenticated) {
-    return <NotAuthenticated />;
-  }
-
   return (
-    <div>
-      <SidebarProvider defaultOpen={true}>
-        <AppSidebar />
-        <SidebarInset>
-          <Navbar />
+    <SidebarProvider defaultOpen={true}>
+      <AppSidebar />
+      <SidebarInset>
+        <Navbar />
 
-          <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <DashboardStats
+        <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+          {/* Jika belum login → tampilkan NotAuthenticated */}
+          {!isAuthenticated ? (
+            <NotAuthenticated />
+          ) : (
+            <>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <DashboardStats
+                  dashboardData={dashboardData}
+                  rangeData={rangeData}
+                  isLoading={isLoading}
+                />
+              </div>
+
+              {dashboardData?.data && (
+                <ChartBarMultiple data={dashboardData.data} />
+              )}
+
+              <DashboardTable
                 dashboardData={dashboardData}
-                rangeData={rangeData}
                 isLoading={isLoading}
+                onOpenFeedback={() => setOpenFeedbackModal(true)}
               />
-            </div>
 
-            {dashboardData?.data && (
-              <ChartBarMultiple data={dashboardData.data} />
-            )}
-
-            <DashboardTable
-              dashboardData={dashboardData}
-              isLoading={isLoading}
-              onOpenFeedback={() => setOpenFeedbackModal(true)}
-            />
-          </div>
-
-          <FeedbackModal
-            open={openFeedbackModal}
-            onClose={() => setOpenFeedbackModal(false)}
-            feedbackData={feedbackData}
-          />
-        </SidebarInset>
-      </SidebarProvider>
-    </div>
+              <FeedbackModal
+                open={openFeedbackModal}
+                onClose={() => setOpenFeedbackModal(false)}
+                feedbackData={feedbackData}
+              />
+            </>
+          )}
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
