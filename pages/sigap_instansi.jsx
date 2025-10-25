@@ -49,42 +49,61 @@ export default function MenuSebelas() {
   const skorSamsat = getNilaiAkhir(table3Data);
 
   useEffect(() => {
-    const storeduser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
+    const checkAuth = () => {
+      const storedUser = localStorage.getItem("user");
+      const token = localStorage.getItem("token");
 
-    setTimeout(() => {
-      if (!storeduser || !token) {
+      if (!storedUser || !token) {
         setIsAuthenticated(false);
         return;
       }
 
       setIsAuthenticated(true);
 
-      const user = JSON.parse(storeduser);
+      // Kirim log kunjungan
+      const user = JSON.parse(storedUser);
       const logData = {
         adminId: user.id,
         action: "visit",
-        description: `${user.username} mengunjungi halaman Sigap Instansi`,
+        description: `User ${user.username} mengunjungi halaman Implementasi UU HKPD`,
       };
       fetch("https://magangproject.vercel.app/api/logs/createlog", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(logData),
-      }).catch((err) => console.error("Gagal mengirim log: ", err));
-    }, 800);
+      }).catch((err) => console.error("Gagal mengirim log:", err));
+    };
+
+    // Jalankan pertama kali (dengan delay spinner)
+    const initialTimeout = setTimeout(checkAuth, 800);
+
+    // Jalankan ulang setiap 30 detik
+    const interval = setInterval(checkAuth, 30000);
+
+    // Dengarkan perubahan di localStorage (real-time logout)
+    const handleStorageChange = (e) => {
+      if (e.key === "token" && !e.newValue) {
+        setIsAuthenticated(false);
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+
+    // Cleanup
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
-  if (isAuthenticated == null) {
+  // Spinner awal
+  if (isAuthenticated === null) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
         <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-gray-600 text-lg mt-4">Memerikasa Auntentikasi...</p>
+        <p className="text-gray-600 text-lg mt-4">Memeriksa autentikasi...</p>
       </div>
     );
-  }
-
-  if (!isAuthenticated) {
-    return <NotAuthenticatedPage />;
   }
 
   return (
@@ -93,113 +112,122 @@ export default function MenuSebelas() {
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
         <div className="flex flex-col gap-6 min-h-screen w-full p-4 md:p-6">
-          {/* Baris 1: Periode Awal, Periode Akhir, Obyek Penilaian, Formula */}
-          {loading ? (
-            <SkeletonInfoGrid />
+          {!isAuthenticated ? (
+            <NotAuthenticatedPage />
           ) : (
-            <div className="grid gap-4 md:grid-cols-4">
-              <PeriodCard title="Periode Awal" date={rangeData?.periode_awal} />
-              <PeriodCard
-                title="Periode Akhir"
-                date={rangeData?.periode_akhir}
-              />
-              <ObjectPenilaianCard />
-              <FormulaSigapCard />
-            </div>
-          )}
+            <>
+              {/* Baris 1: Periode Awal, Periode Akhir, Obyek Penilaian, Formula */}
+              {loading ? (
+                <SkeletonInfoGrid />
+              ) : (
+                <div className="grid gap-4 md:grid-cols-4">
+                  <PeriodCard
+                    title="Periode Awal"
+                    date={rangeData?.periode_awal}
+                  />
+                  <PeriodCard
+                    title="Periode Akhir"
+                    date={rangeData?.periode_akhir}
+                  />
+                  <ObjectPenilaianCard />
+                  <FormulaSigapCard />
+                </div>
+              )}
 
-          {/* Baris 2: Skor Kanwil, Cabang, Samsat */}
-          {loading ? (
-            <SkeletonScoreGrid />
-          ) : (
-            <div className="grid gap-6 md:grid-cols-3">
-              <ScoreCard
-                title="Skor Kanwil"
-                score={skorKanwil}
-                bgColor="bg-blue-100"
-                textColor="text-blue-800"
-                scoreColor="text-blue-700"
-              />
-              <ScoreCard
-                title="Skor Cabang"
-                score={skorCabang}
-                bgColor="bg-green-100"
-                textColor="text-green-800"
-                scoreColor="text-green-700"
-              />
-              <ScoreCard
-                title="Skor Samsat"
-                score={skorSamsat}
-                bgColor="bg-yellow-100"
-                textColor="text-yellow-800"
-                scoreColor="text-yellow-700"
-              />
-            </div>
-          )}
+              {/* Baris 2: Skor Kanwil, Cabang, Samsat */}
+              {loading ? (
+                <SkeletonScoreGrid />
+              ) : (
+                <div className="grid gap-6 md:grid-cols-3">
+                  <ScoreCard
+                    title="Skor Kanwil"
+                    score={skorKanwil}
+                    bgColor="bg-blue-100"
+                    textColor="text-blue-800"
+                    scoreColor="text-blue-700"
+                  />
+                  <ScoreCard
+                    title="Skor Cabang"
+                    score={skorCabang}
+                    bgColor="bg-green-100"
+                    textColor="text-green-800"
+                    scoreColor="text-green-700"
+                  />
+                  <ScoreCard
+                    title="Skor Samsat"
+                    score={skorSamsat}
+                    bgColor="bg-yellow-100"
+                    textColor="text-yellow-800"
+                    scoreColor="text-yellow-700"
+                  />
+                </div>
+              )}
 
-          {/* Tables Section */}
-          {loading ? (
-            <SkeletonTableList count={4} />
-          ) : (
-            <div className="flex flex-col gap-6">
-              <TableCard
-                title={
-                  <>
-                    Skor Kontribusi Penerimaan{" "}
-                    <span className="text-red-700">SIGAP Prioritas</span> -
-                    Kanwil
-                  </>
-                }
-                showFeedback
-                onFeedbackClick={() => setModalOpen(true)}
-              >
-                <RenderTable data={table1Data} />
-              </TableCard>
+              {/* Tables Section */}
+              {loading ? (
+                <SkeletonTableList count={4} />
+              ) : (
+                <div className="flex flex-col gap-6">
+                  <TableCard
+                    title={
+                      <>
+                        Skor Kontribusi Penerimaan{" "}
+                        <span className="text-red-700">SIGAP Prioritas</span> -
+                        Kanwil
+                      </>
+                    }
+                    showFeedback
+                    onFeedbackClick={() => setModalOpen(true)}
+                  >
+                    <RenderTable data={table1Data} />
+                  </TableCard>
 
-              <TableCard
-                title={
-                  <>
-                    Skor Kontribusi Penerimaan{" "}
-                    <span className="text-red-700">SIGAP Instansi</span> - Per
-                    Cabang
-                  </>
-                }
-              >
-                <RenderTableFeedback
-                  data={table2Data}
-                  feedbackData={feedbackData}
-                />
-              </TableCard>
+                  <TableCard
+                    title={
+                      <>
+                        Skor Kontribusi Penerimaan{" "}
+                        <span className="text-red-700">SIGAP Instansi</span> -
+                        Per Cabang
+                      </>
+                    }
+                  >
+                    <RenderTableFeedback
+                      data={table2Data}
+                      feedbackData={feedbackData}
+                    />
+                  </TableCard>
 
-              <TableCard
-                title={
-                  <>
-                    Skor Kontribusi Penerimaan{" "}
-                    <span className="text-red-700">SIGAP Instansi</span> - Per
-                    Samsat
-                  </>
-                }
-              >
-                <RenderTableArray data={table3Data} />
-              </TableCard>
+                  <TableCard
+                    title={
+                      <>
+                        Skor Kontribusi Penerimaan{" "}
+                        <span className="text-red-700">SIGAP Instansi</span> -
+                        Per Samsat
+                      </>
+                    }
+                  >
+                    <RenderTableArray data={table3Data} />
+                  </TableCard>
 
-              <TableCard
-                title={
-                  <>
-                    Hasil Penerimaan Atas Kegiatan{" "}
-                    <span className="text-orange-400">SIGAP Instansi</span>
-                  </>
-                }
-              >
-                <RenderTableArray data={table4Data} />
-              </TableCard>
+                  <TableCard
+                    title={
+                      <>
+                        Hasil Penerimaan Atas Kegiatan{" "}
+                        <span className="text-orange-400">SIGAP Instansi</span>
+                      </>
+                    }
+                  >
+                    <RenderTableArray data={table4Data} />
+                  </TableCard>
 
-              <FeedbackModal
-                open={modalOpen}
-                onClose={() => setModalOpen(false)}
-                feedbackData={feedbackData}
-              />
-            </div>
+                  <FeedbackModal
+                    open={modalOpen}
+                    onClose={() => setModalOpen(false)}
+                    feedbackData={feedbackData}
+                  />
+                </div>
+              )}
+            </>
           )}
         </div>
       </SidebarInset>

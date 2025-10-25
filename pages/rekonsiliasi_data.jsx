@@ -42,42 +42,61 @@ export default function MenuEmpat() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    const storeduser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
+    const checkAuth = () => {
+      const storedUser = localStorage.getItem("user");
+      const token = localStorage.getItem("token");
 
-    setTimeout(() => {
-      if (!storeduser || !token) {
+      if (!storedUser || !token) {
         setIsAuthenticated(false);
         return;
       }
 
       setIsAuthenticated(true);
 
-      const user = JSON.parse(storeduser);
+      // Kirim log kunjungan
+      const user = JSON.parse(storedUser);
       const logData = {
         adminId: user.id,
         action: "visit",
-        description: `${user.username} mengunjungi halaman rekonsiliasi data`,
+        description: `User ${user.username} mengunjungi halaman Implementasi UU HKPD`,
       };
       fetch("https://magangproject.vercel.app/api/logs/createlog", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(logData),
-      }).catch((err) => console.error("Gagal mengirim log ", err));
-    }, 800);
+      }).catch((err) => console.error("Gagal mengirim log:", err));
+    };
+
+    // Jalankan pertama kali (dengan delay spinner)
+    const initialTimeout = setTimeout(checkAuth, 800);
+
+    // Jalankan ulang setiap 30 detik
+    const interval = setInterval(checkAuth, 30000);
+
+    // Dengarkan perubahan di localStorage (real-time logout)
+    const handleStorageChange = (e) => {
+      if (e.key === "token" && !e.newValue) {
+        setIsAuthenticated(false);
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+
+    // Cleanup
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
-  if (isAuthenticated == null) {
+  // Spinner awal
+  if (isAuthenticated === null) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
         <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-gray-600 text-lg mt-4">Memerikasa Auntentikasi...</p>
+        <p className="text-gray-600 text-lg mt-4">Memeriksa autentikasi...</p>
       </div>
     );
-  }
-
-  if (!isAuthenticated) {
-    return <NotAuthenticatedPage />;
   }
 
   return (
@@ -85,87 +104,93 @@ export default function MenuEmpat() {
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
-        {loading ? (
-          <SkeletonGrid />
+        {!isAuthenticated ? (
+          <NotAuthenticatedPage />
         ) : (
-          <div className="flex flex-col gap-6 min-h-screen w-full p-4 md:p-6">
-            {/* Grid Periode & Skor Samsat */}
-            <div className="grid gap-4 md:grid-cols-2">
-              <PeriodCard
-                title="Periode Awal"
-                date={rangeData?.periode_awal}
-                icon={CalendarDays}
-              />
-              <ScoreCard
-                title="Skor Samsat Se-Jateng"
-                score={skorSamsat}
-                maxScore={4}
-                bgColor="bg-yellow-100"
-                textColor="text-yellow-800"
-              />
-              <PeriodCard
-                title="Periode Akhir"
-                date={rangeData?.periode_akhir}
-                icon={CalendarDays}
-              />
-            </div>
+          <>
+            {loading ? (
+              <SkeletonGrid />
+            ) : (
+              <div className="flex flex-col gap-6 min-h-screen w-full p-4 md:p-6">
+                {/* Grid Periode & Skor Samsat */}
+                <div className="grid gap-4 md:grid-cols-2">
+                  <PeriodCard
+                    title="Periode Awal"
+                    date={rangeData?.periode_awal}
+                    icon={CalendarDays}
+                  />
+                  <ScoreCard
+                    title="Skor Samsat Se-Jateng"
+                    score={skorSamsat}
+                    maxScore={4}
+                    bgColor="bg-yellow-100"
+                    textColor="text-yellow-800"
+                  />
+                  <PeriodCard
+                    title="Periode Akhir"
+                    date={rangeData?.periode_akhir}
+                    icon={CalendarDays}
+                  />
+                </div>
 
-            {/* Grid Obyek & Skor Cabang */}
-            <div className="grid gap-4 md:grid-cols-2">
-              <ObjectCard />
-              <BranchScoreCard
-                scores={skorCabangList}
-                targetScore={targetSkor}
-              />
-              <FormulaCard />
-            </div>
+                {/* Grid Obyek & Skor Cabang */}
+                <div className="grid gap-4 md:grid-cols-2">
+                  <ObjectCard />
+                  <BranchScoreCard
+                    scores={skorCabangList}
+                    targetScore={targetSkor}
+                  />
+                  <FormulaCard />
+                </div>
 
-            {/* Tables */}
-            <TableCardFeedback
-              title={
-                <span className="text-xl">
-                  Rekapitulasi{" "}
-                  <span className="text-red-700">Rekonsiliasi Data</span> Per
-                  Cabang
-                </span>
-              }
-              headers={table1Data?.header?.[0] ?? []}
-              data={table1Data?.data ?? []}
-              summary={table1Data?.summary ?? []}
-              isNested={false}
-              feedbackData={feedbackData}
-            />
+                {/* Tables */}
+                <TableCardFeedback
+                  title={
+                    <span className="text-xl">
+                      Rekapitulasi{" "}
+                      <span className="text-red-700">Rekonsiliasi Data</span>{" "}
+                      Per Cabang
+                    </span>
+                  }
+                  headers={table1Data?.header?.[0] ?? []}
+                  data={table1Data?.data ?? []}
+                  summary={table1Data?.summary ?? []}
+                  isNested={false}
+                  feedbackData={feedbackData}
+                />
 
-            <TableCardWrapper
-              title={
-                <span className="text-xl">
-                  Skor Pelaksanaan{" "}
-                  <span className="text-red-700">Rekonsiliasi Data</span> - Per
-                  Samsat
-                </span>
-              }
-              headers={table2Data?.header?.[0] ?? []}
-              data={table2Data?.data ?? []}
-              summary={table2Data?.summary ?? []}
-              isLoading={!table2Data}
-              isNested={true}
-            />
+                <TableCardWrapper
+                  title={
+                    <span className="text-xl">
+                      Skor Pelaksanaan{" "}
+                      <span className="text-red-700">Rekonsiliasi Data</span> -
+                      Per Samsat
+                    </span>
+                  }
+                  headers={table2Data?.header?.[0] ?? []}
+                  data={table2Data?.data ?? []}
+                  summary={table2Data?.summary ?? []}
+                  isLoading={!table2Data}
+                  isNested={true}
+                />
 
-            <TableCardWrapper
-              title={
-                <span className="text-xl">
-                  Rekapitulasi Pelaksanaan{" "}
-                  <span className="text-red-700">Rekonsiliasi Data</span> - Per
-                  Samsat
-                </span>
-              }
-              headers={table3Data?.header?.[0] ?? []}
-              data={table3Data?.data ?? []}
-              summary={table3Data?.summary ?? []}
-              isLoading={!table3Data}
-              isNested={true}
-            />
-          </div>
+                <TableCardWrapper
+                  title={
+                    <span className="text-xl">
+                      Rekapitulasi Pelaksanaan{" "}
+                      <span className="text-red-700">Rekonsiliasi Data</span> -
+                      Per Samsat
+                    </span>
+                  }
+                  headers={table3Data?.header?.[0] ?? []}
+                  data={table3Data?.data ?? []}
+                  summary={table3Data?.summary ?? []}
+                  isLoading={!table3Data}
+                  isNested={true}
+                />
+              </div>
+            )}
+          </>
         )}
       </SidebarInset>
     </SidebarProvider>

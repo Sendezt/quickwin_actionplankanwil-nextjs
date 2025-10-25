@@ -31,10 +31,10 @@ export default function MenuDua() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
+    const checkAuth = () => {
+      const storedUser = localStorage.getItem("user");
+      const token = localStorage.getItem("token");
 
-    setTimeout(() => {
       if (!storedUser || !token) {
         setIsAuthenticated(false);
         return;
@@ -42,20 +42,43 @@ export default function MenuDua() {
 
       setIsAuthenticated(true);
 
+      // Kirim log kunjungan
       const user = JSON.parse(storedUser);
       const logData = {
         adminId: user.id,
         action: "visit",
-        description: `${user.username} mengunjungi halaman Kebijakan Relaksasi`,
+        description: `User ${user.username} mengunjungi halaman Implementasi UU HKPD`,
       };
       fetch("https://magangproject.vercel.app/api/logs/createlog", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(logData),
       }).catch((err) => console.error("Gagal mengirim log:", err));
-    }, 800);
+    };
+
+    // Jalankan pertama kali (dengan delay spinner)
+    const initialTimeout = setTimeout(checkAuth, 800);
+
+    // Jalankan ulang setiap 30 detik
+    const interval = setInterval(checkAuth, 30000);
+
+    // Dengarkan perubahan di localStorage (real-time logout)
+    const handleStorageChange = (e) => {
+      if (e.key === "token" && !e.newValue) {
+        setIsAuthenticated(false);
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+
+    // Cleanup
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
+  // Spinner awal
   if (isAuthenticated === null) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
@@ -65,39 +88,41 @@ export default function MenuDua() {
     );
   }
 
-  if (!isAuthenticated) {
-    return <NotAuthenticatedPage />;
-  }
-
   return (
     <SidebarProvider defaultOpen={true}>
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
         <div className="flex flex-col gap-6 min-h-screen w-full p-4 md:p-6">
-          {/* Periode Information */}
-          <PeriodeCards rangeData={rangeData} loading={loading} />
+          {!isAuthenticated ? (
+            <NotAuthenticatedPage />
+          ) : (
+            <>
+              {/* Periode Information */}
+              <PeriodeCards rangeData={rangeData} loading={loading} />
 
-          {/* Score Information */}
-          <ScoreCards breakdownData={breakdownData} loading={loading} />
+              {/* Score Information */}
+              <ScoreCards breakdownData={breakdownData} loading={loading} />
 
-          {/* Formula Description */}
-          <FormulaCard loading={loading} />
+              {/* Formula Description */}
+              <FormulaCard loading={loading} />
 
-          {/* Growth Chart */}
-          <GrowthChart table1Data={table1Data} loading={loading} />
+              {/* Growth Chart */}
+              <GrowthChart table1Data={table1Data} loading={loading} />
 
-          {/* Data Tables */}
-          <DataTable1
-            table1Data={table1Data}
-            loading={loading}
-            feedbackData={feedbackData}
-          />
-          <DataTable2
-            tableData={tableData}
-            loading={loading}
-            feedbackData={feedbackData}
-          />
+              {/* Data Tables */}
+              <DataTable1
+                table1Data={table1Data}
+                loading={loading}
+                feedbackData={feedbackData}
+              />
+              <DataTable2
+                tableData={tableData}
+                loading={loading}
+                feedbackData={feedbackData}
+              />
+            </>
+          )}
         </div>
       </SidebarInset>
     </SidebarProvider>

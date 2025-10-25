@@ -40,42 +40,61 @@ export default function MenuTen() {
   const skorSamsat = getNilaiAkhir(table3Data);
 
   useEffect(() => {
-    const storeduser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
+    const checkAuth = () => {
+      const storedUser = localStorage.getItem("user");
+      const token = localStorage.getItem("token");
 
-    setTimeout(() => {
-      if (!storeduser || !token) {
+      if (!storedUser || !token) {
         setIsAuthenticated(false);
         return;
       }
 
       setIsAuthenticated(true);
 
-      const user = JSON.parse(storeduser);
+      // Kirim log kunjungan
+      const user = JSON.parse(storedUser);
       const logData = {
         adminId: user.id,
         action: "visit",
-        description: `${user.username} mengunjungi halaman Sigap Prioritas`,
+        description: `User ${user.username} mengunjungi halaman Implementasi UU HKPD`,
       };
       fetch("https://magangproject.vercel.app/api/logs/createlog", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(logData),
-      }).catch((err) => console.error("Gagal mengirim log: ", err));
-    }, 800);
+      }).catch((err) => console.error("Gagal mengirim log:", err));
+    };
+
+    // Jalankan pertama kali (dengan delay spinner)
+    const initialTimeout = setTimeout(checkAuth, 800);
+
+    // Jalankan ulang setiap 30 detik
+    const interval = setInterval(checkAuth, 30000);
+
+    // Dengarkan perubahan di localStorage (real-time logout)
+    const handleStorageChange = (e) => {
+      if (e.key === "token" && !e.newValue) {
+        setIsAuthenticated(false);
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+
+    // Cleanup
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
-  if (isAuthenticated == null) {
+  // Spinner awal
+  if (isAuthenticated === null) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
         <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-gray-600 text-lg mt-4">Memerikasa Auntentikasi...</p>
+        <p className="text-gray-600 text-lg mt-4">Memeriksa autentikasi...</p>
       </div>
     );
-  }
-
-  if (!isAuthenticated) {
-    return <NotAuthenticatedPage />;
   }
 
   return (
@@ -84,16 +103,22 @@ export default function MenuTen() {
       <SidebarInset>
         <Navbar />
         <div className="flex flex-col gap-6 p-4 md:p-6">
-          <InfoCards loading={loading} rangeData={rangeData} />
-          <ScoreCards
-            skorKanwil={skorKanwil}
-            skorCabang={skorCabang}
-            skorSamsat={skorSamsat}
-          />
-          <TablesSection
-            data={{ table1Data, table2Data, table3Data, table4Data }}
-            feedbackData={feedbackData}
-          />
+          {!isAuthenticated ? (
+            <NotAuthenticatedPage />
+          ) : (
+            <>
+              <InfoCards loading={loading} rangeData={rangeData} />
+              <ScoreCards
+                skorKanwil={skorKanwil}
+                skorCabang={skorCabang}
+                skorSamsat={skorSamsat}
+              />
+              <TablesSection
+                data={{ table1Data, table2Data, table3Data, table4Data }}
+                feedbackData={feedbackData}
+              />
+            </>
+          )}
         </div>
       </SidebarInset>
     </SidebarProvider>

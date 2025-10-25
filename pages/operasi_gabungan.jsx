@@ -32,42 +32,61 @@ export default function MenuTiga() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    const storeduser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
+    const checkAuth = () => {
+      const storedUser = localStorage.getItem("user");
+      const token = localStorage.getItem("token");
 
-    setTimeout(() => {
-      if (!storeduser || !token) {
+      if (!storedUser || !token) {
         setIsAuthenticated(false);
         return;
       }
 
       setIsAuthenticated(true);
 
-      const user = JSON.parse(storeduser);
+      // Kirim log kunjungan
+      const user = JSON.parse(storedUser);
       const logData = {
         adminId: user.id,
         action: "visit",
-        description: `${user.username} mengunjungi halaman Operasi Gabungan`,
+        description: `User ${user.username} mengunjungi halaman Implementasi UU HKPD`,
       };
       fetch("https://magangproject.vercel.app/api/logs/createlog", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(logData),
-      }).catch((err) => console.error("Gagal mengirim log: ", err));
-    }, 800);
+      }).catch((err) => console.error("Gagal mengirim log:", err));
+    };
+
+    // Jalankan pertama kali (dengan delay spinner)
+    const initialTimeout = setTimeout(checkAuth, 800);
+
+    // Jalankan ulang setiap 30 detik
+    const interval = setInterval(checkAuth, 30000);
+
+    // Dengarkan perubahan di localStorage (real-time logout)
+    const handleStorageChange = (e) => {
+      if (e.key === "token" && !e.newValue) {
+        setIsAuthenticated(false);
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+
+    // Cleanup
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
-  if (isAuthenticated == null) {
+  // Spinner awal
+  if (isAuthenticated === null) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
         <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-gray-600 text-lg mt-4">Memerikasa Auntentikasi...</p>
+        <p className="text-gray-600 text-lg mt-4">Memeriksa autentikasi...</p>
       </div>
     );
-  }
-
-  if (!isAuthenticated) {
-    return <NotAuthenticatedPage />;
   }
 
   return (
@@ -76,36 +95,42 @@ export default function MenuTiga() {
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
         <div className="flex flex-col gap-6 min-h-screen w-full p-4 md:p-6">
-          {/* Info Cards Row */}
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <PeriodCards rangeData={rangeData} loading={loading} />
-            <ObjectCard loading={loading} />
-            <SupportLetterCard loading={loading} />
-          </div>
+          {!isAuthenticated ? (
+            <NotAuthenticatedPage />
+          ) : (
+            <>
+              {/* Info Cards Row */}
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <PeriodCards rangeData={rangeData} loading={loading} />
+                <ObjectCard loading={loading} />
+                <SupportLetterCard loading={loading} />
+              </div>
 
-          {/* Score Cards Row */}
-          <div className="grid gap-4 md:grid-cols-2">
-            <ScoreCards
-              totalSkor={totalSkor}
-              targetSkor={targetSkor}
-              breakdownData={breakdownData}
-              loading={loading}
-            />
-          </div>
+              {/* Score Cards Row */}
+              <div className="grid gap-4 md:grid-cols-2">
+                <ScoreCards
+                  totalSkor={totalSkor}
+                  targetSkor={targetSkor}
+                  breakdownData={breakdownData}
+                  loading={loading}
+                />
+              </div>
 
-          {/* Formula Card */}
-          <FormulaCard loading={loading} />
+              {/* Formula Card */}
+              <FormulaCard loading={loading} />
 
-          {/* Tables Section */}
-          <TableSections
-            table1Data={table1Data}
-            table2Data={table2Data}
-            table3Data={table3Data}
-            table4Data={table4Data}
-            table5Data={table5Data}
-            feedback={feedback}
-            loading={loading}
-          />
+              {/* Tables Section */}
+              <TableSections
+                table1Data={table1Data}
+                table2Data={table2Data}
+                table3Data={table3Data}
+                table4Data={table4Data}
+                table5Data={table5Data}
+                feedback={feedback}
+                loading={loading}
+              />
+            </>
+          )}
         </div>
       </SidebarInset>
     </SidebarProvider>

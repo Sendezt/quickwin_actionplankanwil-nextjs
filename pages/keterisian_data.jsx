@@ -43,10 +43,10 @@ export default function MenuLima() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
+    const checkAuth = () => {
+      const storedUser = localStorage.getItem("user");
+      const token = localStorage.getItem("token");
 
-    setTimeout(() => {
       if (!storedUser || !token) {
         setIsAuthenticated(false);
         return;
@@ -54,20 +54,43 @@ export default function MenuLima() {
 
       setIsAuthenticated(true);
 
+      // Kirim log kunjungan
       const user = JSON.parse(storedUser);
       const logData = {
         adminId: user.id,
         action: "visit",
-        description: `${user.username} mengunjungi halaman keterisian data valid`,
+        description: `User ${user.username} mengunjungi halaman Implementasi UU HKPD`,
       };
       fetch("https://magangproject.vercel.app/api/logs/createlog", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(logData),
-      }).catch((err) => console.error("Gagal mengirim log: ", err));
-    }, 800);
+      }).catch((err) => console.error("Gagal mengirim log:", err));
+    };
+
+    // Jalankan pertama kali (dengan delay spinner)
+    const initialTimeout = setTimeout(checkAuth, 800);
+
+    // Jalankan ulang setiap 30 detik
+    const interval = setInterval(checkAuth, 30000);
+
+    // Dengarkan perubahan di localStorage (real-time logout)
+    const handleStorageChange = (e) => {
+      if (e.key === "token" && !e.newValue) {
+        setIsAuthenticated(false);
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+
+    // Cleanup
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
+  // Spinner awal
   if (isAuthenticated === null) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
@@ -77,100 +100,105 @@ export default function MenuLima() {
     );
   }
 
-  if (!isAuthenticated) {
-    return <NotAuthenticatedPage />;
-  }
-
   return (
     <SidebarProvider defaultOpen={true}>
       <AppSidebar />
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
         <div className="flex flex-col gap-6 min-h-screen w-full p-4 md:p-6">
-          {/* Grid Periode & Skor Kanwil */}
-          {loading ? (
-            <SkeletonPeriodGrid />
+          {!isAuthenticated ? (
+            <NotAuthenticatedPage />
           ) : (
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-4">
-                <PeriodCard
-                  title="Periode Awal"
-                  date={rangeData?.periode_awal}
-                  icon={CalendarDays}
-                />
-                <PeriodCard
-                  title="Periode Akhir"
-                  date={rangeData?.periode_akhir}
-                  icon={CalendarDays}
-                />
-              </div>
-              <KanwilScoreCard score={skorKanwil} />
-            </div>
-          )}
-
-          {/* Grid Obyek & Skor Cabang */}
-          {loading ? (
-            <SkeletonInfoGrid />
-          ) : (
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-4">
-                <ObjectCard objectName="Kantor Wilayah" objectCount={1} />
-                <FormulaCard
-                  title="Tingkat Keterisian Data Kepemilikan Kendaraan sesuai Target"
-                  formula="= Realisasi Ceri / Target"
-                />
-              </div>
-              <BranchScoreCard
-                scores={skorCabangList}
-                targetScore={targetSkor}
-              />
-            </div>
-          )}
-
-          {/* Chart */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl text-orange-700">
-                Prosentase Keterisian Data
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+            <>
+              {/* Grid Periode & Skor Kanwil */}
               {loading ? (
-                <Skeleton className="h-[300px] w-full" />
+                <SkeletonPeriodGrid />
               ) : (
-                table1Data?.data && <ChartBarSingle data={table1Data.data} />
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-4">
+                    <PeriodCard
+                      title="Periode Awal"
+                      date={rangeData?.periode_awal}
+                      icon={CalendarDays}
+                    />
+                    <PeriodCard
+                      title="Periode Akhir"
+                      date={rangeData?.periode_akhir}
+                      icon={CalendarDays}
+                    />
+                  </div>
+                  <KanwilScoreCard score={skorKanwil} />
+                </div>
               )}
-            </CardContent>
-          </Card>
 
-          {/* Table 1 - Rekapitulasi Data Keterisian */}
-          <Card>
-            <CardHeader className="text-xl">
-              <CardTitle>
-                Rekapitulasi{" "}
-                <span className="text-red-700">Keterisian Data</span> Per Cabang
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <TableRekapitulasi
-                table1Data={table1Data}
-                feedbackData={feedbackData}
-              />
-            </CardContent>
-          </Card>
+              {/* Grid Obyek & Skor Cabang */}
+              {loading ? (
+                <SkeletonInfoGrid />
+              ) : (
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-4">
+                    <ObjectCard objectName="Kantor Wilayah" objectCount={1} />
+                    <FormulaCard
+                      title="Tingkat Keterisian Data Kepemilikan Kendaraan sesuai Target"
+                      formula="= Realisasi Ceri / Target"
+                    />
+                  </div>
+                  <BranchScoreCard
+                    scores={skorCabangList}
+                    targetScore={targetSkor}
+                  />
+                </div>
+              )}
 
-          {/* Table 2 - Data Detail */}
-          <Card>
-            <CardHeader className="text-xl">
-              <CardTitle>
-                Skor <span className="text-red-700">Keterisian Data</span> - Per
-                Samsat
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <TableSkorSamsat table2Data={table2Data} />
-            </CardContent>
-          </Card>
+              {/* Chart */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-2xl text-orange-700">
+                    Prosentase Keterisian Data
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {loading ? (
+                    <Skeleton className="h-[300px] w-full" />
+                  ) : (
+                    table1Data?.data && (
+                      <ChartBarSingle data={table1Data.data} />
+                    )
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Table 1 - Rekapitulasi Data Keterisian */}
+              <Card>
+                <CardHeader className="text-xl">
+                  <CardTitle>
+                    Rekapitulasi{" "}
+                    <span className="text-red-700">Keterisian Data</span> Per
+                    Cabang
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <TableRekapitulasi
+                    table1Data={table1Data}
+                    feedbackData={feedbackData}
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Table 2 - Data Detail */}
+              <Card>
+                <CardHeader className="text-xl">
+                  <CardTitle>
+                    Skor <span className="text-red-700">Keterisian Data</span> -
+                    Per Samsat
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <TableSkorSamsat table2Data={table2Data} />
+                </CardContent>
+              </Card>
+            </>
+          )}
         </div>
       </SidebarInset>
     </SidebarProvider>

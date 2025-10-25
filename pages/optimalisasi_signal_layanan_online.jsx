@@ -37,42 +37,61 @@ export default function MenuTujuh() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    const storeduser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
+    const checkAuth = () => {
+      const storedUser = localStorage.getItem("user");
+      const token = localStorage.getItem("token");
 
-    setTimeout(() => {
-      if (!storeduser || !token) {
+      if (!storedUser || !token) {
         setIsAuthenticated(false);
         return;
       }
 
       setIsAuthenticated(true);
 
-      const user = JSON.parse(storeduser);
+      // Kirim log kunjungan
+      const user = JSON.parse(storedUser);
       const logData = {
         adminId: user.id,
         action: "visit",
-        description: `${user.username} mengunjungi halaman Optimalisasi Signal Layanan Online`,
+        description: `User ${user.username} mengunjungi halaman Implementasi UU HKPD`,
       };
       fetch("https://magangproject.vercel.app/api/logs/createlog", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(logData),
-      }).catch((err) => console.error("Gagal mengirim log: ", err));
-    }, 800);
+      }).catch((err) => console.error("Gagal mengirim log:", err));
+    };
+
+    // Jalankan pertama kali (dengan delay spinner)
+    const initialTimeout = setTimeout(checkAuth, 800);
+
+    // Jalankan ulang setiap 30 detik
+    const interval = setInterval(checkAuth, 30000);
+
+    // Dengarkan perubahan di localStorage (real-time logout)
+    const handleStorageChange = (e) => {
+      if (e.key === "token" && !e.newValue) {
+        setIsAuthenticated(false);
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+
+    // Cleanup
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
-  if (isAuthenticated == null) {
+  // Spinner awal
+  if (isAuthenticated === null) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
         <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-gray-600 text-lg mt-4">Memerikasa Auntentikasi...</p>
+        <p className="text-gray-600 text-lg mt-4">Memeriksa autentikasi...</p>
       </div>
     );
-  }
-
-  if (!isAuthenticated) {
-    return <NotAuthenticatedPage />;
   }
 
   return (
@@ -81,71 +100,77 @@ export default function MenuTujuh() {
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
         <div className="flex flex-col gap-6 min-h-screen w-full p-4 md:p-6">
-          {/* Top Info (4 Card) */}
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {loading ? (
-              <>
-                <SkeletonInfoCard />
-                <SkeletonInfoCard />
-                <SkeletonInfoCard />
-                <SkeletonInfoCard />
-              </>
-            ) : (
-              <>
-                <PeriodCard
-                  title="Periode Awal"
-                  date={rangeData?.periode_awal}
-                />
-                <PeriodCard
-                  title="Periode Akhir"
-                  date={rangeData?.periode_akhir}
-                />
-                <ObjectCard objectName="Kantor Wilayah" objectCount={1} />
-                <FormulaSignalCard />
-              </>
-            )}
-          </div>
-
-          {/* Skor Kanwil */}
-          <div className="grid gap-4 md:grid-cols-1">
-            {loading ? (
-              <SkeletonScoreCard />
-            ) : (
-              <KanwilScoreCard score={skorKanwil} />
-            )}
-          </div>
-
-          {/* Table 1 */}
-          {loading ? (
-            <SkeletonTable />
+          {!isAuthenticated ? (
+            <NotAuthenticatedPage />
           ) : (
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-xl flex items-center gap-2">
-                  Rekapitulasi{" "}
-                  <span className="text-red-700">
-                    Penerimaan SIGNAL & Layanan Online
-                  </span>
-                </CardTitle>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setOpenFeedbackModal(true)}
-                  className="cursor-pointer hover:bg-blue-600 hover:text-white transition"
-                >
-                  Feedback
-                </Button>
-              </CardHeader>
-              <CardContent>
-                <NestedTable data={table1Data} />
-              </CardContent>
+            <>
+              {/* Top Info (4 Card) */}
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                {loading ? (
+                  <>
+                    <SkeletonInfoCard />
+                    <SkeletonInfoCard />
+                    <SkeletonInfoCard />
+                    <SkeletonInfoCard />
+                  </>
+                ) : (
+                  <>
+                    <PeriodCard
+                      title="Periode Awal"
+                      date={rangeData?.periode_awal}
+                    />
+                    <PeriodCard
+                      title="Periode Akhir"
+                      date={rangeData?.periode_akhir}
+                    />
+                    <ObjectCard objectName="Kantor Wilayah" objectCount={1} />
+                    <FormulaSignalCard />
+                  </>
+                )}
+              </div>
 
-              <FeedbackModal
-                open={openFeedbackModal}
-                onClose={() => setOpenFeedbackModal(false)}
-                feedbackData={feedbackData}
-              />
-            </Card>
+              {/* Skor Kanwil */}
+              <div className="grid gap-4 md:grid-cols-1">
+                {loading ? (
+                  <SkeletonScoreCard />
+                ) : (
+                  <KanwilScoreCard score={skorKanwil} />
+                )}
+              </div>
+
+              {/* Table 1 */}
+              {loading ? (
+                <SkeletonTable />
+              ) : (
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between">
+                    <CardTitle className="text-xl flex items-center gap-2">
+                      Rekapitulasi{" "}
+                      <span className="text-red-700">
+                        Penerimaan SIGNAL & Layanan Online
+                      </span>
+                    </CardTitle>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setOpenFeedbackModal(true)}
+                      className="cursor-pointer hover:bg-blue-600 hover:text-white transition"
+                    >
+                      Feedback
+                    </Button>
+                  </CardHeader>
+                  <CardContent>
+                    <NestedTable data={table1Data} />
+                  </CardContent>
+
+                  <FeedbackModal
+                    open={openFeedbackModal}
+                    onClose={() => setOpenFeedbackModal(false)}
+                    feedbackData={feedbackData}
+                  />
+                </Card>
+              )}
+            </>
           )}
         </div>
       </SidebarInset>

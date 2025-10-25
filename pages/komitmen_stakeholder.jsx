@@ -58,55 +58,60 @@ export default function MenuSembilan() {
   ];
 
   useEffect(() => {
-    const storeduser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
+    const checkAuth = () => {
+      const storedUser = localStorage.getItem("user");
+      const token = localStorage.getItem("token");
 
-    setTimeout(() => {
-      if (!storeduser || !token) {
+      if (!storedUser || !token) {
         setIsAuthenticated(false);
         return;
       }
 
       setIsAuthenticated(true);
 
-      const user = JSON.parse(storeduser);
+      // Kirim log kunjungan
+      const user = JSON.parse(storedUser);
       const logData = {
         adminId: user.id,
         action: "visit",
-        description: `${user.username} mengunjungi halaman Komitmen Stakeholder`,
+        description: `User ${user.username} mengunjungi halaman Implementasi UU HKPD`,
       };
       fetch("https://magangproject.vercel.app/api/logs/createlog", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(logData),
-      }).catch((err) => console.error("Gagal mengirim log: ", err));
-    }, 800);
+      }).catch((err) => console.error("Gagal mengirim log:", err));
+    };
+
+    // Jalankan pertama kali (dengan delay spinner)
+    const initialTimeout = setTimeout(checkAuth, 800);
+
+    // Jalankan ulang setiap 30 detik
+    const interval = setInterval(checkAuth, 30000);
+
+    // Dengarkan perubahan di localStorage (real-time logout)
+    const handleStorageChange = (e) => {
+      if (e.key === "token" && !e.newValue) {
+        setIsAuthenticated(false);
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+
+    // Cleanup
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
-  if (isAuthenticated == null) {
+  // Spinner awal
+  if (isAuthenticated === null) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
         <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-gray-600 text-lg mt-4">Memerikasa Auntentikasi...</p>
+        <p className="text-gray-600 text-lg mt-4">Memeriksa autentikasi...</p>
       </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return <NotAuthenticatedPage />;
-  }
-
-  if (loading) {
-    return (
-      <SidebarProvider defaultOpen={true}>
-        <AppSidebar />
-        <SidebarInset className="flex-1 min-w-0">
-          <Navbar />
-          <div className="flex flex-col gap-6 min-h-screen w-full bg-gray-100 p-4 md:p-6">
-            <LoadingSkeleton />
-          </div>
-        </SidebarInset>
-      </SidebarProvider>
     );
   }
 
@@ -116,114 +121,123 @@ export default function MenuSembilan() {
       <SidebarInset className="flex-1 min-w-0">
         <Navbar />
         <div className="flex flex-col gap-6 min-h-screen w-full p-4 md:p-6">
-          {/* Period Section */}
-          <div className="grid gap-4 md:grid-cols-2">
-            <PeriodCard
-              title="Periode Awal"
-              value={rangeData?.periode_awal}
-              description="Tanggal Mulai"
-              icon={CalendarDays}
-            />
-            <PeriodCard
-              title="Periode Akhir"
-              value={rangeData?.periode_akhir}
-              description="Tanggal Akhir"
-              icon={CalendarDays}
-            />
-          </div>
-
-          {/* Scores Section */}
-          <div className="grid gap-4 md:grid-cols-3">
-            {SCORE_CONFIGS.map((config, index) => (
-              <ScoreCard
-                key={index}
-                title={config.title}
-                score={scores[index]}
-                config={config}
-              />
-            ))}
-          </div>
-
-          {/* Breakdown and Info Section */}
-          <div className="grid gap-4 md:grid-cols-2">
-            <BreakdownStakeholderCard breakdownData={breakdownData} />
-            <div className="flex flex-col gap-4">
-              <ObjectPenilaianCard />
-              <FormulaStakeholderCard />
-            </div>
-          </div>
-
-          {/* Tables Section */}
-          <DataTable
-            title={
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="text-xl">Skor</span>{" "}
-                  <span className="text-red-700 font-semibold text-xl">
-                    Jumlah Komitmen Stakeholder
-                  </span>{" "}
-                  <span className="text-xl">- Kanwil</span>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setModalOpen(true);
-                    setSelectedCabang("all");
-                  }}
-                  className="cursor-pointer hover:bg-blue-600 hover:text-white transition"
-                >
-                  Feedback
-                </Button>
+          {!isAuthenticated ? (
+            <NotAuthenticatedPage />
+          ) : (
+            <>
+              {/* Period Section */}
+              <div className="grid gap-4 md:grid-cols-2">
+                <PeriodCard
+                  title="Periode Awal"
+                  value={rangeData?.periode_awal}
+                  description="Tanggal Mulai"
+                  icon={CalendarDays}
+                />
+                <PeriodCard
+                  title="Periode Akhir"
+                  value={rangeData?.periode_akhir}
+                  description="Tanggal Akhir"
+                  icon={CalendarDays}
+                />
               </div>
-            }
-          >
-            <RenderTableFeedback data={table1Data} feedbackData={feedback} />
-          </DataTable>
 
-          <DataTable
-            title={
-              <>
-                <span className="text-xl">Skor</span>{" "}
-                <span className="text-red-700 font-semibold text-xl">
-                  Jumlah Komitmen Stakeholder
-                </span>{" "}
-                <span className="text-xl">- Cabang</span>
-              </>
-            }
-          >
-            <RenderTable data={table2Data} />
-          </DataTable>
+              {/* Scores Section */}
+              <div className="grid gap-4 md:grid-cols-3">
+                {SCORE_CONFIGS.map((config, index) => (
+                  <ScoreCard
+                    key={index}
+                    title={config.title}
+                    score={scores[index]}
+                    config={config}
+                  />
+                ))}
+              </div>
 
-          <DataTable
-            title={
-              <>
-                <span className="text-xl">Skor</span>{" "}
-                <span className="text-red-700 font-semibold text-xl">
-                  Jumlah Komitmen Stakeholder
-                </span>{" "}
-                <span className="text-xl">- Samsat</span>
-              </>
-            }
-          >
-            <RenderTableArray data={table3Data} />
-          </DataTable>
+              {/* Breakdown and Info Section */}
+              <div className="grid gap-4 md:grid-cols-2">
+                <BreakdownStakeholderCard breakdownData={breakdownData} />
+                <div className="flex flex-col gap-4">
+                  <ObjectPenilaianCard />
+                  <FormulaStakeholderCard />
+                </div>
+              </div>
 
-          <DataTable
-            title={
-              <span className="text-xl">
-                Pengisian Data Komitmen Stakeholder
-              </span>
-            }
-          >
-            <RenderTableScroll data={table4Data} />
-          </DataTable>
+              {/* Tables Section */}
+              <DataTable
+                title={
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-xl">Skor</span>{" "}
+                      <span className="text-red-700 font-semibold text-xl">
+                        Jumlah Komitmen Stakeholder
+                      </span>{" "}
+                      <span className="text-xl">- Kanwil</span>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setModalOpen(true);
+                        setSelectedCabang("all");
+                      }}
+                      className="cursor-pointer hover:bg-blue-600 hover:text-white transition"
+                    >
+                      Feedback
+                    </Button>
+                  </div>
+                }
+              >
+                <RenderTableFeedback
+                  data={table1Data}
+                  feedbackData={feedback}
+                />
+              </DataTable>
 
-          <FeedbackModal
-            open={modalOpen}
-            onClose={() => setModalOpen(false)}
-            feedbackData={feedback}
-          />
+              <DataTable
+                title={
+                  <>
+                    <span className="text-xl">Skor</span>{" "}
+                    <span className="text-red-700 font-semibold text-xl">
+                      Jumlah Komitmen Stakeholder
+                    </span>{" "}
+                    <span className="text-xl">- Cabang</span>
+                  </>
+                }
+              >
+                <RenderTable data={table2Data} />
+              </DataTable>
+
+              <DataTable
+                title={
+                  <>
+                    <span className="text-xl">Skor</span>{" "}
+                    <span className="text-red-700 font-semibold text-xl">
+                      Jumlah Komitmen Stakeholder
+                    </span>{" "}
+                    <span className="text-xl">- Samsat</span>
+                  </>
+                }
+              >
+                <RenderTableArray data={table3Data} />
+              </DataTable>
+
+              <DataTable
+                title={
+                  <span className="text-xl">
+                    Pengisian Data Komitmen Stakeholder
+                  </span>
+                }
+              >
+                <RenderTableScroll data={table4Data} />
+              </DataTable>
+
+              <FeedbackModal
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                feedbackData={feedback}
+              />
+            </>
+          )}
         </div>
       </SidebarInset>
     </SidebarProvider>
