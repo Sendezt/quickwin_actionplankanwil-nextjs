@@ -178,7 +178,7 @@ export default function LogActivityContent() {
     const fetchLogs = async () => {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/logs/getLog"
+          "https://quickwin-jateng.vercel.app/api/logs/getLog"
         );
         const data = await res.json();
         if (data.success) {

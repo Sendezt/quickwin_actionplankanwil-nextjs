@@ -61,7 +61,7 @@ export function DashboardContent() {
     const fetchCabang = async () => {
       try {
         const res = await fetch(
-          "https://magangproject.vercel.app/api/cabang/read"
+          "https://quickwin-jateng.vercel.app/api/cabang/read"
         );
         const data = await res.json();
         if (Array.isArray(data)) {
@@ -87,7 +87,7 @@ export function DashboardContent() {
         }
 
         const response = await fetch(
-          "https://magangproject.vercel.app/api/admin/admin/getuser",
+          "https://quickwin-jateng.vercel.app/api/admin/admin/getuser",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -120,7 +120,7 @@ export function DashboardContent() {
         }
 
         const response = await fetch(
-          "https://magangproject.vercel.app/api/admin/actionplan/getActionPlan",
+          "https://quickwin-jateng.vercel.app/api/admin/actionplan/getActionPlan",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -154,7 +154,7 @@ export function DashboardContent() {
         }
 
         const response = await fetch(
-          "https://magangproject.vercel.app/api/admin/sub/getsub",
+          "https://quickwin-jateng.vercel.app/api/admin/sub/getsub",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -188,7 +188,7 @@ export function DashboardContent() {
         }
 
         const response = await fetch(
-          "https://magangproject.vercel.app/api/admin/feedback/getalldata",
+          "https://quickwin-jateng.vercel.app/api/admin/feedback/getalldata",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -219,7 +219,7 @@ export function DashboardContent() {
         if (!token) return;
 
         const response = await fetch(
-          "https://magangproject.vercel.app/api/logs/getLog",
+          "https://quickwin-jateng.vercel.app/api/logs/getLog",
           {
             headers: {
               Authorization: `Bearer ${token}`,

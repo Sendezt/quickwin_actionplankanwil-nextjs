@@ -33,6 +33,7 @@ import { DataTable } from "@/components/komitmenstakeholder/tables/DataTable";
 import { LoadingSkeleton } from "@/components/komitmenstakeholder/skeletons/LoadingSkeleton";
 
 import NotAuthenticatedPage from "@/components/not-Authenticate";
+import LoadingAuth from "@/components/loading";
 
 export default function MenuSembilan() {
   const {
@@ -76,7 +77,7 @@ export default function MenuSembilan() {
         action: "visit",
         description: `User ${user.username} mengunjungi halaman Implementasi UU HKPD`,
       };
-      fetch("https://magangproject.vercel.app/api/logs/createlog", {
+      fetch("https://quickwin-jateng.vercel.app/api/logs/createlog", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(logData),
@@ -107,12 +108,7 @@ export default function MenuSembilan() {
 
   // Spinner awal
   if (isAuthenticated === null) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-gray-600 text-lg mt-4">Memeriksa autentikasi...</p>
-      </div>
-    );
+    return <LoadingAuth />; 
   }
 
   return (
