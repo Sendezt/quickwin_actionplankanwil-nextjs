@@ -9,47 +9,45 @@ export default function NotAuthenticatedPage({
   backButtonHref = "/",
 }) {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted px-4">
-      <div className="w-full max-w-md text-center space-y-8">
-        {/* Icon */}
-        <div className="flex justify-center">
-          <div className="p-4 bg-blue-100 rounded-full">
-            <Lock className="w-12 h-12 text-blue-600" />
-          </div>
+    <div className="flex flex-col items-center justify-center bg-white rounded-lg shadow-sm p-6 mx-auto my-8 max-w-lg w-full text-center border border-gray-100">
+      {/* Icon */}
+      <div className="flex justify-center mb-4">
+        <div className="p-3 bg-blue-50 rounded-full">
+          <Lock className="w-12 h-12 text-blue-600" />
         </div>
+      </div>
 
-        {/* Heading */}
-        <div className="space-y-3">
-          <h1 className="text-4xl font-bold text-foreground">{title}</h1>
-          <p className="text-lg text-muted-foreground">{description}</p>
-        </div>
+      {/* Heading */}
+      <h1 className="text-2xl font-semibold text-gray-800">{title}</h1>
+      <p className="text-md text-gray-500 mt-2">{description}</p>
 
-        {/* Description */}
-        <p className="text-base text-muted-foreground leading-relaxed">
-          Silakan login dengan akun Anda untuk melanjutkan.
-        </p>
+      {/* Description */}
+      <p className="text-sm text-gray-500 mt-3">
+        Silakan login dengan akun Anda untuk melanjutkan.
+      </p>
 
-        {/* Action Button */}
-        <div className="flex flex-col gap-3 pt-4">
-          <Link href="/login" className="w-full">
-            <Button className="w-full h-11 text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white">
-              Masuk ke Akun
-            </Button>
+      {/* Action Button */}
+      <div className="w-full mt-5">
+        <Link href="/login" className="w-full">
+          <Button
+            className="w-full h-9 text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+          >
+            Masuk ke Akun
+          </Button>
+        </Link>
+      </div>
+
+      {/* Back Link */}
+      {showBackButton && (
+        <div className="pt-3">
+          <Link
+            href={backButtonHref}
+            className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors"
+          >
+            ← Kembali ke Beranda
           </Link>
         </div>
-
-        {/* Back Link */}
-        {showBackButton && (
-          <div className="pt-4">
-            <Link
-              href={backButtonHref}
-              className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
-            >
-              ← Kembali ke Beranda
-            </Link>
-          </div>
-        )}
-      </div>
-    </main>
+      )}
+    </div>
   );
 }
