@@ -42,6 +42,7 @@ export default function MenuDuaBelas() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   const skorTotal = table1Data?.data?.[0]?.[6] ?? "-";
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const checkAuth = () => {
@@ -62,7 +63,7 @@ export default function MenuDuaBelas() {
         action: "visit",
         description: `User ${user.username} mengunjungi halaman WA Blast`,
       };
-      fetch("https://quickwin-jateng.vercel.app/api/logs/createlog", {
+      fetch(`${BASE_URL}/api/logs/createlog`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(logData),

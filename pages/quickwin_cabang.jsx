@@ -20,18 +20,19 @@ export default function QuickwinCabang() {
   const [tables, setTables] = useState([]);
   const [tables2, setTables2] = useState([]);
   const [loading, setLoading] = useState(true);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          "https://quickwin-jateng.vercel.app/api/dashboard/getquickwincabangtable"
+          `${BASE_URL}/api/dashboard/getquickwincabangtable`
         );
         const json = await res.json();
         setTables(json.tables || []);
 
         const res2 = await fetch(
-          "https://quickwin-jateng.vercel.app/api/dashboard/getquickwincabang"
+          `${BASE_URL}/api/dashboard/getquickwincabang`
         );
         const json2 = await res2.json();
         setTables2(json2);

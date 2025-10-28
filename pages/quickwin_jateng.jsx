@@ -17,12 +17,13 @@ import RenderQuickwinsTable from "@/components/quickwinjateng/RenderTable";
 export default function QuickwinJateng() {
   const [table1Data, setTable1Data] = useState(null);
   const [loading, setLoading] = useState(true);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res1 = await fetch(
-          "https://quickwin-jateng.vercel.app/api/dashboard/getquickwinjateng"
+          `${BASE_URL}/api/dashboard/getquickwinjateng`
         );
         setTable1Data(await res1.json());
       } catch (error) {

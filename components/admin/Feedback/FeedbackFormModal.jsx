@@ -25,6 +25,7 @@ export default function FeedbackFormModal({
   const [loadingSub, setLoadingSub] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const [cabangId, setCabangId] = useState("");
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const resetForm = useCallback(() => {
     setActionPlanId("");
@@ -64,7 +65,7 @@ export default function FeedbackFormModal({
       }
 
       const res = await fetch(
-        `https://quickwin-jateng.vercel.app/api/admin/sub/getsub?actionPlanId=${actionPlanId}`,
+        `${BASE_URL}/api/admin/sub/getsub?actionPlanId=${actionPlanId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

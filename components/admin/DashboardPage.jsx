@@ -22,6 +22,7 @@ export function DashboardContent() {
   const [feedbackCount, setFeedbackCount] = useState(null);
   const [username, setUsername] = useState("");
   const [activities, setActivities] = useState([]);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const stats = [
     {
@@ -60,9 +61,7 @@ export function DashboardContent() {
     // 🔹 Ambil data cabang dari API
     const fetchCabang = async () => {
       try {
-        const res = await fetch(
-          "https://quickwin-jateng.vercel.app/api/cabang/read"
-        );
+        const res = await fetch(`${BASE_URL}/api/cabang/read`);
         const data = await res.json();
         if (Array.isArray(data)) {
           setCabangCount(data.length);
@@ -86,15 +85,12 @@ export function DashboardContent() {
           return;
         }
 
-        const response = await fetch(
-          "https://quickwin-jateng.vercel.app/api/admin/admin/getuser",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch(`${BASE_URL}/api/admin/admin/getuser`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -120,7 +116,7 @@ export function DashboardContent() {
         }
 
         const response = await fetch(
-          "https://quickwin-jateng.vercel.app/api/admin/actionplan/getActionPlan",
+          `${BASE_URL}/api/admin/actionplan/getActionPlan`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -153,15 +149,12 @@ export function DashboardContent() {
           return;
         }
 
-        const response = await fetch(
-          "https://quickwin-jateng.vercel.app/api/admin/sub/getsub",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch(`${BASE_URL}/api/admin/sub/getsub`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -188,7 +181,7 @@ export function DashboardContent() {
         }
 
         const response = await fetch(
-          "https://quickwin-jateng.vercel.app/api/admin/feedback/getalldata",
+          `${BASE_URL}/api/admin/feedback/getalldata`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -218,15 +211,12 @@ export function DashboardContent() {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const response = await fetch(
-          "https://quickwin-jateng.vercel.app/api/logs/getLog",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch(`${BASE_URL}/api/logs/getLog`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -377,33 +367,51 @@ export function DashboardContent() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
+          const isLoading = stat.value === "Loading...";
+
           return (
             <div
               key={index}
-              className="bg-white rounded-xl shadow-md p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
+              className={`bg-white rounded-xl shadow-md p-6 border border-gray-100 
+      transition-all duration-300 hover:-translate-y-1 cursor-pointer group 
+      ${isLoading ? "animate-pulse" : "hover:shadow-xl"}`}
             >
               <div className="flex items-start mb-4">
                 <div
-                  className={`${stat.color} p-3 rounded-lg text-white group-hover:scale-110 transition-transform duration-300`}
+                  className={`${stat.color} p-3 rounded-lg text-white 
+          ${
+            isLoading
+              ? "opacity-60"
+              : "group-hover:scale-110 transition-transform duration-300"
+          }`}
                 >
                   <Icon className="w-6 h-6" />
                 </div>
               </div>
 
-              <h4 className="text-2xl font-bold text-gray-800 mb-1">
-                {stat.value}
-              </h4>
-              <p className="text-gray-500 text-sm">{stat.label}</p>
+              {isLoading ? (
+                <>
+                  <div className="h-6 w-16 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-4 w-24 bg-gray-100 rounded"></div>
+                </>
+              ) : (
+                <>
+                  <h4 className="text-2xl font-bold text-gray-800 mb-1">
+                    {stat.value}
+                  </h4>
+                  <p className="text-gray-500 text-sm">{stat.label}</p>
+                </>
+              )}
             </div>
           );
         })}
       </div>
 
-      {/* Aktivitas & Aksi Cepat */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Aktivitas */}
+      <div className="grid grid-cols-1 gap-6">
         <div className="lg:col-span-2 bg-white rounded-xl shadow-md p-6 border border-gray-100">
           <div className="flex items-center justify-between mb-6">
             <h4 className="text-xl font-bold text-gray-800">
@@ -448,28 +456,6 @@ export function DashboardContent() {
                 </div>
               ))
             )}
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
-          <h4 className="text-xl font-bold text-gray-800 mb-6">Aksi Cepat</h4>
-          <div className="space-y-3">
-            <button className="w-full flex items-center gap-3 p-4 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium transition-all duration-200 hover:shadow-md">
-              <ClipboardCheck className="w-5 h-5" />
-              <span>Buat Action Plan</span>
-            </button>
-            <button className="w-full flex items-center gap-3 p-4 rounded-lg bg-green-50 hover:bg-green-100 text-green-700 font-medium transition-all duration-200 hover:shadow-md">
-              <Building2 className="w-5 h-5" />
-              <span>Tambah Cabang</span>
-            </button>
-            <button className="w-full flex items-center gap-3 p-4 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 font-medium transition-all duration-200 hover:shadow-md">
-              <Users className="w-5 h-5" />
-              <span>Kelola User</span>
-            </button>
-            <button className="w-full flex items-center gap-3 p-4 rounded-lg bg-orange-50 hover:bg-orange-100 text-orange-700 font-medium transition-all duration-200 hover:shadow-md">
-              <TrendingUp className="w-5 h-5" />
-              <span>Lihat Laporan</span>
-            </button>
           </div>
         </div>
       </div>

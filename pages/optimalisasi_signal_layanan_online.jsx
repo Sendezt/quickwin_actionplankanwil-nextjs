@@ -36,6 +36,7 @@ export default function MenuTujuh() {
   const skorKanwil = table1Data?.summary?.[8] ?? "?";
 
   const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const checkAuth = () => {
@@ -56,7 +57,7 @@ export default function MenuTujuh() {
         action: "visit",
         description: `User ${user.username} mengunjungi halaman Implementasi UU HKPD`,
       };
-      fetch("https://quickwin-jateng.vercel.app/api/logs/createlog", {
+      fetch(`${BASE_URL}/api/logs/createlog`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(logData),

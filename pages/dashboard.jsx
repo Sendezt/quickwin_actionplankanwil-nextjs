@@ -41,12 +41,13 @@ export default function Dashboard() {
       color: "bg-yellow-600",
     },
   ];
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     async function fetchCharts() {
       try {
         const res1 = await fetch(
-          "https://quickwin-jateng.vercel.app/api/dashboard/getdashboardchart1"
+          `${BASE_URL}/api/dashboard/getdashboardchart1`
         );
         const data1 = await res1.json();
 
@@ -65,7 +66,7 @@ export default function Dashboard() {
         }
 
         const res2 = await fetch(
-          "https://quickwin-jateng.vercel.app/api/dashboard/getdashboardchart2"
+          `${BASE_URL}/api/dashboard/getdashboardchart2`
         );
         const data2 = await res2.json();
 
@@ -90,7 +91,7 @@ export default function Dashboard() {
     async function fetchCardDashboard() {
       try {
         const res = await fetch(
-          "https://quickwin-jateng.vercel.app/api/dashboard/getdashboardcard"
+          `${BASE_URL}/api/dashboard/getdashboardcard`
         );
         const json = await res.json();
 
@@ -107,7 +108,7 @@ export default function Dashboard() {
     async function fetchDataBestCabang() {
       try {
         const res = await fetch(
-          "https://quickwin-jateng.vercel.app/api/dashboard/getdashboardtable1"
+          `${BASE_URL}/api/dashboard/getdashboardtable1`
         );
         const json = await res.json();
 
@@ -151,7 +152,7 @@ export default function Dashboard() {
     async function fetchDataBestSamsat() {
       try {
         const res = await fetch(
-          "https://quickwin-jateng.vercel.app/api/dashboard/getdashboardtable2"
+          `${BASE_URL}/api/dashboard/getdashboardtable2`
         );
         const json = await res.json();
 
@@ -186,7 +187,7 @@ export default function Dashboard() {
     async function fetchDataJateng() {
       try {
         const res = await fetch(
-          "https://quickwin-jateng.vercel.app/api/dashboard/getquickwinjateng"
+          `${BASE_URL}/api/dashboard/getquickwinjateng`
         );
         const json = await res.json();
 

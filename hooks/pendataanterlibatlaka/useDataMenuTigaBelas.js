@@ -1,7 +1,7 @@
 // hooks\pendataanterlibatlaka\useDataMenuTigaBelas.js
 import { useState, useEffect } from "react";
 
-const API_BASE_URL = "https://quickwin-jateng.vercel.app/api";
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const useDataMenuTigabelas = () => {
   const [state, setState] = useState({
@@ -16,10 +16,16 @@ export const useDataMenuTigabelas = () => {
     const fetchAllData = async () => {
       try {
         const [table1, table2, range, feedback] = await Promise.all([
-          fetch(`${API_BASE_URL}/sheet13/getsheet13table1`).then(r => r.json()),
-          fetch(`${API_BASE_URL}/sheet13/getsheet13table2`).then(r => r.json()),
-          fetch(`${API_BASE_URL}/sheet13/getRange-sheet13`).then(r => r.json()),
-          fetch(`${API_BASE_URL}/feedback/read`).then(r => r.json()),
+          fetch(`${BASE_URL}/api/sheet13/getsheet13table1`).then((r) =>
+            r.json()
+          ),
+          fetch(`${BASE_URL}/api/sheet13/getsheet13table2`).then((r) =>
+            r.json()
+          ),
+          fetch(`${BASE_URL}/api/sheet13/getRange-sheet13`).then((r) =>
+            r.json()
+          ),
+          fetch(`${BASE_URL}/api/feedback/read`).then((r) => r.json()),
         ]);
 
         setState({
@@ -31,7 +37,7 @@ export const useDataMenuTigabelas = () => {
         });
       } catch (error) {
         console.error("Gagal fetch data:", error);
-        setState(prev => ({ ...prev, loading: false }));
+        setState((prev) => ({ ...prev, loading: false }));
       }
     };
 

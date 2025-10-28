@@ -6,6 +6,7 @@ export function useDashboardData() {
   const [rangeData, setRangeData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [feedbackData, setFeedbackData] = useState(null);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     let interval;
@@ -13,7 +14,7 @@ export function useDashboardData() {
     const fetchFeedbackData = async () => {
       try {
         const res = await fetch(
-          "https://quickwin-jateng.vercel.app/api/feedback/read"
+          `${BASE_URL}/api/feedback/read`
         );
         const json = await res.json();
         setFeedbackData(json);
@@ -25,7 +26,7 @@ export function useDashboardData() {
     async function fetchData() {
       try {
         const res = await fetch(
-          "https://quickwin-jateng.vercel.app/api/sheet1/getsheet1"
+          `${BASE_URL}/api/sheet1/getsheet1`
         );
         const json = await res.json();
 
@@ -44,7 +45,7 @@ export function useDashboardData() {
     async function fetchRangeData() {
       try {
         const res = await fetch(
-          "https://quickwin-jateng.vercel.app/api/sheet1/getRange-sheet1"
+          `${BASE_URL}/api/sheet1/getRange-sheet1`
         );
         const json = await res.json();
 

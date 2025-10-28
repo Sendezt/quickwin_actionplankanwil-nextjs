@@ -1,31 +1,32 @@
 import { useState, useEffect } from "react";
 
 // API Service functions
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const apiService = {
   fetchMainData: async () => {
     const res = await fetch(
-      "https://quickwin-jateng.vercel.app/api/sheet2/getsheet2"
+      `${BASE_URL}/api/sheet2/getsheet2`
     );
     return res.json();
   },
 
   fetchBreakdownData: async () => {
     const res = await fetch(
-      "https://quickwin-jateng.vercel.app/api/sheet2/getsheet2card"
+      `${BASE_URL}/api/sheet2/getsheet2card`
     );
     return res.json();
   },
 
   fetchRangeData: async () => {
     const res = await fetch(
-      "https://quickwin-jateng.vercel.app/api/sheet2/getRange-sheet2"
+      `${BASE_URL}/api/sheet2/getRange-sheet2`
     );
     return res.json();
   },
 
   fetchFeedbackData: async () => {
     const res = await fetch(
-      "https://quickwin-jateng.vercel.app/api/feedback/read"
+      `${BASE_URL}/api/feedback/read`
     );
     return res.json();
   },

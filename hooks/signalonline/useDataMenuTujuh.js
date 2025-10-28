@@ -8,18 +8,19 @@ export const useDataMenuTujuh = () => {
     feedbackData: [],
     loading: true,
   });
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchAllData = async () => {
       try {
         const [table1, range, feedback] = await Promise.all([
           fetch(
-            "https://quickwin-jateng.vercel.app/api/sheet7/getsheet7table1"
+            `${BASE_URL}/api/sheet7/getsheet7table1`
           ).then((r) => r.json()),
           fetch(
-            "https://quickwin-jateng.vercel.app/api/sheet7/getRange-sheet7"
+            `${BASE_URL}/api/sheet7/getRange-sheet7`
           ).then((r) => r.json()),
-          fetch("https://quickwin-jateng.vercel.app/api/feedback/read").then(
+          fetch(`${BASE_URL}/api/feedback/read`).then(
             (r) => r.json()
           ),
         ]);

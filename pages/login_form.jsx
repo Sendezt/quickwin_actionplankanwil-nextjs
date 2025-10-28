@@ -21,6 +21,7 @@ export default function LoginForm({ className, ...props }) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     if (error) {
@@ -37,7 +38,7 @@ export default function LoginForm({ className, ...props }) {
     setLoading(true);
 
     try {
-      const res = await fetch("https://quickwin-jateng.vercel.app/api/login", {
+      const res = await fetch(`${BASE_URL}/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),

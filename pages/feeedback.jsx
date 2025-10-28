@@ -281,7 +281,7 @@ export default function FeedbackPage() {
                 {isRefreshing ? "Refreshing..." : "Refresh"}
               </Button>
 
-              {isAllowedDate && (
+              {isAllowedDate && userInfo.role !== "Admin" && (
                 <Button
                   className={`transition-all duration-200 flex items-center gap-2 ${
                     isLoggedIn

@@ -55,6 +55,7 @@ export default function SubAgendaTable() {
   const [actionPlans, setActionPlans] = useState([]);
   const [selectedActionPlan, setSelectedActionPlan] = useState("");
   const [openEdit, setOpenEdit] = useState(false); // khusus edit modal
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const pageSize = 10;
 
@@ -64,7 +65,7 @@ export default function SubAgendaTable() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/admin/sub/getsub",
+        `${BASE_URL}/api/admin/sub/getsub`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -88,7 +89,7 @@ export default function SubAgendaTable() {
   async function fetchActionPlans() {
     try {
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/actionplan"
+        `${BASE_URL}/api/actionplan`
       );
       if (!res.ok) throw new Error("Gagal fetch action plans");
 
@@ -112,7 +113,7 @@ export default function SubAgendaTable() {
       setIsSubmitting(true);
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/api/admin/sub/createsub",
+        `${BASE_URL}/api/api/admin/sub/createsub`,
         {
           method: "POST",
           headers: {
@@ -154,7 +155,7 @@ export default function SubAgendaTable() {
       setSaving(true);
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `https://quickwin-jateng.vercel.app/api/api/admin/sub/updatesub/${editId}`,
+        `${BASE_URL}/api/api/admin/sub/updatesub/${editId}`,
         {
           method: "PUT",
           headers: {
@@ -184,7 +185,7 @@ export default function SubAgendaTable() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `https://quickwin-jateng.vercel.app/api/api/admin/sub/deletesub/${id}`,
+        `${BASE_URL}/api/api/admin/sub/deletesub/${id}`,
         {
           method: "DELETE",
           headers: {

@@ -15,6 +15,7 @@ export default function DetailTable({ loket }) {
   };
 
   const targetName = loketMap[loket] || loket;
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   // Fetcher untuk SWR
   const fetcher = (url) => fetch(url).then((res) => res.json());
@@ -23,7 +24,7 @@ export default function DetailTable({ loket }) {
   const { data, error, isLoading } = useSWR(
     `detail-${targetName}`, // key cache
     () =>
-      fetcher("https://quickwin-jateng.vercel.app/api/sheet1/getsheet1Detail"),
+      fetcher(`${BASE_URL}/api/sheet1/getsheet1Detail`),
     { revalidateOnFocus: false }
   );
 

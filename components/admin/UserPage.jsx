@@ -14,12 +14,13 @@ export default function UserManagement() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   // fetch users
   const fetchUsers = async () => {
     try {
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/admin/admin/getuser",
+        `${BASE_URL}/api/admin/admin/getuser`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
@@ -35,7 +36,7 @@ export default function UserManagement() {
   const fetchCabangs = async () => {
     try {
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/cabang/read"
+        `${BASE_URL}/api/cabang/read`
       );
       const data = await res.json();
       setCabangs(data);
@@ -51,7 +52,7 @@ export default function UserManagement() {
   const handleCreate = async (formData) => {
     try {
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/admin/admin/createuser",
+        `${BASE_URL}/api/admin/admin/createuser`,
         {
           method: "POST",
           headers: {
@@ -79,7 +80,7 @@ export default function UserManagement() {
   const handleEdit = async (formData) => {
     try {
       const res = await fetch(
-        `https://quickwin-jateng.vercel.app/api/admin/admin/updateuser/${selectedUser.id}`,
+        `${BASE_URL}/api/admin/admin/updateuser/${selectedUser.id}`,
         {
           method: "PUT",
           headers: {
@@ -108,7 +109,7 @@ export default function UserManagement() {
   const handleDelete = async (id) => {
     try {
       const res = await fetch(
-        `https://quickwin-jateng.vercel.app/api/admin/admin/deleteuser/${id}`,
+        `${BASE_URL}/api/admin/admin/deleteuser/${id}`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

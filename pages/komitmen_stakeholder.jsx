@@ -58,6 +58,8 @@ export default function MenuSembilan() {
     table3Data?.summary?.[8] ?? "?",
   ];
 
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   useEffect(() => {
     const checkAuth = () => {
       const storedUser = localStorage.getItem("user");
@@ -77,7 +79,7 @@ export default function MenuSembilan() {
         action: "visit",
         description: `User ${user.username} mengunjungi halaman Implementasi UU HKPD`,
       };
-      fetch("https://quickwin-jateng.vercel.app/api/logs/createlog", {
+      fetch(`${BASE_URL}/api/logs/createlog`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(logData),

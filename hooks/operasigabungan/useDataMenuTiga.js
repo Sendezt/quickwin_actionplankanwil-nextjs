@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
 
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 const API_ENDPOINTS = {
-  table1: "https://quickwin-jateng.vercel.app/api/sheet3/getsheet3table1",
-  table2: "https://quickwin-jateng.vercel.app/api/sheet3/getsheet3table2",
-  table3: "https://quickwin-jateng.vercel.app/api/sheet3/getsheet3table3",
-  table4: "https://quickwin-jateng.vercel.app/api/sheet3/getsheet3table4",
-  table5: "https://quickwin-jateng.vercel.app/api/sheet3/getsheet3table5",
-  breakdown: "https://quickwin-jateng.vercel.app/api/sheet3/getsheet3card",
-  range: "https://quickwin-jateng.vercel.app/api/sheet3/getRange-sheet3",
-  feedback: "https://quickwin-jateng.vercel.app/api/feedback/read",
+  table1: `${BASE_URL}/api/sheet3/getsheet3table1`,
+  table2: `${BASE_URL}/api/sheet3/getsheet3table2`,
+  table3: `${BASE_URL}/api/sheet3/getsheet3table3`,
+  table4: `${BASE_URL}/api/sheet3/getsheet3table4`,
+  table5: `${BASE_URL}/api/sheet3/getsheet3table5`,
+  breakdown: `${BASE_URL}/api/sheet3/getsheet3card`,
+  range: `${BASE_URL}/api/sheet3/getRange-sheet3`,
+  feedback: `${BASE_URL}/api/feedback/read`,
 };
 
 export function useDataMenuTiga() {

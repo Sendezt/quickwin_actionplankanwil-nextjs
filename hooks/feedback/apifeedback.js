@@ -1,30 +1,41 @@
 // services/feedback.js
 
-const BASE_URL = "https://quickwin-jateng.vercel.app/api";
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export async function fetchFeedbacks() {
-  const res = await fetch(`${BASE_URL}/feedback/read`);
+  const res = await fetch(`${BASE_URL}/api/feedback/read`);
   return res.json();
 }
 
 export async function fetchCabangs() {
-  const res = await fetch(`${BASE_URL}/cabang/read`);
+  const res = await fetch(`${BASE_URL}/api/cabang/read`);
   return res.json();
 }
 
 export async function fetchActionPlans() {
-  const res = await fetch(`${BASE_URL}/actionplan`);
+  const res = await fetch(`${BASE_URL}/api/actionplan`);
   return res.json();
 }
 
 export async function fetchSubActionPlans() {
-  const res = await fetch(`${BASE_URL}/admin/sub/getsub`);
+  const token = localStorage.getItem("token"); // ambil token login user
+
+  const res = await fetch(`${BASE_URL}/api/admin/sub/getsub`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch sub action plans: ${res.status}`);
+  }
+
   return res.json();
 }
 
 export async function createFeedback(payload) {
   const token = localStorage.getItem("token");
-  return fetch(`${BASE_URL}/feedback/create`, {
+  return fetch(`${BASE_URL}/api/feedback/create`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -41,7 +52,7 @@ export async function createFeedback(payload) {
  * @param {File} file - File bukti (gambar atau PDF)
  */
 export async function updateFeedbackStatus(id, file) {
-  const url = `${BASE_URL}/feedback/${id}/selesai`;
+  const url = `${BASE_URL}/api/feedback/${id}/selesai`;
   const token = localStorage.getItem("token");
 
   const formData = new FormData();
@@ -63,7 +74,7 @@ export async function updateFeedbackStatus(id, file) {
  * @param {File} file - File bukti baru (gambar atau PDF)
  */
 export async function replaceFeedbackFile(id, file) {
-  const url = `${BASE_URL}/feedback/${id}/file`;
+  const url = `${BASE_URL}/api/feedback/${id}/file`;
   const token = localStorage.getItem("token");
 
   const formData = new FormData();

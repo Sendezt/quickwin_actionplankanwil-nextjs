@@ -1,7 +1,6 @@
 // hooks\sigapinstansi\useDataMenuSebelas.js
 import { useState, useEffect } from "react";
 
-const API_BASE_URL = "https://quickwin-jateng.vercel.app/api";
 
 export const useDataMenuSebelas = () => {
   const [state, setState] = useState({
@@ -14,27 +13,29 @@ export const useDataMenuSebelas = () => {
     loading: true,
   });
 
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   useEffect(() => {
     const fetchAllData = async () => {
       try {
         const [table1, table2, table3, table4, range, feedback] =
           await Promise.all([
-            fetch(`${API_BASE_URL}/sheet11/getsheet11table1`).then((r) =>
+            fetch(`${BASE_URL}/api/sheet11/getsheet11table1`).then((r) =>
               r.json()
             ),
-            fetch(`${API_BASE_URL}/sheet11/getsheet11table2`).then((r) =>
+            fetch(`${BASE_URL}/api/sheet11/getsheet11table2`).then((r) =>
               r.json()
             ),
-            fetch(`${API_BASE_URL}/sheet11/getsheet11table3`).then((r) =>
+            fetch(`${BASE_URL}/api/sheet11/getsheet11table3`).then((r) =>
               r.json()
             ),
-            fetch(`${API_BASE_URL}/sheet11/getsheet11table4`).then((r) =>
+            fetch(`${BASE_URL}/api/sheet11/getsheet11table4`).then((r) =>
               r.json()
             ),
-            fetch(`${API_BASE_URL}/sheet11/getRange-sheet11`).then((r) =>
+            fetch(`${BASE_URL}/api/sheet11/getRange-sheet11`).then((r) =>
               r.json()
             ),
-            fetch(`${API_BASE_URL}/feedback/read`).then((r) => r.json()),
+            fetch(`${BASE_URL}/api/feedback/read`).then((r) => r.json()),
           ]);
 
         setState({

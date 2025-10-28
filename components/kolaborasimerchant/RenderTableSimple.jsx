@@ -11,12 +11,13 @@ import {
 
 export default function RenderTableSimple() {
   const [data, setData] = useState(null);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     async function fetchData() {
       try {
         const res = await fetch(
-          "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8table4"
+          `${BASE_URL}/api/sheet8/getsheet8table4`
         );
         const json = await res.json();
         setData(json);

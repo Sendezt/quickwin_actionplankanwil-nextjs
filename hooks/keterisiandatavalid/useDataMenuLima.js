@@ -10,25 +10,26 @@ export const useMenuLimaData = () => {
     feedbackData: null,
     loading: true,
   });
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchAllData = async () => {
       try {
         const [table1, table2, cabang, feedback, range] = await Promise.all([
           fetch(
-            "https://quickwin-jateng.vercel.app/api/sheet5/getsheet5table1"
+            `${BASE_URL}/api/sheet5/getsheet5table1`
           ).then((r) => r.json()),
           fetch(
-            "https://quickwin-jateng.vercel.app/api/sheet5/getsheet5table2"
+            `${BASE_URL}/api/sheet5/getsheet5table2`
           ).then((r) => r.json()),
           fetch(
-            "https://quickwin-jateng.vercel.app/api/sheet5/getsheet5card"
+            `${BASE_URL}/api/sheet5/getsheet5card`
           ).then((r) => r.json()),
-          fetch("https://quickwin-jateng.vercel.app/api/feedback/read").then(
+          fetch(`${BASE_URL}/api/feedback/read`).then(
             (r) => r.json()
           ),
           fetch(
-            "https://quickwin-jateng.vercel.app/api/sheet5/getRange-sheet5"
+            `${BASE_URL}/api/sheet5/getRange-sheet5`
           ).then((r) => r.json()),
         ]);
 

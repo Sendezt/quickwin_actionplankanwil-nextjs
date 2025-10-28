@@ -48,6 +48,7 @@ export default function AgendaTable() {
   const [saving, setSaving] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const pageSize = 8;
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   // Function to check token and redirect if not exists
   const checkTokenAndRedirect = () => {
@@ -68,7 +69,7 @@ export default function AgendaTable() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/admin/actionplan/getActionPlan",
+        `${BASE_URL}/api/admin/actionplan/getActionPlan`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -105,7 +106,7 @@ export default function AgendaTable() {
       setIsSubmitting(true);
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/admin/actionplan/createActionPlan",
+        `${BASE_URL}/api/admin/actionplan/createActionPlan`,
         {
           method: "POST",
           headers: {
@@ -148,7 +149,7 @@ export default function AgendaTable() {
       setSaving(true);
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `https://quickwin-jateng.vercel.app/api/admin/actionplan/updateActionPlan/${editId}`,
+        `${BASE_URL}/api/admin/actionplan/updateActionPlan/${editId}`,
         {
           method: "PUT",
           headers: {
@@ -181,7 +182,7 @@ export default function AgendaTable() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `https://quickwin-jateng.vercel.app/api/admin/actionplan/deleteActionPlan/${id}`,
+        `${BASE_URL}/api/admin/actionplan/deleteActionPlan/${id}`,
         {
           method: "DELETE",
           headers: {

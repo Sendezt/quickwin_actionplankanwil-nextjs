@@ -85,12 +85,13 @@ export default function FeedbackPage() {
   const [isCreating, setIsCreating] = useState(false);
   const [actionPlans, setActionPlans] = useState([]);
   const [cabangs, setCabangs] = useState([]);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   // Fetch Cabang
   const fetchCabangs = useCallback(async () => {
     try {
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/cabang/read"
+        `${BASE_URL}/api/cabang/read`
       );
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
@@ -103,7 +104,7 @@ export default function FeedbackPage() {
   // Fetch feedbacks
   const fetchFeedbacks = useCallback(() => {
     setLoading(true);
-    fetch("https://quickwin-jateng.vercel.app/api/admin/feedback/getalldata", {
+    fetch(`${BASE_URL}/api/admin/feedback/getalldata`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -125,7 +126,7 @@ export default function FeedbackPage() {
   const fetchActionPlans = useCallback(async () => {
     try {
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/actionplan"
+        `${BASE_URL}/api/actionplan`
       );
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
@@ -154,7 +155,7 @@ export default function FeedbackPage() {
     try {
       setSaving(true);
       const res = await fetch(
-        `https://quickwin-jateng.vercel.app/api/admin/feedback/updatefeedback/${editingData.id}`,
+        `${BASE_URL}/api/admin/feedback/updatefeedback/${editingData.id}`,
         {
           method: "PUT",
           headers: {
@@ -182,7 +183,7 @@ export default function FeedbackPage() {
     try {
       setDeleting(true);
       const res = await fetch(
-        `https://quickwin-jateng.vercel.app/api/admin/feedback/deletedata/${id}`,
+        `${BASE_URL}/api/admin/feedback/deletedata/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -203,7 +204,7 @@ export default function FeedbackPage() {
     try {
       setClearing(true);
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/admin/feedback/clearfeedback",
+        `${BASE_URL}/api/admin/feedback/clearfeedback`,
         {
           method: "DELETE",
           headers: {
@@ -224,7 +225,7 @@ export default function FeedbackPage() {
     setIsCreating(true);
     try {
       const res = await fetch(
-        "https://quickwin-jateng.vercel.app/api/admin/feedback/createfeedback",
+        `${BASE_URL}/api/admin/feedback/createfeedback`,
         {
           method: "POST",
           headers: {
@@ -495,7 +496,7 @@ export default function FeedbackPage() {
                       try {
                         setSaving(true);
                         const updateRes = await fetch(
-                          `https://quickwin-jateng.vercel.app/api/admin/feedback/updatefeedback/${editingData.id}`,
+                          `${BASE_URL}/api/admin/feedback/updatefeedback/${editingData.id}`,
                           {
                             method: "PUT",
                             headers: {
@@ -540,7 +541,7 @@ export default function FeedbackPage() {
                       try {
                         setSaving(true);
                         const res = await fetch(
-                          `https://quickwin-jateng.vercel.app/api/admin/feedback/updatefeedback/${editingData.id}`,
+                          `${BASE_URL}/api/admin/feedback/updatefeedback/${editingData.id}`,
                           {
                             method: "PUT",
                             headers: {
@@ -589,7 +590,7 @@ export default function FeedbackPage() {
                         fd.append("file", formData.file);
 
                         const uploadRes = await fetch(
-                          `https://quickwin-jateng.vercel.app/api/admin/feedback/uploadfeedback/${editingData.id}`,
+                          `${BASE_URL}/api/admin/feedback/uploadfeedback/${editingData.id}`,
                           {
                             method: "POST",
                             headers: {
@@ -605,7 +606,7 @@ export default function FeedbackPage() {
                       } else {
                         // Update task biasa
                         const updateRes = await fetch(
-                          `https://quickwin-jateng.vercel.app/api/admin/feedback/updatefeedback/${editingData.id}`,
+                          `${BASE_URL}/api/admin/feedback/updatefeedback/${editingData.id}`,
                           {
                             method: "PUT",
                             headers: {

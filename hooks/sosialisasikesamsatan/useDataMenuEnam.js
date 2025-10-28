@@ -13,17 +13,19 @@ export const useMenuEnamData = () => {
     loading: true,
   });
 
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   useEffect(() => {
     const fetchAllData = async () => {
       try {
         const [table1, table2, table3, table4, table5, feedback, range] = await Promise.all([
-          fetch("https://quickwin-jateng.vercel.app/api/sheet6/getsheet6table1").then(r => r.json()),
-          fetch("https://quickwin-jateng.vercel.app/api/sheet6/getsheet6table2").then(r => r.json()),
-          fetch("https://quickwin-jateng.vercel.app/api/sheet6/getsheet6table3").then(r => r.json()),
-          fetch("https://quickwin-jateng.vercel.app/api/sheet6/getsheet6table4").then(r => r.json()),
-          fetch("https://quickwin-jateng.vercel.app/api/sheet6/getsheet6table5").then(r => r.json()),
-          fetch("https://quickwin-jateng.vercel.app/api/feedback/read").then(r => r.json()),
-          fetch("https://quickwin-jateng.vercel.app/api/sheet6/getRange-sheet6").then(r => r.json()),
+          fetch(`${BASE_URL}/api/sheet6/getsheet6table1`).then(r => r.json()),
+          fetch(`${BASE_URL}/api/sheet6/getsheet6table2`).then(r => r.json()),
+          fetch(`${BASE_URL}/api/sheet6/getsheet6table3`).then(r => r.json()),
+          fetch(`${BASE_URL}/api/sheet6/getsheet6table4`).then(r => r.json()),
+          fetch(`${BASE_URL}/api/sheet6/getsheet6table5`).then(r => r.json()),
+          fetch(`${BASE_URL}/api/feedback/read`).then(r => r.json()),
+          fetch(`${BASE_URL}/api/sheet6/getRange-sheet6`).then(r => r.json()),
         ]);
 
         setState({

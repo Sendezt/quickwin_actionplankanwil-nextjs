@@ -11,17 +11,18 @@ export const useDataFetching = () => {
     feedbackData: [],
     loading: true,
   });
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchAllData = async () => {
       try {
         const [table1, table2, table3, cabang, range, feedback] = await Promise.all([
-          fetch("https://quickwin-jateng.vercel.app/api/sheet4/getsheet4table1").then(r => r.json()),
-          fetch("https://quickwin-jateng.vercel.app/api/sheet4/getsheet4table2").then(r => r.json()),
-          fetch("https://quickwin-jateng.vercel.app/api/sheet4/getsheet4table3").then(r => r.json()),
-          fetch("https://quickwin-jateng.vercel.app/api/sheet4/getsheet4card").then(r => r.json()),
-          fetch("https://quickwin-jateng.vercel.app/api/sheet4/getRange-sheet4").then(r => r.json()),
-          fetch("https://quickwin-jateng.vercel.app/api/feedback/read").then(r => r.json()),
+          fetch(`${BASE_URL}/api/sheet4/getsheet4table1`).then(r => r.json()),
+          fetch(`${BASE_URL}/api/sheet4/getsheet4table2`).then(r => r.json()),
+          fetch(`${BASE_URL}/api/sheet4/getsheet4table3`).then(r => r.json()),
+          fetch(`${BASE_URL}/api/sheet4/getsheet4card`).then(r => r.json()),
+          fetch(`${BASE_URL}/api/sheet4/getRange-sheet4`).then(r => r.json()),
+          fetch(`${BASE_URL}/api/feedback/read`).then(r => r.json()),
         ]);
 
         setState({

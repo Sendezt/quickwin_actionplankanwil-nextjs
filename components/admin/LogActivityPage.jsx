@@ -173,12 +173,13 @@ export default function LogActivityContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [loading, setLoading] = useState(true);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchLogs = async () => {
       try {
         const res = await fetch(
-          "https://quickwin-jateng.vercel.app/api/logs/getLog"
+          `${BASE_URL}/api/logs/getLog`
         );
         const data = await res.json();
         if (data.success) {
@@ -243,7 +244,7 @@ export default function LogActivityContent() {
   return (
     <div className="space-y-6">
       {/* Statistik */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
           { label: "Login", count: stats.login, color: "green", icon: LogIn },
           { label: "Create", count: stats.create, color: "blue", icon: Plus },

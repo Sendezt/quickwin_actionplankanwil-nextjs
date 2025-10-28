@@ -13,12 +13,13 @@ export default function MenuSengkuyung() {
   const [table1, setTable1] = useState(null);
   const [table2, setTable2] = useState(null);
   const [loading, setLoading] = useState(true);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchTable = async () => {
       try {
         const res = await fetch(
-          "https://quickwin-jateng.vercel.app/api/sheetI/getsheetItable1"
+          `${BASE_URL}/api/sheetI/getsheetItable1`
         );
         const json = await res.json();
         setTable1(json.table1);

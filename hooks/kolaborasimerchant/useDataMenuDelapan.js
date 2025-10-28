@@ -16,6 +16,7 @@ export const useDataMenuDelapan = () => {
     feedbackData: [],
     loading: true,
   });
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -34,36 +35,36 @@ export const useDataMenuDelapan = () => {
           feedback,
         ] = await Promise.all([
           fetch(
-            "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8table1"
+            `${BASE_URL}/api/sheet8/getsheet8table1`
           ).then((r) => r.json()),
           fetch(
-            "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8table4"
+            `${BASE_URL}/api/sheet8/getsheet8table4`
           ).then((r) => r.json()),
           fetch(
-            "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8table2"
+            `${BASE_URL}/api/sheet8/getsheet8table2`
           ).then((r) => r.json()),
           fetch(
-            "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8table5"
+            `${BASE_URL}/api/sheet8/getsheet8table5`
           ).then((r) => r.json()),
           fetch(
-            "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8table3"
+            `${BASE_URL}/api/sheet8/getsheet8table3`
           ).then((r) => r.json()),
           fetch(
-            "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8table6"
+            `${BASE_URL}/api/sheet8/getsheet8table6`
           ).then((r) => r.json()),
           fetch(
-            "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8table7"
+            `${BASE_URL}/api/sheet8/getsheet8table7`
           ).then((r) => r.json()),
           fetch(
-            "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8table8"
+            `${BASE_URL}/api/sheet8/getsheet8table8`
           ).then((r) => r.json()),
           fetch(
-            "https://quickwin-jateng.vercel.app/api/sheet8/getsheet8card"
+            `${BASE_URL}/api/sheet8/getsheet8card`
           ).then((r) => r.json()),
           fetch(
-            "https://quickwin-jateng.vercel.app/api/sheet8/getRange-sheet8"
+            `${BASE_URL}/api/sheet8/getRange-sheet8`
           ).then((r) => r.json()),
-          fetch("https://quickwin-jateng.vercel.app/api/feedback/read").then(
+          fetch(`${BASE_URL}/api/feedback/read`).then(
             (r) => r.json()
           ),
         ]);

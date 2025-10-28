@@ -26,6 +26,7 @@ export default function UserDetailPage() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -41,7 +42,7 @@ export default function UserDetailPage() {
         const userId = parsedUser.id;
 
         const response = await fetch(
-          `https://quickwin-jateng.vercel.app/api/admin/admin/getuser/${userId}`,
+          `${BASE_URL}/api/admin/admin/getuser/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

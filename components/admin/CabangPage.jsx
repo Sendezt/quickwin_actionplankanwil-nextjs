@@ -11,7 +11,7 @@ import LoadingSkeleton from "@/components/admin/Cabang/LoadingSkeleton";
 import AlertMessage from "@/components/admin/Cabang/AlertMessage";
 
 export default function CabangPage() {
-  const baseURL = "https://quickwin-jateng.vercel.app";
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
   const [cabangs, setCabangs] = useState([]);
   const [filteredCabangs, setFilteredCabangs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -60,7 +60,7 @@ export default function CabangPage() {
   async function fetchCabangs() {
     setLoading(true);
     try {
-      const res = await fetch(`${baseURL}/api/admin/cabang/getcabang`, {
+      const res = await fetch(`${BASE_URL}/api/admin/cabang/getcabang`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -81,7 +81,7 @@ export default function CabangPage() {
     if (!newCabang.trim()) return setError("Nama cabang tidak boleh kosong");
     setIsSubmitting(true);
     try {
-      const res = await fetch(`${baseURL}/api/admin/cabang/createcabang`, {
+      const res = await fetch(`${BASE_URL}/api/admin/cabang/createcabang`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +105,7 @@ export default function CabangPage() {
 
   async function openEditModal(id) {
     try {
-      const res = await fetch(`${baseURL}/api/admin/cabang/getcabang/${id}`, {
+      const res = await fetch(`${BASE_URL}/api/admin/cabang/getcabang/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -128,7 +128,7 @@ export default function CabangPage() {
     setIsUpdating(true);
     try {
       const res = await fetch(
-        `${baseURL}/api/admin/cabang/updatecabang/${editCabang.id}`,
+        `${BASE_URL}/api/admin/cabang/updatecabang/${editCabang.id}`,
         {
           method: "PUT",
           headers: {
@@ -155,7 +155,7 @@ export default function CabangPage() {
     setDeletingId(id);
     try {
       const res = await fetch(
-        `${baseURL}/api/admin/cabang/deletecabang/${id}`,
+        `${BASE_URL}/api/admin/cabang/deletecabang/${id}`,
         {
           method: "DELETE",
           headers: {

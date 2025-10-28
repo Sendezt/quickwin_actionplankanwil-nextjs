@@ -5,12 +5,13 @@ import React, { useEffect, useState } from "react";
 export default function ActionPlanTable() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          "https://quickwin-jateng.vercel.app/api/actionplan"
+          `${BASE_URL}/api/actionplan`
         );
         const json = await res.json();
         setData(json);

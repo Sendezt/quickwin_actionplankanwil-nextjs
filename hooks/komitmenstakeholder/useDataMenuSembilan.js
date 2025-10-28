@@ -1,16 +1,16 @@
 // hooks\komitmenstakeholder\useDataMenuSembilan.js
 import { useState, useEffect } from "react";
 
-const API_BASE_URL = "https://quickwin-jateng.vercel.app/api";
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;;
 
 const API_ENDPOINTS = {
-  table1: `${API_BASE_URL}/sheet9/getsheet9table1`,
-  table2: `${API_BASE_URL}/sheet9/getsheet9table2`,
-  table3: `${API_BASE_URL}/sheet9/getsheet9table3`,
-  table4: `${API_BASE_URL}/sheet9/getsheet9table4`,
-  breakdown: `${API_BASE_URL}/sheet9/getsheet9card`,
-  range: `${API_BASE_URL}/sheet9/getRange-sheet9`,
-  feedback: `${API_BASE_URL}/feedback/read`,
+  table1: `${BASE_URL}/api/sheet9/getsheet9table1`,
+  table2: `${BASE_URL}/api/sheet9/getsheet9table2`,
+  table3: `${BASE_URL}/api/sheet9/getsheet9table3`,
+  table4: `${BASE_URL}/api/sheet9/getsheet9table4`,
+  breakdown: `${BASE_URL}/api/sheet9/getsheet9card`,
+  range: `${BASE_URL}/api/sheet9/getRange-sheet9`,
+  feedback: `${BASE_URL}/api/feedback/read`,
 };
 
 export const useDataMenuSembilan = () => {
