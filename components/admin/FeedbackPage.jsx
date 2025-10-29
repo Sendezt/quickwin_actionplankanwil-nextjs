@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,7 +20,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Edit, Trash2, Plus, Loader2 } from "lucide-react";
+import {
+  Edit,
+  Trash2,
+  Plus,
+  Loader2,
+  FileText,
+  X,
+  Eye,
+  Info,
+} from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -71,6 +81,126 @@ const LoadingOverlay = ({ message = "Memuat data..." }) => {
   );
 };
 
+// File Dropzone Component
+const FileDropzone = ({ file, onFileSelect, onFileRemove }) => {
+  const [preview, setPreview] = useState(null);
+
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      if (acceptedFiles.length > 0) {
+        const selectedFile = acceptedFiles[0];
+        onFileSelect(selectedFile);
+
+        // Create preview for images
+        if (selectedFile.type.startsWith("image/")) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setPreview(reader.result);
+          };
+          reader.readAsDataURL(selectedFile);
+        } else {
+          setPreview(null);
+        }
+      }
+    },
+    [onFileSelect]
+  );
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      "image/*": [".png", ".jpg", ".jpeg", ".gif"],
+      "application/pdf": [".pdf"],
+    },
+    maxFiles: 1,
+    multiple: false,
+  });
+
+  const handleRemove = () => {
+    setPreview(null);
+    onFileRemove();
+  };
+
+  const isImage = file && file.type.startsWith("image/");
+  const isPdf = file && file.type === "application/pdf";
+
+  return (
+    <div>
+      {!file ? (
+        <div
+          {...getRootProps()}
+          className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
+            isDragActive
+              ? "border-blue-500 bg-blue-50"
+              : "border-gray-300 hover:border-gray-400 hover:bg-gray-50"
+          }`}
+        >
+          <input {...getInputProps()} />
+          <FileText className="h-10 w-10 mx-auto mb-2 text-gray-400" />
+          {isDragActive ? (
+            <p className="text-sm text-blue-600">Letakkan file di sini...</p>
+          ) : (
+            <div>
+              <p className="text-sm text-gray-600 mb-1">
+                Seret & lepas file atau klik untuk memilih
+              </p>
+              <p className="text-xs text-gray-400">
+                Format: PNG, JPG, PDF (Max 1 file)
+              </p>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {/* Image Preview */}
+          {isImage && preview && (
+            <div className="relative border-2 border-gray-300 rounded-lg overflow-hidden bg-gray-50">
+              <img
+                src={preview}
+                alt="Preview"
+                className="w-full max-h-48 object-contain"
+              />
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={handleRemove}
+                className="absolute top-2 right-2 shadow-lg"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+
+          {/* File Info */}
+          <div className="border border-gray-300 rounded-lg p-4 flex items-center justify-between bg-gray-50">
+            <div className="flex items-center gap-3">
+              <FileText className="h-8 w-8 text-blue-600" />
+              <div>
+                <p className="text-sm font-medium text-gray-900">{file.name}</p>
+                <p className="text-xs text-gray-500">
+                  {(file.size / 1024).toFixed(2)} KB
+                  {isImage && " • Gambar"}
+                  {isPdf && " • PDF"}
+                </p>
+              </div>
+            </div>
+            {!isImage && (
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={handleRemove}
+                className="hover:bg-red-50 hover:text-red-600"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default function FeedbackPage() {
   const [feedbacks, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -85,14 +215,14 @@ export default function FeedbackPage() {
   const [isCreating, setIsCreating] = useState(false);
   const [actionPlans, setActionPlans] = useState([]);
   const [cabangs, setCabangs] = useState([]);
+  const [previewUrl, setPreviewUrl] = useState(null);
+
   const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   // Fetch Cabang
   const fetchCabangs = useCallback(async () => {
     try {
-      const res = await fetch(
-        `${BASE_URL}/api/cabang/read`
-      );
+      const res = await fetch(`${BASE_URL}/api/cabang/read`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       setCabangs(data || []);
@@ -125,9 +255,7 @@ export default function FeedbackPage() {
   // Fetch action plans
   const fetchActionPlans = useCallback(async () => {
     try {
-      const res = await fetch(
-        `${BASE_URL}/api/actionplan`
-      );
+      const res = await fetch(`${BASE_URL}/api/actionplan`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       setActionPlans(data || []);
@@ -203,15 +331,12 @@ export default function FeedbackPage() {
   const handleClearAll = async () => {
     try {
       setClearing(true);
-      const res = await fetch(
-        `${BASE_URL}/api/admin/feedback/clearfeedback`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const res = await fetch(`${BASE_URL}/api/admin/feedback/clearfeedback`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       await fetchFeedbacks();
     } catch (err) {
       console.error("Error clearing feedback:", err);
@@ -224,22 +349,19 @@ export default function FeedbackPage() {
   const handleCreateFeedback = async (formData) => {
     setIsCreating(true);
     try {
-      const res = await fetch(
-        `${BASE_URL}/api/admin/feedback/createfeedback`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify({
-            cabangId: formData.cabangId,
-            actionPlanId: formData.actionPlanId,
-            subActionPlanId: formData.subActionPlanId,
-            task: formData.task,
-          }),
-        }
-      );
+      const res = await fetch(`${BASE_URL}/api/admin/feedback/createfeedback`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          cabangId: formData.cabangId,
+          actionPlanId: formData.actionPlanId,
+          subActionPlanId: formData.subActionPlanId,
+          task: formData.task,
+        }),
+      });
 
       const data = await res.json();
       if (data.success) {
@@ -358,10 +480,8 @@ export default function FeedbackPage() {
                     <th className="px-6 py-3 text-left">No</th>
                     <th className="px-6 py-3 text-left">Cabang</th>
                     <th className="px-6 py-3 text-left">Action Plan</th>
-                    <th className="px-6 py-3 text-left">Task</th>
+                    <th className="px-6 py-3 text-left">Feedback</th>
                     <th className="px-6 py-3 text-left">Status</th>
-                    <th className="px-6 py-3 text-left">Proses</th>
-                    <th className="px-6 py-3 text-left">Selesai</th>
                     <th className="px-6 py-3 text-left">Aksi</th>
                   </tr>
                 </thead>
@@ -376,12 +496,6 @@ export default function FeedbackPage() {
                       <td className="px-6 py-3">{fb.actionPlan?.title}</td>
                       <td className="px-6 py-3">{fb.task}</td>
                       <td className="px-6 py-3">{renderStatus(fb.status)}</td>
-                      <td className="px-6 py-3">
-                        {formatDate(fb.timestampProses)}
-                      </td>
-                      <td className="px-6 py-3">
-                        {formatDate(fb.timestampSelesai)}
-                      </td>
                       <td className="px-6 py-3 flex gap-2">
                         <Button
                           size="sm"
@@ -421,6 +535,26 @@ export default function FeedbackPage() {
                             </AlertDialogFooter>
                           </AlertDialogContent>
                         </AlertDialog>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className={
+                            fb.buktiGambar
+                              ? "border-blue-500 text-blue-600 hover:bg-blue-50"
+                              : "border-gray-400 text-gray-600 hover:bg-gray-50"
+                          }
+                          onClick={() => handleReview(fb)}
+                        >
+                          {fb.buktiGambar ? (
+                            <>
+                              <Eye className="h-4 w-4 mr-1" /> Review
+                            </>
+                          ) : (
+                            <>
+                              <Info className="h-4 w-4 mr-1" /> Detail
+                            </>
+                          )}
+                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -443,7 +577,7 @@ export default function FeedbackPage() {
 
         {/* Dialog Edit */}
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogContent className="sm:max-w-md">
+          <DialogContent className="sm:max-w-md max-h-[90vh] flex flex-col">
             <DialogHeader>
               <DialogTitle>Edit Feedback</DialogTitle>
               <DialogDescription>
@@ -455,10 +589,10 @@ export default function FeedbackPage() {
               </DialogDescription>
             </DialogHeader>
 
-            <div className="space-y-4">
+            <div className="space-y-4 overflow-y-auto px-1 [&::-webkit-scrollbar]:hidden scrollbar-none">
               {/* Edit Task */}
               <div>
-                <Label>Task</Label>
+                <Label className="pb-1">Feedback</Label>
                 <Input
                   value={formData.task}
                   onChange={(e) =>
@@ -467,15 +601,15 @@ export default function FeedbackPage() {
                 />
               </div>
 
-              {/* Jika status PROSES → tampilkan upload file */}
+              {/* Jika status PROSES → tampilkan upload file dengan dropzone */}
               {editingData?.status === "proses" && (
                 <div>
-                  <Label>Upload File Bukti</Label>
-                  <Input
-                    type="file"
-                    accept="image/*,application/pdf"
-                    onChange={(e) =>
-                      setFormData({ ...formData, file: e.target.files[0] })
+                  <Label className="pb-1">Upload File Bukti</Label>
+                  <FileDropzone
+                    file={formData.file}
+                    onFileSelect={(file) => setFormData({ ...formData, file })}
+                    onFileRemove={() =>
+                      setFormData({ ...formData, file: null })
                     }
                   />
                 </div>
@@ -483,7 +617,11 @@ export default function FeedbackPage() {
             </div>
 
             <DialogFooter className="flex flex-wrap justify-end gap-2 pt-4">
-              <Button variant="outline" onClick={() => setOpen(false)}>
+              <Button
+                className="cursor-pointer"
+                variant="outline"
+                onClick={() => setOpen(false)}
+              >
                 Batal
               </Button>
 
@@ -579,6 +717,7 @@ export default function FeedbackPage() {
               ) : (
                 /* Jika status bukan selesai (misal proses atau pending) */
                 <Button
+                  className="bg-blue-600 hover:bg-blue-700 cursor-pointer"
                   disabled={saving}
                   onClick={async () => {
                     try {

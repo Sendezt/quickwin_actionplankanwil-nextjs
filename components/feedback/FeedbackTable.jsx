@@ -120,7 +120,7 @@ export function FeedbackTable({
                   {/* Aksi */}
                   <td className="p-4 text-left">
                     {/* ✅ Logika baru: */}
-                    {fb.status !== "selesai" && isOwnCabang ? (
+                    {fb.buktiGambar == null && isOwnCabang ? (
                       // Tampilkan tombol "Tandai Selesai" hanya untuk cabang sendiri
                       <Button
                         size="sm"

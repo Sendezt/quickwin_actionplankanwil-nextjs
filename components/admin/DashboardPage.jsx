@@ -20,6 +20,8 @@ export function DashboardContent() {
   const [actionPlanCount, setActionPlanCount] = useState(null);
   const [subActionPlanCount, setSubActionPlanCount] = useState(null);
   const [feedbackCount, setFeedbackCount] = useState(null);
+  const [feedbackProsesCount, setFeedbackProsesCount] = useState(null);
+  const [feedbackSelesaiCount, setFeedbackSelesaiCount] = useState(null);
   const [username, setUsername] = useState("");
   const [activities, setActivities] = useState([]);
   const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -50,9 +52,15 @@ export function DashboardContent() {
       color: "bg-yellow-500",
     },
     {
-      label: "Feedback",
-      value: feedbackCount ?? "Loading...",
+      label: "Feedback Proses",
+      value: feedbackProsesCount ?? "Loading...",
       icon: Activity,
+      color: "bg-orange-500",
+    },
+    {
+      label: "Feedback Selesai",
+      value: feedbackSelesaiCount ?? "Loading...",
+      icon: ClipboardCheck,
       color: "bg-orange-500",
     },
   ];
@@ -195,10 +203,24 @@ export function DashboardContent() {
         }
 
         const result = await response.json();
-        const count = result?.data ? result.data.length : 0;
-        setFeedbackCount(count);
+        const data = result?.data || [];
+
+        // Hitung total feedback
+        setFeedbackCount(data.length);
+
+        // Pisahkan berdasarkan status timestampSelesai
+        const selesai = data.filter(
+          (item) => item.timestampSelesai !== null
+        ).length;
+        const proses = data.filter(
+          (item) => item.timestampSelesai === null
+        ).length;
+
+        // Set ke state
+        setFeedbackSelesaiCount(selesai);
+        setFeedbackProsesCount(proses);
       } catch (error) {
-        console.error("Gagal mengambil data action plan:", error);
+        console.error("Gagal mengambil data feedback:", error);
       }
     };
 

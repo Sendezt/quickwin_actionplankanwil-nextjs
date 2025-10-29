@@ -109,7 +109,7 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
       formData.append("file", file);
 
       const response = await fetch(
-        `https://magangproject.vercel.app/api/feedback/${feedback.id}/selesai`,
+        `https://magangproject.vercel.app/api/feedback/${feedback.id}`,
         {
           method: "POST",
           headers: {

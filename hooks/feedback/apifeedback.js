@@ -52,7 +52,7 @@ export async function createFeedback(payload) {
  * @param {File} file - File bukti (gambar atau PDF)
  */
 export async function updateFeedbackStatus(id, file) {
-  const url = `${BASE_URL}/api/feedback/${id}/selesai`;
+  const url = `${BASE_URL}/api/feedback/${id}`;
   const token = localStorage.getItem("token");
 
   const formData = new FormData();
