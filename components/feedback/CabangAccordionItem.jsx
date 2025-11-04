@@ -27,6 +27,7 @@ export function CabangAccordionItem({
   selectedFeedbackId,
   setOpenCabang, // ✅ terima di sini
   userCabangId,
+  onUploadUlang,
 }) {
   return (
     <AccordionItem key={cabang.id} value={`cabang-${cabang.id}`}>
@@ -73,6 +74,7 @@ export function CabangAccordionItem({
           totalFeedbacks={totalFeedbacks}
           onSelesai={onSelesai}
           onInfo={onInfo}
+          onUploadUlang={onUploadUlang}
           isUpdating={isUpdating}
           selectedFeedbackId={selectedFeedbackId}
           userCabangId={userCabangId}

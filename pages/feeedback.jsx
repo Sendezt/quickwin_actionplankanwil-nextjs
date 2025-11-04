@@ -25,6 +25,7 @@ import { CabangAccordionItem } from "@/components/feedback/CabangAccordionItem";
 import FeedbackFormModal from "@/components/feedback/FeedbackFormModal";
 import FeedbackModal from "@/components/feedback/FeedbackModal";
 import FeedbackInfoModal from "@/components/feedback/FeedbackInfoModal";
+import ReuploadFeedbackModal from "@/components/feedback/FeedbackReuploadModal";
 
 export default function FeedbackPage() {
   const now = new Date();
@@ -61,6 +62,8 @@ export default function FeedbackPage() {
   const [selectedFeedback, setSelectedFeedback] = useState(null);
   const [infoOpen, setInfoOpen] = useState(false);
   const [infoFeedback, setInfoFeedback] = useState(null);
+  const [reuploadOpen, setReuploadOpen] = useState(false);
+  const [reuploadFeedback, setReuploadFeedback] = useState(null);
 
   // Auth states
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -189,6 +192,18 @@ export default function FeedbackPage() {
     setShowModal(true);
   };
 
+  const handleOpenReupload = (feedback) => {
+    setReuploadFeedback(feedback);
+    setReuploadOpen(true);
+  };
+
+  const handleConfirmReupload = (updatedFeedback) => {
+    // Reload data setelah reupload berhasil
+    loadData(true);
+    setReuploadOpen(false);
+    setReuploadFeedback(null);
+  };
+
   const handleGoToLogin = () => {
     // Redirect to login page
     window.location.href = "/login"; // Adjust path as needed
@@ -281,7 +296,7 @@ export default function FeedbackPage() {
                 {isRefreshing ? "Refreshing..." : "Refresh"}
               </Button>
 
-              {isAllowedDate && userInfo.role !== "Admin" && (
+              {isAllowedDate && userInfo?.role !== "Admin" && (
                 <Button
                   className={`transition-all duration-200 flex items-center gap-2 ${
                     isLoggedIn
@@ -362,6 +377,7 @@ export default function FeedbackPage() {
                         setOpenCabang(`cabang-${cabang.id}`);
                         handleOpenInfo(feedback);
                       }}
+                      onUploadUlang={handleOpenReupload}
                       isRefreshing={isRefreshing}
                       isUpdating={isUpdating}
                       selectedFeedbackId={selectedFeedback?.id}
@@ -418,6 +434,13 @@ export default function FeedbackPage() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        <ReuploadFeedbackModal
+          open={reuploadOpen}
+          onClose={() => setReuploadOpen(false)}
+          feedback={reuploadFeedback}
+          onConfirm={handleConfirmReupload}
+        />
 
         <FeedbackModal
           open={confirmOpen}

@@ -43,6 +43,8 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import FeedbackFormModal from "@/components/admin/Feedback/FeedbackFormModal";
+import FeedbackInfoModal from "./Feedback/FeedbackInfoModal";
+import FeedbackInfoProsesModal from "./Feedback/FeedbackInfoProsesModal";
 
 // Loading Skeleton Component
 const TableSkeleton = () => {
@@ -216,6 +218,9 @@ export default function FeedbackPage() {
   const [actionPlans, setActionPlans] = useState([]);
   const [cabangs, setCabangs] = useState([]);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [openInfoModal, setOpenInfoModal] = useState(false);
+  const [openProsesModal, setOpenProsesModal] = useState(false);
+  const [selectedFeedback, setSelectedFeedback] = useState(null);
 
   const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -404,11 +409,31 @@ export default function FeedbackPage() {
         </Badge>
       );
     }
+    if (status === "reject") {
+      return (
+        <Badge className="bg-yellow-100 text-red-800 border border-red-200">
+          Reject
+        </Badge>
+      );
+    }
     return (
       <Badge className="bg-gray-100 text-gray-800 border border-gray-200">
         -
       </Badge>
     );
+  };
+
+  const handleReview = (fb) => {
+    const isReview =
+      fb.buktiGambar && fb.timestampUpload && !fb.timestampSelesai;
+
+    setSelectedFeedback(fb);
+
+    if (isReview) {
+      setOpenProsesModal(true);
+    } else {
+      setOpenInfoModal(true);
+    }
   };
 
   return (
@@ -539,13 +564,17 @@ export default function FeedbackPage() {
                           size="sm"
                           variant="outline"
                           className={
-                            fb.buktiGambar
+                            fb.buktiGambar &&
+                            fb.timestampUpload &&
+                            !fb.timestampSelesai
                               ? "border-blue-500 text-blue-600 hover:bg-blue-50"
                               : "border-gray-400 text-gray-600 hover:bg-gray-50"
                           }
                           onClick={() => handleReview(fb)}
                         >
-                          {fb.buktiGambar ? (
+                          {fb.buktiGambar &&
+                          fb.timestampUpload &&
+                          !fb.timestampSelesai ? (
                             <>
                               <Eye className="h-4 w-4 mr-1" /> Review
                             </>
@@ -784,6 +813,23 @@ export default function FeedbackPage() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+        {/* Modal Detail Feedback */}
+        {selectedFeedback && (
+          <FeedbackInfoModal
+            open={openInfoModal}
+            onClose={() => setOpenInfoModal(false)}
+            feedback={selectedFeedback}
+          />
+        )}
+
+        {/* Modal Review Feedback (Proses) */}
+        {selectedFeedback && (
+          <FeedbackInfoProsesModal
+            open={openProsesModal}
+            onClose={() => setOpenProsesModal(false)}
+            feedback={selectedFeedback}
+          />
+        )}
       </Card>
     </>
   );

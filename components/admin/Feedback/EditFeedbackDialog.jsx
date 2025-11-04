@@ -1,3 +1,4 @@
+// ===== FILE: components/feedback/EditFeedbackDialog.jsx =====
 import React from "react";
 import {
   Dialog,
@@ -23,15 +24,12 @@ export const EditFeedbackDialog = ({
   onSave,
   onRevert,
 }) => {
-  const isCompleted = editingData?.status === "selesai";
-  const isInProgress = editingData?.status === "proses";
-
   const getDialogDescription = () => {
-    if (isCompleted) {
-      return "Feedback telah selesai. Anda dapat mengedit task atau mengembalikannya ke status proses.";
-    }
-    if (isInProgress) {
+    if (editingData?.status === "proses") {
       return "Perbarui task atau unggah file untuk menyelesaikan feedback.";
+    }
+    if (editingData?.status === "selesai") {
+      return "Feedback telah selesai. Anda dapat mengedit task atau mengembalikannya ke status proses.";
     }
     return "Perbarui informasi feedback.";
   };
@@ -55,7 +53,7 @@ export const EditFeedbackDialog = ({
             />
           </div>
 
-          {isInProgress && (
+          {editingData?.status === "proses" && (
             <div>
               <Label className="pb-1">Upload File Bukti</Label>
               <FileDropzone
@@ -68,11 +66,15 @@ export const EditFeedbackDialog = ({
         </div>
 
         <DialogFooter className="flex flex-wrap justify-end gap-2 pt-4">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button
+            className="cursor-pointer"
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+          >
             Batal
           </Button>
 
-          {isCompleted ? (
+          {editingData?.status === "selesai" ? (
             <>
               <Button disabled={saving} onClick={onSave}>
                 {saving ? (
@@ -84,6 +86,7 @@ export const EditFeedbackDialog = ({
                   "Edit Task"
                 )}
               </Button>
+
               <Button
                 variant="destructive"
                 disabled={saving}
@@ -101,7 +104,7 @@ export const EditFeedbackDialog = ({
             </>
           ) : (
             <Button
-              className="bg-blue-600 hover:bg-blue-700"
+              className="bg-blue-600 hover:bg-blue-700 cursor-pointer"
               disabled={saving}
               onClick={onSave}
             >

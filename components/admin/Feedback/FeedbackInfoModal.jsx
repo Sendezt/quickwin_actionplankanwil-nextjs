@@ -163,7 +163,7 @@ export default function FeedbackInfoModal({
   };
 
   const canUploadFile =
-    currentFeedback.status !== "selesai" &&
+    currentFeedback.status !== "proses" &&
     currentFeedback.buktiGambar !== null;
 
   return (
@@ -172,7 +172,7 @@ export default function FeedbackInfoModal({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Info className="w-5 h-5 text-blue-600" />
-            Detail Feedback
+            Detail Feedback Ngloco
           </DialogTitle>
           <DialogDescription>
             Informasi lengkap tentang feedback ini
@@ -214,9 +214,8 @@ export default function FeedbackInfoModal({
                 </p>
               </div>
 
-              {/* File Upload Section - Hanya tampil jika status proses */}
-              {/* File Bukti & Upload Section */}
-              {currentFeedback.buktiGambar && (
+              {/* File Upload Section - Hanya tampil jika status selesai */}
+              {canUploadFile && (
                 <div
                   className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm"
                   key={`upload-${currentFeedback.id}-${
@@ -228,95 +227,31 @@ export default function FeedbackInfoModal({
                     File Bukti
                   </h3>
 
-                  {/* Success notification */}
-                  {uploadSuccess && (
-                    <div className="mb-3 p-3 bg-green-50 rounded-lg border border-green-200 flex items-center gap-2 animate-in fade-in duration-300">
-                      <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
-                      <p className="text-sm text-green-700 font-medium">
-                        File berhasil diganti!
+                  {/* File saat ini */}
+                  {currentFeedback.buktiGambar && (
+                    <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                      <p className="text-sm text-blue-900 mb-2 font-medium">
+                        File saat ini:
                       </p>
+                      <a
+                        href={currentFeedback.buktiGambar}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-blue-600 hover:text-blue-800 underline break-all"
+                      >
+                        Lihat File
+                      </a>
                     </div>
                   )}
 
-                  {/* File saat ini */}
-                  <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                    <p className="text-sm text-blue-900 mb-2 font-medium">
-                      File saat ini:
-                    </p>
-                    <a
-                      href={currentFeedback.buktiGambar}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-blue-600 hover:text-blue-800 underline break-all"
-                    >
-                      Lihat File
-                    </a>
-                  </div>
-
-                  {/* Upload section - hanya jika status belum selesai */}
-                  {currentFeedback.status !== "selesai" && (
-                    <>
-                      {!isUploading && (
-                        <div className="space-y-3">
-                          <input
-                            ref={fileInputRef}
-                            type="file"
-                            accept="image/jpeg,image/jpg,image/png,image/webp,application/pdf"
-                            onChange={handleFileSelect}
-                            disabled={isUploading}
-                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                          />
-
-                          {selectedFile && (
-                            <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg border border-green-200">
-                              <FileText className="w-4 h-4 text-green-600 flex-shrink-0" />
-                              <span className="text-sm text-green-900 flex-1 truncate">
-                                {selectedFile.name}
-                              </span>
-                              <button
-                                onClick={handleCancelFile}
-                                disabled={isUploading}
-                                className="text-green-600 hover:text-green-800 disabled:opacity-50"
-                              >
-                                <X className="w-4 h-4" />
-                              </button>
-                            </div>
-                          )}
-
-                          {uploadError && (
-                            <div className="p-3 bg-red-50 rounded-lg border border-red-200">
-                              <p className="text-sm text-red-700">
-                                {uploadError}
-                              </p>
-                            </div>
-                          )}
-
-                          {selectedFile && (
-                            <Button
-                              onClick={handleUpload}
-                              disabled={isUploading}
-                              className="w-full"
-                            >
-                              <Upload className="w-4 h-4 mr-2" />
-                              Upload File Baru
-                            </Button>
-                          )}
-
-                          <p className="text-xs text-gray-500">
-                            Format: JPG, PNG, WEBP, PDF (Max. 2MB)
-                          </p>
-                        </div>
-                      )}
-
-                      {isUploading && (
-                        <div className="flex items-center justify-center py-8">
-                          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-                          <span className="ml-3 text-gray-600">
-                            Mengunggah file...
-                          </span>
-                        </div>
-                      )}
-                    </>
+                  {/* Loading state */}
+                  {isUploading && (
+                    <div className="flex items-center justify-center py-8">
+                      <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                      <span className="ml-3 text-gray-600">
+                        Mengunggah file...
+                      </span>
+                    </div>
                   )}
                 </div>
               )}

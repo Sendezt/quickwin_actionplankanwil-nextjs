@@ -18,13 +18,7 @@ export async function fetchActionPlans() {
 }
 
 export async function fetchSubActionPlans() {
-  const token = localStorage.getItem("token"); // ambil token login user
-
-  const res = await fetch(`${BASE_URL}/api/admin/sub/getsub`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const res = await fetch(`${BASE_URL}/api/feedback/getsubactionplan`);
 
   if (!res.ok) {
     throw new Error(`Failed to fetch sub action plans: ${res.status}`);
@@ -52,7 +46,7 @@ export async function createFeedback(payload) {
  * @param {File} file - File bukti (gambar atau PDF)
  */
 export async function updateFeedbackStatus(id, file) {
-  const url = `${BASE_URL}/api/feedback/${id}`;
+  const url = `${BASE_URL}/api/feedback/${id}/upload`;
   const token = localStorage.getItem("token");
 
   const formData = new FormData();

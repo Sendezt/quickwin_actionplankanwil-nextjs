@@ -1,3 +1,4 @@
+// components\feedback\FeedbackReuploadModal.jsx
 "use client";
 import { useState, useCallback, useEffect } from "react";
 import {
@@ -11,18 +12,22 @@ import {
 import { Button } from "@/components/ui/button";
 import { useDropzone } from "react-dropzone";
 
-export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
+export default function ReuploadFeedbackModal({
+  open,
+  onClose,
+  onConfirm,
+  feedback,
+}) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-  // Fungsi saat file dijatuhkan
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles && acceptedFiles.length > 0) {
       const selectedFile = acceptedFiles[0];
 
-      // Validasi ukuran file (max 2MB)
+      // Validasi ukuran file maksimal 2MB
       if (selectedFile.size > 2 * 1024 * 1024) {
         alert("Ukuran file maksimal 2 MB");
         return;
@@ -36,20 +41,14 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
         "image/webp",
         "application/pdf",
       ];
-      if (
-        !allowedTypes.some(
-          (type) =>
-            selectedFile.type === type ||
-            selectedFile.type.startsWith(type.split("/")[0])
-        )
-      ) {
+      if (!allowedTypes.includes(selectedFile.type)) {
         alert("Hanya file gambar (JPG, PNG, WEBP) atau PDF yang diperbolehkan");
         return;
       }
 
       setFile(selectedFile);
 
-      // Preview hanya untuk gambar
+      // Tampilkan preview hanya jika file adalah gambar
       if (selectedFile.type.startsWith("image/")) {
         const objectUrl = URL.createObjectURL(selectedFile);
         setPreview(objectUrl);
@@ -59,7 +58,6 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
     }
   }, []);
 
-  // Dropzone configuration
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
@@ -69,7 +67,7 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
       "application/pdf": [".pdf"],
     },
     multiple: false,
-    maxSize: 5 * 1024 * 1024, // 2MB
+    maxSize: 2 * 1024 * 1024, // 2MB
   });
 
   // Reset state saat modal ditutup
@@ -81,22 +79,18 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
     }
   }, [open]);
 
-  // Cleanup preview URL
+  // Bersihkan object URL saat unmount
   useEffect(() => {
     return () => {
-      if (preview) {
-        URL.revokeObjectURL(preview);
-      }
+      if (preview) URL.revokeObjectURL(preview);
     };
   }, [preview]);
 
   if (!feedback) return null;
 
-  const handleConfirm = async () => {
+  const handleReupload = async () => {
     if (!file) {
-      alert(
-        "Upload bukti kegiatan (gambar atau PDF) wajib untuk menyelesaikan feedback."
-      );
+      alert("Silakan upload file baru terlebih dahulu sebelum mengirim ulang.");
       return;
     }
 
@@ -104,18 +98,15 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
 
     try {
       const token = localStorage.getItem("token");
-
-      // Buat FormData - field name bebas, backend hanya baca file stream
       const formData = new FormData();
       formData.append("file", file);
 
       const response = await fetch(
-        `${BASE_URL}/api/feedback/${feedback.id}/upload`,
+        `${BASE_URL}/api/feedback/${feedback.id}/reupload`,
         {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
-            // JANGAN tambahkan Content-Type, biar browser yang set otomatis dengan boundary
           },
           body: formData,
         }
@@ -123,7 +114,6 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
 
       const contentType = response.headers.get("content-type");
       let data;
-
       if (contentType && contentType.includes("application/json")) {
         data = await response.json();
       } else {
@@ -133,19 +123,14 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
       }
 
       if (!response.ok) {
-        throw new Error(
-          data.message || `Error ${response.status}: Gagal update feedback`
-        );
+        throw new Error(data.message || "Gagal mengirim ulang file.");
       }
 
-      // Berhasil
       onConfirm(data.data);
-      setFile(null);
-      setPreview(null);
       onClose();
     } catch (err) {
-      console.error("Error updating feedback:", err);
-      alert(err.message || "Terjadi kesalahan saat mengupdate feedback");
+      console.error("Error reupload feedback:", err);
+      alert(err.message || "Terjadi kesalahan saat mengirim ulang file.");
     } finally {
       setLoading(false);
     }
@@ -155,21 +140,41 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="rounded-2xl shadow-lg max-w-md">
         <DialogHeader>
-          <DialogTitle>Upload File</DialogTitle>
+          <DialogTitle>Kirim Ulang Bukti Kegiatan</DialogTitle>
           <DialogDescription>
-            Silakan unggah bukti penyelesaian terlebih dahulu. Setelah file
-            diunggah, status feedback akan menunggu{" "}
-            <span className="text-blue-600 font-semibold">
-              verifikasi dari admin
-            </span>
-            .
+            File sebelumnya telah{" "}
+            <span className="text-red-600 font-semibold">ditolak</span>. Silakan
+            periksa file saat ini, lalu unggah ulang bukti kegiatan yang benar.
           </DialogDescription>
         </DialogHeader>
 
-        {/* Dropzone */}
-        <div className="mt-4">
+        {/* FILE SAAT INI */}
+        {feedback.buktiGambar && (
+          <div className="mb-4 p-3 bg-red-50 rounded-lg border border-red-200">
+            <p className="text-sm text-red-900 mb-2 font-medium">
+              File saat ini (ditolak):
+            </p>
+            <a
+              href={feedback.buktiGambar}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-red-600 hover:text-red-800 underline break-all"
+            >
+              Lihat File
+            </a>
+            {feedback.rejectReason && (
+              <p className="text-xs text-red-700 mt-2">
+                Alasan ditolak:{" "}
+                <span className="font-medium">{feedback.rejectReason}</span>
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Dropzone Upload Ulang */}
+        <div className="mt-2">
           <label className="font-semibold block mb-2 text-sm">
-            Upload Bukti Kegiatan <span className="text-red-500">*</span>
+            Upload File Baru <span className="text-red-500">*</span>
           </label>
           <div
             {...getRootProps()}
@@ -182,10 +187,8 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
             }`}
           >
             <input {...getInputProps()} />
-
             {file ? (
               <div className="flex flex-col items-center gap-3">
-                {/* Preview file */}
                 {file.type.startsWith("image/") ? (
                   <img
                     src={preview}
@@ -197,8 +200,6 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
                     <span className="text-4xl">📄</span>
                   </div>
                 )}
-
-                {/* Info file */}
                 <div className="text-center">
                   <p className="text-sm font-medium text-gray-700 break-all px-2">
                     {file.name}
@@ -207,8 +208,6 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
                     {(file.size / 1024).toFixed(2)} KB
                   </p>
                 </div>
-
-                {/* Tombol ganti file */}
                 <p className="text-xs text-gray-500 mt-2">
                   Klik untuk mengganti file
                 </p>
@@ -231,16 +230,17 @@ export default function FeedbackModal({ open, onClose, onConfirm, feedback }) {
           </div>
         </div>
 
+        {/* Footer */}
         <DialogFooter className="gap-2 sm:gap-0">
           <Button variant="outline" onClick={onClose} disabled={loading}>
             Batal
           </Button>
           <Button
             className="bg-green-600 hover:bg-green-700"
-            onClick={handleConfirm}
+            onClick={handleReupload}
             disabled={loading || !file}
           >
-            {loading ? "Mengirim..." : "Ya, Selesai"}
+            {loading ? "Mengirim..." : "Kirim Ulang"}
           </Button>
         </DialogFooter>
       </DialogContent>

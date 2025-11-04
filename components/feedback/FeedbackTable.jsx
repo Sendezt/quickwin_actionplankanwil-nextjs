@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Loader2, Info } from "lucide-react";
+import { Loader2, Info, Upload } from "lucide-react";
 
 export function FeedbackTable({
   feedbacks,
@@ -11,6 +11,7 @@ export function FeedbackTable({
   isUpdating,
   selectedFeedbackId,
   userCabangId, // ✅ TAMBAHKAN: ID cabang user yang login
+  onUploadUlang,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -103,15 +104,17 @@ export function FeedbackTable({
                   <td className="p-4 border-r border-gray-100 text-center">
                     <span
                       className={`
-                        px-3 py-1 rounded-full text-xs font-medium transition-all duration-200
-                        ${
-                          fb.status === "selesai"
-                            ? "bg-green-100 text-green-800 border border-green-200"
-                            : fb.status === "proses"
-                            ? "bg-yellow-100 text-yellow-800 border border-yellow-200"
-                            : "bg-gray-100 text-gray-800 border border-gray-200"
-                        }
-                      `}
+      px-3 py-1 rounded-full text-xs font-medium transition-all duration-200
+      ${
+        fb.status === "selesai"
+          ? "bg-green-100 text-green-800 border border-green-200"
+          : fb.status === "proses"
+          ? "bg-yellow-100 text-yellow-800 border border-yellow-200"
+          : fb.status === "reject"
+          ? "bg-red-100 text-red-800 border border-red-200"
+          : "bg-gray-100 text-gray-800 border border-gray-200"
+      }
+    `}
                     >
                       {fb.status}
                     </span>
@@ -119,9 +122,18 @@ export function FeedbackTable({
 
                   {/* Aksi */}
                   <td className="p-4 text-left">
-                    {/* ✅ Logika baru: */}
-                    {fb.buktiGambar == null && isOwnCabang ? (
-                      // Tampilkan tombol "Tandai Selesai" hanya untuk cabang sendiri
+                    {/* ✅ Logika baru untuk tombol berdasarkan kondisi */}
+                    {fb.status === "reject" ? (
+                      // Jika feedback status = reject → tampilkan tombol Upload Ulang
+                      <Button
+                        size="sm"
+                        onClick={() => onUploadUlang(fb)}
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white font-medium px-4 py-2 rounded-md transition-all duration-200 shadow-sm hover:shadow-md focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 flex items-center gap-2"
+                      >
+                        Upload Ulang
+                      </Button>
+                    ) : fb.timestampUpload == null ? (
+                      // Jika belum ada file diupload (belum selesai)
                       <Button
                         size="sm"
                         onClick={() => onSelesai(fb)}
@@ -134,11 +146,28 @@ export function FeedbackTable({
                             Processing...
                           </>
                         ) : (
-                          "Tandai Selesai"
+                          "Upload File"
+                        )}
+                      </Button>
+                    ) : fb.buktiGambar == null && isOwnCabang ? (
+                      // Jika file belum ada tapi cabang sendiri
+                      <Button
+                        size="sm"
+                        onClick={() => onSelesai(fb)}
+                        disabled={isUpdating && selectedFeedbackId === fb.id}
+                        className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-md transition-all duration-200 shadow-sm hover:shadow-md focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                      >
+                        {isUpdating && selectedFeedbackId === fb.id ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Processing...
+                          </>
+                        ) : (
+                          "Upload File"
                         )}
                       </Button>
                     ) : (
-                      // Tampilkan tombol "Info" untuk cabang lain atau yang sudah selesai
+                      // Selain itu (sudah selesai, bukan cabang sendiri, dsb.)
                       <Button
                         size="sm"
                         variant="outline"

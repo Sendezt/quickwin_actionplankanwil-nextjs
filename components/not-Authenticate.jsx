@@ -8,6 +8,11 @@ export default function NotAuthenticatedPage({
   showBackButton = true,
   backButtonHref = "/",
 }) {
+  const handleLoginClick = () => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("redirectAfterLogin", window.location.pathname);
+    }
+  };
   return (
     <div className="flex flex-col items-center justify-center bg-white rounded-lg shadow-sm p-6 mx-auto my-8 max-w-lg w-full text-center border border-gray-100">
       {/* Icon */}
@@ -28,10 +33,8 @@ export default function NotAuthenticatedPage({
 
       {/* Action Button */}
       <div className="w-full mt-5">
-        <Link href="/login" className="w-full">
-          <Button
-            className="w-full h-9 text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
-          >
+        <Link href="/login" className="w-full" onClick={handleLoginClick}>
+          <Button className="w-full h-9 text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white cursor-pointer">
             Masuk ke Akun
           </Button>
         </Link>

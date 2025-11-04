@@ -64,14 +64,11 @@ export default function SubAgendaTable() {
     setError("");
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(
-        `${BASE_URL}/api/admin/sub/getsub`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(`${BASE_URL}/api/admin/sub/getsub`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
@@ -88,9 +85,7 @@ export default function SubAgendaTable() {
 
   async function fetchActionPlans() {
     try {
-      const res = await fetch(
-        `${BASE_URL}/api/actionplan`
-      );
+      const res = await fetch(`${BASE_URL}/api/actionplan`);
       if (!res.ok) throw new Error("Gagal fetch action plans");
 
       const json = await res.json();
@@ -112,20 +107,17 @@ export default function SubAgendaTable() {
     try {
       setIsSubmitting(true);
       const token = localStorage.getItem("token");
-      const res = await fetch(
-        `${BASE_URL}/api/api/admin/sub/createsub`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            actionPlanId: Number(selectedActionPlan),
-            title: newTitle,
-          }),
-        }
-      );
+      const res = await fetch(`${BASE_URL}/api/admin/sub/createsub`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          actionPlanId: Number(selectedActionPlan),
+          title: newTitle,
+        }),
+      });
 
       if (!res.ok) throw new Error("Gagal membuat sub action plan");
 
@@ -184,15 +176,12 @@ export default function SubAgendaTable() {
   async function handleDelete(id) {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(
-        `${BASE_URL}/api/api/admin/sub/deletesub/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(`${BASE_URL}/api/api/admin/sub/deletesub/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!res.ok) throw new Error("Gagal menghapus sub action plan");
 

@@ -57,11 +57,13 @@ export default function LoginForm({ className, ...props }) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
+      const redirectPath = localStorage.getItem("redirectAfterLogin");
+
+      localStorage.removeItem("redirectAfterLogin");
+
       // Redirect berdasarkan role
-      if (data.user.role === "Admin") {
-        router.push("/admindashboard");
-      } else if (data.user.role === "Kacab") {
-        router.push("/feedback");
+      if (redirectPath) {
+        router.push(redirectPath);
       } else {
         router.push("/");
       }
