@@ -68,7 +68,7 @@ export default function MenuEnam() {
       const logData = {
         adminId: user.id,
         action: "visit",
-        description: `User ${user.username} mengunjungi halaman Implementasi UU HKPD`,
+        description: `User ${user.username} mengunjungi halaman Sosialisasi Kesamsatan`,
       };
       fetch(`${BASE_URL}/api/logs/createlog`, {
         method: "POST",

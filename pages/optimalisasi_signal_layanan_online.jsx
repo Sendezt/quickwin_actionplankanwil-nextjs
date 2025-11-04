@@ -55,7 +55,7 @@ export default function MenuTujuh() {
       const logData = {
         adminId: user.id,
         action: "visit",
-        description: `User ${user.username} mengunjungi halaman Implementasi UU HKPD`,
+        description: `User ${user.username} mengunjungi halaman Optimalisasi Signal Layanan Online`,
       };
       fetch(`${BASE_URL}/api/logs/createlog`, {
         method: "POST",

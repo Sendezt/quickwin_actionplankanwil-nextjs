@@ -67,7 +67,7 @@ export default function MenuSebelas() {
       const logData = {
         adminId: user.id,
         action: "visit",
-        description: `User ${user.username} mengunjungi halaman Implementasi UU HKPD`,
+        description: `User ${user.username} mengunjungi halaman Sigap Instansi`,
       };
       fetch(`${BASE_URL}/api/logs/createlog`, {
         method: "POST",

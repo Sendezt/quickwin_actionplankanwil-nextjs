@@ -75,7 +75,7 @@ export default function MenuDelapan() {
       const logData = {
         adminId: user.id,
         action: "visit",
-        description: `User ${user.username} mengunjungi halaman Implementasi UU HKPD`,
+        description: `User ${user.username} mengunjungi halaman Kolaborasi Merchant`,
       };
       fetch(`${BASE_URL}/api/logs/createlog`, {
         method: "POST",

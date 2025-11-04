@@ -50,7 +50,7 @@ export default function MenuTigaBelas() {
       const logData = {
         adminId: user.id,
         action: "visit",
-        description: `User ${user.username} mengunjungi halaman Implementasi UU HKPD`,
+        description: `User ${user.username} mengunjungi halaman Pendataan Laka`,
       };
       fetch(`${BASE_URL}/api/logs/createlog`, {
         method: "POST",

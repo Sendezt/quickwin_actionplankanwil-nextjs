@@ -31,14 +31,19 @@ export default function MenuSatu() {
       }
 
       setIsAuthenticated(true);
+    };
 
-      // Kirim log kunjungan
+    const sendVisitLog = () => {
+      const storedUser = localStorage.getItem("user");
+      if (!storedUser) return;
+
       const user = JSON.parse(storedUser);
       const logData = {
         adminId: user.id,
         action: "visit",
         description: `User ${user.username} mengunjungi halaman Implementasi UU HKPD`,
       };
+
       fetch(`${BASE_URL}/api/logs/createlog`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -46,13 +51,15 @@ export default function MenuSatu() {
       }).catch((err) => console.error("Gagal mengirim log:", err));
     };
 
-    // Jalankan pertama kali (dengan delay spinner)
-    const initialTimeout = setTimeout(checkAuth, 800);
+    // Jalankan checkAuth pertama kali (dengan spinner delay)
+    const initialTimeout = setTimeout(() => {
+      checkAuth();
+      sendVisitLog(); // kirim log hanya sekali
+    }, 800);
 
-    // Jalankan ulang setiap 30 detik
+    // Jalankan ulang checkAuth setiap 30 detik (tanpa kirim log)
     const interval = setInterval(checkAuth, 30000);
 
-    // Dengarkan perubahan di localStorage (real-time logout)
     const handleStorageChange = (e) => {
       if (e.key === "token" && !e.newValue) {
         setIsAuthenticated(false);
@@ -60,7 +67,6 @@ export default function MenuSatu() {
     };
     window.addEventListener("storage", handleStorageChange);
 
-    // Cleanup
     return () => {
       clearTimeout(initialTimeout);
       clearInterval(interval);
