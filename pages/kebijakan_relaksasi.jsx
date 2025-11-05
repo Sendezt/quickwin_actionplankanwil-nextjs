@@ -43,7 +43,11 @@ export default function MenuDua() {
       }
 
       setIsAuthenticated(true);
+    };
 
+    const sendVisitLog = () => {
+      const storedUser = localStorage.getItem("user");
+      if (!storedUser) return;
       // Kirim log kunjungan
       const user = JSON.parse(storedUser);
       const logData = {
@@ -59,7 +63,10 @@ export default function MenuDua() {
     };
 
     // Jalankan pertama kali (dengan delay spinner)
-    const initialTimeout = setTimeout(checkAuth, 800);
+    const initialTimeout = setTimeout(() => {
+      checkAuth();
+      sendVisitLog();
+    }, 800);
 
     // Jalankan ulang setiap 30 detik
     const interval = setInterval(checkAuth, 30000);

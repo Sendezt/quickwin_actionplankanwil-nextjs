@@ -54,13 +54,17 @@ export default function MenuEmpat() {
       }
 
       setIsAuthenticated(true);
+    };
 
+    const sendVisitLog = () => {
+      const storedUser = localStorage.getItem("user");
+      if (!storedUser) return;
       // Kirim log kunjungan
       const user = JSON.parse(storedUser);
       const logData = {
         adminId: user.id,
         action: "visit",
-        description: `User ${user.username} mengunjungi halaman Implementasi UU HKPD`,
+        description: `User ${user.username} mengunjungi halaman Rekonsiliasi Data`,
       };
       fetch(`${BASE_URL}/api/logs/createlog`, {
         method: "POST",
@@ -70,7 +74,10 @@ export default function MenuEmpat() {
     };
 
     // Jalankan pertama kali (dengan delay spinner)
-    const initialTimeout = setTimeout(checkAuth, 800);
+    const initialTimeout = setTimeout(() => {
+      checkAuth();
+      sendVisitLog();
+    }, 800);
 
     // Jalankan ulang setiap 30 detik
     const interval = setInterval(checkAuth, 30000);
