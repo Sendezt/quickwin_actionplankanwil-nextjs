@@ -30,6 +30,7 @@ export default function FeedbackInfoModal({
   onFileReplaced,
   userRole, // ✅ TAMBAHKAN: role user
   userCabangId, // ✅ TAMBAHKAN: ID cabang user
+  isLoggedIn, // ✅ TAMBAHKAN: status login user
 }) {
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -165,12 +166,14 @@ export default function FeedbackInfoModal({
   };
 
   // ✅ LOGIKA BARU: Cek apakah user boleh upload file
+  const isUserNotLoggedIn = !isLoggedIn;
   const isUserAdmin = userRole === "Admin";
   const isOtherCabang =
     userCabangId && currentFeedback.cabangId !== userCabangId;
   const canUploadFile =
     currentFeedback.status !== "selesai" &&
     currentFeedback.buktiGambar !== null &&
+    !isUserNotLoggedIn && // User harus login
     !isUserAdmin && // Bukan admin
     !isOtherCabang; // Bukan cabang lain
 
