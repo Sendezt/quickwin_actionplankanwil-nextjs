@@ -10,7 +10,9 @@ export function FeedbackTable({
   onInfo,
   isUpdating,
   selectedFeedbackId,
-  userCabangId, // ✅ TAMBAHKAN: ID cabang user yang login
+  userCabangId, // ID cabang user yang login
+  isLoggedIn, // ✅ TAMBAHKAN: status login user
+  userRole, // ✅ TAMBAHKAN: role user (Admin, User, dll)
   onUploadUlang,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -61,8 +63,19 @@ export function FeedbackTable({
           </thead>
           <tbody className="divide-y divide-gray-100">
             {paginatedFeedbacks.map((fb, index) => {
-              // ✅ Cek apakah feedback ini milik cabang user
-              const isOwnCabang = userCabangId && fb.cabangId === userCabangId;
+              // ✅ KONDISI 1: User belum login
+              const isUserNotLoggedIn = !isLoggedIn;
+
+              // ✅ KONDISI 2: User login sebagai Admin
+              const isUserAdmin = userRole === "Admin";
+
+              // ✅ KONDISI 3: User cabang A melihat cabang B
+              const isOtherCabang =
+                userCabangId && fb.cabangId !== userCabangId;
+
+              // ✅ Gabungkan semua kondisi: jika salah satu true, tampilkan button Info saja
+              const showOnlyInfoButton =
+                isUserNotLoggedIn || isUserAdmin || isOtherCabang;
 
               return (
                 <tr
@@ -104,17 +117,17 @@ export function FeedbackTable({
                   <td className="p-4 border-r border-gray-100 text-center">
                     <span
                       className={`
-      px-3 py-1 rounded-full text-xs font-medium transition-all duration-200
-      ${
-        fb.status === "selesai"
-          ? "bg-green-100 text-green-800 border border-green-200"
-          : fb.status === "proses"
-          ? "bg-yellow-100 text-yellow-800 border border-yellow-200"
-          : fb.status === "reject"
-          ? "bg-red-100 text-red-800 border border-red-200"
-          : "bg-gray-100 text-gray-800 border border-gray-200"
-      }
-    `}
+                        px-3 py-1 rounded-full text-xs font-medium transition-all duration-200
+                        ${
+                          fb.status === "selesai"
+                            ? "bg-green-100 text-green-800 border border-green-200"
+                            : fb.status === "proses"
+                            ? "bg-yellow-100 text-yellow-800 border border-yellow-200"
+                            : fb.status === "reject"
+                            ? "bg-red-100 text-red-800 border border-red-200"
+                            : "bg-gray-100 text-gray-800 border border-gray-200"
+                        }
+                      `}
                     >
                       {fb.status}
                     </span>
@@ -122,52 +135,9 @@ export function FeedbackTable({
 
                   {/* Aksi */}
                   <td className="p-4 text-left">
-                    {/* ✅ Logika baru untuk tombol berdasarkan kondisi */}
-                    {fb.status === "reject" ? (
-                      // Jika feedback status = reject → tampilkan tombol Upload Ulang
-                      <Button
-                        size="sm"
-                        onClick={() => onUploadUlang(fb)}
-                        className="bg-yellow-500 hover:bg-yellow-600 text-white font-medium px-4 py-2 rounded-md transition-all duration-200 shadow-sm hover:shadow-md focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 flex items-center gap-2"
-                      >
-                        Upload Ulang
-                      </Button>
-                    ) : fb.timestampUpload == null ? (
-                      // Jika belum ada file diupload (belum selesai)
-                      <Button
-                        size="sm"
-                        onClick={() => onSelesai(fb)}
-                        disabled={isUpdating && selectedFeedbackId === fb.id}
-                        className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-md transition-all duration-200 shadow-sm hover:shadow-md focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                      >
-                        {isUpdating && selectedFeedbackId === fb.id ? (
-                          <>
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            Processing...
-                          </>
-                        ) : (
-                          "Upload File"
-                        )}
-                      </Button>
-                    ) : fb.buktiGambar == null && isOwnCabang ? (
-                      // Jika file belum ada tapi cabang sendiri
-                      <Button
-                        size="sm"
-                        onClick={() => onSelesai(fb)}
-                        disabled={isUpdating && selectedFeedbackId === fb.id}
-                        className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-md transition-all duration-200 shadow-sm hover:shadow-md focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                      >
-                        {isUpdating && selectedFeedbackId === fb.id ? (
-                          <>
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            Processing...
-                          </>
-                        ) : (
-                          "Upload File"
-                        )}
-                      </Button>
-                    ) : (
-                      // Selain itu (sudah selesai, bukan cabang sendiri, dsb.)
+                    {/* ✅ LOGIKA BARU: Tampilkan Info button jika memenuhi kondisi */}
+                    {showOnlyInfoButton ? (
+                      // Tampilkan button Info untuk 3 kondisi di atas
                       <Button
                         size="sm"
                         variant="outline"
@@ -177,6 +147,55 @@ export function FeedbackTable({
                         <Info className="w-4 h-4" />
                         Info
                       </Button>
+                    ) : (
+                      // Logika asli untuk user yang login dan melihat cabangnya sendiri
+                      <>
+                        {fb.status === "reject" ? (
+                          // Jika feedback status = reject → tampilkan tombol Upload Ulang
+                          <Button
+                            size="sm"
+                            onClick={() => onUploadUlang(fb)}
+                            className="bg-yellow-500 hover:bg-yellow-600 text-white font-medium px-4 py-2 rounded-md transition-all duration-200 shadow-sm hover:shadow-md focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 flex items-center gap-2"
+                          >
+                            <Upload className="w-4 h-4" />
+                            Upload Ulang
+                          </Button>
+                        ) : fb.timestampUpload == null ||
+                          fb.buktiGambar == null ? (
+                          // Jika belum ada file diupload
+                          <Button
+                            size="sm"
+                            onClick={() => onSelesai(fb)}
+                            disabled={
+                              isUpdating && selectedFeedbackId === fb.id
+                            }
+                            className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-md transition-all duration-200 shadow-sm hover:shadow-md focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                          >
+                            {isUpdating && selectedFeedbackId === fb.id ? (
+                              <>
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                                Processing...
+                              </>
+                            ) : (
+                              <>
+                                <Upload className="w-4 h-4" />
+                                Upload File
+                              </>
+                            )}
+                          </Button>
+                        ) : (
+                          // Sudah selesai upload
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => onInfo(fb)}
+                            className="flex items-center gap-2 text-blue-600 border-blue-300 hover:bg-blue-50"
+                          >
+                            <Info className="w-4 h-4" />
+                            Info
+                          </Button>
+                        )}
+                      </>
                     )}
                   </td>
                 </tr>

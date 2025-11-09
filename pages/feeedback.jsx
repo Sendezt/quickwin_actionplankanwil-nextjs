@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-// Removed useRouter import - using browser API instead
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import Navbar from "@/components/navbar";
@@ -36,7 +35,6 @@ export default function FeedbackPage() {
 
   const forceButton = process.env.NEXT_PUBLIC_FORCE_FEEDBACK_BUTTON === "false";
   const isAllowedDate = forceButton || (currentDate >= 25 && currentDate <= 28);
-  // ✅ Get cabangId from URL using browser API
   const [cabangIdFromUrl, setCabangIdFromUrl] = useState(null);
 
   const { feedbacks, cabangs, actionPlans, isLoading, isRefreshing, loadData } =
@@ -73,7 +71,6 @@ export default function FeedbackPage() {
   // Open Cabang
   const [openCabang, setOpenCabang] = useState(null);
 
-  // ✅ Extract cabangId from URL on component mount
   useEffect(() => {
     if (typeof window !== "undefined") {
       const urlParams = new URLSearchParams(window.location.search);
@@ -82,7 +79,6 @@ export default function FeedbackPage() {
     }
   }, []);
 
-  // ✅ Auto-open accordion berdasarkan cabangId dari URL
   useEffect(() => {
     if (cabangIdFromUrl && cabangs.length > 0) {
       // Cari cabang berdasarkan ID
@@ -91,10 +87,8 @@ export default function FeedbackPage() {
       );
 
       if (targetCabang) {
-        // Set accordion terbuka untuk cabang tersebut
         setOpenCabang(`cabang-${cabangIdFromUrl}`);
 
-        // Optional: Scroll ke accordion yang terbuka setelah render
         setTimeout(() => {
           const accordionElement = document.querySelector(
             `[data-accordion-item="cabang-${cabangIdFromUrl}"]`
@@ -107,7 +101,6 @@ export default function FeedbackPage() {
           }
         }, 100);
 
-        // Clear URL parameter setelah accordion terbuka
         if (typeof window !== "undefined") {
           const newUrl = window.location.pathname;
           window.history.replaceState({}, "", newUrl);
@@ -116,11 +109,8 @@ export default function FeedbackPage() {
     }
   }, [cabangIdFromUrl, cabangs]);
 
-  // ✅ Clear URL params after accordion is opened (optional)
   useEffect(() => {
     if (openCabang && cabangIdFromUrl) {
-      // Hapus cabangId dari URL setelah accordion terbuka
-      // untuk mencegah auto-open lagi saat refresh
       if (typeof window !== "undefined") {
         const newUrl = window.location.pathname;
         window.history.replaceState({}, "", newUrl);
@@ -454,6 +444,8 @@ export default function FeedbackPage() {
           open={infoOpen}
           onClose={() => setInfoOpen(false)}
           feedback={infoFeedback}
+          userRole={userInfo?.role}
+          userCabangId={userInfo?.cabangId}
         />
       </SidebarInset>
     </SidebarProvider>

@@ -28,6 +28,8 @@ export default function FeedbackInfoModal({
   onClose,
   feedback,
   onFileReplaced,
+  userRole, // ✅ TAMBAHKAN: role user
+  userCabangId, // ✅ TAMBAHKAN: ID cabang user
 }) {
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -162,9 +164,15 @@ export default function FeedbackInfoModal({
     }
   };
 
+  // ✅ LOGIKA BARU: Cek apakah user boleh upload file
+  const isUserAdmin = userRole === "Admin";
+  const isOtherCabang =
+    userCabangId && currentFeedback.cabangId !== userCabangId;
   const canUploadFile =
     currentFeedback.status !== "selesai" &&
-    currentFeedback.buktiGambar !== null;
+    currentFeedback.buktiGambar !== null &&
+    !isUserAdmin && // Bukan admin
+    !isOtherCabang; // Bukan cabang lain
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -214,7 +222,6 @@ export default function FeedbackInfoModal({
                 </p>
               </div>
 
-              {/* File Upload Section - Hanya tampil jika status proses */}
               {/* File Bukti & Upload Section */}
               {currentFeedback.buktiGambar && (
                 <div
@@ -253,8 +260,8 @@ export default function FeedbackInfoModal({
                     </a>
                   </div>
 
-                  {/* Upload section - hanya jika status belum selesai */}
-                  {currentFeedback.status !== "selesai" && (
+                  {/* ✅ Upload section - hanya tampil jika memenuhi kriteria */}
+                  {canUploadFile && (
                     <>
                       {!isUploading && (
                         <div className="space-y-3">
