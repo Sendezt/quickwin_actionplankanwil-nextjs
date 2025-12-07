@@ -54,8 +54,9 @@ export const data = {
       url: "/",
       icon: Flame,
       items: [
-        { title: "SENGKUYUNG", url: "/sengkuyung" },
-        { title: "PROMITRA", url: "/404" },
+        { title: "SENGKUYUNG PRIORITAS", url: "/sengkuyung" },
+        { title: "SENGKUYUNG DOOR TO DOOR", url: "/development" },
+        { title: "KDMP BUDIMAN", url: "/development" },
       ],
     },
     {
